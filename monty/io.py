@@ -9,6 +9,10 @@ __date__ = '1/24/14'
 import os
 from bz2 import BZ2File
 from gzip import GzipFile
+import tempfile
+import shutil
+
+from monty.shutil import copy_r
 
 
 def zopen(filename, *args, **kwargs):
@@ -130,3 +134,66 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
             else:
                 # Start-of-file
                 return
+
+
+def gzip_dir(path):
+    """
+    Gzips all files in a directory.
+
+    Args:
+        path (str): Path to directory.
+    """
+    for f in os.listdir(path):
+        if not f.lower().endswith("gz"):
+            with open(f, 'rb') as f_in, \
+                    GzipFile('{}.gz'.format(f), 'wb') as f_out:
+                f_out.writelines(f_in)
+            os.remove(f)
+
+
+class ScratchDir(object):
+    """
+    Creates a with context manager that automatically handles creation of
+    temporary directories in the scratch space and cleanup when done.
+    """
+    SCR_LINK = "scratch_link"
+
+    def __init__(self, rootpath, create_symbolic_link=False):
+        """
+        Initializes scratch directory given a **root** path. There is no need
+        to try to create unique directory names. The code will generate a
+        temporary sub directory in the rootpath. The way to use this is using a
+        with context manager. Example::
+
+            with ScratchDir("/scratch"):
+                do_something()
+
+        Args:
+            rootpath (str): The path in which to create temp subdirectories.
+            create_symbolic_link (bool): Whether to create a symbolic link in
+                the current working directory.
+        """
+        self.rootpath = rootpath
+        self.cwd = os.getcwd()
+        self.create_symbolic_link = create_symbolic_link
+
+    def __enter__(self):
+        tempdir = self.cwd
+        if self.rootpath is not None and os.path.abspath(self.rootpath) != \
+                self.cwd:
+            tempdir = tempfile.mkdtemp(dir=self.rootpath)
+            self.tempdir = os.path.abspath(tempdir)
+            copy_r(".", tempdir)
+            if self.create_symbolic_link:
+                os.symlink(tempdir, ScratchDir.SCR_LINK)
+            os.chdir(tempdir)
+        return tempdir
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if self.rootpath is not None and os.path.abspath(self.rootpath) != \
+                self.cwd:
+            copy_r(".", self.cwd)
+            shutil.rmtree(self.tempdir)
+            os.chdir(self.cwd)
+            if self.create_symbolic_link:
+                os.remove(ScratchDir.SCR_LINK)
