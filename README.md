@@ -8,4 +8,4 @@ not part of the standard library. Examples include useful utilities like
 transparent support for zipped files, useful design patterns such as
 singleton and cached_class, and many more.
 
-Please read the [official docs](https://
+Please read the [official docs](https://www.pythonhosted.org/monty)
