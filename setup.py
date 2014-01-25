@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="monty",
     packages=find_packages(),
-    version="0.0.5",
+    version="0.1.0",
     install_requires=[],
     extras_require={},
     package_data={},
