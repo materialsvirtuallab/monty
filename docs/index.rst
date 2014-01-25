@@ -27,6 +27,11 @@ Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.
 
+Compatibility
+-------------
+
+Monty is tested for both Python 2.7 and Python 3+ compatibility.
+
 Latest Change Log
 =================
 
