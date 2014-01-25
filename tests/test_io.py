@@ -9,9 +9,10 @@ __date__ = '1/24/14'
 
 
 import unittest
+import tempfile
 import os
 
-from monty.io import reverse_readline
+from monty.io import reverse_readline, ScratchDir
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -40,6 +41,23 @@ class ReverseReadlineTest(unittest.TestCase):
         with open(os.path.join(test_dir, "empty_file.txt")) as f:
             for idx, line in enumerate(reverse_readline(f)):
                 raise ValueError("an empty file is being read!")
+
+
+class ScratchDirTest(unittest.TestCase):
+
+    def test_with(self):
+        scratch = tempfile.gettempdir()
+        with ScratchDir(scratch) as d:
+            with open("scratch_text", "w") as f:
+                f.write("write")
+            files = os.listdir(d)
+            self.assertIn("scratch_text", files)
+
+        #Make sure the tempdir is deleted.
+        self.assertFalse(os.path.exists(d))
+        files = os.listdir(".")
+        self.assertIn("scratch_text", files)
+        os.remove("scratch_text")
 
 
 if __name__ == "__main__":
