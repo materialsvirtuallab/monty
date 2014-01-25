@@ -14,6 +14,14 @@ from functools import wraps
 def singleton(cls):
     """
     This decorator can be used to create a singleton out of a class.
+
+    Usage::
+
+        @singleton
+        class MySingleton():
+
+            def __init__():
+                pass
     """
 
     instances = {}
@@ -41,6 +49,21 @@ def cached_class(klass):
     so are always hashable, but if any arguments (keyword
     or positional) are non-hashable, that set of arguments
     is not cached.
+
+    Example::
+
+        >>> @cached_class
+            class A(object):
+                def __init__(self, val):
+                    self.val = val
+            ...
+        >>> a1a = A(1)
+        >>> a1b = A(1)
+        >>> a2 = A(2)
+        >>> id(a1a) == id(a1b)
+        True
+        >>> id(a1a) == id(2)
+        False
     """
     cache = {}
 

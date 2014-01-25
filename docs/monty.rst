@@ -1,13 +1,36 @@
 monty package
 =============
 
+Subpackages
+-----------
+
+.. toctree::
+
+    monty.os
+
 Submodules
 ----------
+
+monty.collections module
+------------------------
+
+.. automodule:: monty.collections
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 monty.design_patterns module
 ----------------------------
 
 .. automodule:: monty.design_patterns
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+monty.dev module
+----------------
+
+.. automodule:: monty.dev
     :members:
     :undoc-members:
     :show-inheritance:
@@ -20,10 +43,10 @@ monty.io module
     :undoc-members:
     :show-inheritance:
 
-monty.os module
----------------
+monty.json module
+-----------------
 
-.. automodule:: monty.os
+.. automodule:: monty.json
     :members:
     :undoc-members:
     :show-inheritance:
