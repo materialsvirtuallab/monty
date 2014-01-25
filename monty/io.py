@@ -1,10 +1,11 @@
+from __future__ import absolute_import
+
 __author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Project'
+__copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = '0.1'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
-
 
 import os
 from bz2 import BZ2File
