@@ -30,6 +30,10 @@ be a resource to collect the best solutions.
 Latest Change Log
 =================
 
+v0.0.5
+------
+1. First official alpha release with unittests and docs.
+
 v0.0.2
 ------
 1. Added several decorators and utilities.
