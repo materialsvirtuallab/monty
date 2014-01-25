@@ -17,14 +17,14 @@ __date__ = "1/24/14"
 import unittest
 import os
 
-test_dir = os.path.join(os.path.dirname(__file__), "..", "..", 'test_files')
+test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
 from monty.json import loadf, dumpf
 
 
 class JsonTest(unittest.TestCase):
 
-    def test_dumpf(self):
+    def test_dumpf_loadf(self):
         d = {"hello": "world"}
         dumpf(d, "monte_test.json", indent=4)
         d2 = loadf("monte_test.json")

@@ -19,7 +19,7 @@ import os
 
 from monty.io import reverse_readline
 
-test_dir = os.path.join(os.path.dirname(__file__), "..", "..", 'test_files')
+test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
 
 class ReverseReadlineTest(unittest.TestCase):
