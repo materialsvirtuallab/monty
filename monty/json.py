@@ -45,5 +45,5 @@ def dumpf(obj, f, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    with zopen(f, "wb") as fp:
+    with open(f, "wt") as fp:
         json.dump(obj, fp, *args, **kwargs)
