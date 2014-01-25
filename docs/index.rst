@@ -86,7 +86,7 @@ API docs
 
 .. toctree::
 
-   modules
+   monty
 
 License
 =======
