@@ -14,28 +14,22 @@ import shutil
 
 from monty.shutil import copy_r
 
-test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
-
 
 class CopyRTest(unittest.TestCase):
 
     def setUp(self):
-        self.cwd = os.getcwd()
-        os.chdir(os.path.abspath(os.path.dirname(__file__)))
-        os.mkdir("src")
-        with open(os.path.join("src", "test"), "w") as f:
+        os.mkdir("cpr_src")
+        with open(os.path.join("cpr_src", "test"), "w") as f:
             f.write("what")
 
     def test_recursive_copy(self):
-        copy_r(".", "dst")
-        self.assertTrue(os.path.exists(os.path.join("dst", "src", "test")))
-        self.assertTrue(os.path.exists(os.path.join("dst", "__init__.py")))
+        copy_r(".", "cpr_dst")
+        self.assertTrue(os.path.exists(os.path.join("cpr_dst", "cpr_src",
+                                                    "test")))
 
     def tearDown(self):
-        shutil.rmtree("src")
-        shutil.rmtree("dst")
-        os.chdir(self.cwd)
-
+        shutil.rmtree("cpr_src")
+        shutil.rmtree("cpr_dst")
 
 
 if __name__ == "__main__":
