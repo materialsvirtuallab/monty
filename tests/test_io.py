@@ -43,21 +43,21 @@ class ReverseReadlineTest(unittest.TestCase):
                 raise ValueError("an empty file is being read!")
 
 
-class ScratchDirTest(unittest.TestCase):
-
-    def test_with(self):
-        scratch = tempfile.gettempdir()
-        with ScratchDir(scratch) as d:
-            with open("scratch_text", "w") as f:
-                f.write("write")
-            files = os.listdir(d)
-            self.assertIn("scratch_text", files)
-
-        #Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
-        files = os.listdir(".")
-        self.assertIn("scratch_text", files)
-        os.remove("scratch_text")
+# class ScratchDirTest(unittest.TestCase):
+#
+#     def test_with(self):
+#         scratch = tempfile.gettempdir()
+#         with ScratchDir(scratch) as d:
+#             with open("scratch_text", "w") as f:
+#                 f.write("write")
+#             files = os.listdir(d)
+#             self.assertIn("scratch_text", files)
+#
+#         #Make sure the tempdir is deleted.
+#         self.assertFalse(os.path.exists(d))
+#         files = os.listdir(".")
+#         self.assertIn("scratch_text", files)
+#         os.remove("scratch_text")
 
 
 if __name__ == "__main__":
