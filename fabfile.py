@@ -14,7 +14,6 @@ __email__ = "shyue@mit.edu"
 __date__ = "Apr 29, 2012"
 
 import glob
-import os
 
 from fabric.api import local, lcd
 from monty import __version__ as ver
@@ -23,7 +22,6 @@ from monty import __version__ as ver
 def makedoc():
     with lcd("docs"):
         local("sphinx-apidoc -o . -f ../monty")
-        #local("rm monty.*.tests.rst")
         for f in glob.glob("docs/*.rst"):
             if f.startswith('docs/monty') and f.endswith('rst'):
                 newoutput = []
@@ -76,15 +74,8 @@ def update_doc():
         local("git push origin gh-pages")
 
 
-def log_ver():
-    filepath = os.path.join(os.environ["HOME"], "Dropbox", "Public", "monty", ver)
-    with open(filepath, "w") as f:
-        f.write("Release")
-
-
 def release():
     setver()
     test()
+    makedoc()
     publish()
-    #log_ver()
-    update_doc()
