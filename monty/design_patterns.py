@@ -79,7 +79,7 @@ def cached_class(klass):
             #    o = super(klass, cls).__new__(cls, *args, **kwds)
             #    cache[key] = o
             #return cache[key]
-            key = (cls,) + args + tuple(kwds.iteritems())
+            key = (cls,) + args + tuple(kwds.items())
             try:
                 inst = cache.get(key, None)
             except TypeError:

@@ -43,7 +43,7 @@ class DecoratorTest(unittest.TestCase):
 
         @requires(fictitious_mod is not None, "fictitious_mod is not present.")
         def use_fictitious_mod():
-            print "success"
+            print("success")
 
         self.assertRaises(RuntimeError, use_fictitious_mod)
 
