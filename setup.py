@@ -19,7 +19,6 @@ setup(
                      "support for zipped files etc.",
     keywords=["monty"],
     classifiers=[
-        "Programming Language :: Python :: 2.7",
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",

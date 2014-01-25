@@ -111,21 +111,6 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
                 return
 
 
-def gzip_dir(path):
-    """
-    Gzips all files in a directory.
-
-    Args:
-        path (str): Path to directory.
-    """
-    for f in os.listdir(path):
-        if not f.lower().endswith("gz"):
-            with open(f, 'rb') as f_in, \
-                    GzipFile('{}.gz'.format(f), 'wb') as f_out:
-                f_out.writelines(f_in)
-            os.remove(f)
-
-
 class ScratchDir(object):
     """
     Creates a with context manager that automatically handles creation of

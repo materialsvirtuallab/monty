@@ -10,6 +10,7 @@ __date__ = '1/24/14'
 
 import os
 import shutil
+from gzip import GzipFile
 
 
 def copy_r(src, dst):
@@ -31,3 +32,18 @@ def copy_r(src, dst):
             pass
         for f in files:
             shutil.copy(os.path.join(parent, f), realdst)
+
+
+def gzip_dir(path):
+    """
+    Gzips all files in a directory.
+
+    Args:
+        path (str): Path to directory.
+    """
+    for f in os.listdir(path):
+        if not f.lower().endswith("gz"):
+            with open(f, 'rb') as f_in, \
+                    GzipFile('{}.gz'.format(f), 'wb') as f_out:
+                f_out.writelines(f_in)
+            os.remove(f)

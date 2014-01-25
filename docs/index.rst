@@ -30,6 +30,11 @@ be a resource to collect the best solutions.
 Latest Change Log
 =================
 
+v0.1.0
+------
+1. Ensure Python 3+ compatibility.
+2. Travis testing implemented.
+
 v0.0.5
 ------
 1. First official alpha release with unittests and docs.
