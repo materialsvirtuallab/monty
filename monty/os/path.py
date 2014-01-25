@@ -8,7 +8,6 @@ __date__ = '1/24/14'
 
 import os
 
-
 def which(program):
     """
     Returns full path to a executable.
