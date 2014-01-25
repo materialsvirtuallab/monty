@@ -5,6 +5,7 @@
 
 Monty - The Missing Complement to Python
 ========================================
+.. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master   :target: https://travis-ci.org/materialsvirtuallab/monty
 
 Monty is the missing complement to Python. Monty implements supplementary
 useful functions for Python that are not part of the standard library.
@@ -35,27 +36,22 @@ Monty is tested for both Python 2.7 and Python 3+ compatibility.
 Latest Change Log
 =================
 
+v0.1.1
+------
+1. Minor release to update description.
+
 v0.1.0
 ------
 1. Ensure Python 3+ compatibility.
 2. Travis testing implemented.
-
-v0.0.5
-------
-1. First official alpha release with unittests and docs.
-
-v0.0.2
-------
-1. Added several decorators and utilities.
 
 :doc:`Older versions </changelog>`
 
 Installing monty
 ================
 
-The version at the Python Package Index (PyPI) is always the latest stable
-release that will be hopefully, be relatively bug-free. The easiest way to
-install monty on any system is to use easy_install or pip, as follows::
+The easiest way to install monty on any system is to use easy_install or
+pip, as follows::
 
     easy_install monty
 
@@ -98,9 +94,20 @@ standard Unix's zless/zgrep commands.
 API docs
 --------
 
+The API docs are given below. The docs for most classes or methods are clear
+enough for usage. Where there is somewhat greater subtlety in the usage,
+examples are provided.
+
 .. toctree::
 
    monty
+
+Contributing
+============
+
+Contributions to Monty are always welcome. Feel free to visit the `Monty
+Github repo <https://github.com/materialsvirtuallab/monty>`_ to fork the
+repo or to submit Issues.
 
 License
 =======
@@ -135,8 +142,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-
-.. _`pymatgen's Google Groups page`: https://groups.google.com/forum/?fromgroups#!forum/pymatgen/
-.. _`PyPI` : http://pypi.python.org/pypi/pymatgen
-.. _`Github page`: https://github.com/materialsproject/pymatgen/issues

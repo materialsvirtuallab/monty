@@ -1,9 +1,12 @@
 from setuptools import setup, find_packages
 
+with open("README.md") as f:
+    long_desc = f.read()
+
 setup(
     name="monty",
     packages=find_packages(),
-    version="0.1.0",
+    version="0.1.1",
     install_requires=[],
     extras_require={},
     package_data={},
@@ -13,12 +16,11 @@ setup(
     url="https://github.com/materialsvirtuallab/monty",
     license="MIT",
     description="Monty is the missing complement to Python.",
-    long_description="Monty implements supplementary useful functions for "
-                     "Python that are not part of the standard library. "
-                     "Examples include useful utilities like transparent "
-                     "support for zipped files etc.",
+    long_description=long_desc,
     keywords=["monty"],
     classifiers=[
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
         "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
