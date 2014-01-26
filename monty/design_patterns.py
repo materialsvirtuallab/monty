@@ -73,13 +73,8 @@ def cached_class(klass):
         # isn't writable once the class is created
         __doc__ = klass.__doc__
 
-        def __new__(cls, *args, **kwds):
-            #key = (cls,) + args + tuple(kwds.items())
-            #if key not in cache:
-            #    o = super(klass, cls).__new__(cls, *args, **kwds)
-            #    cache[key] = o
-            #return cache[key]
-            key = (cls,) + args + tuple(kwds.items())
+        def __new__(cls, *args, **kwargs):
+            key = (cls,) + args + tuple(kwargs.items())
             try:
                 inst = cache.get(key, None)
             except TypeError:
@@ -92,11 +87,11 @@ def cached_class(klass):
                 # calling up to klass.__new__ would be the
                 # "official" way to create the instance, but
                 # that raises DeprecationWarning if there are
-                # args or kwds and klass does not override
+                # args or kwargs and klass does not override
                 # __new__ (which most classes don't), because
                 # object.__new__ takes no parameters (and in
                 # Python 3 the warning will become an error)
-                inst = klass(*args, **kwds)
+                inst = klass(*args, **kwargs)
                 # This makes isinstance and issubclass work
                 # properly
                 inst.__class__ = cls
@@ -104,7 +99,7 @@ def cached_class(klass):
                     cache[key] = inst
             return inst
 
-        def __init__(self, *args, **kwds):
+        def __init__(self, *args, **kwargs):
             # This will be called every time __new__ is
             # called, so we skip initializing here and do
             # it only when the instance is created above
