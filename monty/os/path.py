@@ -38,3 +38,22 @@ def which(cmd):
             if is_exe(exe_file):
                 return exe_file
     return None
+
+
+def zpath(filename):
+    """
+    Returns an existing (zipped or unzipped) file path given the unzipped
+    version. If no path exists, returns the filename unmodified.
+
+    Args:
+        filename: filename without zip extension
+
+    Returns:
+        filename with a zip extension (unless an unzipped version
+        exists)
+    """
+    for ext in ["", '.gz', '.GZ', '.bz2', '.BZ2', '.z', '.Z']:
+        zfilename = "{}{}".format(filename, ext)
+        if os.path.exists(zfilename):
+            return zfilename
+    return filename
