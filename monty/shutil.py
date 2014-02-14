@@ -26,9 +26,7 @@ def copy_r(src, dst):
 
     for parent, subdir, files in os.walk(src):
         relparent = os.path.relpath(parent, src)
-        print "Parents is " + parent
         realdst = dst if relparent == "." else os.path.join(dst, relparent)
-        print "real dst is "+ realdst
         try:
             os.makedirs(realdst)
         except Exception as ex:
@@ -63,7 +61,8 @@ def compress_file(filepath, compression="gz"):
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to "gz".
     """
-    assert compression in ["gz", "bz2"]
+    if compression not in ["gz", "bz2"]:
+        raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
     from monty.io import zopen
     if not filepath.lower().endswith(".%s" % compression):
         with open(filepath, 'rb') as f_in, \
@@ -86,3 +85,39 @@ def compress_dir(path, compression="gz"):
     for parent, subdirs, files in os.walk(path):
         for f in files:
             compress_file(os.path.join(parent, f), compression=compression)
+
+
+def decompress_file(filepath):
+    """
+    Decompresses a file with the correct extension. Automatically detects gz
+    or bz2 extension.
+
+    Args:
+        filepath (str): Path to file.
+        compression (str): A compression mode. Valid options are "gz" or
+            "bz2". Defaults to "gz".
+    """
+    toks = filepath.split(".")
+    file_ext = toks[-1].upper()
+    from monty.io import zopen
+    if file_ext in ["BZ2", "GZ", "Z"]:
+        with open(".".join(toks[0:-1]), 'wb') as f_out, \
+                zopen(filepath, 'rb') as f_in:
+            f_out.writelines(f_in)
+        os.remove(filepath)
+
+
+def decompress_dir(path, compression="gz"):
+    """
+    Recursively compresses all files in a directory. Note that this
+    compresses all files singly, i.e., it does not create a tar archive. For
+    that, just use Python tarfile class.
+
+    Args:
+        path (str): Path to parent directory.
+        compression (str): A compression mode. Valid options are "gz" or
+            "bz2". Defaults to gz.
+    """
+    for parent, subdirs, files in os.walk(path):
+        for f in files:
+            decompress_file(os.path.join(parent, f))

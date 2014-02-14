@@ -12,9 +12,10 @@ import unittest
 import os
 import shutil
 
-from monty.shutil import copy_r, compress_file, compress_dir
+from monty.shutil import copy_r, compress_file, compress_dir, decompress_dir
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
+
 
 class CopyRTest(unittest.TestCase):
 
@@ -26,13 +27,27 @@ class CopyRTest(unittest.TestCase):
         with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
             f.write("what2")
 
-    def test_recursive_copy(self):
+    def test_recursive_copy_and_compress(self):
         copy_r(os.path.join(test_dir, "cpr_src"),
                os.path.join(test_dir, "cpr_dst"))
         self.assertTrue(
             os.path.exists(os.path.join(test_dir, "cpr_dst", "test")))
         self.assertTrue(
             os.path.exists(os.path.join(test_dir, "cpr_dst", "sub", "testr")))
+
+        compress_dir(os.path.join(test_dir, "cpr_src"))
+        self.assertTrue(
+            os.path.exists(os.path.join(test_dir, "cpr_src", "test.gz")))
+        self.assertTrue(
+            os.path.exists(os.path.join(test_dir, "cpr_src", "sub",
+                                        "testr.gz")))
+
+        decompress_dir(os.path.join(test_dir, "cpr_src"))
+        self.assertTrue(
+            os.path.exists(os.path.join(test_dir, "cpr_src", "test")))
+        self.assertTrue(
+            os.path.exists(os.path.join(test_dir, "cpr_src", "sub",
+                                        "testr")))
 
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "cpr_src"))
@@ -50,6 +65,7 @@ class CompressFileDirTest(unittest.TestCase):
         self.assertTrue(
             os.path.exists(os.path.join(test_dir,
                                         "tempfile.gz")))
+        self.assertRaises(ValueError, compress_file, "whatever", "badformat")
 
     def tearDown(self):
         os.remove(os.path.join(test_dir, "tempfile.gz"))
