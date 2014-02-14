@@ -37,6 +37,10 @@ Monty is tested for both Python 2.7 and Python 3+ compatibility.
 Latest Change Log
 =================
 
+v0.1.2
+------
+1. Added zpath method to return zipped paths.
+
 v0.1.1
 ------
 1. Minor release to update description.

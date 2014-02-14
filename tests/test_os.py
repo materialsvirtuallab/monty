@@ -11,8 +11,9 @@ __date__ = '1/24/14'
 import unittest
 import os
 
-from monty.os.path import which
+from monty.os.path import which, zpath
 
+test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
 class PathTest(unittest.TestCase):
 
@@ -20,6 +21,9 @@ class PathTest(unittest.TestCase):
         py = which("python")
         self.assertEqual(os.path.basename(py), "python")
 
+    def test_zpath(self):
+        fullzpath = zpath(os.path.join(test_dir, "myfile"))
+        self.assertEqual(os.path.join(test_dir, "myfile.gz"), fullzpath)
 
 if __name__ == "__main__":
     unittest.main()
