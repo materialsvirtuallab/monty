@@ -37,6 +37,12 @@ Monty is tested for both Python 2.7 and Python 3+ compatibility.
 Latest Change Log
 =================
 
+v0.1.5
+------
+1. Added the useful monty.shutil.compress_file, compress_dir,
+   decompress_file and decompress_dir methods.
+2. Much more robust copy_r in shutil.
+
 v0.1.4
 ------
 1. Bug fix for 0.1.3.
