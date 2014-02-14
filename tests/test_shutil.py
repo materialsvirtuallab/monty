@@ -12,7 +12,8 @@ import unittest
 import os
 import shutil
 
-from monty.shutil import copy_r, compress_file, compress_dir, decompress_dir
+from monty.shutil import copy_r, compress_file, decompress_file, \
+    compress_dir, decompress_dir
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -48,6 +49,10 @@ class CopyRTest(unittest.TestCase):
         self.assertTrue(
             os.path.exists(os.path.join(test_dir, "cpr_src", "sub",
                                         "testr")))
+        with open(os.path.join(test_dir, "cpr_src", "test")) as f:
+            txt = f.read()
+            self.assertEqual(txt, "what")
+
 
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "cpr_src"))
@@ -60,15 +65,22 @@ class CompressFileDirTest(unittest.TestCase):
         with open(os.path.join(test_dir, "tempfile"), "w") as f:
             f.write("hello world")
 
-    def test_compress_file(self):
-        compress_file(os.path.join(test_dir, "tempfile"))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir,
-                                        "tempfile.gz")))
+    def test_compress_and_decompress_file(self):
+        fname = os.path.join(test_dir, "tempfile")
+        for fmt in ["gz", "bz2"]:
+            compress_file(fname, fmt)
+            self.assertTrue(os.path.exists(fname + "." + fmt))
+            self.assertFalse(os.path.exists(fname))
+            decompress_file(fname + "." + fmt)
+            self.assertTrue(os.path.exists(fname))
+            self.assertFalse(os.path.exists(fname + "." + fmt))
+        with open(fname) as f:
+            txt = f.read()
+            self.assertEqual(txt, "hello world")
         self.assertRaises(ValueError, compress_file, "whatever", "badformat")
 
     def tearDown(self):
-        os.remove(os.path.join(test_dir, "tempfile.gz"))
+        os.remove(os.path.join(test_dir, "tempfile"))
 
 if __name__ == "__main__":
     unittest.main()
