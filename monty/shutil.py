@@ -23,9 +23,12 @@ def copy_r(src, dst):
         src (str): Source folder to copy.
         dst (str): Destination folder.
     """
+
     for parent, subdir, files in os.walk(src):
-        parent = os.path.relpath(parent)
-        realdst = dst if parent == "." else os.path.join(dst, parent)
+        relparent = os.path.relpath(parent, src)
+        print "Parents is " + parent
+        realdst = dst if relparent == "." else os.path.join(dst, relparent)
+        print "real dst is "+ realdst
         try:
             os.makedirs(realdst)
         except Exception as ex:

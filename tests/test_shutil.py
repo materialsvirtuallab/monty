@@ -16,22 +16,27 @@ from monty.shutil import copy_r, compress_file, compress_dir
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
-# class CopyRTest(unittest.TestCase):
-#
-#     def setUp(self):
-#         os.mkdir(os.path.join(test_dir, "cpr_src"))
-#         with open(os.path.join(test_dir, "cpr_src", "test"), "w") as f:
-#             f.write("what")
-#
-#     def test_recursive_copy(self):
-#         copy_r(os.path.join(test_dir, "cpr_src"),
-#                os.path.join(test_dir, "cpr_dst"))
-    #     self.assertTrue(
-    #         os.path.exists(os.path.join(test_dir, "cpr_dst", "test")))
-    #
-    # def tearDown(self):
-    #     shutil.rmtree(os.path.join(test_dir, "cpr_src"))
-    #     shutil.rmtree(os.path.join(test_dir, "cpr_dst"))
+class CopyRTest(unittest.TestCase):
+
+    def setUp(self):
+        os.mkdir(os.path.join(test_dir, "cpr_src"))
+        with open(os.path.join(test_dir, "cpr_src", "test"), "w") as f:
+            f.write("what")
+        os.mkdir(os.path.join(test_dir, "cpr_src", "sub"))
+        with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
+            f.write("what2")
+
+    def test_recursive_copy(self):
+        copy_r(os.path.join(test_dir, "cpr_src"),
+               os.path.join(test_dir, "cpr_dst"))
+        self.assertTrue(
+            os.path.exists(os.path.join(test_dir, "cpr_dst", "test")))
+        self.assertTrue(
+            os.path.exists(os.path.join(test_dir, "cpr_dst", "sub", "testr")))
+
+    def tearDown(self):
+        shutil.rmtree(os.path.join(test_dir, "cpr_src"))
+        shutil.rmtree(os.path.join(test_dir, "cpr_dst"))
 
 
 class CompressFileDirTest(unittest.TestCase):
