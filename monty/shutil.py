@@ -47,3 +47,39 @@ def gzip_dir(path):
                     GzipFile('{}.gz'.format(f), 'wb') as f_out:
                 f_out.writelines(f_in)
             os.remove(f)
+
+
+def compress_file(filepath, compression="gz"):
+    """
+    Compresses a file with the correct extension. Functions like standard
+    Unix command line gzip and bzip2 in the sense that the original
+    uncompressed files are not retained.
+
+    Args:
+        filepath (str): Path to file.
+        compression (str): A compression mode. Valid options are "gz" or
+            "bz2". Defaults to "gz".
+    """
+    assert compression in ["gz", "bz2"]
+    from monty.io import zopen
+    if not filepath.lower().endswith(".%s" % compression):
+        with open(filepath, 'rb') as f_in, \
+                zopen('%s.%s' % (filepath, compression), 'wb') as f_out:
+            f_out.writelines(f_in)
+        os.remove(filepath)
+
+
+def compress_dir(path, compression="gz"):
+    """
+    Recursively compresses all files in a directory. Note that this
+    compresses all files singly, i.e., it does not create a tar archive. For
+    that, just use Python tarfile class.
+
+    Args:
+        path (str): Path to parent directory.
+        compression (str): A compression mode. Valid options are "gz" or
+            "bz2". Defaults to gz.
+    """
+    for parent, subdirs, files in os.walk(path):
+        for f in files:
+            compress_file(os.path.join(parent, f), compression=compression)
