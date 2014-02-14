@@ -50,7 +50,8 @@ def zpath(filename):
 
     Returns:
         filename with a zip extension (unless an unzipped version
-        exists)
+        exists). If filename is not found, the same filename is returned
+        unchanged.
     """
     for ext in ["", '.gz', '.GZ', '.bz2', '.BZ2', '.z', '.Z']:
         zfilename = "{}{}".format(filename, ext)
