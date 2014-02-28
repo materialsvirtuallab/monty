@@ -4,3 +4,10 @@ __version__ = '0.2.0'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '2/27/14'
+
+"""
+Monty is the missing complement to Python. Monty implements supplementary
+useful functions for Python that are not part of the standard library.
+Examples include useful utilities like transparent support for zipped files,
+useful design patterns such as singleton and cached_class, and many more.
+"""

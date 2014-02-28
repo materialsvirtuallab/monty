@@ -41,29 +41,14 @@ v0.2.0
 ------
 1. ScratchDir now supports non-copying of files to and from current
    directory, and this is the default (different from prior releases).
+2. Yet more improvements to copy_r to prevent recursive infinite loops in
+   copying.
 
 v0.1.5
 ------
 1. Added the useful monty.shutil.compress_file, compress_dir,
    decompress_file and decompress_dir methods.
 2. Much more robust copy_r in shutil.
-
-v0.1.4
-------
-1. Bug fix for 0.1.3.
-
-v0.1.2
-------
-1. Added zpath method to return zipped paths.
-
-v0.1.1
-------
-1. Minor release to update description.
-
-v0.1.0
-------
-1. Ensure Python 3+ compatibility.
-2. Travis testing implemented.
 
 :doc:`Older versions </changelog>`
 
