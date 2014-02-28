@@ -59,6 +59,14 @@ monty.shutil module
     :undoc-members:
     :show-inheritance:
 
+monty.string module
+-------------------
+
+.. automodule:: monty.string
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

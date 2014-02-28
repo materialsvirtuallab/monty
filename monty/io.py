@@ -1,3 +1,8 @@
+"""
+Augments Python's suite of IO functions with useful transparent support for
+compressed files.
+"""
+
 from __future__ import absolute_import
 
 __author__ = 'Shyue Ping Ong'
