@@ -147,11 +147,12 @@ class ScratchDir(object):
                 If this is None, no temp directories will be created and
                 this will just be a simple pass through.
             create_symbolic_link (bool): Whether to create a symbolic link in
-                the current working directory.
-            copy_from_current_on_enter (bool): Whether to copy files from the
-                current directory (recursively) at the start, e.g.,
-                if input files are needed for performing some actions.
-                Defaults to False.
+                the current working directory to the scratch directory
+                created.
+            copy_from_current_on_enter (bool): Whether to copy all files from
+                the current directory (recursively) to the temp dir at the
+                start, e.g., if input files are needed for performing some
+                actions. Defaults to False.
             copy_to_current_on_exit (bool): Whether to copy files from the
                 scratch to the current directory (recursively) at the end. E
                 .g., if output files are generated during the operation.
