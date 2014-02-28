@@ -132,6 +132,8 @@ class ScratchDir(object):
 
         Args:
             rootpath (str): The path in which to create temp subdirectories.
+                If this is None, no temp directories will be created and
+                this will just be a simple pass through.
             create_symbolic_link (bool): Whether to create a symbolic link in
                 the current working directory.
             copy_from_current_on_enter (bool): Whether to copy files from the
@@ -143,7 +145,8 @@ class ScratchDir(object):
                 .g., if output files are generated during the operation.
                 Defaults to True.
         """
-        self.rootpath = rootpath
+        self.rootpath = os.path.abspath(rootpath) if rootpath is not None \
+            else None
         self.cwd = os.getcwd()
         self.create_symbolic_link = create_symbolic_link
         self.start_copy = copy_from_current_on_enter
@@ -151,8 +154,7 @@ class ScratchDir(object):
 
     def __enter__(self):
         tempdir = self.cwd
-        if self.rootpath is not None and os.path.abspath(self.rootpath) != \
-                self.cwd:
+        if self.rootpath is not None:
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
             if self.start_copy:
@@ -163,8 +165,7 @@ class ScratchDir(object):
         return tempdir
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.rootpath is not None and os.path.abspath(self.rootpath) != \
-                self.cwd:
+        if self.rootpath is not None:
             if self.end_copy:
                 copy_r(".", self.cwd)
             shutil.rmtree(self.tempdir)
