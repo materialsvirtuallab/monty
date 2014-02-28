@@ -6,7 +6,7 @@ with open("README.md") as f:
 setup(
     name="monty",
     packages=find_packages(),
-    version="0.1.6",
+    version="0.2.0",
     install_requires=[],
     extras_require={},
     package_data={},

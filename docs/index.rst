@@ -37,6 +37,11 @@ Monty is tested for both Python 2.7 and Python 3+ compatibility.
 Latest Change Log
 =================
 
+v0.2.0
+------
+1. ScratchDir now supports non-copying of files to and from current
+   directory, and this is the default (different from prior releases).
+
 v0.1.5
 ------
 1. Added the useful monty.shutil.compress_file, compress_dir,
