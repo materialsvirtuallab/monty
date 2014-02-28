@@ -119,8 +119,8 @@ class ScratchDir(object):
     SCR_LINK = "scratch_link"
 
     def __init__(self, rootpath, create_symbolic_link=False,
-                 copy_from_current_on_enter=True,
-                 copy_to_current_on_exit=True):
+                 copy_from_current_on_enter=False,
+                 copy_to_current_on_exit=False):
         """
         Initializes scratch directory given a **root** path. There is no need
         to try to create unique directory names. The code will generate a
@@ -139,11 +139,11 @@ class ScratchDir(object):
             copy_from_current_on_enter (bool): Whether to copy files from the
                 current directory (recursively) at the start, e.g.,
                 if input files are needed for performing some actions.
-                Defaults to True.
+                Defaults to False.
             copy_to_current_on_exit (bool): Whether to copy files from the
                 scratch to the current directory (recursively) at the end. E
                 .g., if output files are generated during the operation.
-                Defaults to True.
+                Defaults to False.
         """
         self.rootpath = os.path.abspath(rootpath) if rootpath is not None \
             else None
