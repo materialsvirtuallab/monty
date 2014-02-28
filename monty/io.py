@@ -118,6 +118,7 @@ class ScratchDir(object):
     functions) and cleanup when done. This improves on Python's built in
     functions by allowing for truly temporary workspace that are deleted
     when it is done. The way it works is as follows:
+
     1. Create a temp dir in specified root path.
     2. Optionally copy input files from current directory to temp dir.
     3. Change to temp dir.
@@ -125,6 +126,7 @@ class ScratchDir(object):
     5. Optionally copy generated output files back to original directory.
     6. Change back to original directory.
     7. Delete temp dir.
+
     """
     SCR_LINK = "scratch_link"
 
