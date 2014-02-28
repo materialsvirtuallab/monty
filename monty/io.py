@@ -113,8 +113,18 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
 
 class ScratchDir(object):
     """
-    Creates a with context manager that automatically handles creation of
-    temporary directories in the scratch space and cleanup when done.
+    Creates a "with" context manager that automatically handles creation of
+    temporary directories (utilizing Python's build in temp directory
+    functions) and cleanup when done. This improves on Python's built in
+    functions by allowing for truly temporary workspace that are deleted
+    when it is done. The way it works is as follows:
+    1. Create a temp dir in specified root path.
+    2. Optionally copy input files from current directory to temp dir.
+    3. Change to temp dir.
+    4. User performs specified operations.
+    5. Optionally copy generated output files back to original directory.
+    6. Change back to original directory.
+    7. Delete temp dir.
     """
     SCR_LINK = "scratch_link"
 
