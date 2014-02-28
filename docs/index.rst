@@ -32,7 +32,7 @@ be a resource to collect the best solutions.
 Compatibility
 -------------
 
-Monty is tested for both Python 2.7 and Python 3+ compatibility.
+Monty is tested to work on Python 2.7, 3.2 and 3.3.
 
 Latest Change Log
 =================
