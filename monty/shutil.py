@@ -95,8 +95,8 @@ def compress_dir(path, compression="gz"):
 
 def decompress_file(filepath):
     """
-    Decompresses a file with the correct extension. Automatically detects gz
-    or bz2 extension.
+    Decompresses a file with the correct extension. Automatically detects
+    gz, bz2 or z extension.
 
     Args:
         filepath (str): Path to file.
@@ -113,16 +113,12 @@ def decompress_file(filepath):
         os.remove(filepath)
 
 
-def decompress_dir(path, compression="gz"):
+def decompress_dir(path):
     """
-    Recursively compresses all files in a directory. Note that this
-    compresses all files singly, i.e., it does not create a tar archive. For
-    that, just use Python tarfile class.
+    Recursively decompresses all files in a directory.
 
     Args:
         path (str): Path to parent directory.
-        compression (str): A compression mode. Valid options are "gz" or
-            "bz2". Defaults to gz.
     """
     for parent, subdirs, files in os.walk(path):
         for f in files:
