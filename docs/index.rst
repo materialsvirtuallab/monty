@@ -37,6 +37,11 @@ Monty is tested for both Python 2.7 and Python 3+ compatibility.
 Latest Change Log
 =================
 
+v0.2.1
+------
+1. Add string module, which provides a function to remove non-ascii
+   characters. More to be added.
+
 v0.2.0
 ------
 1. ScratchDir now supports non-copying of files to and from current
