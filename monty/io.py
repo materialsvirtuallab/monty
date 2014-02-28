@@ -118,7 +118,9 @@ class ScratchDir(object):
     """
     SCR_LINK = "scratch_link"
 
-    def __init__(self, rootpath, create_symbolic_link=False):
+    def __init__(self, rootpath, create_symbolic_link=False,
+                 copy_from_current_on_enter=True,
+                 copy_to_current_on_exit=True):
         """
         Initializes scratch directory given a **root** path. There is no need
         to try to create unique directory names. The code will generate a
@@ -132,10 +134,20 @@ class ScratchDir(object):
             rootpath (str): The path in which to create temp subdirectories.
             create_symbolic_link (bool): Whether to create a symbolic link in
                 the current working directory.
+            copy_from_current_on_enter (bool): Whether to copy files from the
+                current directory (recursively) at the start, e.g.,
+                if input files are needed for performing some actions.
+                Defaults to True.
+            copy_to_current_on_exit (bool): Whether to copy files from the
+                scratch to the current directory (recursively) at the end. E
+                .g., if output files are generated during the operation.
+                Defaults to True.
         """
         self.rootpath = rootpath
         self.cwd = os.getcwd()
         self.create_symbolic_link = create_symbolic_link
+        self.start_copy = copy_from_current_on_enter
+        self.end_copy = copy_to_current_on_exit
 
     def __enter__(self):
         tempdir = self.cwd
@@ -143,7 +155,8 @@ class ScratchDir(object):
                 self.cwd:
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
-            copy_r(".", tempdir)
+            if self.start_copy:
+                copy_r(".", tempdir)
             if self.create_symbolic_link:
                 os.symlink(tempdir, ScratchDir.SCR_LINK)
             os.chdir(tempdir)
@@ -152,7 +165,8 @@ class ScratchDir(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.rootpath is not None and os.path.abspath(self.rootpath) != \
                 self.cwd:
-            copy_r(".", self.cwd)
+            if self.end_copy:
+                copy_r(".", self.cwd)
             shutil.rmtree(self.tempdir)
             os.chdir(self.cwd)
             if self.create_symbolic_link:

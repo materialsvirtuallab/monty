@@ -24,15 +24,18 @@ def copy_r(src, dst):
         dst (str): Destination folder.
     """
 
-    for parent, subdir, files in os.walk(src):
-        relparent = os.path.relpath(parent, src)
-        realdst = dst if relparent == "." else os.path.join(dst, relparent)
-        try:
-            os.makedirs(realdst)
-        except Exception as ex:
-            pass
-        for f in files:
-            shutil.copy(os.path.join(parent, f), realdst)
+    abssrc = os.path.abspath(src)
+    absdst = os.path.abspath(dst)
+    try:
+        os.makedirs(absdst)
+    except:
+        pass
+    for f in os.listdir(abssrc):
+        fpath = os.path.join(abssrc, f)
+        if os.path.isfile(fpath):
+            shutil.copy(fpath, absdst)
+        elif not absdst.startswith(fpath):
+            copy_r(fpath, os.path.join(absdst, f))
 
 
 def gzip_dir(path):

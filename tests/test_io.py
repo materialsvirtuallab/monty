@@ -9,7 +9,7 @@ __date__ = '1/24/14'
 
 
 import unittest
-import tempfile
+import shutil
 import os
 
 from monty.io import reverse_readline, ScratchDir
@@ -43,21 +43,27 @@ class ReverseReadlineTest(unittest.TestCase):
                 raise ValueError("an empty file is being read!")
 
 
-# class ScratchDirTest(unittest.TestCase):
-#
-#     def test_with(self):
-#         scratch = tempfile.gettempdir()
-#         with ScratchDir(scratch) as d:
-#             with open("scratch_text", "w") as f:
-#                 f.write("write")
-#             files = os.listdir(d)
-#             self.assertIn("scratch_text", files)
-#
-#         #Make sure the tempdir is deleted.
-#         self.assertFalse(os.path.exists(d))
-#         files = os.listdir(".")
-#         self.assertIn("scratch_text", files)
-#         os.remove("scratch_text")
+class ScratchDirTest(unittest.TestCase):
+
+    def test_with(self):
+        cwd = os.getcwd()
+        os.chdir(test_dir)
+        scratch = os.path.join(test_dir, "..", "..", "tempscratch")
+        os.mkdir(scratch)
+        with ScratchDir(scratch, copy_from_current_on_enter=True,
+                        copy_to_current_on_exit=True) as d:
+            with open("scratch_text", "w") as f:
+                f.write("write")
+            files = os.listdir(d)
+            self.assertIn("scratch_text", files)
+
+        #Make sure the tempdir is deleted.
+        self.assertFalse(os.path.exists(d))
+        files = os.listdir(".")
+        self.assertIn("scratch_text", files)
+        os.remove("scratch_text")
+        shutil.rmtree(scratch)
+        os.chdir(cwd)
 
 
 if __name__ == "__main__":
