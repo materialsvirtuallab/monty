@@ -22,8 +22,8 @@ from monty.string import remove_non_ascii
 class FuncTest(unittest.TestCase):
 
     def test_remove_non_ascii(self):
-        s = "".join(chr(random.randint(0, 127)) for i in xrange(10))
-        s += "".join(chr(random.randint(128, 150)) for i in xrange(10))
+        s = "".join(chr(random.randint(0, 127)) for i in range(10))
+        s += "".join(chr(random.randint(128, 150)) for i in range(10))
         clean = remove_non_ascii(s)
         self.assertEqual(len(clean), 10)
 
