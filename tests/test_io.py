@@ -45,25 +45,46 @@ class ReverseReadlineTest(unittest.TestCase):
 
 class ScratchDirTest(unittest.TestCase):
 
-    def test_with(self):
-        cwd = os.getcwd()
+    def setUp(self):
+        self.cwd = os.getcwd()
         os.chdir(test_dir)
-        scratch = os.path.join(test_dir, "..", "..", "tempscratch")
-        os.mkdir(scratch)
-        with ScratchDir(scratch, copy_from_current_on_enter=True,
+        self.scratch_root = os.path.join(test_dir, "..", "..", "tempscratch")
+        os.mkdir(self.scratch_root)
+
+    def test_with_copy(self):
+
+        with ScratchDir(self.scratch_root, copy_from_current_on_enter=True,
                         copy_to_current_on_exit=True) as d:
             with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
             self.assertIn("scratch_text", files)
+            self.assertIn("empty_file.txt", files)
 
         #Make sure the tempdir is deleted.
         self.assertFalse(os.path.exists(d))
         files = os.listdir(".")
         self.assertIn("scratch_text", files)
         os.remove("scratch_text")
-        shutil.rmtree(scratch)
-        os.chdir(cwd)
+
+    def test_no_copy(self):
+
+        with ScratchDir(self.scratch_root, copy_from_current_on_enter=False,
+                        copy_to_current_on_exit=False) as d:
+            with open("scratch_text", "w") as f:
+                f.write("write")
+            files = os.listdir(d)
+            self.assertIn("scratch_text", files)
+            self.assertNotIn("empty_file.txt", files)
+
+        #Make sure the tempdir is deleted.
+        self.assertFalse(os.path.exists(d))
+        files = os.listdir(".")
+        self.assertNotIn("scratch_text", files)
+
+    def tearDown(self):
+        os.chdir(self.cwd)
+        shutil.rmtree(self.scratch_root)
 
 
 if __name__ == "__main__":
