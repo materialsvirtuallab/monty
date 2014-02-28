@@ -10,6 +10,7 @@ __date__ = '1/24/14'
 
 import os
 import shutil
+import warnings
 from gzip import GzipFile
 
 
@@ -36,6 +37,8 @@ def copy_r(src, dst):
             shutil.copy(fpath, absdst)
         elif not absdst.startswith(fpath):
             copy_r(fpath, os.path.join(absdst, f))
+        else:
+            warnings.warn("Cannot copy %s to itself" % fpath)
 
 
 def gzip_dir(path):
