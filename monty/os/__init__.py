@@ -1,3 +1,5 @@
+from __future__ import absolute_import
+
 __author__ = 'Shyue Ping Ong'
 __copyright__ = 'Copyright 2013, The Materials Project'
 __version__ = '0.1'
