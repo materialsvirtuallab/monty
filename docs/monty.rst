@@ -67,6 +67,14 @@ monty.string module
     :undoc-members:
     :show-inheritance:
 
+monty.tempfile module
+---------------------
+
+.. automodule:: monty.tempfile
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------

@@ -37,6 +37,11 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.2.2
+------
+1. Add a Fabric-inspired cd context manager in monty.os.
+2. Refactor ScratchDir context manager to monty.tempfile.
+
 v0.2.1
 ------
 1. Add string module, which provides a function to remove non-ascii
