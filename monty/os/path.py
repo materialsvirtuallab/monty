@@ -25,8 +25,8 @@ def which(cmd):
 
         full_path_to_python = which("python")
     """
-    def is_exe(fpath):
-        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+    def is_exe(fp):
+        return os.path.isfile(fp) and os.access(fp, os.X_OK)
 
     fpath, fname = os.path.split(cmd)
     if fpath:

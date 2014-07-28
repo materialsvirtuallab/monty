@@ -21,7 +21,7 @@ def remove_non_ascii(s):
     is not available.
 
     Args:
-        s: Input string
+        s (str): Input string
 
     Returns:
         String with all non-ascii characters removed.

@@ -29,7 +29,7 @@ def copy_r(src, dst):
     absdst = os.path.abspath(dst)
     try:
         os.makedirs(absdst)
-    except:
+    except OSError:
         pass
     for f in os.listdir(abssrc):
         fpath = os.path.join(abssrc, f)
