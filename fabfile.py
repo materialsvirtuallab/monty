@@ -66,14 +66,6 @@ def setver():
     local("mv newsetup setup.py")
 
 
-def update_doc():
-    makedoc()
-    with lcd("docs/_build/html/"):
-        local("git add .")
-        local("git commit -a -m \"Update dev docs\"")
-        local("git push origin gh-pages")
-
-
 def release():
     setver()
     test()
