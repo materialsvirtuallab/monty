@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.2.3
+------
+1. Added get_ncpus method in dev. (G. Matteo).
+
 v0.2.2
 ------
 1. Add a Fabric-inspired cd context manager in monty.os.
