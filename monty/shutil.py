@@ -30,6 +30,7 @@ def copy_r(src, dst):
     try:
         os.makedirs(absdst)
     except OSError:
+        # If absdst exists, an OSError is raised. We ignore this error.
         pass
     for f in os.listdir(abssrc):
         fpath = os.path.join(abssrc, f)
