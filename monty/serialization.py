@@ -29,7 +29,9 @@ except ImportError:
 def serial_loadf(f, *args, **kwargs):
     """
     Loads json/yaml directly from a filename instead of a File-like object.
-    For YAML, PyYAML must be installed. The file type is automatically detected.
+    For YAML, PyYAML must be installed. The file type is automatically
+    detected. YAML is assumed if the filename contains "yaml" (lower or upper
+    case). Otherwise, json is always assumed.
 
     Args:
         f (str): filename
@@ -52,8 +54,10 @@ def serial_loadf(f, *args, **kwargs):
 def serial_dumpf(obj, f, *args, **kwargs):
     """
     Dump to a json/yaml directly by filename instead of a File-like object.
-    For YAML, PyYAML must be installed. The file type is automatically detected.
-
+    For YAML, PyYAML must be installed. The file type is automatically
+    detected. YAML is assumed if the filename contains "yaml" (lower or upper
+    case). Otherwise, json is always assumed.
+    
     Args:
         obj (object): Object to dump.
         f (str): filename.
