@@ -8,7 +8,7 @@ setup(
     packages=find_packages(),
     version="0.2.3",
     install_requires=[],
-    extras_require={},
+    extras_require={"yaml": ["pyyaml>=3.1"],},
     package_data={},
     author="Shyue Ping Ong",
     author_email="ongsp@ucsd.edu",

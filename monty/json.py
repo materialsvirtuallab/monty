@@ -41,9 +41,6 @@ def dumpf(obj, f, *args, **kwargs):
         f (str): filename.
         \*args: Any of the args supported by Python's json.load.
         \*\*kwargs: Any of the kwargs supported by Python's json.load.
-
-    Returns:
-        (object) Result of json.load.
     """
     with open(f, "wt") as fp:
         json.dump(obj, fp, *args, **kwargs)
