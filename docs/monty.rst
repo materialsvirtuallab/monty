@@ -51,6 +51,14 @@ monty.json module
     :undoc-members:
     :show-inheritance:
 
+monty.serialization module
+--------------------------
+
+.. automodule:: monty.serialization
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.shutil module
 -------------------
 

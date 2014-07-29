@@ -37,6 +37,11 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.2.4
+------
+1. Added serialization module that supports both json and yaml. The latter
+   requires pyyaml.
+
 v0.2.3
 ------
 1. Added get_ncpus method in dev. (G. Matteo).

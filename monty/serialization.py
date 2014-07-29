@@ -57,7 +57,7 @@ def serial_dumpf(obj, f, *args, **kwargs):
     For YAML, PyYAML must be installed. The file type is automatically
     detected. YAML is assumed if the filename contains "yaml" (lower or upper
     case). Otherwise, json is always assumed.
-    
+
     Args:
         obj (object): Object to dump.
         f (str): filename.
