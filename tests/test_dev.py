@@ -13,26 +13,25 @@ import warnings
 
 from monty.dev import deprecated, requires
 
-class DecoratorTest(unittest.TestCase):
 
+class DecoratorTest(unittest.TestCase):
 
     def test_deprecated(self):
 
-        def A():
+        def func_a():
             pass
 
-        @deprecated(A)
-        def B():
+        @deprecated(func_a)
+        def func_b():
             pass
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            B()
+            func_b()
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
-
 
     def test_requires(self):
 

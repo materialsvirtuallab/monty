@@ -12,7 +12,7 @@ __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
-
+import re
 import logging
 import datetime
 import warnings
@@ -34,10 +34,10 @@ def logged(level=logging.DEBUG):
 
         def wrapped_f(*args, **kwargs):
             _logger.log(level, "Called at {} with args = {} and kwargs = {}"
-                       .format(datetime.datetime.now(), args, kwargs))
+                        .format(datetime.datetime.now(), args, kwargs))
             data = f(*args, **kwargs)
             _logger.log(level, "Done at {} with args = {} and kwargs = {}"
-                       .format(datetime.datetime.now(), args, kwargs))
+                        .format(datetime.datetime.now(), args, kwargs))
             return data
 
         return wrapped_f
@@ -93,21 +93,22 @@ class requires(object):
         self.condition = condition
         self.message = message
 
-    def __call__(self, callable):
-        @wraps(callable)
+    def __call__(self, _callable):
+        @wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
                 raise RuntimeError(self.message)
-            return callable(*args, **kwargs)
+            return _callable(*args, **kwargs)
         return decorated
 
 
-def number_of_cpus():
+def get_ncpus():
     """
     Number of virtual or physical CPUs on this system, i.e.
-    user/real as output by time(1) when called with an optimally scaling userspace-only program
-    Return -1 if ncpus cannot be detected. Taken from:
-    http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of-cpus-in-python
+    user/real as output by time(1) when called with an optimally scaling
+    userspace-only program. Return -1 if ncpus cannot be detected. Taken from:
+    http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of-
+    cpus-in-python
     """
     # Python 2.6+
     # May raise NonImplementedError
@@ -123,14 +124,16 @@ def number_of_cpus():
     # POSIX
     try:
         res = int(os.sysconf('SC_NPROCESSORS_ONLN'))
-        if res > 0: return res
+        if res > 0:
+            return res
     except (AttributeError, ValueError):
         pass
 
     # Windows
     try:
         res = int(os.environ['NUMBER_OF_PROCESSORS'])
-        if res > 0: return res
+        if res > 0:
+            return res
     except (KeyError, ValueError):
         pass
 
@@ -139,35 +142,40 @@ def number_of_cpus():
         from java.lang import Runtime
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
-        if res > 0: return res
+        if res > 0:
+            return res
     except ImportError:
         pass
 
     # BSD
     try:
-        sysctl = subprocess.Popen(['sysctl', '-n', 'hw.ncpu'], stdout=subprocess.PIPE)
-        scStdout = sysctl.communicate()[0]
-        res = int(scStdout)
-        if res > 0: return res
+        sysctl = subprocess.Popen(['sysctl', '-n', 'hw.ncpu'],
+                                  stdout=subprocess.PIPE)
+        scstdout = sysctl.communicate()[0]
+        res = int(scstdout)
+        if res > 0:
+            return res
     except (OSError, ValueError):
         pass
 
     # Linux
     try:
         res = open('/proc/cpuinfo').read().count('processor\t:')
-        if res > 0: return res
+        if res > 0:
+            return res
     except IOError:
         pass
 
     # Solaris
     try:
-        pseudoDevices = os.listdir('/devices/pseudo/')
+        pseudo_devices = os.listdir('/devices/pseudo/')
         expr = re.compile('^cpuid@[0-9]+$')
         res = 0
-        for pd in pseudoDevices:
+        for pd in pseudo_devices:
             if expr.match(pd) is not None:
                 res += 1
-        if res > 0: return res
+        if res > 0:
+            return res
     except OSError:
         pass
 
@@ -176,14 +184,15 @@ def number_of_cpus():
         try:
             dmesg = open('/var/run/dmesg.boot').read()
         except IOError:
-            dmesgProcess = subprocess.Popen(['dmesg'], stdout=subprocess.PIPE)
-            dmesg = dmesgProcess.communicate()[0]
+            dmesg_process = subprocess.Popen(['dmesg'], stdout=subprocess.PIPE)
+            dmesg = dmesg_process.communicate()[0]
 
         res = 0
         while '\ncpu' + str(res) + ':' in dmesg:
             res += 1
 
-        if res > 0: return res
+        if res > 0:
+            return res
     except OSError:
         pass
 
