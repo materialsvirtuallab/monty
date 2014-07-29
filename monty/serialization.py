@@ -41,7 +41,7 @@ def serial_loadf(f, *args, **kwargs):
     """
     with zopen(f) as fp:
         serial_mod = json
-        if "yaml" in f:
+        if "yaml" in f.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
@@ -65,7 +65,7 @@ def serial_dumpf(obj, f, *args, **kwargs):
     """
     with open(f, "wt") as fp:
         serial_mod = json
-        if "yaml" in f:
+        if "yaml" in f.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
