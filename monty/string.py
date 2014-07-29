@@ -27,3 +27,29 @@ def remove_non_ascii(s):
         String with all non-ascii characters removed.
     """
     return "".join(i for i in s if ord(i) < 128)
+
+
+def marquee(text="", width=78, mark='*'):
+    """
+    Return the input string centered in a 'marquee'.
+
+    :Examples:
+
+    >>> marquee('A test', width=40)
+    '**************** A test ****************'
+
+    >>> marquee('A test', width=40, mark='-')
+    '---------------- A test ----------------'
+
+    marquee('A test',40, ' ')
+    '                 A test                 '
+    """
+    if not text:
+        return (mark*width)[:width]
+
+    nmark = (width-len(text)-2)//len(mark)//2
+    if nmark < 0: 
+        nmark = 0
+
+    marks = mark * nmark
+    return '%s %s %s' % (marks, text, marks)
