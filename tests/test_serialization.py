@@ -11,19 +11,19 @@ __date__ = '1/24/14'
 import unittest
 import os
 
-from monty.serialization import serial_dumpf, serial_loadf
+from monty.serialization import dumpfn, loadfn
 
 
 class SerialTest(unittest.TestCase):
 
     def test_dumpf_loadf(self):
         d = {"hello": "world"}
-        serial_dumpf(d, "monte_test.json", indent=4)
-        d2 = serial_loadf("monte_test.json")
+        dumpfn(d, "monte_test.json", indent=4)
+        d2 = loadfn("monte_test.json")
         self.assertEqual(d, d2)
         os.remove("monte_test.json")
-        serial_dumpf(d, "monte_test.yaml", default_flow_style=False)
-        d2 = serial_loadf("monte_test.yaml")
+        dumpfn(d, "monte_test.yaml", default_flow_style=False)
+        d2 = loadfn("monte_test.yaml")
         self.assertEqual(d, d2)
         os.remove("monte_test.yaml")
 

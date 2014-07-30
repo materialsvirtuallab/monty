@@ -12,10 +12,11 @@ __email__ = "shyuep@gmail.com"
 __date__ = "1/24/14"
 
 
-import json
-from monty.io import zopen
+from monty.dev import deprecated
+from monty.serialization import loadfn, dumpfn
 
 
+@deprecated(replacement=loadfn)
 def loadf(f, *args, **kwargs):
     """
     Load json directly from a filename instead of a File-like object.
@@ -28,10 +29,10 @@ def loadf(f, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    with zopen(f) as fp:
-        return json.load(fp, *args, **kwargs)
+    return loadfn(f, *args, **kwargs)
 
 
+@deprecated(replacement=dumpfn)
 def dumpf(obj, f, *args, **kwargs):
     """
     Dump to a json directly by filename instead of a File-like object.
@@ -42,5 +43,4 @@ def dumpf(obj, f, *args, **kwargs):
         \*args: Any of the args supported by Python's json.load.
         \*\*kwargs: Any of the kwargs supported by Python's json.load.
     """
-    with open(f, "wt") as fp:
-        json.dump(obj, fp, *args, **kwargs)
+    dumpfn(obj, f, *args, **kwargs)
