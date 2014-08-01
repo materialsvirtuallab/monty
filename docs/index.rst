@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.3.0
+------
+1. Refactor serialization tools to shorten method names.
+
 v0.2.4
 ------
 1. Added serialization module that supports both json and yaml. The latter

@@ -26,7 +26,7 @@ except ImportError:
     Loader = None
 
 
-def serial_loadf(f, *args, **kwargs):
+def loadfn(fn, *args, **kwargs):
     """
     Loads json/yaml directly from a filename instead of a File-like object.
     For YAML, PyYAML must be installed. The file type is automatically
@@ -34,16 +34,16 @@ def serial_loadf(f, *args, **kwargs):
     case). Otherwise, json is always assumed.
 
     Args:
-        f (str): filename
-        \*args: Any of the args supported by Python's json.load.
-        \*\*kwargs: Any of the kwargs supported by Python's json.load.
+        fn (str): filename
+        \*args: Any of the args supported by json/yaml.load.
+        \*\*kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
         (object) Result of json/yaml.load.
     """
-    with zopen(f) as fp:
+    with zopen(fn) as fp:
         serial_mod = json
-        if "yaml" in f.lower():
+        if "yaml" in fn.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
@@ -51,7 +51,7 @@ def serial_loadf(f, *args, **kwargs):
         return serial_mod.load(fp, *args, **kwargs)
 
 
-def serial_dumpf(obj, f, *args, **kwargs):
+def dumpfn(obj, fn, *args, **kwargs):
     """
     Dump to a json/yaml directly by filename instead of a File-like object.
     For YAML, PyYAML must be installed. The file type is automatically
@@ -60,16 +60,16 @@ def serial_dumpf(obj, f, *args, **kwargs):
 
     Args:
         obj (object): Object to dump.
-        f (str): filename.
-        \*args: Any of the args supported by Python's json.load.
-        \*\*kwargs: Any of the kwargs supported by Python's json.load.
+        fn (str): filename.
+        \*args: Any of the args supported by json/yaml.dump.
+        \*\*kwargs: Any of the kwargs supported by json/yaml.dump.
 
     Returns:
         (object) Result of json.load.
     """
-    with open(f, "wt") as fp:
+    with open(fn, "wt") as fp:
         serial_mod = json
-        if "yaml" in f.lower():
+        if "yaml" in fn.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
