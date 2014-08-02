@@ -18,9 +18,9 @@ try:
     import yaml
     # Use CLoader for faster performance where possible.
     try:
-        from yaml import CLoader as Loader
+        from yaml import CLoader as Loader, CDumper as Dumper
     except ImportError:
-        from yaml import Loader
+        from yaml import Loader, Dumper
 except ImportError:
     yaml = None
     Loader = None
@@ -31,7 +31,9 @@ def loadfn(fn, *args, **kwargs):
     Loads json/yaml directly from a filename instead of a File-like object.
     For YAML, PyYAML must be installed. The file type is automatically
     detected. YAML is assumed if the filename contains "yaml" (lower or upper
-    case). Otherwise, json is always assumed.
+    case). Otherwise, json is always assumed. Furthermore, if pyyaml is
+    compiled with the LibYAML library, the CLoader is automatically chosen
+    for ~10x faster parsing.
 
     Args:
         fn (str): filename
@@ -42,13 +44,13 @@ def loadfn(fn, *args, **kwargs):
         (object) Result of json/yaml.load.
     """
     with zopen(fn) as fp:
-        serial_mod = json
         if "yaml" in fn.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
-            serial_mod = yaml
-        return serial_mod.load(fp, *args, **kwargs)
+            return yaml.load(fp, *args, Loader=Loader, **kwargs)
+        else:
+            return json.load(fp, *args, **kwargs)
 
 
 def dumpfn(obj, fn, *args, **kwargs):
@@ -56,7 +58,9 @@ def dumpfn(obj, fn, *args, **kwargs):
     Dump to a json/yaml directly by filename instead of a File-like object.
     For YAML, PyYAML must be installed. The file type is automatically
     detected. YAML is assumed if the filename contains "yaml" (lower or upper
-    case). Otherwise, json is always assumed.
+    case). Otherwise, json is always assumed. Furthermore, if pyyaml is
+    compiled with the LibYAML library, the CDumper is automatically chosen
+    for ~10x faster parsing.
 
     Args:
         obj (object): Object to dump.
@@ -68,10 +72,10 @@ def dumpfn(obj, fn, *args, **kwargs):
         (object) Result of json.load.
     """
     with open(fn, "wt") as fp:
-        serial_mod = json
         if "yaml" in fn.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
-            serial_mod = yaml
-        return serial_mod.dump(obj, fp, *args, **kwargs)
+            yaml.dump(obj, fp, *args, Dumper=Dumper, **kwargs)
+        else:
+            json.dump(obj, fp, *args, **kwargs)

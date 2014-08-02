@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.3.1
+------
+1. Proper support for libyaml auto-detect in yaml support.
+
 v0.3.0
 ------
 1. Refactor serialization tools to shorten method names.
