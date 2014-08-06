@@ -17,10 +17,13 @@ import fractions
 
 def gcd(*numbers):
     """
-    Returns the greatest common denominator for a sequence of numbers.
+    Returns the greatest common divisor for a sequence of numbers.
 
     Args:
         \*numbers: Sequence of numbers.
+
+    Returns:
+        (int) Greatest common divisor of numbers.
     """
     return reduce(fractions.gcd, numbers)
 
@@ -31,6 +34,9 @@ def lcm(*numbers):
 
     Args:
         \*numbers: Sequence of numbers.
+
+    Returns:
+        (int) Lowest common multiple of numbers.
     """
     def lcm(a, b):
         return (a * b) // gcd(a, b)
