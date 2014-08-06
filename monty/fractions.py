@@ -25,7 +25,10 @@ def gcd(*numbers):
     Returns:
         (int) Greatest common divisor of numbers.
     """
-    return reduce(fractions.gcd, numbers)
+    n = numbers[0]
+    for i in numbers:
+        n = fractions.gcd(n, i)
+    return n
 
 
 def lcm(*numbers):
