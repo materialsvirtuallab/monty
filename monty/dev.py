@@ -16,9 +16,14 @@ import re
 import logging
 import datetime
 import warnings
+import os
+import subprocess
+import multiprocessing
+
 from functools import wraps
 
-logger = logging.getLogger(__file__)
+
+logger = logging.getLogger(__name__)
 
 
 def logged(level=logging.DEBUG):
@@ -113,13 +118,9 @@ def get_ncpus():
     # Python 2.6+
     # May raise NonImplementedError
     try:
-        import multiprocessing
         return multiprocessing.cpu_count()
     except (ImportError, NotImplementedError):
         pass
-
-    import os
-    import subprocess
 
     # POSIX
     try:
