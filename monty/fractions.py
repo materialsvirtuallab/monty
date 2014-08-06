@@ -41,7 +41,7 @@ def lcm(*numbers):
     Returns:
         (int) Lowest common multiple of numbers.
     """
-    def lcm(a, b):
-        return (a * b) // gcd(a, b)
-
-    return reduce(lcm, numbers, 1)
+    n = 1
+    for i in numbers:
+        n = (i * n) // gcd(i, n)
+    return n
