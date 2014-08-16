@@ -35,6 +35,14 @@ monty.dev module
     :undoc-members:
     :show-inheritance:
 
+monty.fractions module
+----------------------
+
+.. automodule:: monty.fractions
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.io module
 ---------------
 
