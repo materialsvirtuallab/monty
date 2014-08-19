@@ -62,13 +62,13 @@ def deprecated(replacement=None):
     """
     def wrap(old):
         def wrapped(*args, **kwargs):
-            msg = "{} is deprecated".format(old.__name__)
+            msg = "%s is deprecated" % old.__name__
             if replacement is not None:
                 if isinstance(replacement, property):
-                    msg += "; use {} in {} instead.".format(
+                    msg += "; use %s in %s instead." % (
                         replacement.fget.__name__, replacement.fget.__module__)
                 else:
-                    msg += "; use {} in {} instead.".format(
+                    msg += "; use %s in %s instead." % (
                         replacement.__name__, replacement.__module__)
             warnings.simplefilter('default')
             warnings.warn(msg, DeprecationWarning, stacklevel=2)
