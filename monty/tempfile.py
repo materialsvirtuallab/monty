@@ -1,5 +1,5 @@
 """
-TODO: Modify module doc.
+Temporary directory and file creation utilities.
 """
 
 from __future__ import absolute_import
@@ -49,6 +49,9 @@ class ScratchDir(object):
             with ScratchDir("/scratch"):
                 do_something()
 
+        If the root path does not exist or is None, this will function as a
+        simple pass through, i.e., nothing happens.
+
         Args:
             rootpath (str): The path in which to create temp subdirectories.
                 If this is None, no temp directories will be created and
@@ -74,7 +77,7 @@ class ScratchDir(object):
 
     def __enter__(self):
         tempdir = self.cwd
-        if self.rootpath is not None:
+        if self.rootpath is not None and os.path.exists(self.rootpath):
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
             if self.start_copy:
@@ -85,7 +88,7 @@ class ScratchDir(object):
         return tempdir
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        if self.rootpath is not None:
+        if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
                 copy_r(".", self.cwd)
             shutil.rmtree(self.tempdir)
