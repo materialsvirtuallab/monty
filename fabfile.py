@@ -97,9 +97,15 @@ def release_github():
     print response.text
 
 
+def commit():
+    local("git commit -a -m \"v%s release\"" % ver)
+    local("git push")
+
+
 def release():
     setver()
     test()
     makedoc()
     publish()
+    commit()
     release_github()
