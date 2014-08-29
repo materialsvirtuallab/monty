@@ -14,6 +14,9 @@ __email__ = "shyue@mit.edu"
 __date__ = "Apr 29, 2012"
 
 import glob
+import requests
+import json
+import os
 
 from fabric.api import local, lcd
 from monty import __version__ as ver
@@ -66,8 +69,37 @@ def setver():
     local("mv newsetup setup.py")
 
 
+def release_github():
+    desc = []
+    read = False
+    with open("docs/index.rst") as f:
+        for l in f:
+            if l.strip() == "v" + ver:
+                read = True
+            elif l.strip() == "":
+                read = False
+            elif read:
+                desc.append(l.rstrip())
+    desc.pop(0)
+    payload = {
+        "tag_name": "v" + ver,
+        "target_commitish": "master",
+        "name": "v" + ver,
+        "body": "\n".join(desc),
+        "draft": False,
+        "prerelease": False
+    }
+
+    response = requests.post(
+        "https://api.github.com/repos/materialsvirtuallab/monty/releases",
+        data=json.dumps(payload),
+        headers={"Authorization": "token " + os.environ["PYMATGEN_GH_TOKEN"]})
+    print response.text
+
+
 def release():
     setver()
     test()
     makedoc()
     publish()
+    release_github()
