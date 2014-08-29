@@ -39,7 +39,7 @@ Latest Change Log
 
 v0.3.6
 ------
-1. `:class:monty.tempfile.ScratchDir`_ now checks for existence of root
+1. :class:`monty.tempfile.ScratchDir` now checks for existence of root
    directory. If root path does not exist, will function as simple
    pass through. Makes it a lot more robust to bad mounting of scratch
    directories.
