@@ -54,6 +54,10 @@ class ScratchDirTest(unittest.TestCase):
         files = os.listdir(".")
         self.assertNotIn("scratch_text", files)
 
+    def test_bad_root(self):
+        with ScratchDir("bad_groot") as d:
+            self.assertEqual(d, test_dir)
+
     def tearDown(self):
         os.chdir(self.cwd)
         shutil.rmtree(self.scratch_root)
