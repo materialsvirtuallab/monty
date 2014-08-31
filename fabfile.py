@@ -93,7 +93,7 @@ def release_github():
     response = requests.post(
         "https://api.github.com/repos/materialsvirtuallab/monty/releases",
         data=json.dumps(payload),
-        headers={"Authorization": "token " + os.environ["PYMATGEN_GH_TOKEN"]})
+        headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]})
     print response.text
 
 
