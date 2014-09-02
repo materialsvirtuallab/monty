@@ -12,6 +12,18 @@ import warnings
 from monty.dev import deprecated, requires
 
 
+class A:
+
+    @property
+    def repl_prop(self):
+        pass
+
+    @deprecated(repl_prop)
+    @property
+    def prop(self):
+        pass
+
+
 class DecoratorTest(unittest.TestCase):
 
     def test_deprecated(self):
@@ -28,6 +40,41 @@ class DecoratorTest(unittest.TestCase):
             warnings.simplefilter("always")
             # Trigger a warning.
             func_b()
+            # Verify some things
+            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+
+    def test_deprecated_property(self):
+
+        class a(object):
+            def __init__(self):
+                pass
+
+            @property
+            def property_a(self):
+                pass
+
+            @property
+            @deprecated(property_a)
+            def property_b(self):
+                return 'b'
+
+            @deprecated(property_a)
+            def func_a(self):
+                return 'a'
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            self.assertEqual(a().property_b, 'b')
+            # Verify some things
+            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            self.assertEqual(a().func_a(), 'a')
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
 

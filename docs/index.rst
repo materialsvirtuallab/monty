@@ -37,6 +37,22 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.3.6
+------
+1. :class:`monty.tempfile.ScratchDir` now checks for existence of root
+   directory. If root path does not exist, will function as simple
+   pass through. Makes it a lot more robust to bad mounting of scratch
+   directories.
+
+v0.3.5
+------
+1. Added backport of functools.lru_cache.
+
+v0.3.4
+------
+1. Specialized json encoders / decoders with support for numpy arrays and
+   objects supporting a to_dict() protocol used in pymatgen.
+
 v0.3.1
 ------
 1. Proper support for libyaml auto-detect in yaml support.
