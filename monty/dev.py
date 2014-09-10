@@ -49,13 +49,14 @@ def logged(level=logging.DEBUG):
     return wrap
 
 
-def deprecated(replacement=None):
+def deprecated(replacement=None, message=None):
     """
     Decorator to mark classes or functions as deprecated,
     with a possible replacement.
 
     Args:
-        replacement: A replacement class or method.
+        replacement (callable): A replacement class or method.
+        message (str): A warning message to be displayed.
 
     Returns:
         Original function, but with a warning to use the updated class.
@@ -72,6 +73,8 @@ def deprecated(replacement=None):
                         replacement.__name__, replacement.__module__)
             warnings.simplefilter('default')
             warnings.warn(msg, DeprecationWarning, stacklevel=2)
+            if message is not None:
+                warnings.warn(message, DeprecationWarning, stacklevel=2)
             return old(*args, **kwargs)
         return wrapped
     return wrap

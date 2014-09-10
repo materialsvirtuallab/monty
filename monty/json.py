@@ -170,33 +170,3 @@ class MSONError(Exception):
     Exception class for serialization errors.
     """
     pass
-
-
-@deprecated(replacement=loadfn)
-def loadf(f, *args, **kwargs):
-    """
-    Load json directly from a filename instead of a File-like object.
-
-    Args:
-        f (str): filename
-        \*args: Any of the args supported by Python's json.load.
-        \*\*kwargs: Any of the kwargs supported by Python's json.load.
-
-    Returns:
-        (object) Result of json.load.
-    """
-    return loadfn(f, *args, **kwargs)
-
-
-@deprecated(replacement=dumpfn)
-def dumpf(obj, f, *args, **kwargs):
-    """
-    Dump to a json directly by filename instead of a File-like object.
-
-    Args:
-        obj (object): Object to dump.
-        f (str): filename.
-        \*args: Any of the args supported by Python's json.load.
-        \*\*kwargs: Any of the kwargs supported by Python's json.load.
-    """
-    dumpfn(obj, f, *args, **kwargs)
