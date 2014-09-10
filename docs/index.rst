@@ -37,6 +37,12 @@ Monty is tested to work on Python 2.7, 3.2 and 3.3.
 Latest Change Log
 =================
 
+v0.4.0
+------
+1. Remove deprecated json.loadf methods.
+2. Add MSONable protocol for json/yaml based serialization.
+3. deprecated now supports an additonal message.
+
 v0.3.6
 ------
 1. :class:`monty.tempfile.ScratchDir` now checks for existence of root
