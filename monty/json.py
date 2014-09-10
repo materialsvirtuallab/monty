@@ -146,7 +146,7 @@ class MontyDecoder(json.JSONDecoder):
                 elif modname == "numpy" and classname == "array":
                     return np.array(d["data"])
 
-                mod = __import__(modname, globals(), locals(), [classname], -1)
+                mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
                     data = {k: v for k, v in d.items()
