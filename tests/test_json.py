@@ -23,7 +23,7 @@ class MSONableTest(unittest.TestCase):
                 self.a = a
                 self.b = b
 
-            def to_dict(self):
+            def as_dict(self):
                 d = {'a': self.a, 'b': self.b}
                 return d
 
@@ -39,7 +39,7 @@ class MSONableTest(unittest.TestCase):
                 self.a = a
                 self.b = b
 
-            def to_dict(self):
+            def as_dict(self):
                 d = {'a': self.a, 'b': self.b}
                 return d
 
@@ -47,17 +47,13 @@ class MSONableTest(unittest.TestCase):
 
     def test_to_from_dict(self):
         obj = self.good_cls("Hello", "World")
-        d = obj.to_dict()
+        d = obj.as_dict()
         self.assertIsNotNone(d)
         self.good_cls.from_dict(d)
         obj = self.bad_cls("Hello", "World")
-        d = obj.to_dict()
+        d = obj.as_dict()
         self.assertIsNotNone(d)
         self.assertRaises(MSONError, self.bad_cls.from_dict, d)
-
-    def test_to_json(self):
-        obj = self.good_cls("Hello", "World")
-        self.assertIsNotNone(obj.to_json)
 
 
 class JsonTest(unittest.TestCase):
