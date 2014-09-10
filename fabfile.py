@@ -80,6 +80,7 @@ def release_github():
                 read = False
             elif read:
                 desc.append(l.rstrip())
+
     desc.pop(0)
     payload = {
         "tag_name": "v" + ver,

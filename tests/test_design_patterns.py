@@ -7,6 +7,7 @@ __date__ = '1/24/14'
 
 
 import unittest
+import pickle
 
 from monty.design_patterns import singleton, cached_class
 
@@ -24,22 +25,36 @@ class SingletonTest(unittest.TestCase):
 
         self.assertEqual(id(a1), id(a2))
 
+
+@cached_class
+class A(object):
+    def __init__(self, val):
+        self.val = val
+
+    def __eq__(self, other):
+        return self.val == other.val
+
+    def __getinitargs__(self):
+        return self.val,
+
+    def __getnewargs__(self):
+        return self.val,
+
+
 class CachedClassTest(unittest.TestCase):
 
     def test_cached_class(self):
-
-        @cached_class
-        class A(object):
-
-            def __init__(self, val):
-                self.val = val
-
         a1a = A(1)
         a1b = A(1)
         a2 = A(2)
 
         self.assertEqual(id(a1a), id(a1b))
         self.assertNotEqual(id(a1a), id(a2))
+
+    def test_pickle(self):
+        a = A(2)
+        o = pickle.dumps(a)
+        self.assertEqual(a, pickle.loads(o))
 
 
 if __name__ == "__main__":

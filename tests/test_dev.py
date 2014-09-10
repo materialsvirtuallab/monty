@@ -31,7 +31,7 @@ class DecoratorTest(unittest.TestCase):
         def func_a():
             pass
 
-        @deprecated(func_a)
+        @deprecated(func_a, "hello")
         def func_b():
             pass
 
@@ -41,7 +41,9 @@ class DecoratorTest(unittest.TestCase):
             # Trigger a warning.
             func_b()
             # Verify some things
-            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
+            self.assertTrue(issubclass(w[1].category, DeprecationWarning))
+            self.assertEqual(str(w[1].message), 'hello')
 
     def test_deprecated_property(self):
 
