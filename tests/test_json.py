@@ -71,13 +71,14 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(type(d["dt"]), datetime.datetime)
 
     def test_numpy(self):
-        x = np.array([1, 2, 3])
+        x = np.array([1, 2, 3], dtype="int64")
         self.assertRaises(TypeError, json.dumps, x)
         djson = json.dumps(x, cls=MontyEncoder)
         d = json.loads(djson)
         self.assertEqual(d["@class"], "array")
         self.assertEqual(d["@module"], "numpy")
         self.assertEqual(d["data"], [1, 2, 3])
+        self.assertEqual(d["dtype"], "int64")
         x = json.loads(djson, cls=MontyDecoder)
         self.assertEqual(type(x), np.ndarray)
         x = np.min([1, 2, 3]) > 2
