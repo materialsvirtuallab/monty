@@ -32,10 +32,14 @@ be a resource to collect the best solutions.
 Compatibility
 -------------
 
-Monty is tested to work on Python 2.7, 3.2 and 3.3.
+Monty is tested to work on Python 2.7, 3.x.
 
 Latest Change Log
 =================
+
+v0.4.2
+------
+1. Improve numpy array serialization with MontyEncoder.
 
 v0.4.1
 ------
