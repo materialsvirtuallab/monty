@@ -14,39 +14,15 @@ __date__ = '1/24/14'
 
 import re
 import logging
-import datetime
 import warnings
 import os
 import subprocess
 import multiprocessing
 
-from functools import wraps
+import functools
 
 
 logger = logging.getLogger(__name__)
-
-
-def logged(level=logging.DEBUG):
-    """
-    Useful logging decorator. If a method is logged, the beginning and end of
-    the method call will be logged at a pre-specified level.
-
-    Args:
-        level: Level to log method at. Defaults to DEBUG.
-    """
-    def wrap(f):
-        _logger = logging.getLogger("{}.{}".format(f.__module__, f.__name__))
-
-        def wrapped_f(*args, **kwargs):
-            _logger.log(level, "Called at {} with args = {} and kwargs = {}"
-                        .format(datetime.datetime.now(), args, kwargs))
-            data = f(*args, **kwargs)
-            _logger.log(level, "Done at {} with args = {} and kwargs = {}"
-                        .format(datetime.datetime.now(), args, kwargs))
-            return data
-
-        return wrapped_f
-    return wrap
 
 
 def deprecated(replacement=None, message=None):
@@ -106,7 +82,7 @@ class requires(object):
         self.message = message
 
     def __call__(self, _callable):
-        @wraps(_callable)
+        @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
                 raise RuntimeError(self.message)
@@ -206,3 +182,54 @@ def get_ncpus():
 
     logger.warning('Cannot determine number of CPUs on this system!')
     return -1
+
+
+class lazy_property(object):
+    """lazy descriptor
+
+    Used as a decorator to create lazy attributes. Lazy attributes
+    are evaluated on first use.
+    """
+
+    def __init__(self, func):
+        self.__func = func
+        functools.wraps(self.__func)(self)
+
+    def __get__(self, inst, inst_cls):
+        if inst is None:
+            return self
+
+        if not hasattr(inst, '__dict__'):
+            raise AttributeError("'%s' object has no attribute '__dict__'"
+                                 % (inst_cls.__name__,))
+
+        name = self.__name__
+        if name.startswith('__') and not name.endswith('__'):
+            name = '_%s%s' % (inst_cls.__name__, name)
+
+        value = self.__func(inst)
+        inst.__dict__[name] = value
+        return value
+
+    @classmethod
+    def invalidate(cls, inst, name):
+        """Invalidate a lazy attribute.
+
+        This obviously violates the lazy contract. A subclass of lazy
+        may however have a contract where invalidation is appropriate.
+        """
+        inst_cls = inst.__class__
+
+        if not hasattr(inst, '__dict__'):
+            raise AttributeError("'%s' object has no attribute '__dict__'"
+                                 % (inst_cls.__name__,))
+
+        if name.startswith('__') and not name.endswith('__'):
+            name = '_%s%s' % (inst_cls.__name__, name)
+
+        if not isinstance(getattr(inst_cls, name), cls):
+            raise AttributeError("'%s.%s' is not a %s attribute"
+                                 % (inst_cls.__name__, name, cls.__name__))
+
+        if name in inst.__dict__:
+            del inst.__dict__[name]

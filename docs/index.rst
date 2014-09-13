@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.x.
 Latest Change Log
 =================
 
+v0.4.3
+------
+1. Additional dev decorators lazy and logging functions.
+
 v0.4.2
 ------
 1. Improve numpy array serialization with MontyEncoder.
