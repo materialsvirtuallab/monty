@@ -19,7 +19,7 @@ import os
 import subprocess
 import multiprocessing
 
-from functools import wraps
+import functools
 
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ class requires(object):
         self.message = message
 
     def __call__(self, _callable):
-        @wraps(_callable)
+        @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
                 raise RuntimeError(self.message)
@@ -193,7 +193,7 @@ class lazy_property(object):
 
     def __init__(self, func):
         self.__func = func
-        wraps(self.__func)(self)
+        functools.wraps(self.__func)(self)
 
     def __get__(self, inst, inst_cls):
         if inst is None:

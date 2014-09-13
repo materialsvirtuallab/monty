@@ -3,7 +3,7 @@
 """
 TODO: Modify module doc.
 """
-
+from __future__ import absolute_import
 from __future__ import division
 
 __author__ = "Shyue Ping Ong"
@@ -16,7 +16,8 @@ __date__ = "9/13/14"
 
 import logging
 import datetime
-from functools import wraps
+import functools
+
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +57,7 @@ def enable_logging(main):
         main:
             main function.
     """
-    @wraps(main)
+    @functools.wraps(main)
     def wrapper(*args, **kwargs):
         import argparse
         parser = argparse.ArgumentParser()
@@ -95,7 +96,7 @@ def enable_logging(main):
         main:
             main function.
     """
-    @wraps(main)
+    @functools.wraps(main)
     def wrapper(*args, **kwargs):
         import argparse
         parser = argparse.ArgumentParser()
