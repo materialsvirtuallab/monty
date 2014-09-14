@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.x.
 Latest Change Log
 =================
 
+v0.4.4
+------
+1. Refactor lazy_property to be in functools module.
+
 v0.4.3
 ------
 1. Additional dev decorators lazy and logging functions.

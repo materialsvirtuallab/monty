@@ -6,7 +6,7 @@ with open("README.md") as f:
 setup(
     name="monty",
     packages=find_packages(),
-    version="0.4.3",
+    version="0.4.4",
     install_requires=[],
     extras_require={"yaml": ["pyyaml>=3.1"],},
     package_data={},
