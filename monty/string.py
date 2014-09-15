@@ -30,6 +30,11 @@ def marquee(text="", width=78, mark='*'):
     """
     Return the input string centered in a 'marquee'.
 
+    Args:
+        text (str): Input string
+        width (int): Width of final output string.
+        mark (str): Character used to fill string.
+
     :Examples:
 
     >>> marquee('A test', width=40)

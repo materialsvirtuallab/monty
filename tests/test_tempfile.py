@@ -44,7 +44,7 @@ class ScratchDirTest(unittest.TestCase):
 
         with ScratchDir(self.scratch_root, copy_from_current_on_enter=False,
                         copy_to_current_on_exit=False) as d:
-            with open("scratch_text", "wt") as f:
+            with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
             self.assertIn("scratch_text", files)

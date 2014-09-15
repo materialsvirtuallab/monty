@@ -1,6 +1,84 @@
 Change log
 ==========
 
+v0.4.4
+------
+1. Refactor lazy_property to be in functools module.
+
+v0.4.3
+------
+1. Additional dev decorators lazy and logging functions.
+
+v0.4.2
+------
+1. Improve numpy array serialization with MontyEncoder.
+
+v0.4.1
+------
+1. Minor bug fix for module load in Py3k.
+
+v0.4.0
+------
+1. Remove deprecated json.loadf methods.
+2. Add MSONable protocol for json/yaml based serialization.
+3. deprecated now supports an additonal message.
+
+v0.3.6
+------
+1. :class:`monty.tempfile.ScratchDir` now checks for existence of root
+   directory. If root path does not exist, will function as simple
+   pass through. Makes it a lot more robust to bad mounting of scratch
+   directories.
+
+v0.3.5
+------
+1. Added backport of functools.lru_cache.
+
+v0.3.4
+------
+1. Specialized json encoders / decoders with support for numpy arrays and
+   objects supporting a to_dict() protocol used in pymatgen.
+
+v0.3.1
+------
+1. Proper support for libyaml auto-detect in yaml support.
+
+v0.3.0
+------
+1. Refactor serialization tools to shorten method names.
+
+v0.2.4
+------
+1. Added serialization module that supports both json and yaml. The latter
+   requires pyyaml.
+
+v0.2.3
+------
+1. Added get_ncpus method in dev. (G. Matteo).
+
+v0.2.2
+------
+1. Add a Fabric-inspired cd context manager in monty.os.
+2. Refactor ScratchDir context manager to monty.tempfile.
+
+v0.2.1
+------
+1. Add string module, which provides a function to remove non-ascii
+   characters. More to be added.
+
+v0.2.0
+------
+1. ScratchDir now supports non-copying of files to and from current
+   directory, and this is the default (different from prior releases).
+2. Yet more improvements to copy_r to prevent recursive infinite loops in
+   copying.
+
+v0.1.5
+------
+1. Added the useful monty.shutil.compress_file, compress_dir,
+   decompress_file and decompress_dir methods.
+2. Much more robust copy_r in shutil.
+
 v0.1.4
 ------
 1. Bug fix for 0.1.3.
