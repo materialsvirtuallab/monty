@@ -3,6 +3,7 @@ JSON serialization and deserialization utilities.
 """
 
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
