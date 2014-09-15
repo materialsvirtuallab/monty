@@ -28,8 +28,8 @@ class ScratchDirTest(unittest.TestCase):
 
         with ScratchDir(self.scratch_root, copy_from_current_on_enter=True,
                         copy_to_current_on_exit=True) as d:
-            with open("scratch_text", "wt") as f:
-                f.write("write")
+            with open("scratch_text", "w") as f:
+                f.write(u"write")
             files = os.listdir(d)
             self.assertIn("scratch_text", files)
             self.assertIn("empty_file.txt", files)
@@ -45,7 +45,7 @@ class ScratchDirTest(unittest.TestCase):
         with ScratchDir(self.scratch_root, copy_from_current_on_enter=False,
                         copy_to_current_on_exit=False) as d:
             with open("scratch_text", "w") as f:
-                f.write("write")
+                f.write(u"write")
             files = os.listdir(d)
             self.assertIn("scratch_text", files)
             self.assertNotIn("empty_file.txt", files)

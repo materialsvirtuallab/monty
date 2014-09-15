@@ -22,10 +22,10 @@ class CopyRTest(unittest.TestCase):
     def setUp(self):
         os.mkdir(os.path.join(test_dir, "cpr_src"))
         with open(os.path.join(test_dir, "cpr_src", "test"), "w") as f:
-            f.write("what")
+            f.write(u"what")
         os.mkdir(os.path.join(test_dir, "cpr_src", "sub"))
         with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
-            f.write("what2")
+            f.write(u"what2")
 
     def test_recursive_copy_and_compress(self):
         copy_r(os.path.join(test_dir, "cpr_src"),
@@ -62,7 +62,7 @@ class CompressFileDirTest(unittest.TestCase):
 
     def setUp(self):
         with open(os.path.join(test_dir, "tempfile"), "w") as f:
-            f.write("hello world")
+            f.write(u"hello world")
 
     def test_compress_and_decompress_file(self):
         fname = os.path.join(test_dir, "tempfile")
