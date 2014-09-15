@@ -91,11 +91,11 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
 
     # If the file size is within our desired RAM use, just reverse it in memory
     # GZip files must use this method because there is no way to negative seek
-    if file_size < max_mem or isinstance(m_file, GzipFile):
+    if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
             yield line.rstrip()
     else:
-        if isinstance(m_file, BZ2File):
+        if isinstance(m_file, bz2.BZ2File):
             # for bz2 files, seeks are expensive. It is therefore in our best
             # interest to maximize the blk_size within limits of desired RAM
             # use.
