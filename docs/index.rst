@@ -42,7 +42,9 @@ v0.5.0
 1. Completely rewritten zopen which supports the "rt" keyword of Python 3
    even when used in Python 2.
 2. monty.string now has a marquee method which centers a string
-(contributed by Matteo).
+   (contributed by Matteo).
+3. Monty now supports only Python >= 3.3 as well as Python 2.7. Python 3.2
+   support is now dropped.
 
 :doc:`Older versions </changelog>`
 
