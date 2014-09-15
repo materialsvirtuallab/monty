@@ -13,11 +13,16 @@ __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
 import os
-from bz2 import BZ2File
-from gzip import GzipFile
+
+from io import open
+import bz2
+import gzip
+import sys
 
 from monty.tempfile import ScratchDir as ScrDir
 from monty.dev import deprecated
+
+PY_VERSION = sys.version_info
 
 
 def zopen(filename, *args, **kwargs):
@@ -37,9 +42,18 @@ def zopen(filename, *args, **kwargs):
     """
     file_ext = filename.split(".")[-1].upper()
     if file_ext == "BZ2":
-        return BZ2File(filename, *args, **kwargs)
+        if PY_VERSION[0] >= 3:
+            return bz2.open(filename, *args, **kwargs)
+        else:
+            args = list(args)
+            if len(args) > 0:
+                args[0] = "".join([c for c in args[0] if c != "t"])
+            if "mode" in kwargs:
+                kwargs["mode"] = "".join([c for c in kwargs["mode"] if c !=
+                                          "t"])
+            return bz2.BZ2File(filename, *args, **kwargs)
     elif file_ext in ("GZ", "Z"):
-        return GzipFile(filename, *args, **kwargs)
+        return gzip.open(filename, *args, **kwargs)
     else:
         return open(filename, *args, **kwargs)
 
