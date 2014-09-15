@@ -9,6 +9,7 @@ __date__ = '1/24/14'
 import unittest
 import os
 import shutil
+from io import open
 
 from monty.shutil import copy_r, compress_file, decompress_file, \
     compress_dir, decompress_dir
@@ -60,7 +61,7 @@ class CopyRTest(unittest.TestCase):
 class CompressFileDirTest(unittest.TestCase):
 
     def setUp(self):
-        with open(os.path.join(test_dir, "tempfile"), "w") as f:
+        with open(os.path.join(test_dir, "tempfile"), "wt") as f:
             f.write("hello world")
 
     def test_compress_and_decompress_file(self):

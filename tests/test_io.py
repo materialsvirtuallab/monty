@@ -44,11 +44,11 @@ class ReverseReadlineTest(unittest.TestCase):
 class ZopenTest(unittest.TestCase):
 
     def test_zopen(self):
-        with zopen(os.path.join(test_dir, "myfile.gz"), mode="rt") as f:
+        with zopen(os.path.join(test_dir, "myfile_gz.gz"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
-        with zopen(os.path.join(test_dir, "myfile.bz2"), mode="rt") as f:
+        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
-        with zopen(os.path.join(test_dir, "myfile.bz2"), "rt") as f:
+        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")

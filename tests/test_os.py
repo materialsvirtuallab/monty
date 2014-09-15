@@ -21,8 +21,8 @@ class PathTest(unittest.TestCase):
         self.assertEqual(os.path.basename(py), "python")
 
     def test_zpath(self):
-        fullzpath = zpath(os.path.join(test_dir, "myfile"))
-        self.assertEqual(os.path.join(test_dir, "myfile.gz"), fullzpath)
+        fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
+        self.assertEqual(os.path.join(test_dir, "myfile_gz.gz"), fullzpath)
 
 
 class CdTest(unittest.TestCase):

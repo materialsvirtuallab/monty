@@ -7,6 +7,7 @@ __date__ = '8/29/14'
 
 import unittest
 import sys
+from io import open
 from monty.functools import lru_cache, lazy_property
 
 
