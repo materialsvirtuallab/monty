@@ -14,12 +14,8 @@ __date__ = "1/24/14"
 
 import json
 import datetime
-import sys
 
 from abc import ABCMeta, abstractmethod
-
-from .string import str2unicode
-
 
 try:
     import numpy as np
@@ -106,9 +102,6 @@ class MontyEncoder(json.JSONEncoder):
                         "data": o.tolist()}
             elif isinstance(o, np.generic):
                 return o.item()
-        elif sys.version_info.major < 3:
-            if isinstance(o, basestring):
-                return str2unicode(o)
 
         try:
             d = o.as_dict()

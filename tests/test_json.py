@@ -12,6 +12,7 @@ import json
 import datetime
 
 from monty.json import MSONable, MSONError, MontyEncoder, MontyDecoder
+from monty.io import zopen
 
 
 class MSONableTest(unittest.TestCase):
@@ -83,7 +84,6 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(type(x), np.ndarray)
         x = np.min([1, 2, 3]) > 2
         self.assertRaises(TypeError, json.dumps, x)
-
 
 
 if __name__ == "__main__":
