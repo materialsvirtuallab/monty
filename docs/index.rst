@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.x.
 Latest Change Log
 =================
 
+v0.5.2
+------
+1. Add unicode2str and str2unicode in monty.string.
+
 v0.5.0
 ------
 1. Completely rewritten zopen which supports the "rt" keyword of Python 3

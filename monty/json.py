@@ -14,8 +14,11 @@ __date__ = "1/24/14"
 
 import json
 import datetime
+import sys
 
 from abc import ABCMeta, abstractmethod
+
+from .string import str2unicode
 
 
 try:
@@ -103,13 +106,16 @@ class MontyEncoder(json.JSONEncoder):
                         "data": o.tolist()}
             elif isinstance(o, np.generic):
                 return o.item()
+        elif sys.version_info.major < 3:
+            if isinstance(o, basestring):
+                return str2unicode(o)
 
         try:
             d = o.as_dict()
             if "@module" not in d:
-                d["@module"] = o.__class__.__module__
+                d["@module"] = u"{}".format(o.__class__.__module__)
             if "@class" not in d:
-                d["@class"] = o.__class__.__name__
+                d["@class"] = u"{}".format(o.__class__.__name__)
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
