@@ -13,8 +13,9 @@ __date__ = "2/28/14"
 
 import unittest
 import random
+import sys
 
-from monty.string import remove_non_ascii
+from monty.string import remove_non_ascii, str2unicode, unicode2str
 
 
 class FuncTest(unittest.TestCase):
@@ -25,6 +26,17 @@ class FuncTest(unittest.TestCase):
         clean = remove_non_ascii(s)
         self.assertEqual(len(clean), 10)
 
+    def test_str2unicode(self):
+        if sys.version_info.major < 3:
+            self.assertEqual(type(str2unicode("a")), unicode)
+        else:
+            self.assertEqual(type(str2unicode("a")), str)
+
+    def test_unicode2str(self):
+        if sys.version_info.major < 3:
+            self.assertEqual(type(unicode2str("a")), str)
+        else:
+            self.assertEqual(type(unicode2str("a")), str)
 
 if __name__ == '__main__':
     unittest.main()

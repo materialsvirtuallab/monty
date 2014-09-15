@@ -12,6 +12,9 @@ __email__ = "ongsp@ucsd.edu"
 __date__ = "2/28/14"
 
 
+import sys
+
+
 def remove_non_ascii(s):
     """
     Remove non-ascii characters in a file. Needed when support for non-ASCII
@@ -24,6 +27,33 @@ def remove_non_ascii(s):
         String with all non-ascii characters removed.
     """
     return "".join(i for i in s if ord(i) < 128)
+
+
+def unicode2str(s):
+    """
+    Forces a unicode to a string in Python 2, but transparently handles
+    Python 3.
+
+    Args:
+        s (str/unicode): Input string / unicode.
+
+    Returns:
+        str in Python 2. Unchanged otherwise.
+    """
+    return s.encode('utf-8') if sys.version_info.major < 3 else s
+
+
+def str2unicode(s):
+    """
+    Converts strings to unicode in python 2. Ignores Python 3 strings.
+
+    Args:
+        s (str/unicode): Input string / unicode.
+
+    Returns:
+        Unicode.
+    """
+    return unicode(s) if sys.version_info.major < 3 else s
 
 
 def marquee(text="", width=78, mark='*'):
