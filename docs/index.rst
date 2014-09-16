@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7, 3.x.
 Latest Change Log
 =================
 
+v0.5.3
+------
+1. Minor efficiency improvement.
+
 v0.5.2
 ------
 1. Add unicode2str and str2unicode in monty.string.
