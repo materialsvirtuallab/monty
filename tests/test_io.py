@@ -10,7 +10,7 @@ import unittest
 import os
 from io import open
 
-from monty.io import reverse_readline, zopen
+from monty.io import reverse_readline, zopen, FileLock, FileLockException
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -52,6 +52,24 @@ class ZopenTest(unittest.TestCase):
             self.assertEqual(f.read(), "HelloWorld.\n\n")
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
+
+
+
+class FileLockTest(unittest.TestCase):
+
+    def setUp(self):
+        self.file_name = "__lock__"
+        self.lock = FileLock(self.file_name, timeout=1)
+        self.lock.acquire()
+
+    def test_raise(self):
+        with self.assertRaises(FileLockException):
+            new_lock = FileLock(self.file_name, timeout=1)
+            new_lock.acquire()
+
+    def tearDown(self):
+        self.lock.release()
+
 
 if __name__ == "__main__":
     unittest.main()
