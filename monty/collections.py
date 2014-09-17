@@ -41,12 +41,13 @@ class AttrDict(dict):
     Allows to access dict keys as obj.foo in addition
     to the traditional way obj['foo']"
 
-    >>> d = AttrDict(foo=1, bar=2)
-    >>> d["foo"] == d.foo
-    True
-    >>> d.bar = "hello"
-    >>> d.bar
-    'hello'
+    Example:
+        >> d = AttrDict(foo=1, bar=2)
+        >> d["foo"] == d.foo
+        True
+        >> d.bar = "hello"
+        >> d.bar
+        'hello'
     """
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
