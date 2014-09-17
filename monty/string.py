@@ -56,6 +56,38 @@ def str2unicode(s):
     return unicode(s) if sys.version_info.major < 3 else s
 
 
+def is_string(s):
+    """True if s behaves like a string (duck typing test)."""
+    try:
+        s + " "
+        return True
+
+    except TypeError:
+        return False
+
+
+def list_strings(arg):
+    """
+    Always return a list of strings, given a string or list of strings as
+    input.
+
+    :Examples:
+
+    >>> list_strings('A single string')
+    ['A single string']
+
+    >>> list_strings(['A single string in a list'])
+    ['A single string in a list']
+
+    >>> list_strings(['A','list','of','strings'])
+    ['A', 'list', 'of', 'strings']
+    """
+    if is_string(arg):
+        return [arg]
+    else:
+        return arg
+
+
 def marquee(text="", width=78, mark='*'):
     """
     Return the input string centered in a 'marquee'.
