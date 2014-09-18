@@ -22,7 +22,7 @@ from fabric.api import local, lcd
 from monty import __version__ as ver
 
 
-def makedoc():
+def make_doc():
     with lcd("docs"):
         local("sphinx-apidoc -o . -f ../monty")
         for f in glob.glob("docs/*.rst"):
@@ -106,7 +106,7 @@ def commit():
 def release():
     setver()
     test()
-    makedoc()
+    make_doc()
     publish()
     commit()
     release_github()
