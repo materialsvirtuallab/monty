@@ -275,3 +275,21 @@ class lazy_property(object):
 
         if name in inst.__dict__:
             del inst.__dict__[name]
+
+
+def benchmark(func):
+    """
+    A decorator that computes the time a function takes to execute 
+    and stores it in the __etime attribute.
+    """
+    import time
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        t = time.clock()
+        res = func(*args, **kwargs)
+        etime = time.clock() - t
+        #print(func.__name__, etime)
+        func.__etime = etime
+        return res
+    return wrapper

@@ -225,3 +225,20 @@ class FileLock(object):
         lying around.
         """
         self.release()
+
+
+def get_open_fds():
+    """
+    Return the number of open file descriptors for current process
+
+    .. warning: will only work on UNIX-like os-es.
+    """
+    import subprocess
+    import os
+
+    pid = os.getpid()
+    procs = subprocess.check_output(["lsof", '-w', '-Ff', "-p", str(pid)])
+
+    nprocs = len(filter(lambda s: s and s[0] == 'f' and s[1:].isdigit(), procs.split('\n')))
+
+    return nprocs
