@@ -36,3 +36,7 @@ nosetests.xml
 .project
 .pydevproject
 .idea
+
+# vim files
+*.swp
+*.swo

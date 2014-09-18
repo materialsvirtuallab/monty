@@ -231,7 +231,7 @@ def get_open_fds():
     """
     Return the number of open file descriptors for current process
 
-    .. warning: will only work on UNIX-like os-es.
+    .. warning: will only work on UNIX-like OS-es.
     """
     import subprocess
     import os
