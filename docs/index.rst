@@ -37,6 +37,12 @@ Monty is tested to work on Python 2.7, 3.x.
 Latest Change Log
 =================
 
+v0.5.4
+------
+1. Addition of many help functions in string, itertools, etc. (Matteo).
+2. NullFile and NullStream in monty.design_patterns (Matteo).
+3. FileLock in monty.io (Matteo)
+
 v0.5.3
 ------
 1. Minor efficiency improvement.
