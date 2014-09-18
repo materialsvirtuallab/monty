@@ -59,6 +59,14 @@ monty.io module
     :undoc-members:
     :show-inheritance:
 
+monty.itertools module
+----------------------
+
+.. automodule:: monty.itertools
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.json module
 -----------------
 
