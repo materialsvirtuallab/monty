@@ -9,7 +9,7 @@ __date__ = '1/24/14'
 import unittest
 import os
 
-from monty.collections import frozendict, NotOverwritableDict, AttrDict
+from monty.collections import frozendict, Namespace, AttrDict
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -20,8 +20,8 @@ class FrozenDictTest(unittest.TestCase):
         self.assertRaises(KeyError, d.__setitem__, "k", "v")
         self.assertEqual(d["hello"], "world")
 
-    def test_notoverwritable_dict(self):
-        d = NotOverwritableDict(foo="bar")
+    def test_namespace_dict(self):
+        d = Namespace(foo="bar")
         d["hello"] = "world"
         self.assertEqual(d["foo"], "bar")
         self.assertRaises(KeyError, d.__setitem__, "foo", "spam")

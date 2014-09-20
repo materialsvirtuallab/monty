@@ -20,7 +20,7 @@ class frozendict(dict):
         raise KeyError("Cannot overwrite existing key: %s" % str(key))
 
 
-class NotOverwritableDict(dict):
+class Namespace(dict):
     """A dictionary that does not permit to redefine its keys."""
     def __init__(self, *args, **kwargs):
         self.update(*args, **kwargs)
@@ -34,6 +34,9 @@ class NotOverwritableDict(dict):
     def update(self, *args, **kwargs):
         for k, v in dict(*args, **kwargs).items():
             self[k] = v
+
+#MG TODO To be removed 
+NotOverwritableDict = Namespace
 
 
 class AttrDict(dict):

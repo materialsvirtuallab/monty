@@ -117,3 +117,29 @@ def marquee(text="", width=78, mark='*'):
 
     marks = mark * nmark
     return '%s %s %s' % (marks, text, marks)
+
+
+def boxed(msg, ch="=", pad=5):
+    """
+    Returns a string in a box
+    Args:
+        msg:
+            Input string.
+        ch:
+            Characted used to form the box.
+        pad:
+            Number of characters ch added before and after msg.
+
+    >>> print(boxed("hello", ch="*", pad=2))
+    ***********
+    ** hello **
+    ***********
+    """
+    if pad > 0:
+        msg = pad * ch + " " + msg.strip() + " " + pad * ch
+
+    return "\n".join([len(msg) * ch,
+                      msg,
+                      len(msg) * ch,
+                     ])
+
