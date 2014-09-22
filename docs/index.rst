@@ -32,10 +32,15 @@ be a resource to collect the best solutions.
 Compatibility
 -------------
 
-Monty is tested to work on Python 2.7, 3.x.
+Monty is tested to work on Python 2.7 and 3.x.
 
 Latest Change Log
 =================
+
+v0.5.5
+------
+1. More robust handling of numpy arrays and datetime objects in json.
+2. Refactor NotOverwritableDict to Namespace (Matteo).
 
 v0.5.4
 ------

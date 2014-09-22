@@ -1,6 +1,9 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function, division, unicode_literals
 
+from __future__ import absolute_import, print_function, division, \
+    unicode_literals
+
+import sys
 
 def pprint_table(table, out=sys.stdout, rstrip=False):
     """
