@@ -93,12 +93,12 @@ class MontyEncoder(json.JSONEncoder):
         """
         if isinstance(o, datetime.datetime):
             return {"@module": "datetime", "@class": "datetime",
-                    "string": str(o)}
+                    "string": o.__str__()}
         elif np is not None:
             if isinstance(o, np.ndarray):
                 return {"@module": "numpy",
                         "@class": "array",
-                        "dtype": str(o.dtype),
+                        "dtype": o.dtype.__str__(),
                         "data": o.tolist()}
             elif isinstance(o, np.generic):
                 return o.item()
