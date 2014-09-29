@@ -40,12 +40,9 @@ def deprecated(replacement=None, message=None):
         def wrapped(*args, **kwargs):
             msg = "%s is deprecated" % old.__name__
             if replacement is not None:
-                if isinstance(replacement, property):
-                    msg += "; use %s in %s instead." % (
-                        replacement.fget.__name__, replacement.fget.__module__)
-                else:
-                    msg += "; use %s in %s instead." % (
-                        replacement.__name__, replacement.__module__)
+                r = replacement.fget if isinstance(replacement, property) \
+                    else replacement
+                msg += "; use %s in %s instead." % (r.__name__, r.__module__)
             if message is not None:
                 msg += "\n" + message
             warnings.simplefilter('default')

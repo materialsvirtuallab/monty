@@ -5,6 +5,7 @@ from __future__ import absolute_import, print_function, division, \
 
 import sys
 
+
 def pprint_table(table, out=sys.stdout, rstrip=False):
     """
     Prints out a table of data, padded for alignment
