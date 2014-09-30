@@ -10,7 +10,7 @@ import unittest
 import os
 
 from monty.serialization import dumpfn, loadfn
-
+from yaml import Dumper
 
 class SerialTest(unittest.TestCase):
 
@@ -23,7 +23,10 @@ class SerialTest(unittest.TestCase):
         dumpfn(d, "monte_test.yaml", default_flow_style=False)
         d2 = loadfn("monte_test.yaml")
         self.assertEqual(d, d2)
+        dumpfn(d, "monte_test.yaml", Dumper=Dumper)
+        d2 = loadfn("monte_test.yaml")
         os.remove("monte_test.yaml")
+
 
 if __name__ == "__main__":
     unittest.main()

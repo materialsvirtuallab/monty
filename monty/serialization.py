@@ -76,6 +76,8 @@ def dumpfn(obj, fn, *args, **kwargs):
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
-            yaml.dump(obj, fp, *args, Dumper=Dumper, **kwargs)
+            if "Dumper" not in kwargs:
+                kwargs["Dumper"] = Dumper
+            yaml.dump(obj, fp, *args, **kwargs)
         else:
             json.dump(obj, fp, *args, **kwargs)
