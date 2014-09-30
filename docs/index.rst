@@ -37,6 +37,11 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.5.6
+------
+1. Provide way to specify Dumper and Loader in monty.serialization.
+2. Better handling of unicode.
+
 v0.5.5
 ------
 1. More robust handling of numpy arrays and datetime objects in json.

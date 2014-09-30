@@ -2,7 +2,7 @@
 This module implements serialization support for common formats such as json
 and yaml.
 """
-from __future__ import absolute_import
+from __future__ import absolute_import, unicode_literals
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = 'Copyright 2013, The Materials Project'
@@ -48,7 +48,9 @@ def loadfn(fn, *args, **kwargs):
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
                                    "possible as PyYAML is not installed.")
-            return yaml.load(fp, *args, Loader=Loader, **kwargs)
+            if "Loader" not in kwargs:
+                kwargs["Loader"] = Loader
+            return yaml.load(fp, *args, **kwargs)
         else:
             return json.load(fp, *args, **kwargs)
 
@@ -71,7 +73,7 @@ def dumpfn(obj, fn, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    with open(fn, "wt") as fp:
+    with zopen(fn, "wt") as fp:
         if "yaml" in fn.lower():
             if yaml is None:
                 raise RuntimeError("Loading of YAML files is not "
@@ -80,4 +82,4 @@ def dumpfn(obj, fn, *args, **kwargs):
                 kwargs["Dumper"] = Dumper
             yaml.dump(obj, fp, *args, **kwargs)
         else:
-            json.dump(obj, fp, *args, **kwargs)
+            fp.write("%s" % json.dumps(obj, *args, **kwargs))
