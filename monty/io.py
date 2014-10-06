@@ -125,7 +125,7 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
     # GZip files must use this method because there is no way to negative seek
     if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
-            yield line.rstrip()
+            yield line.decode("utf-8").rstrip()
     else:
         if isinstance(m_file, bz2.BZ2File):
             # for bz2 files, seeks are expensive. It is therefore in our best
