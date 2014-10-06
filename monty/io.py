@@ -18,6 +18,7 @@ import gzip
 import sys
 import time
 import errno
+import mmap
 
 from io import open
 from monty.tempfile import ScratchDir as ScrDir
@@ -57,6 +58,32 @@ def zopen(filename, *args, **kwargs):
         return gzip.open(filename, *args, **kwargs)
     else:
         return open(filename, *args, **kwargs)
+
+
+def reverse_readfile(filename):
+    """
+    A much faster reverse read of file by using Python's mmap to generate a
+    memory-mapped file. It is slower for very small files than
+    reverse_readline, but at least 2x faster for large files (the primary use
+    of such a method).
+
+    Args:
+        filename (str):
+            Name of file to read.
+
+    Yields:
+        Lines from the file in reverse order.
+    """
+    try:
+        with zopen(filename, "r+b") as f:
+            fm = mmap.mmap(f.fileno(), 0)
+    except ValueError:
+        return
+    n = len(fm)
+    while n != -1:
+        i = fm.rfind("\n", 0, n)
+        yield fm[i + 1:n].strip("\n")
+        n = i
 
 
 def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
