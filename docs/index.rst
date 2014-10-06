@@ -183,7 +183,7 @@ License
 =======
 
 Monty is released under the MIT License. The terms of the license are as
-follows::
+follows:
 
 .. literalinclude:: ../LICENSE.rst
 
