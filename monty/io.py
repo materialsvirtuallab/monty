@@ -78,7 +78,7 @@ def reverse_readfile(filename):
         with zopen(filename, "r+b") as f:
             if isinstance(f, gzip.GzipFile):
                 for l in reversed(f.readlines()):
-                    yield l.rstrip()
+                    yield l.decode("utf-8").rstrip()
             else:
                 fm = mmap.mmap(f.fileno(), 0)
                 n = len(fm)

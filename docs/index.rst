@@ -39,7 +39,7 @@ Latest Change Log
 
 v0.5.8
 ------
-1. Fix reverse read file for gzipped files.:
+1. Fix reverse read file for gzipped files.
 
 v0.5.7
 ------

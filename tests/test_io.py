@@ -58,6 +58,19 @@ class ReverseReadfileTest(unittest.TestCase):
                              "have read {}".format(
                              int(line), self.NUMLINES - idx))
 
+    def test_reverse_readfile_gz(self):
+        """
+        We are making sure a file containing line numbers is read in reverse
+        order, i.e. the first line that is read corresponds to the last line.
+        number
+        """
+        fname = os.path.join(test_dir, "3000lines.txt.gz")
+        for idx, line in enumerate(reverse_readfile(fname)):
+            self.assertEqual(int(line), self.NUMLINES - idx,
+                             "read_backwards read {} whereas it should "
+                             "have read {}".format(
+                             int(line), self.NUMLINES - idx))
+
     def test_empty_file(self):
         """
         make sure an empty file does not throw an error when reverse_readline
@@ -66,6 +79,7 @@ class ReverseReadfileTest(unittest.TestCase):
         for idx, line in enumerate(reverse_readfile(
                 os.path.join(test_dir, "empty_file.txt"))):
             raise ValueError("an empty file is being read!")
+
 
 class ZopenTest(unittest.TestCase):
 
