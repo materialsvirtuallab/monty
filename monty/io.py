@@ -76,14 +76,18 @@ def reverse_readfile(filename):
     """
     try:
         with zopen(filename, "r+b") as f:
-            fm = mmap.mmap(f.fileno(), 0)
+            if isinstance(f, gzip.GzipFile):
+                for l in reversed(f.readlines()):
+                    yield l.rstrip()
+            else:
+                fm = mmap.mmap(f.fileno(), 0)
+                n = len(fm)
+                while n > 0:
+                    i = fm.rfind("\n", 0, n)
+                    yield fm[i + 1:n].strip("\n")
+                    n = i
     except ValueError:
         return
-    n = len(fm)
-    while n != -1:
-        i = fm.rfind("\n", 0, n)
-        yield fm[i + 1:n].strip("\n")
-        n = i
 
 
 def reverse_readline(m_file, blk_size=4096, max_mem=4000000):

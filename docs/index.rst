@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.5.8
+------
+1. Fix reverse read file for gzipped files.:
+
 v0.5.7
 ------
 1. Added a reverse_readfile method in monty.io, which is faster than
