@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.5.9
+------
+1. More fixes for reverse read of gzipped files ofr Py3k.
+
 v0.5.8
 ------
 1. Fix reverse read file for gzipped files.

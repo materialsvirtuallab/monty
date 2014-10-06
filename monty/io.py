@@ -83,8 +83,8 @@ def reverse_readfile(filename):
                 fm = mmap.mmap(f.fileno(), 0)
                 n = len(fm)
                 while n > 0:
-                    i = fm.rfind("\n", 0, n)
-                    yield fm[i + 1:n].strip("\n")
+                    i = fm.rfind(b"\n", 0, n)
+                    yield fm[i + 1:n].decode("utf-8").strip("\n")
                     n = i
     except ValueError:
         return
@@ -125,7 +125,7 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
     # GZip files must use this method because there is no way to negative seek
     if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
-            yield line.decode("utf-8").rstrip()
+            yield line.rstrip()
     else:
         if isinstance(m_file, bz2.BZ2File):
             # for bz2 files, seeks are expensive. It is therefore in our best
