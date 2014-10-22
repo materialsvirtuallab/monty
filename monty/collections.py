@@ -35,9 +35,6 @@ class Namespace(dict):
         for k, v in dict(*args, **kwargs).items():
             self[k] = v
 
-#MG TODO To be removed 
-NotOverwritableDict = Namespace
-
 
 class AttrDict(dict):
     """
