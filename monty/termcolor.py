@@ -23,11 +23,11 @@
 
 """ANSII Color formatting for output in terminal."""
 
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 import os
 
 
-__ALL__ = [ 'colored', 'cprint' ]
+__all__ = [ 'colored', 'cprint' ]
 
 VERSION = (1, 1, 0)
 
@@ -83,6 +83,19 @@ COLORS = dict(
 RESET = '\033[0m'
 
 
+__ISON = True
+
+def enable(true_false):
+    """Enable/Disable ANSII Color formatting"""
+    global __ISON
+    __ISON = true_false
+
+
+def ison():
+    """True if ANSII Color formatting is activated."""
+    return __ISON
+
+
 def colored(text, color=None, on_color=None, attrs=None):
     """Colorize text.
 
@@ -99,7 +112,8 @@ def colored(text, color=None, on_color=None, attrs=None):
         colored('Hello, World!', 'red', 'on_grey', ['blue', 'blink'])
         colored('Hello, World!', 'green')
     """
-    if os.getenv('ANSI_COLORS_DISABLED') is None:
+
+    if __ISON and os.getenv('ANSI_COLORS_DISABLED') is None:
         fmt_str = '\033[%dm%s'
         if color is not None:
             text = fmt_str % (COLORS[color], text)
@@ -125,6 +139,7 @@ def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
 
 
 if __name__ == '__main__':
+    #enable(False)
     print('Current terminal type: %s' % os.getenv('TERM'))
     print('Test basic colors:')
     cprint('Grey color', 'grey')
