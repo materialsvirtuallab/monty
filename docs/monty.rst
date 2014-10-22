@@ -124,6 +124,15 @@ monty.tempfile module
     :show-inheritance:
 
 
+monty.termcolor module
+---------------------
+
+.. automodule:: monty.termcolor
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
 Module contents
 ---------------
 
