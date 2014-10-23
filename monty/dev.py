@@ -180,3 +180,32 @@ def get_ncpus():
     return -1
 
 
+
+def install_excepthook(hook_type="color", **kwargs):
+    """
+    This function replaces the original python traceback with an improved version from Ipython 
+    Use `color` for colourful traceback formatting, `verbose` for Ka-Ping Yee's "cgitb.py" version
+    kwargs are the keyword arguments passed to the constructor. See IPython.core.ultratb.py for more info.
+
+    Return:
+        0 if hook is installed successfully. 
+    """
+    try:
+        from IPython.core import ultratb
+    except ImportError:
+        import warnings
+        warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
+        return 1
+
+    # Select the hook.
+    hook = dict(
+        color=ultratb.ColorTB,
+        verbose=ultratb.VerboseTB,
+    ).get(hook_type.lower(), None)
+
+    if hook is None:
+        return 2
+
+    import sys
+    sys.excepthook = hook(**kwargs)
+    return 0
