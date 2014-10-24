@@ -9,7 +9,7 @@ __date__ = '1/24/14'
 import unittest
 import os
 
-from monty.collections import frozendict, Namespace, AttrDict
+from monty.collections import frozendict, Namespace, AttrDict, FrozenAttrDict
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -33,6 +33,16 @@ class FrozenDictTest(unittest.TestCase):
         self.assertEqual(d["foo"], d.foo)
         d.bar = "hello"
         self.assertEqual(d["bar"], "hello")
+
+    def test_frozen_attrdict(self):
+        d = FrozenAttrDict({"hello": "world", 1: 2})
+        self.assertEqual(d["hello"], "world")
+        self.assertEqual(d.hello, "world")
+        self.assertRaises(KeyError, d.update, {"updating": 2})
+        self.assertRaises(KeyError, d.update, {"updating": 2})
+        with self.assertRaises(KeyError):  d["foo"] = "bar"
+        with self.assertRaises(KeyError):  d.foo = "bar"
+        with self.assertRaises(KeyError): d.hello = "new"
 
 
 if __name__ == "__main__":

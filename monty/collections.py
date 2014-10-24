@@ -59,3 +59,28 @@ class AttrDict(dict):
     def copy(self):
         newd = super(AttrDict, self).copy()
         return self.__class__(**newd)
+
+
+
+class FrozenAttrDict(frozendict):
+    """
+    A dictionary that:
+        * does not permit changes. 
+        * Allows to access dict keys as obj.foo in addition
+          to the traditional way obj['foo']
+    """
+    def __init__(self, *args, **kwargs):
+        super(FrozenAttrDict, self).__init__(*args, **kwargs)
+
+    def __getattribute__(self, name):
+        try:
+            return super(FrozenAttrDict, self).__getattribute__(name)
+        except AttributeError:
+            try:
+                return self[name]
+            except KeyError as exc:
+                raise AttributeError(str(exc))
+
+    def __setattr__(self, name, value):
+        raise KeyError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
+
