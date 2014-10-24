@@ -19,6 +19,9 @@ class frozendict(dict):
     def __setitem__(self, key, val):
         raise KeyError("Cannot overwrite existing key: %s" % str(key))
 
+    def update(self, *args, **kwargs):
+        raise KeyError("Cannot update a %s" % self.__class__.__name__)
+
 
 class Namespace(dict):
     """A dictionary that does not permit to redefine its keys."""

@@ -18,6 +18,7 @@ class FrozenDictTest(unittest.TestCase):
     def test_frozen_dict(self):
         d = frozendict({"hello": "world"})
         self.assertRaises(KeyError, d.__setitem__, "k", "v")
+        self.assertRaises(KeyError, d.update, {"k": "v"})
         self.assertEqual(d["hello"], "world")
 
     def test_namespace_dict(self):
