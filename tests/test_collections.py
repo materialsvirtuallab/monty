@@ -39,7 +39,6 @@ class FrozenDictTest(unittest.TestCase):
         self.assertEqual(d["hello"], "world")
         self.assertEqual(d.hello, "world")
         self.assertRaises(KeyError, d.update, {"updating": 2})
-        self.assertRaises(KeyError, d.update, {"updating": 2})
         with self.assertRaises(KeyError):  d["foo"] = "bar"
         with self.assertRaises(KeyError):  d.foo = "bar"
         with self.assertRaises(KeyError): d.hello = "new"
