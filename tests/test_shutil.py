@@ -12,7 +12,7 @@ import shutil
 from io import open
 
 from monty.shutil import copy_r, compress_file, decompress_file, \
-    compress_dir, decompress_dir
+    compress_dir, decompress_dir, Command
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -80,6 +80,22 @@ class CompressFileDirTest(unittest.TestCase):
 
     def tearDown(self):
         os.remove(os.path.join(test_dir, "tempfile"))
+
+
+class CommandTest(unittest.TestCase):
+    def test_command(self):
+        """Test Command class"""
+        sleep05 = Command("sleep 0.5")
+
+        sleep05.run(timeout=1)
+        print(sleep05)
+        self.assertEqual(sleep05.retcode, 0)
+        self.assertFalse(sleep05.killed)
+
+        sleep05.run(timeout=0.1)
+        self.assertNotEqual(sleep05.retcode, 0)
+        self.assertTrue(sleep05.killed)
+
 
 if __name__ == "__main__":
     unittest.main()
