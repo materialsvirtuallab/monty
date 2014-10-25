@@ -84,3 +84,52 @@ class FrozenAttrDict(frozendict):
     def __setattr__(self, name, value):
         raise KeyError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
 
+
+class MongoDict(object):
+    """
+    >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
+    >>> assert m.a == {'b': 1} and m.x == 2
+    >>> assert m.a.b == 1
+    >>> assert "a" in m and "b" in m.a
+
+    NB: Cannot inherit from ABC collections.Mapping because otherwise 
+        dict.keys and dict.items will pollute the namespace.
+        e.g MongoDict({"keys": 1}).keys would be the ABC dict method.
+    """
+    def __init__(self, mongo_dict):
+        self.__dict__["_mongo_dict_"] = mongo_dict
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return str(self._mongo_dict_)
+
+    def __setattr__(self, name, value):
+        raise NotImplementedError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
+
+    def __getattribute__(self, name):
+        try:
+            return super(MongoDict, self).__getattribute__(name)
+        except:
+            #raise
+            try:
+                a = self._mongo_dict_[name]
+                if isinstance(a, collections.Mapping):
+                    a = self.__class__(a)
+                return a
+            except Exception as exc:
+                raise AttributeError(str(exc))
+
+    def __getitem__(self, slice):
+        return self._mongo_dict_.__getitem__(slice)
+
+    def __iter__(self):
+        return iter(self._mongo_dict_)
+
+    def __len__(self):
+        return len(self._mongo_dict_)
+
+    def __dir__(self):
+        """For Ipython tab completion. See http://ipython.org/ipython-doc/dev/config/integrating.html"""
+        return sorted(list(k for k in self._mongo_dict_ if not callable(k)))
