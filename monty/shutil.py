@@ -124,3 +124,4 @@ def decompress_dir(path):
     for parent, subdirs, files in os.walk(path):
         for f in files:
             decompress_file(os.path.join(parent, f))
+

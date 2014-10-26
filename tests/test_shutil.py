@@ -81,5 +81,6 @@ class CompressFileDirTest(unittest.TestCase):
     def tearDown(self):
         os.remove(os.path.join(test_dir, "tempfile"))
 
+
 if __name__ == "__main__":
     unittest.main()

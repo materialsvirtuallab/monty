@@ -7,6 +7,8 @@ __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
+import collections
+
 
 class frozendict(dict):
     """
@@ -45,12 +47,10 @@ class AttrDict(dict):
     to the traditional way obj['foo']"
 
     Example:
-        >> d = AttrDict(foo=1, bar=2)
-        >> d["foo"] == d.foo
-        True
-        >> d.bar = "hello"
-        >> d.bar
-        'hello'
+        >>> d = AttrDict(foo=1, bar=2)
+        >>> assert d["foo"] == d.foo
+        >>> d.bar = "hello"
+        >>> assert d.bar == "hello"
     """
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
@@ -84,3 +84,58 @@ class FrozenAttrDict(frozendict):
     def __setattr__(self, name, value):
         raise KeyError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
 
+
+class MongoDict(object):
+    """
+    This dict-like object allows one to access the entries in a nested dict as attributes. 
+    Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object 
+    is particularly useful if you need to analyze a nested dict interactively (e.g. documents
+    extracted from a MongoDB database).
+
+    >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
+    >>> assert m.a.b == 1 and m.x == 2
+    >>> assert "a" in m and "b" in m.a
+
+    .. note:: 
+
+        Cannot inherit from ABC collections.Mapping because otherwise 
+        dict.keys and dict.items will pollute the namespace.
+        e.g MongoDict({"keys": 1}).keys would be the ABC dict method.
+    """
+    def __init__(self, *args, **kwargs):
+        self.__dict__["_mongo_dict_"] = dict(*args, **kwargs)
+
+    def __repr__(self):
+        return str(self)
+
+    def __str__(self):
+        return str(self._mongo_dict_)
+
+    def __setattr__(self, name, value):
+        raise NotImplementedError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
+
+    def __getattribute__(self, name):
+        try:
+            return super(MongoDict, self).__getattribute__(name)
+        except:
+            #raise
+            try:
+                a = self._mongo_dict_[name]
+                if isinstance(a, collections.Mapping):
+                    a = self.__class__(a)
+                return a
+            except Exception as exc:
+                raise AttributeError(str(exc))
+
+    def __getitem__(self, slice):
+        return self._mongo_dict_.__getitem__(slice)
+
+    def __iter__(self):
+        return iter(self._mongo_dict_)
+
+    def __len__(self):
+        return len(self._mongo_dict_)
+
+    def __dir__(self):
+        """For Ipython tab completion. See http://ipython.org/ipython-doc/dev/config/integrating.html"""
+        return sorted(list(k for k in self._mongo_dict_ if not callable(k)))

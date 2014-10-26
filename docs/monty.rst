@@ -115,6 +115,14 @@ monty.string module
     :undoc-members:
     :show-inheritance:
 
+monty.subprocess module
+-------------------
+
+.. automodule:: monty.subprocess
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.tempfile module
 ---------------------
 
