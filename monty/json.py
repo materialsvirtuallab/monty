@@ -2,8 +2,7 @@
 JSON serialization and deserialization utilities.
 """
 
-from __future__ import absolute_import
-from __future__ import unicode_literals
+from __future__ import absolute_import, unicode_literals
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -14,6 +13,7 @@ __date__ = "1/24/14"
 
 import json
 import datetime
+import six
 
 from abc import ABCMeta, abstractmethod
 
@@ -176,3 +176,44 @@ class MSONError(Exception):
     Exception class for serialization errors.
     """
     pass
+
+
+def jsanitize(obj, strict=False):
+    """
+    This method cleans an input json-like object, either a list or a dict or
+    some sequence, nested or otherwise, by converting all non-string
+    dictionary keys (such as int and float) to strings, and also recursively
+    encodes all objects using Monty's as_dict() protocol.
+
+    Args:
+        obj: input json-like object.
+        strict: This parameters sets the behavior when clean encounters an
+            object it does not understand. If strict is True, clean will
+            try to get the as_dict() attribute of the object. If no such
+            attribute is found, an attribute error will be thrown. If strict is
+            False, clean will simply call str(object) to convert the
+            object to a string representation.
+
+    Returns:
+        Sanitized dict that can be json serialized.
+    """
+    if isinstance(obj, (list, tuple)):
+        return [jsanitize(i, strict=strict) for i in obj]
+    elif np is not None and isinstance(obj, np.ndarray):
+        return [jsanitize(i, strict=strict) for i in obj]
+    elif isinstance(obj, dict):
+        return {k.__str__(): jsanitize(v, strict=strict)
+                for k, v in obj.items()}
+    elif isinstance(obj, (int, float)):
+        return obj
+    elif obj is None:
+        return None
+    else:
+        if not strict:
+            return obj.__str__()
+        else:
+            if isinstance(obj, six.string_types):
+                return obj.__str__()
+            else:
+                return jsanitize(obj.as_dict(), strict=strict)
+

@@ -10,28 +10,30 @@ import unittest
 import numpy as np
 import json
 import datetime
+import six
 
-from monty.json import MSONable, MSONError, MontyEncoder, MontyDecoder
-from monty.io import zopen
+from monty.json import MSONable, MSONError, MontyEncoder, MontyDecoder, \
+    jsanitize
+
+
+class GoodMSONClass(MSONable):
+
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    def as_dict(self):
+        d = {'a': self.a, 'b': self.b}
+        return d
+
+    @classmethod
+    def from_dict(cls, d):
+        return GoodMSONClass(d['a'], d['b'])
 
 
 class MSONableTest(unittest.TestCase):
 
     def setUp(self):
-        class GoodMSONClass(MSONable):
-
-            def __init__(self, a, b):
-                self.a = a
-                self.b = b
-
-            def as_dict(self):
-                d = {'a': self.a, 'b': self.b}
-                return d
-
-            @classmethod
-            def from_dict(cls, d):
-                return GoodMSONClass(d['a'], d['b'])
-
         self.good_cls = GoodMSONClass
 
         class BadMSONClass(MSONable):
@@ -85,6 +87,21 @@ class JsonTest(unittest.TestCase):
         x = np.min([1, 2, 3]) > 2
         self.assertRaises(TypeError, json.dumps, x)
 
+    def test_jsanitize(self):
+        #clean_json should have no effect on None types.
+        d = {"hello": 1, "world": None}
+        clean = jsanitize(d)
+        self.assertIsNone(clean["world"])
+        self.assertEqual(json.loads(json.dumps(d)), json.loads(json.dumps(
+            clean)))
+
+        d = {"hello": GoodMSONClass(1, 2)}
+        self.assertRaises(TypeError, json.dumps, d)
+        clean = jsanitize(d)
+        self.assertIsInstance(clean["hello"], six.string_types)
+        clean_strict = jsanitize(d, strict=True)
+        self.assertEqual(clean_strict["hello"]["a"], 1)
+        self.assertEqual(clean_strict["hello"]["b"], 2)
 
 if __name__ == "__main__":
     unittest.main()
