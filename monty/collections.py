@@ -47,12 +47,10 @@ class AttrDict(dict):
     to the traditional way obj['foo']"
 
     Example:
-        >> d = AttrDict(foo=1, bar=2)
-        >> d["foo"] == d.foo
-        True
-        >> d.bar = "hello"
-        >> d.bar
-        'hello'
+        >>> d = AttrDict(foo=1, bar=2)
+        >>> assert d["foo"] == d.foo
+        >>> d.bar = "hello"
+        >>> assert d.bar == "hello"
     """
     def __init__(self, *args, **kwargs):
         super(AttrDict, self).__init__(*args, **kwargs)
@@ -89,16 +87,23 @@ class FrozenAttrDict(frozendict):
 
 class MongoDict(object):
     """
+    This dict-like object allows one to access the entries in a nested dict as attributes. 
+    Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object 
+    is particularly useful if you need to analyze a nested dict interactively (e.g. documents
+    extracted from a MongoDB database).
+
     >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
     >>> assert m.a.b == 1 and m.x == 2
     >>> assert "a" in m and "b" in m.a
 
-    NB: Cannot inherit from ABC collections.Mapping because otherwise 
+    .. note:: 
+
+        Cannot inherit from ABC collections.Mapping because otherwise 
         dict.keys and dict.items will pollute the namespace.
         e.g MongoDict({"keys": 1}).keys would be the ABC dict method.
     """
-    def __init__(self, mongo_dict):
-        self.__dict__["_mongo_dict_"] = mongo_dict
+    def __init__(self, *args, **kwargs):
+        self.__dict__["_mongo_dict_"] = dict(*args, **kwargs)
 
     def __repr__(self):
         return str(self)
