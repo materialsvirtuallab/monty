@@ -7,6 +7,8 @@ __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
+import collections
+
 
 class frozendict(dict):
     """
@@ -88,8 +90,7 @@ class FrozenAttrDict(frozendict):
 class MongoDict(object):
     """
     >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
-    >>> assert m.a == {'b': 1} and m.x == 2
-    >>> assert m.a.b == 1
+    >>> assert m.a.b == 1 and m.x == 2
     >>> assert "a" in m and "b" in m.a
 
     NB: Cannot inherit from ABC collections.Mapping because otherwise 
