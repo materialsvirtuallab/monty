@@ -37,6 +37,13 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.6.0
+------
+1. New frozendict and MongoDict (allows for Javascript like access of nested
+   dicts) classes (Matteo).
+2. New Command class in subprocess which allows commands to be run in separate
+   thread with timeout (Matteo).
+
 v0.5.9
 ------
 1. More fixes for reverse read of gzipped files ofr Py3k.

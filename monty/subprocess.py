@@ -1,5 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function, division, unicode_literals
+from __future__ import absolute_import, print_function, division, \
+    unicode_literals
 
 __author__ = 'Matteo Giantomass'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -11,7 +12,8 @@ __date__ = '10/26/14'
 
 class Command(object):
     """
-    Enables to run subprocess commands in a different thread with TIMEOUT option.
+    Enables to run subprocess commands in a different thread with TIMEOUT
+    option.
 
     Based on jcollado's solution:
         http://stackoverflow.com/questions/1191374/subprocess-with-timeout/4825933#4825933
@@ -51,7 +53,7 @@ class Command(object):
         self.killed = False
 
     def __str__(self):
-        return "command: %s, retcode: %s" % (str(self.command), str(self.retcode))
+        return "command: %s, retcode: %s" % (self.command, self.retcode)
 
     def run(self, timeout=None, **kwargs):
         """
@@ -61,10 +63,11 @@ class Command(object):
         Return: self
         """
         from subprocess import Popen, PIPE
-        def target(**kwargs):
+
+        def target(**kw):
             try:
                 #print('Thread started')
-                self.process = Popen(self.command, **kwargs)
+                self.process = Popen(self.command, **kw)
                 self.output, self.error = self.process.communicate()
                 self.retcode = self.process.returncode
                 #print('Thread stopped')
@@ -74,8 +77,11 @@ class Command(object):
                 self.retcode = -1
 
         # default stdout and stderr
-        if 'stdout' not in kwargs: kwargs['stdout'] = PIPE
-        if 'stderr' not in kwargs: kwargs['stderr'] = PIPE
+        if 'stdout' not in kwargs:
+            kwargs['stdout'] = PIPE
+
+        if 'stderr' not in kwargs:
+            kwargs['stderr'] = PIPE
 
         # thread
         import threading

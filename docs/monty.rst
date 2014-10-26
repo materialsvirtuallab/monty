@@ -116,7 +116,7 @@ monty.string module
     :show-inheritance:
 
 monty.subprocess module
--------------------
+-----------------------
 
 .. automodule:: monty.subprocess
     :members:
@@ -131,9 +131,8 @@ monty.tempfile module
     :undoc-members:
     :show-inheritance:
 
-
 monty.termcolor module
----------------------
+----------------------
 
 .. automodule:: monty.termcolor
     :members:
