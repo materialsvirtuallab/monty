@@ -83,6 +83,14 @@ monty.logging module
     :undoc-members:
     :show-inheritance:
 
+monty.math module
+-----------------
+
+.. automodule:: monty.math
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.pprint module
 -------------------
 

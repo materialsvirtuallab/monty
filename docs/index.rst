@@ -37,6 +37,11 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.6.1
+------
+1. New jsanitize method to convert objects supporting the MSONable protocol
+   to json serializable dicts.
+
 v0.6.0
 ------
 1. New frozendict and MongoDict (allows for Javascript like access of nested
