@@ -8,7 +8,7 @@ setup(
     name="monty",
     packages=find_packages(),
     version="0.6.1",
-    install_requires=[],
+    install_requires=["six"],
     extras_require={"yaml": ["pyyaml>=3.1"],},
     package_data={},
     author="Shyue Ping Ong",
