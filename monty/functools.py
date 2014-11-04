@@ -13,7 +13,7 @@ __date__ = '8/29/14'
 
 
 from collections import namedtuple
-from functools import update_wrapper, wraps
+from functools import update_wrapper, wraps, partial
 
 
 try:
@@ -284,7 +284,7 @@ def benchmark(func):
     """
     import time
 
-    @functools.wraps(func)
+    @wraps(func)
     def wrapper(*args, **kwargs):
         t = time.clock()
         res = func(*args, **kwargs)
@@ -293,3 +293,59 @@ def benchmark(func):
         func.__etime = etime
         return res
     return wrapper
+
+
+def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
+    """
+    Decorator for functions, methods or properties. Execute the callable in a try block, 
+    and return retval_if_exc if one of the exceptions listed in exception_tuple is raised
+    (se also ``return_node_if_raise``).
+
+    Setting disabled to True disables  the try except block (useful for debugging purposes).
+    One can use this decorator to define properties.
+    
+    Examples:
+
+        @return_if_raise(ValueError, None)
+        def return_none_if_value_error(self):
+
+        @return_if_raise((ValueError, KeyError), "hello")
+        def another_method(self):
+
+        @property
+        @return_if_raise(AttributeError, None):
+        def name(self)
+            "Name of the object, None if not set."
+            return self._name
+    """
+    # we need a tuple of exceptions.
+    if isinstance(exception_tuple, list): 
+        exception_tuple = tuple(exception_tuple)
+    elif not isinstance(exception_tuple, tuple): 
+        exception_tuple = (exception_tuple,)
+    else:
+        raise TypeError("Wrong exception_tuple %s" % type(exception_tuple))
+
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if disabled:
+                return func(*args, **kwargs)
+            try:
+                return func(*args, **kwargs)
+            except exception_tuple:
+                return retval_if_exc
+            else:
+                raise
+        return wrapper
+    return decorator
+
+
+# One could use None as default value in return_if_raise but this one is explicit and  more readable
+return_none_if_raise = partial(return_if_raise, retval_if_exc=None)
+"""
+This decorator returns None if one of the exceptions is raised.
+
+    @return_none_if_raise(ValueError)
+    def method(self):
+"""
