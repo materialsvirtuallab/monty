@@ -7,8 +7,9 @@ __date__ = '8/29/14'
 
 import unittest
 import sys
+import functools
 from io import open
-from monty.functools import lru_cache, lazy_property
+from monty.functools import lru_cache, lazy_property, return_if_raise, return_none_if_raise
 
 
 class TestLRUCache(unittest.TestCase):
@@ -638,6 +639,42 @@ class AssertExceptionTests(TestCase):
             "baz",
             getattr, self, 'foobar')
 
+
+class TryOrReturnTest(unittest.TestCase):
+    def test_decorator(self):
+        class A(object):
+            @return_if_raise(ValueError, "hello")
+            def return_one(self):
+                return 1
+
+            @return_if_raise(ValueError, "hello")
+            def return_hello(self):
+                raise ValueError()
+
+            @return_if_raise(KeyError, "hello")
+            def reraise_value_error(self):
+                raise ValueError()
+
+            @return_if_raise([KeyError, ValueError], "hello")
+            def catch_exc_list(self):
+                import random
+                if random.randint(0, 1) == 0:
+                    raise ValueError()
+                else:
+                    raise KeyError()
+
+            @return_none_if_raise(TypeError)
+            def return_none(self):
+                raise TypeError()
+
+        a = A()
+        aequal = self.assertEqual
+        aequal(a.return_one(), 1)
+        aequal(a.return_hello(), "hello")
+        with self.assertRaises(ValueError):
+            a.reraise_value_error()
+        aequal(a.catch_exc_list(), "hello")
+        self.assertTrue(a.return_none() is None)
 
 if __name__ == '__main__':
     unittest.main()

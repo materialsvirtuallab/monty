@@ -138,6 +138,23 @@ def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
     print((colored(text, color, on_color, attrs)), **kwargs)
 
 
+def stream_has_colours(stream):
+    """
+    True if stream supports colours. Python cookbook, #475186
+    """
+    if not hasattr(stream, "isatty"):
+        return False
+
+    if not stream.isatty():
+        return False  # auto color only on TTYs
+    try:
+        import curses
+        curses.setupterm()
+        return curses.tigetnum("colors") > 2
+    except:
+        return False  # guess false in case of error
+
+
 if __name__ == '__main__':
     #enable(False)
     print('Current terminal type: %s' % os.getenv('TERM'))
@@ -180,20 +197,3 @@ if __name__ == '__main__':
     cprint('Underline red on grey color', 'red', 'on_grey',
             ['underline'])
     cprint('Reversed green on red color', 'green', 'on_red', ['reverse'])
-
-
-def stream_has_colours(stream):
-    """
-    True if stream supports colours. Python cookbook, #475186
-    """
-    if not hasattr(stream, "isatty"):
-        return False
-
-    if not stream.isatty():
-        return False  # auto color only on TTYs
-    try:
-        import curses
-        curses.setupterm()
-        return curses.tigetnum("colors") > 2
-    except:
-        return False  # guess false in case of error
