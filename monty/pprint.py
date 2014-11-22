@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, print_function, division, \
     unicode_literals
+from six.moves import cStringIO
 
 import sys
 
@@ -39,3 +40,42 @@ def pprint_table(table, out=sys.stdout, rstrip=False):
             col = row[i].rjust(col_paddings[i] + 2)
             out.write(col)
         out.write("\n")
+
+
+
+def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
+    """
+    Args:
+        node: the root of the tree to be drawn,
+        child_iter: function that when called with a node, returns an iterable over all its children
+        text_str: turns a node into the text to be displayed in the tree.
+
+    The default implementations of these two arguments retrieve the children by accessing node.children
+    and simply use str(node) to convert a node to a string. The resulting tree is drawn into a buffer and returned as a string.
+
+    Based on https://pypi.python.org/pypi/asciitree/
+    """
+    return _draw_tree(node, '', child_iter, text_str)
+
+
+def _draw_tree(node, prefix, child_iter, text_str):
+    buf = cStringIO()
+
+    children = list(child_iter(node))
+
+    # check if root node
+    if prefix:
+        buf.write(prefix[:-3])
+        buf.write('  +--')
+    buf.write(text_str(node))
+    buf.write('\n')
+
+    for index, child in enumerate(children):
+        if index+1 == len(children):
+            sub_prefix = prefix + '   '
+        else:
+            sub_prefix = prefix + '  |'
+
+        buf.write(_draw_tree(child, sub_prefix, child_iter, text_str))
+
+    return buf.getvalue()
