@@ -80,7 +80,7 @@ def reverse_readfile(filename):
                 for l in reversed(f.readlines()):
                     yield l.decode("utf-8").rstrip()
             else:
-                fm = mmap.mmap(f.fileno(), 0)
+                fm = mmap.mmap(f.fileno(), 0, access=mmap.MAP_PRIVATE)
                 n = len(fm)
                 while n > 0:
                     i = fm.rfind(b"\n", 0, n)
