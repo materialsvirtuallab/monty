@@ -150,8 +150,12 @@ def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
 
     It accepts arguments of print function.
     """
-
-    print((colored(text, color, on_color, attrs)), **kwargs)
+    try:
+        print((colored(text, color, on_color, attrs)), **kwargs)
+    except TypeError:
+        # flush is not supported by py2.7
+        kwargs.pop("flush", None)
+        print((colored(text, color, on_color, attrs)), **kwargs)
 
 
 def colored_map(text, cmap):
@@ -181,7 +185,12 @@ def cprint_map(text, cmap, **kwargs):
     Example:
         cprint_map("Hello world", {"Hello": "red"})
     """
-    print(colored_map(text, cmap), **kwargs)
+    try:
+        print(colored_map(text, cmap), **kwargs)
+    except TypeError:
+        # flush is not supported by py2.7
+        kwargs.pop("flush", None)
+        print((colored(text, color, on_color, attrs)), **kwargs)
 
 
 if __name__ == '__main__':
