@@ -42,7 +42,6 @@ def pprint_table(table, out=sys.stdout, rstrip=False):
         out.write("\n")
 
 
-
 def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
     """
     Args:

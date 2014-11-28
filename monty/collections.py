@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+# coding: utf-8
+from __future__ import absolute_import, print_function, unicode_literals, division
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -8,6 +9,21 @@ __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
 import collections
+
+
+def as_set(obj):
+    """
+    Convert obj into a set, returns None if obj is None.
+
+    >>> assert as_set(None) is None and as_set(1) == set([1]) and as_set(range(1,3)) == set([1, 2])
+    """
+    if obj is None or isinstance(obj, collections.Set):
+        return obj
+
+    if not isinstance(obj, collections.Iterable):
+        return set((obj,))
+    else:
+        return set(obj)
 
 
 class frozendict(dict):
