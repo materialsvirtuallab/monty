@@ -20,7 +20,6 @@
 # THE SOFTWARE.
 #
 # Author: Konstantin Lepa <konstantin.lepa@gmail.com>
-
 """ANSII Color formatting for output in terminal."""
 from __future__ import print_function, unicode_literals, absolute_import
 
@@ -96,6 +95,23 @@ def ison():
     return __ISON
 
 
+def stream_has_colours(stream):
+    """
+    True if stream supports colours. Python cookbook, #475186
+    """
+    if not hasattr(stream, "isatty"):
+        return False
+
+    if not stream.isatty():
+        return False  # auto color only on TTYs
+    try:
+        import curses
+        curses.setupterm()
+        return curses.tigetnum("colors") > 2
+    except:
+        return False  # guess false in case of error
+
+
 def colored(text, color=None, on_color=None, attrs=None):
     """Colorize text.
 
@@ -134,25 +150,47 @@ def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
 
     It accepts arguments of print function.
     """
-
-    print((colored(text, color, on_color, attrs)), **kwargs)
-
-
-def stream_has_colours(stream):
-    """
-    True if stream supports colours. Python cookbook, #475186
-    """
-    if not hasattr(stream, "isatty"):
-        return False
-
-    if not stream.isatty():
-        return False  # auto color only on TTYs
     try:
-        import curses
-        curses.setupterm()
-        return curses.tigetnum("colors") > 2
-    except:
-        return False  # guess false in case of error
+        print((colored(text, color, on_color, attrs)), **kwargs)
+    except TypeError:
+        # flush is not supported by py2.7
+        kwargs.pop("flush", None)
+        print((colored(text, color, on_color, attrs)), **kwargs)
+
+
+def colored_map(text, cmap):
+    """
+    Return colorized text. cmap is a dict mapping tokens to color options.
+
+    .. Example:
+
+        colored_key("foo bar", {bar: "green"})
+        colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
+    """
+    if not __ISON: return text
+    for key, v in cmap.items():
+        if isinstance(v, dict):
+            text = text.replace(key, colored(key, **v))
+        else:
+            text = text.replace(key, colored(key, color=v))
+    return text
+
+
+def cprint_map(text, cmap, **kwargs):
+    """
+    Print colorize text. 
+    cmap is a dict mapping keys to color options. 
+    kwargs are passed to print function
+
+    Example:
+        cprint_map("Hello world", {"Hello": "red"})
+    """
+    try:
+        print(colored_map(text, cmap), **kwargs)
+    except TypeError:
+        # flush is not supported by py2.7
+        kwargs.pop("flush", None)
+        print((colored(text, color, on_color, attrs)), **kwargs)
 
 
 if __name__ == '__main__':
@@ -197,3 +235,7 @@ if __name__ == '__main__':
     cprint('Underline red on grey color', 'red', 'on_grey',
             ['underline'])
     cprint('Reversed green on red color', 'green', 'on_red', ['reverse'])
+
+    # Test cprint_keys 
+    cprint_map("Hello world", {"Hello": "red"})
+    cprint_map("Hello world", {"Hello": {"color": "blue", "on_color": "on_red"}})
