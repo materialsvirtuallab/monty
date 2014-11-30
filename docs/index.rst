@@ -37,6 +37,11 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.6.2
+------
+1. New bisect module (Matteo).
+2. Fixes for reverse_readfile to improve compatibility with some file systems.
+
 v0.6.1
 ------
 1. New jsanitize method to convert objects supporting the MSONable protocol
