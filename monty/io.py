@@ -75,12 +75,12 @@ def reverse_readfile(filename):
         Lines from the file in reverse order.
     """
     try:
-        with zopen(filename, "r+b") as f:
+        with zopen(filename, "rb") as f:
             if isinstance(f, gzip.GzipFile):
                 for l in reversed(f.readlines()):
                     yield l.decode("utf-8").rstrip()
             else:
-                fm = mmap.mmap(f.fileno(), 0, access=mmap.MAP_PRIVATE)
+                fm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
                 n = len(fm)
                 while n > 0:
                     i = fm.rfind(b"\n", 0, n)
