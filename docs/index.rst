@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.6.3
+------
+1. Reverse read line now works without write privileges.
+
 v0.6.2
 ------
 1. New bisect module (Matteo).
