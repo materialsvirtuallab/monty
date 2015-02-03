@@ -58,3 +58,69 @@ def zpath(filename):
         if os.path.exists(zfilename):
             return zfilename
     return filename
+
+
+def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basename"):
+    """
+    Find all files with the extension listed in exts that are located within the directory tree 
+    rooted at top (including top itself, but excluding '.' and '..')
+
+    Args:
+        top (str): Root directory
+        exts (str or list of strings): List of extensions.
+        exclude_dirs (str): Wildcards used to exclude particular directories. Can be concatenated via `|`  
+        include_dirs (str): Wildcards used to select particular directories. 
+                            `include_dirs` and `exclude_dirs` are mutually exclusive 
+        match_mode (str): "basename" if  match should be done on the basename.
+                          "abspath" for absolute path.
+
+    Returns:
+        (list of str): Absolute paths of the files.
+
+    .. example::
+
+        # Fid all pdf and ps files starting from the current directory.
+        find_exts(".", ("pdf", "ps"))
+
+        # Fid all pdf files, exclude hidden directories and dirs whose name starts with `_`
+        find_exts(".", "pdf", exclude_dirs="_*|.*")
+
+        # Fid all ps files, in the directories whose basename starts with output.
+        find_exts(".", "ps", include_dirs="output*"))
+    """
+    from monty.string import list_strings
+    exts = list_strings(exts)
+
+    # Handle file!
+    if os.path.isfile(top):
+        return [os.path.abspath(top)] if any(top.endswith(ext) for ext in exts) else []
+
+    # Build shell-style wildcards.
+    from monty.fnmatch import WildCard
+    if exclude_dirs is not None:
+        assert include_dirs is None
+        exclude_dirs = WildCard(exclude_dirs)
+
+    if include_dirs is not None:
+        assert exclude_dirs is None
+        include_dirs = WildCard(include_dirs)
+
+    mangle = dict(
+        basename=os.path.basename,
+        abspath=os.path.abspath)[match_mode]
+
+    # Assume directory
+    paths = []
+    for dirpath, dirnames, filenames in os.walk(top):
+        dirpath = os.path.abspath(dirpath)
+
+        if exclude_dirs and exclude_dirs.match(mangle(dirpath)): 
+            continue
+        if include_dirs and not include_dirs.match(mangle(dirpath)): 
+            continue
+
+        for filename in filenames:
+            if any(filename.endswith(ext) for ext in exts):
+                paths.append(os.path.join(dirpath, filename))
+
+    return paths
