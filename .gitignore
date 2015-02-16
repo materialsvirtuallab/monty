@@ -40,3 +40,5 @@ nosetests.xml
 # vim files
 *.swp
 *.swo
+
+.DS_Store
