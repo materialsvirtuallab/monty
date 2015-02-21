@@ -43,18 +43,18 @@ monty.dev module
     :undoc-members:
     :show-inheritance:
 
-monty.fractions module
-----------------------
-
-.. automodule:: monty.fractions
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 monty.fnmatch module
 --------------------
 
 .. automodule:: monty.fnmatch
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+monty.fractions module
+----------------------
+
+.. automodule:: monty.fractions
     :members:
     :undoc-members:
     :show-inheritance:

@@ -9,9 +9,8 @@ from monty.string import list_strings
 
 class WildCard(object):
     """
-    This object provides an easy-to-use interface for filename matching with shell patterns (fnmatch).
-
-    .. example::
+    This object provides an easy-to-use interface for filename matching with
+    shell patterns (fnmatch).
 
     >>> w = WildCard("*.nc|*.pdf")
     >>> w.filter(["foo.nc", "bar.pdf", "hello.txt"])

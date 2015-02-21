@@ -1,6 +1,64 @@
 Change log
 ==========
 
+v0.6.1
+------
+1. New jsanitize method to convert objects supporting the MSONable protocol
+   to json serializable dicts.
+
+v0.6.0
+------
+1. New frozendict and MongoDict (allows for Javascript like access of nested
+   dicts) classes (Matteo).
+2. New Command class in subprocess which allows commands to be run in separate
+   thread with timeout (Matteo).
+
+v0.5.9
+------
+1. More fixes for reverse read of gzipped files ofr Py3k.
+
+v0.5.8
+------
+1. Fix reverse read file for gzipped files.
+
+v0.5.7
+------
+1. Added a reverse_readfile method in monty.io, which is faster than
+   reverse_readline for large files.
+
+v0.5.6
+------
+1. Provide way to specify Dumper and Loader in monty.serialization.
+2. Better handling of unicode.
+
+v0.5.5
+------
+1. More robust handling of numpy arrays and datetime objects in json.
+2. Refactor NotOverwritableDict to Namespace (Matteo).
+
+v0.5.4
+------
+1. Addition of many help functions in string, itertools, etc. (Matteo).
+2. NullFile and NullStream in monty.design_patterns (Matteo).
+3. FileLock in monty.io (Matteo)
+
+v0.5.3
+------
+1. Minor efficiency improvement.
+
+v0.5.2
+------
+1. Add unicode2str and str2unicode in monty.string.
+
+v0.5.0
+------
+1. Completely rewritten zopen which supports the "rt" keyword of Python 3
+   even when used in Python 2.
+2. monty.string now has a marquee method which centers a string
+   (contributed by Matteo).
+3. Monty now supports only Python >= 3.3 as well as Python 2.7. Python 3.2
+   support is now dropped.
+
 v0.4.4
 ------
 1. Refactor lazy_property to be in functools module.
