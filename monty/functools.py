@@ -279,7 +279,7 @@ class lazy_property(object):
 
 def benchmark(func):
     """
-    A decorator that computes the time a function takes to execute 
+    A decorator that computes the time a function takes to execute
     and stores it in the __etime attribute.
     """
     import time
@@ -297,31 +297,34 @@ def benchmark(func):
 
 def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
     """
-    Decorator for functions, methods or properties. Execute the callable in a try block, 
-    and return retval_if_exc if one of the exceptions listed in exception_tuple is raised
-    (se also ``return_node_if_raise``).
+    Decorator for functions, methods or properties. Execute the callable in a
+    try block, and return retval_if_exc if one of the exceptions listed in
+    exception_tuple is raised (se also ``return_node_if_raise``).
 
-    Setting disabled to True disables  the try except block (useful for debugging purposes).
-    One can use this decorator to define properties.
-    
-    Examples:
+    Setting disabled to True disables the try except block (useful for
+    debugging purposes). One can use this decorator to define properties.
+
+    Example::
 
         @return_if_raise(ValueError, None)
         def return_none_if_value_error(self):
+            pass
 
         @return_if_raise((ValueError, KeyError), "hello")
         def another_method(self):
+            pass
 
         @property
-        @return_if_raise(AttributeError, None):
-        def name(self)
+        @return_if_raise(AttributeError, None)
+        def name(self):
             "Name of the object, None if not set."
             return self._name
+
     """
     # we need a tuple of exceptions.
-    if isinstance(exception_tuple, list): 
+    if isinstance(exception_tuple, list):
         exception_tuple = tuple(exception_tuple)
-    elif not isinstance(exception_tuple, tuple): 
+    elif not isinstance(exception_tuple, tuple):
         exception_tuple = (exception_tuple,)
     else:
         raise TypeError("Wrong exception_tuple %s" % type(exception_tuple))
@@ -341,7 +344,8 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
     return decorator
 
 
-# One could use None as default value in return_if_raise but this one is explicit and  more readable
+# One could use None as default value in return_if_raise but this one is
+# explicit and  more readable
 return_none_if_raise = partial(return_if_raise, retval_if_exc=None)
 """
 This decorator returns None if one of the exceptions is raised.
