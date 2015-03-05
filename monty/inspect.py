@@ -3,6 +3,8 @@ Useful additional functions to help get information about live objects
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+from inspect import currentframe, getframeinfo
+
 
 def all_subclasses(cls):
     """
@@ -18,7 +20,7 @@ def find_top_pyfile():
     This function inspects the Cpython frame to find the path of the script.
     """
     import os
-    from inspect import currentframe, getframeinfo
+    #from inspect import currentframe, getframeinfo
     frame = currentframe()
     while True:
         if frame.f_back is None:
@@ -28,11 +30,9 @@ def find_top_pyfile():
 
         frame = frame.f_back
 
-
-
 def find_caller():
     """
-    find the stack frame of the caller so that we can note the source file name, 
+    Find the stack frame of the caller so that we can note the source file name, 
     line number and function name.
 
     Return:
@@ -57,7 +57,6 @@ def find_caller():
     #if hasattr(sys, '_getframe'): currentframe = lambda: sys._getframe(3)
     # done filching
 
-    from inspect import currentframe
     #_getframe = currentframe
 
     # _srcfile is used when walking the stack to check when we've got the first caller stack frame.
