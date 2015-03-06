@@ -3,7 +3,8 @@ Useful additional functions to help get information about live objects
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from inspect import currentframe, getframeinfo
+import inspect
+from inspect import currentframe, getframeinfo, stack, getouterframes
 
 
 def all_subclasses(cls):
@@ -57,10 +58,29 @@ def find_caller():
     #if hasattr(sys, '_getframe'): currentframe = lambda: sys._getframe(3)
     # done filching
 
-    #_getframe = currentframe
+    import collections
+    # See also
+    #http://stackoverflow.com/questions/2654113/python-how-to-get-the-callers-method-name-in-the-called-method
 
-    # _srcfile is used when walking the stack to check when we've got the first caller stack frame.
+    CallerInfo = collections.namedtuple("CallerInfo", "filename, lineno, name")
+    caller = CallerInfo("(unknown file)", 0, "(unknown function)")
+
+    curframe = currentframe()
+    if curframe is None:
+        return caller
+
+    f = getouterframes(curframe, 2)[1][0]
+    #print(f)
+
     import sys, os
+    co = f.f_code
+    filename = os.path.normcase(co.co_filename)
+    return CallerInfo(co.co_filename, f.f_lineno, co.co_name)
+
+    #print('caller name:', calframe[1][3])
+    #_getframe = currentframe
+    # _srcfile is used when walking the stack to check when we've got the first caller stack frame.
+
     if hasattr(sys, 'frozen'): #support for py2exe
         _srcfile = "logging%s__init__%s" % (os.sep, __file__[-4:])
     elif __file__[-4:].lower() in ['.pyc', '.pyo']:
@@ -70,10 +90,6 @@ def find_caller():
     #print(_srcfile)
 
     _srcfile = os.path.normcase(_srcfile)
-
-    import collections
-    CallerInfo = collections.namedtuple("CallerInfo", "filename, lineno, name")
-    caller = CallerInfo("(unknown file)", 0, "(unknown function)")
 
     f = currentframe()
     # On some versions of IronPython, currentframe() returns None if
@@ -92,3 +108,45 @@ def find_caller():
         break
 
     return caller
+
+
+def caller_name(skip=2):
+    """
+    Get a name of a caller in the format module.class.method
+    
+    `skip` specifies how many levels of stack to skip while getting caller
+    name. skip=1 means "who calls me", skip=2 "who calls my caller" etc.
+       
+    An empty string is returned if skipped levels exceed stack height
+
+    Taken from:
+
+        https://gist.github.com/techtonik/2151727
+
+    Public Domain, i.e. feel free to copy/paste
+    """
+    stack = inspect.stack()
+    start = 0 + skip
+    if len(stack) < start + 1:
+      return ''
+    parentframe = stack[start][0]    
+    
+    name = []
+    module = inspect.getmodule(parentframe)
+    # `modname` can be None when frame is executed directly in console
+    # TODO(techtonik): consider using __main__
+    if module:
+        name.append(module.__name__)
+    # detect classname
+    if 'self' in parentframe.f_locals:
+        # I don't know any way to detect call from the object method
+        # XXX: there seems to be no way to detect static method call - it will
+        #      be just a function call
+        name.append(parentframe.f_locals['self'].__class__.__name__)
+    codename = parentframe.f_code.co_name
+    if codename != '<module>':  # top level usually
+        name.append( codename ) # function or a method
+    del parentframe
+    return ".".join(name)
+
+

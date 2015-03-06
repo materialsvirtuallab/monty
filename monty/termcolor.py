@@ -228,11 +228,6 @@ def get_terminal_size():
 
     if not rc:
         rc = (env.get('LINES', 25), env.get('COLUMNS', 80))
-        ### Use get(key[, default]) instead of a try/catch
-        #try:
-        #    rc = (env['LINES'], env['COLUMNS'])
-        #except:
-        #    rc = (25, 80)
 
     return int(rc[0]), int(rc[1])
 
