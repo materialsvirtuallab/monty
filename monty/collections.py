@@ -77,7 +77,6 @@ class AttrDict(dict):
         return self.__class__(**newd)
 
 
-
 class FrozenAttrDict(frozendict):
     """
     A dictionary that:
@@ -155,3 +154,29 @@ class MongoDict(object):
     def __dir__(self):
         """For Ipython tab completion. See http://ipython.org/ipython-doc/dev/config/integrating.html"""
         return sorted(list(k for k in self._mongo_dict_ if not callable(k)))
+
+
+def dict2namedtuple(*args, **kwargs):
+    """
+    Helper function to create a :class:`namedtuple` from a dictionary.
+
+    Example:
+
+        >>> t = dic2namedtuple(foo=1, bar="hello")
+        >>> assert t.foo == 1 and t.bar == "hello"
+
+        >>> t = dic2namedtuple([("foo", 1), ("bar", "hello")])
+        >>> assert t[0] == t.foo and t[1] == t.bar
+
+    .. warning::
+
+        - The order of the items in the namedtuple is not deterministic if kwargs are used.
+          namedtuples, however, should always be accessed by attribute hence 
+          this behaviour should not represent a serious problem.
+
+        - Don't use this function in code in which memory and performance are crucial
+          since a dict is needed to instantiate the tuple!
+    """
+    d = collections.OrderedDict(*args)
+    d.update(**kwargs)
+    return collections.namedtuple(typename="dict2namedtuple", field_names=list(d.keys()))(**d)
