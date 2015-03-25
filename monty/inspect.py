@@ -150,3 +150,35 @@ def caller_name(skip=2):
     return ".".join(name)
 
 
+def initializer(func):
+    """
+    Automatically assigns the parameters.
+    http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables
+
+    >>> class process:
+    ...     @initializer
+    ...     def __init__(self, cmd, reachable=False, user='root'):
+    ...         pass
+    >>> p = process('halt', True)
+    >>> p.cmd, p.reachable, p.user
+    ('halt', True, 'root')
+    """
+    names, varargs, keywords, defaults = inspect.getargspec(func)
+
+    from functools import wraps
+    @wraps(func)
+    def wrapper(self, *args, **kargs):
+        #print("names", names, "defaults", defaults)
+        for name, arg in list(zip(names[1:], args)) + list(kargs.items()):
+            setattr(self, name, arg)
+
+        # Avoid TypeError: argument to reversed() must be a sequence
+        if defaults is not None:
+            for name, default in zip(reversed(names), reversed(defaults)):
+                if not hasattr(self, name):
+                    setattr(self, name, default)
+
+        return func(self, *args, **kargs)
+
+    return wrapper
+

@@ -4,7 +4,7 @@ from __future__ import division, unicode_literals
 import unittest
 import os
 
-from monty.inspect import find_caller
+from monty.inspect import *
 
 
 class InspectTest(unittest.TestCase):
