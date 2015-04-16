@@ -115,6 +115,14 @@ monty.math module
     :undoc-members:
     :show-inheritance:
 
+monty.operator module
+---------------------
+
+.. automodule:: monty.operator
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.pprint module
 -------------------
 
