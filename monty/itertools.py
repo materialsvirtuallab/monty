@@ -36,7 +36,7 @@ def iterator_from_slice(s):
         # Infinite iterator.
         return itertools.count(start=start, step=step)
     else:
-        # xrange-like iterator that suppors float.
+        # xrange-like iterator that supports float.
         return iter(np.arange(start, s.stop, step))
 
 
