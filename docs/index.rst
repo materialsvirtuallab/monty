@@ -37,6 +37,11 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.6.5
+------
+1. New monty.re.regrep, which is a powerful version of grep implemented
+   in python.
+
 v0.6.4
 ------
 1. New fnmatch tools.
