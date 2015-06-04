@@ -131,6 +131,14 @@ monty.pprint module
     :undoc-members:
     :show-inheritance:
 
+monty.re module
+---------------
+
+.. automodule:: monty.re
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.serialization module
 --------------------------
 

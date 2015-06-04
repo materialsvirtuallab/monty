@@ -27,5 +27,7 @@ def cd(path):
     """
     cwd = os.getcwd()
     os.chdir(path)
-    yield
-    os.chdir(cwd)
+    try:
+        yield
+    finally:
+        os.chdir(cwd)
