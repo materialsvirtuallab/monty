@@ -79,6 +79,29 @@ class DecoratorTest(unittest.TestCase):
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
 
+    def test_deprecated_classmethod(self):
+
+        class a(object):
+            def __init__(self):
+                pass
+
+            @classmethod
+            def classmethod_a(self):
+                pass
+
+            @classmethod
+            @deprecated(classmethod_a)
+            def classmethod_b(self):
+                return 'b'
+
+        with warnings.catch_warnings(record=True) as w:
+            # Cause all warnings to always be triggered.
+            warnings.simplefilter("always")
+            # Trigger a warning.
+            self.assertEqual(a().classmethod_b(), 'b')
+            # Verify some things
+            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+
     def test_requires(self):
 
         try:
