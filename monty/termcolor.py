@@ -193,6 +193,44 @@ def cprint_map(text, cmap, **kwargs):
         print((colored(text, color, on_color, attrs)), **kwargs)
 
 
+def get_terminal_size():
+    """"
+    Return the size of the terminal as (nrow, ncols)
+    
+    Based on: 
+
+        http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
+    """
+    try:
+        rc = os.popen('stty size', 'r').read().split()
+        return int(rc[0]), int(rc[1])
+    except:
+        pass
+
+    env = os.environ
+    def ioctl_GWINSZ(fd):
+        try:
+            import fcntl, termios, struct
+            rc = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
+            return rc
+        except:
+            return None
+
+    rc = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
+
+    if not rc:
+        try:
+            fd = os.open(os.ctermid(), os.O_RDONLY)
+            rc = ioctl_GWINSZ(fd)
+            os.close(fd)
+        except:
+            pass
+
+    if not rc:
+        rc = (env.get('LINES', 25), env.get('COLUMNS', 80))
+
+    return int(rc[0]), int(rc[1])
+
 if __name__ == '__main__':
     # enable(False)
     print('Current terminal type: %s' % os.getenv('TERM'))
@@ -238,5 +276,7 @@ if __name__ == '__main__':
 
     # Test cprint_keys 
     cprint_map("Hello world", {"Hello": "red"})
-    cprint_map("Hello world",
-               {"Hello": {"color": "blue", "on_color": "on_red"}})
+    cprint_map("Hello world", {"Hello": {"color": "blue", "on_color": "on_red"}})
+    
+    # Test terminal size.
+    print("terminal size: %s", get_terminal_size())
