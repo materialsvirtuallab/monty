@@ -16,8 +16,7 @@ def operator_from_str(op):
     >>> assert operator_from_str("=")(1, 1) and operator_from_str("+")(1, 1) == 2
     """
     import operator
-    return {
-        "==": operator.eq,
+    d= {"==": operator.eq,
         "!=": operator.ne,
         ">": operator.gt,
         ">=": operator.ge,
@@ -26,8 +25,14 @@ def operator_from_str(op):
         '+' : operator.add,
         '-' : operator.sub,
         '*' : operator.mul,
-        '/' : operator.div,
         '%' : operator.mod,
         '^' : operator.xor,
-    }[op]
+    }
+
+    try:
+        d['/']=operator.truediv
+    except AttributeError:
+        pass
+
+    return d[op]
 

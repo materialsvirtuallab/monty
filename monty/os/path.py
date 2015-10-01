@@ -62,8 +62,8 @@ def zpath(filename):
 
 def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basename"):
     """
-    Find all files with the extension listed in exts that are located within the directory tree
-    rooted at top (including top itself, but excluding '.' and '..')
+    Find all files with the extension listed in `exts` that are located within the directory tree
+    rooted at `top` (including top itself, but excluding '.' and '..')
 
     Args:
         top (str): Root directory
