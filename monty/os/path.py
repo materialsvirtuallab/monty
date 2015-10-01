@@ -62,8 +62,8 @@ def zpath(filename):
 
 def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basename"):
     """
-    Find all files with the extension listed in exts that are located within the directory tree
-    rooted at top (including top itself, but excluding '.' and '..')
+    Find all files with the extension listed in `exts` that are located within the directory tree
+    rooted at `top` (including top itself, but excluding '.' and '..')
 
     Args:
         top (str): Root directory
@@ -79,14 +79,14 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basen
 
     Examples::
 
-        # Fid all pdf and ps files starting from the current directory.
+        # Find all pdf and ps files starting from the current directory.
         find_exts(".", ("pdf", "ps"))
 
-        # Fid all pdf files, exclude hidden directories and dirs whose name
+        # Find all pdf files, exclude hidden directories and dirs whose name
         # starts with `_`
         find_exts(".", "pdf", exclude_dirs="_*|.*")
 
-        # Fid all ps files, in the directories whose basename starts with
+        # Find all ps files, in the directories whose basename starts with
         # output.
         find_exts(".", "ps", include_dirs="output*"))
     """

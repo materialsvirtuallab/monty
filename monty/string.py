@@ -122,13 +122,11 @@ def marquee(text="", width=78, mark='*'):
 def boxed(msg, ch="=", pad=5):
     """
     Returns a string in a box
+
     Args:
-        msg:
-            Input string.
-        ch:
-            Characted used to form the box.
-        pad:
-            Number of characters ch added before and after msg.
+        msg: Input string.
+        ch: Character used to form the box.
+        pad: Number of characters ch added before and after msg.
 
     >>> print(boxed("hello", ch="*", pad=2))
     ***********
@@ -143,3 +141,13 @@ def boxed(msg, ch="=", pad=5):
                       len(msg) * ch,
                      ])
 
+
+def make_banner(s, width=78, mark="*"):
+    banner = marquee(s, width=width, mark=mark)
+    return "\n" + len(banner) * mark + "\n" + banner + "\n" + len(banner) * mark
+
+
+def indent(lines, amount, ch=' '):
+    """Indent the lines in a string by padding each one with proper number of pad characters"""
+    padding = amount * ch
+    return padding + ('\n' + padding).join(lines.split('\n'))

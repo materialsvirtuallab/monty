@@ -67,6 +67,14 @@ monty.functools module
     :undoc-members:
     :show-inheritance:
 
+monty.inspect module
+--------------------
+
+.. automodule:: monty.inspect
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.io module
 ---------------
 
@@ -103,6 +111,14 @@ monty.math module
 -----------------
 
 .. automodule:: monty.math
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+monty.operator module
+---------------------
+
+.. automodule:: monty.operator
     :members:
     :undoc-members:
     :show-inheritance:
