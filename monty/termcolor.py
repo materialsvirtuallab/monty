@@ -1,6 +1,8 @@
 # coding: utf-8
-# Copyright (c) 2008-2011 Volvox Development Team
-#
+
+"""
+Copyright (c) 2008-2011 Volvox Development Team
+
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
@@ -20,69 +22,67 @@
 # THE SOFTWARE.
 #
 # Author: Konstantin Lepa <konstantin.lepa@gmail.com>
-"""ANSII Color formatting for output in terminal."""
+
+ANSII Color formatting for output in terminal.
+"""
 from __future__ import print_function, unicode_literals, absolute_import
 
 import os
 
-
-__all__ = [ 'colored', 'cprint' ]
+__all__ = ['colored', 'cprint']
 
 VERSION = (1, 1, 0)
 
 ATTRIBUTES = dict(
-        list(zip([
-            'bold',
-            'dark',
-            '',
-            'underline',
-            'blink',
-            '',
-            'reverse',
-            'concealed'
-            ],
-            list(range(1, 9))
-            ))
-        )
+    list(zip([
+        'bold',
+        'dark',
+        '',
+        'underline',
+        'blink',
+        '',
+        'reverse',
+        'concealed'
+    ],
+        list(range(1, 9))
+    ))
+)
 del ATTRIBUTES['']
 
-
 HIGHLIGHTS = dict(
-        list(zip([
-            'on_grey',
-            'on_red',
-            'on_green',
-            'on_yellow',
-            'on_blue',
-            'on_magenta',
-            'on_cyan',
-            'on_white'
-            ],
-            list(range(40, 48))
-            ))
-        )
-
+    list(zip([
+        'on_grey',
+        'on_red',
+        'on_green',
+        'on_yellow',
+        'on_blue',
+        'on_magenta',
+        'on_cyan',
+        'on_white'
+    ],
+        list(range(40, 48))
+    ))
+)
 
 COLORS = dict(
-        list(zip([
-            'grey',
-            'red',
-            'green',
-            'yellow',
-            'blue',
-            'magenta',
-            'cyan',
-            'white',
-            ],
-            list(range(30, 38))
-            ))
-        )
-
+    list(zip([
+        'grey',
+        'red',
+        'green',
+        'yellow',
+        'blue',
+        'magenta',
+        'cyan',
+        'white',
+    ],
+        list(range(30, 38))
+    ))
+)
 
 RESET = '\033[0m'
 
-
 __ISON = True
+
 
 def enable(true_false):
     """Enable/Disable ANSII Color formatting"""
@@ -194,7 +194,7 @@ def cprint_map(text, cmap, **kwargs):
 
 
 if __name__ == '__main__':
-    #enable(False)
+    # enable(False)
     print('Current terminal type: %s' % os.getenv('TERM'))
     print('Test basic colors:')
     cprint('Grey color', 'grey')
@@ -226,16 +226,17 @@ if __name__ == '__main__':
     cprint('Reversed blue color', 'blue', attrs=['reverse'])
     cprint('Concealed Magenta color', 'magenta', attrs=['concealed'])
     cprint('Bold underline reverse cyan color', 'cyan',
-            attrs=['bold', 'underline', 'reverse'])
+           attrs=['bold', 'underline', 'reverse'])
     cprint('Dark blink concealed white color', 'white',
-            attrs=['dark', 'blink', 'concealed'])
+           attrs=['dark', 'blink', 'concealed'])
     print(('-' * 78))
 
     print('Test mixing:')
     cprint('Underline red on grey color', 'red', 'on_grey',
-            ['underline'])
+           ['underline'])
     cprint('Reversed green on red color', 'green', 'on_red', ['reverse'])
 
     # Test cprint_keys 
     cprint_map("Hello world", {"Hello": "red"})
-    cprint_map("Hello world", {"Hello": {"color": "blue", "on_color": "on_red"}})
+    cprint_map("Hello world",
+               {"Hello": {"color": "blue", "on_color": "on_red"}})

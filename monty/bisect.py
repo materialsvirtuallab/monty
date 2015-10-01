@@ -1,7 +1,13 @@
 # coding: utf-8
 from __future__ import division, unicode_literals, absolute_import
+
 """
-Additional bisect functions.
+Additional bisect functions. Taken from
+https://docs.python.org/2/library/bisect.html
+The above bisect() functions are useful for finding insertion points but can be
+tricky or awkward to use for common searching tasks.
+The functions show how to transform them into the standard lookups for sorted
+lists.
 """
 
 __author__ = 'Matteo Giantomassi'
@@ -13,9 +19,6 @@ __date__ = '11/09/14'
 
 import bisect as bs
 
-# Taken from https://docs.python.org/2/library/bisect.html
-# The above bisect() functions are useful for finding insertion points but can be tricky or awkward to use for common searching tasks. 
-# The following five functions show how to transform them into the standard lookups for sorted lists:
 
 def index(a, x, atol=None):
     """Locate the leftmost value exactly equal to x."""

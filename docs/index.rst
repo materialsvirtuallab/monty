@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.6.6
+------
+1. New operator, string and inspection tools. (Matteo)
+
 v0.6.5
 ------
 1. New monty.re.regrep, which is a powerful version of grep implemented
