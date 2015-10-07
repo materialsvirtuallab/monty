@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v0.7.0
+------
+1. New backwards incompatible MSONable implementation that inspects init args
+   to create a default dict representation for objects.
+
 v0.6.1
 ------
 1. New jsanitize method to convert objects supporting the MSONable protocol

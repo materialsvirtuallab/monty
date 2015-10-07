@@ -43,7 +43,7 @@ class MSONableTest(unittest.TestCase):
                 self.b = b
 
             def as_dict(self):
-                d = {'a': self.a, 'b': self.b}
+                d = {"init": {'a': self.a, 'b': self.b}}
                 return d
 
         self.bad_cls = BadMSONClass

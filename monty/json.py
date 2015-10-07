@@ -14,7 +14,7 @@ __date__ = "1/24/14"
 import json
 import datetime
 import six
-
+import inspect
 from abc import ABCMeta, abstractmethod
 
 try:
@@ -25,7 +25,7 @@ except ImportError:
 
 class MSONable(object):
     """
-    This is an abstract base class specifying an API for msonable objects. MSON
+    This is a mix-in base class specifying an API for msonable objects. MSON
     is Monty JSON. Essentially, MSONable objects must implement an as_dict
     method, which must return a json serializable dict and must also support
     no arguments (though optional arguments to finetune the output is ok),
@@ -39,14 +39,21 @@ class MSONable(object):
 
     If you use MontyDecoder, these fields will automatically be added.
     """
-    __metaclass__ = ABCMeta
 
-    @abstractmethod
     def as_dict(self):
         """
         A JSON serializable dict representation of an object.
         """
-        pass
+        d = {"@module": self.__class__.__module__,
+             "@class": self.__class__.__name__}
+        if hasattr(self, "__init__"):
+            for c in inspect.getargspec(self.__init__).args:
+                if c != "self":
+                    a = self.__getattribute__(c)
+                    if hasattr(a, "as_dict"):
+                        a = a.as_dict()
+                    d[c] = a
+        return d
 
     @classmethod
     def from_dict(cls, d):
@@ -55,10 +62,14 @@ class MSONable(object):
         classes that simply saves all init arguments in a "init_args"
         key. Otherwise, the MSONAble class must override this class method.
         """
-        if "init_args" in d:
-            return cls(**d['init_args'])
-        raise MSONError("Invalid dict for default from_dict. Please "
-                        "override from_dict for ".format(cls))
+        try:
+            kwargs = {k: v for k, v in d.items()
+                      if k in inspect.getargspec(cls.__init__).args}
+            return cls(**kwargs)
+        except TypeError:
+            raise MSONError("Unable to deserialize from given dict. If you have"
+                            "customized the as_dict method, you may need to "
+                            "override the from_dict method as well.")
 
     def to_json(self):
         """
