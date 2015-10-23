@@ -10,7 +10,7 @@ import unittest
 import os
 
 from monty.os.path import which, zpath
-from monty.os import cd
+from monty.os import cd, makedirs_p
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -40,6 +40,21 @@ class CdTest(unittest.TestCase):
         except:
             pass
         self.assertFalse(os.path.exists("empty_file.txt"))
+
+
+class Makedirs_pTest(unittest.TestCase):
+
+    def setUp(self):
+        self.test_dir_path = os.path.join(test_dir, "test_dir")
+
+    def test_makedirs_p(self):
+        makedirs_p(self.test_dir_path)
+        self.assertTrue(os.path.exists(self.test_dir_path))
+        makedirs_p(self.test_dir_path)
+        self.assertRaises(OSError, makedirs_p, os.path.join(test_dir, "myfile_txt"))
+
+    def tearDown(self):
+        os.rmdir(self.test_dir_path)
 
 
 if __name__ == "__main__":
