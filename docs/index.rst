@@ -37,29 +37,9 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
-v0.6.6
+v0.7.1
 ------
-1. New operator, string and inspection tools. (Matteo)
-
-v0.6.5
-------
-1. New monty.re.regrep, which is a powerful version of grep implemented
-   in python.
-
-v0.6.4
-------
-1. New fnmatch tools.
-
-v0.6.3
-------
-1. Reverse read line now works without write privileges.
-
-v0.6.2
-------
-1. New bisect module (Matteo).
-2. Fixes for reverse_readfile to improve compatibility with some file systems.
-
-
+1. Added timeout function. Useful to limit function calls that take too long.
 
 :doc:`Older versions </changelog>`
 
