@@ -353,3 +353,41 @@ This decorator returns None if one of the exceptions is raised.
     @return_none_if_raise(ValueError)
     def method(self):
 """
+
+
+class timeout(object):
+    """
+    Timeout function. Use to limit matching to a certain time limit. Note that
+    this works only on Unix-based systems as it uses signal. Usage:
+
+    try:
+        with timeout(3):
+            do_stuff()
+    except TimeoutError:
+        do_something_else()
+    """
+    def __init__(self, seconds=1, error_message='Timeout'):
+        """
+        Args:
+            seconds (int): Allowed time for function in seconds.
+            error_message (str): An error message.
+
+        """
+        self.seconds = seconds
+        self.error_message = error_message
+
+    def handle_timeout(self, signum, frame):
+        raise TimeoutError(self.error_message)
+
+    def __enter__(self):
+        import signal
+        signal.signal(signal.SIGALRM, self.handle_timeout)
+        signal.alarm(self.seconds)
+
+    def __exit__(self, type, value, traceback):
+        import signal
+        signal.alarm(0)
+
+
+class TimeoutError(Exception):
+    pass

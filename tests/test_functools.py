@@ -7,9 +7,10 @@ __date__ = '8/29/14'
 
 import unittest
 import sys
-import functools
 from io import open
-from monty.functools import lru_cache, lazy_property, return_if_raise, return_none_if_raise
+import time
+from monty.functools import lru_cache, lazy_property, return_if_raise, \
+    return_none_if_raise, timeout, TimeoutError
 
 
 class TestLRUCache(unittest.TestCase):
@@ -675,6 +676,18 @@ class TryOrReturnTest(unittest.TestCase):
             a.reraise_value_error()
         aequal(a.catch_exc_list(), "hello")
         self.assertTrue(a.return_none() is None)
+
+
+class TimeoutTest(unittest.TestCase):
+
+    def test_with(self):
+        try:
+            with timeout(1, "timeout!"):
+                time.sleep(2)
+            self.assertTrue(False, "Did not timeout!")
+        except TimeoutError as ex:
+            self.assertEqual(ex.message, "timeout!")
+
 
 if __name__ == '__main__':
     unittest.main()
