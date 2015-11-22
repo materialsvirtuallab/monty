@@ -1,2 +1,3 @@
 six
 pyyaml>=3.10
+msgpack-python

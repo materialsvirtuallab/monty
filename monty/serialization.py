@@ -14,6 +14,8 @@ __date__ = '7/29/14'
 
 import json
 from monty.io import zopen
+from monty.json import MontyEncoder, MontyDecoder
+
 try:
     import yaml
     # Use CLoader for faster performance where possible.
@@ -25,15 +27,20 @@ except ImportError:
     yaml = None
     Loader = None
 
+try:
+    import msgpack
+except ImportError:
+    msgpack = None
+
 
 def loadfn(fn, *args, **kwargs):
     """
-    Loads json/yaml directly from a filename instead of a File-like object.
-    For YAML, PyYAML must be installed. The file type is automatically
-    detected. YAML is assumed if the filename contains "yaml" (lower or upper
-    case). Otherwise, json is always assumed. Furthermore, if pyyaml is
-    compiled with the LibYAML library, the CLoader is automatically chosen
-    for ~10x faster parsing.
+    Loads json/yaml/msgpack directly from a filename instead of a
+    File-like object. For YAML, PyYAML must be installed. The file type is
+    automatically detected. YAML is assumed if the filename contains "yaml"
+    (lower or upper case). Otherwise, json is always assumed. Furthermore, if
+    pyyaml is compiled with the LibYAML library, the CLoader is automatically
+    chosen for ~10x faster parsing.
 
     Args:
         fn (str): filename
@@ -41,7 +48,7 @@ def loadfn(fn, *args, **kwargs):
         \*\*kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
-        (object) Result of json/yaml.load.
+        (object) Result of json/yaml/msgpack.load.
     """
     with zopen(fn) as fp:
         if "yaml" in fn.lower():
@@ -51,6 +58,14 @@ def loadfn(fn, *args, **kwargs):
             if "Loader" not in kwargs:
                 kwargs["Loader"] = Loader
             return yaml.load(fp, *args, **kwargs)
+        elif "mpk" in fn.lower():
+            if msgpack is None:
+                raise RuntimeError(
+                    "Loading of message pack files is not "
+                    "possible as msgpack-python is not installed.")
+            if "object_hook" not in kwargs:
+                kwargs["object_hook"] = MontyDecoder().process_decoded
+            return msgpack.load(fp, *args, **kwargs)
         else:
             return json.load(fp, *args, **kwargs)
 
@@ -81,5 +96,13 @@ def dumpfn(obj, fn, *args, **kwargs):
             if "Dumper" not in kwargs:
                 kwargs["Dumper"] = Dumper
             yaml.dump(obj, fp, *args, **kwargs)
+        elif "mpk" in fn.lower():
+            if msgpack is None:
+                raise RuntimeError(
+                    "Loading of message pack files is not "
+                    "possible as msgpack-python is not installed.")
+            if "default" not in kwargs:
+                kwargs["default"] = MontyEncoder().default
+            return msgpack.load(fp, *args, **kwargs)
         else:
             fp.write("%s" % json.dumps(obj, *args, **kwargs))
