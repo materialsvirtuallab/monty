@@ -7,7 +7,7 @@ useful design patterns such as singleton and cached_class, and many more.
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = 'Copyright 2014, The Materials Virtual Lab'
-__version__ = '0.7.1'
+__version__ = '0.7.2'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
-__date__ = 'Oct 29 2015'
+__date__ = 'Nov 22 2015'

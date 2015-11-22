@@ -115,6 +115,14 @@ monty.math module
     :undoc-members:
     :show-inheritance:
 
+monty.msgpack module
+--------------------
+
+.. automodule:: monty.msgpack
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 monty.operator module
 ---------------------
 

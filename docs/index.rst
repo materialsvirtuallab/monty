@@ -37,9 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
-v0.7.1
+v0.7.2
 ------
-1. Added timeout function. Useful to limit function calls that take too long.
+1. Added support for msgpack serialization in monty.serialization.dumpfn, loadfn
+   and monty.msgpack.default and object_hook.
 
 :doc:`Older versions </changelog>`
 

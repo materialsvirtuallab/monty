@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v0.7.1
+------
+1. Added timeout function. Useful to limit function calls that take too long.
+
 v0.7.0
 ------
 1. New backwards incompatible MSONable implementation that inspects init args
