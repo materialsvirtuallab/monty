@@ -30,6 +30,7 @@ class SerialTest(unittest.TestCase):
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
         self.assertEqual(d, d2)
+        os.remove("monte_test.mpk")
 
 
 if __name__ == "__main__":
