@@ -68,8 +68,9 @@ def loadfn(fn, *args, **kwargs):
                 if "Loader" not in kwargs:
                     kwargs["Loader"] = Loader
                 return yaml.load(fp, *args, **kwargs)
-
             else:
+                if "cls" not in kwargs:
+                    kwargs["cls"] = MontyDecoder
                 return json.load(fp, *args, **kwargs)
 
 
@@ -109,6 +110,7 @@ def dumpfn(obj, fn, *args, **kwargs):
                 if "Dumper" not in kwargs:
                     kwargs["Dumper"] = Dumper
                 yaml.dump(obj, fp, *args, **kwargs)
-
             else:
+                if "cls" not in kwargs:
+                    kwargs["cls"] = MontyEncoder
                 fp.write("%s" % json.dumps(obj, *args, **kwargs))
