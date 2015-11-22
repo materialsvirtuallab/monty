@@ -15,6 +15,7 @@ __date__ = '7/29/14'
 import json
 from monty.io import zopen
 from monty.json import MontyEncoder, MontyDecoder
+from monty.msgpack import default, object_hook
 
 try:
     import yaml
@@ -56,7 +57,7 @@ def loadfn(fn, *args, **kwargs):
                 "Loading of message pack files is not "
                 "possible as msgpack-python is not installed.")
         if "object_hook" not in kwargs:
-            kwargs["object_hook"] = MontyDecoder().process_decoded
+            kwargs["object_hook"] = object_hook
         with zopen(fn, "rb") as fp:
             return msgpack.load(fp, *args, **kwargs)
     else:
@@ -98,7 +99,7 @@ def dumpfn(obj, fn, *args, **kwargs):
                 "Loading of message pack files is not "
                 "possible as msgpack-python is not installed.")
         if "default" not in kwargs:
-            kwargs["default"] = MontyEncoder().default
+            kwargs["default"] = default
         with zopen(fn, "wb") as fp:
             msgpack.dump(obj, fp, *args, **kwargs)
     else:
