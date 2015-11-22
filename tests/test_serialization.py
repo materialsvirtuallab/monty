@@ -12,9 +12,10 @@ import os
 from monty.serialization import dumpfn, loadfn
 from yaml import Dumper
 
+
 class SerialTest(unittest.TestCase):
 
-    def test_dumpf_loadf(self):
+    def test_dumpfn_loadfn(self):
         d = {"hello": "world"}
         dumpfn(d, "monte_test.json", indent=4)
         d2 = loadfn("monte_test.json")
@@ -26,6 +27,9 @@ class SerialTest(unittest.TestCase):
         dumpfn(d, "monte_test.yaml", Dumper=Dumper)
         d2 = loadfn("monte_test.yaml")
         os.remove("monte_test.yaml")
+        dumpfn(d, "monte_test.mpk")
+        d2 = loadfn("monte_test.mpk")
+        self.assertEqual(d, d2)
 
 
 if __name__ == "__main__":

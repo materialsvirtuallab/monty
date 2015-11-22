@@ -50,24 +50,27 @@ def loadfn(fn, *args, **kwargs):
     Returns:
         (object) Result of json/yaml/msgpack.load.
     """
-    with zopen(fn) as fp:
-        if "yaml" in fn.lower():
-            if yaml is None:
-                raise RuntimeError("Loading of YAML files is not "
-                                   "possible as PyYAML is not installed.")
-            if "Loader" not in kwargs:
-                kwargs["Loader"] = Loader
-            return yaml.load(fp, *args, **kwargs)
-        elif "mpk" in fn.lower():
-            if msgpack is None:
-                raise RuntimeError(
-                    "Loading of message pack files is not "
-                    "possible as msgpack-python is not installed.")
-            if "object_hook" not in kwargs:
-                kwargs["object_hook"] = MontyDecoder().process_decoded
+    if "mpk" in fn.lower():
+        if msgpack is None:
+            raise RuntimeError(
+                "Loading of message pack files is not "
+                "possible as msgpack-python is not installed.")
+        if "object_hook" not in kwargs:
+            kwargs["object_hook"] = MontyDecoder().process_decoded
+        with zopen(fn, "rb") as fp:
             return msgpack.load(fp, *args, **kwargs)
-        else:
-            return json.load(fp, *args, **kwargs)
+    else:
+        with zopen(fn) as fp:
+            if "yaml" in fn.lower():
+                if yaml is None:
+                    raise RuntimeError("Loading of YAML files is not "
+                                       "possible as PyYAML is not installed.")
+                if "Loader" not in kwargs:
+                    kwargs["Loader"] = Loader
+                return yaml.load(fp, *args, **kwargs)
+
+            else:
+                return json.load(fp, *args, **kwargs)
 
 
 def dumpfn(obj, fn, *args, **kwargs):
@@ -88,21 +91,24 @@ def dumpfn(obj, fn, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    with zopen(fn, "wt") as fp:
-        if "yaml" in fn.lower():
-            if yaml is None:
-                raise RuntimeError("Loading of YAML files is not "
-                                   "possible as PyYAML is not installed.")
-            if "Dumper" not in kwargs:
-                kwargs["Dumper"] = Dumper
-            yaml.dump(obj, fp, *args, **kwargs)
-        elif "mpk" in fn.lower():
-            if msgpack is None:
-                raise RuntimeError(
-                    "Loading of message pack files is not "
-                    "possible as msgpack-python is not installed.")
-            if "default" not in kwargs:
-                kwargs["default"] = MontyEncoder().default
-            return msgpack.load(fp, *args, **kwargs)
-        else:
-            fp.write("%s" % json.dumps(obj, *args, **kwargs))
+    if "mpk" in fn.lower():
+        if msgpack is None:
+            raise RuntimeError(
+                "Loading of message pack files is not "
+                "possible as msgpack-python is not installed.")
+        if "default" not in kwargs:
+            kwargs["default"] = MontyEncoder().default
+        with zopen(fn, "wb") as fp:
+            msgpack.dump(obj, fp, *args, **kwargs)
+    else:
+        with zopen(fn, "wt") as fp:
+            if "yaml" in fn.lower():
+                if yaml is None:
+                    raise RuntimeError("Loading of YAML files is not "
+                                       "possible as PyYAML is not installed.")
+                if "Dumper" not in kwargs:
+                    kwargs["Dumper"] = Dumper
+                yaml.dump(obj, fp, *args, **kwargs)
+
+            else:
+                fp.write("%s" % json.dumps(obj, *args, **kwargs))
