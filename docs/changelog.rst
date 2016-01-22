@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v0.7.2
+------
+1. Added support for msgpack serialization in monty.serialization.dumpfn, loadfn
+   and monty.msgpack.default and object_hook.
+
 v0.7.1
 ------
 1. Added timeout function. Useful to limit function calls that take too long.

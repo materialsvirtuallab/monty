@@ -37,10 +37,9 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
-v0.7.2
+v0.8.0
 ------
-1. Added support for msgpack serialization in monty.serialization.dumpfn, loadfn
-   and monty.msgpack.default and object_hook.
+1. A new collections.tree object, which allows nested defaultdicts.
 
 :doc:`Older versions </changelog>`
 
