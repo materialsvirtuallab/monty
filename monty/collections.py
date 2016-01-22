@@ -1,5 +1,6 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function, unicode_literals, division
+from __future__ import absolute_import, print_function, unicode_literals,\
+    division
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -8,7 +9,23 @@ __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
+
 import collections
+
+
+def tree():
+    """
+    A tree object, which is effectively a recursive defaultdict that
+    adds tree as members.
+
+    Usage:
+        x = tree()
+        x['a']['b']['c'] = 1
+
+    Returns:
+        A tree.
+    """
+    return collections.defaultdict(tree)
 
 
 def as_set(obj):

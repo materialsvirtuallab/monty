@@ -9,7 +9,8 @@ __date__ = '1/24/14'
 import unittest
 import os
 
-from monty.collections import frozendict, Namespace, AttrDict, FrozenAttrDict
+from monty.collections import frozendict, Namespace, AttrDict, \
+    FrozenAttrDict, tree
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -42,6 +43,17 @@ class FrozenDictTest(unittest.TestCase):
         with self.assertRaises(KeyError):  d["foo"] = "bar"
         with self.assertRaises(KeyError):  d.foo = "bar"
         with self.assertRaises(KeyError): d.hello = "new"
+
+
+class TreeTest(unittest.TestCase):
+
+    def test_tree(self):
+        x = tree()
+        x['a']['b']['c']['d'] = 1
+        self.assertIn('b', x['a'])
+        self.assertNotIn('c', x['a'])
+        self.assertIn('c', x['a']['b'])
+        self.assertEqual(x['a']['b']['c']['d'], 1)
 
 
 if __name__ == "__main__":
