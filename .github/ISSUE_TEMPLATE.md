@@ -3,9 +3,9 @@ is a feature request, please simply state the requested feature.
 
 ## System
 
-* <Version of monty>
-* <Python version>
-* <OS version>
+* Monty version: <Write "branch_name" if it is development version.>
+* Python version: <Only 2.7.* and 3.* supported.>
+* OS version: <E.g., Mac OS X>
 
 ## Summary
 
