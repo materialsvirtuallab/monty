@@ -3,7 +3,12 @@ Math functions.
 """
 from __future__ import absolute_import, division
 
-import fractions
+try:
+    # New Py>=3.5 import
+    from math import gcd as pygcd
+except ImportError:
+    # Deprecated import from Py3.5 onwards.
+    from fractions import gcd as pygcd
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = 'Copyright 2013, The Materials Virtual Lab'
@@ -25,7 +30,7 @@ def gcd(*numbers):
     """
     n = numbers[0]
     for i in numbers:
-        n = fractions.gcd(n, i)
+        n = pygcd(n, i)
     return n
 
 

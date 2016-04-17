@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v0.8.0
+------
+1. A new collections.tree object, which allows nested defaultdicts.
+
+
 v0.7.2
 ------
 1. Added support for msgpack serialization in monty.serialization.dumpfn, loadfn

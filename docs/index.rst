@@ -37,9 +37,9 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
-v0.8.0
+v0.8.1
 ------
-1. A new collections.tree object, which allows nested defaultdicts.
+1. Update gcd for deprecated fractions.gcd in py >= 3.5. Try math.gcd by default first.
 
 :doc:`Older versions </changelog>`
 
