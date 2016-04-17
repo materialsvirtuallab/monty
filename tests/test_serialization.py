@@ -29,7 +29,7 @@ class SerialTest(unittest.TestCase):
         os.remove("monte_test.yaml")
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
-        self.assertEqual(d, d2)
+        self.assertEqual(d, {k.decode('utf-8'): v.decode('utf-8') for k, v in d2.items()})
         os.remove("monte_test.mpk")
 
 

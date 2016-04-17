@@ -390,4 +390,6 @@ class timeout(object):
 
 
 class TimeoutError(Exception):
-    pass
+
+    def __init__(self, message):
+        self.message = message
