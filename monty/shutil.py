@@ -42,18 +42,21 @@ def copy_r(src, dst):
             warnings.warn("Cannot copy %s to itself" % fpath)
 
 
-def gzip_dir(path):
+def gzip_dir(path, compresslevel=6):
     """
     Gzips all files in a directory.
 
     Args:
         path (str): Path to directory.
+        compresslevel (int): Level of compression, 1-9. 9 is default for
+            GzipFile, 6 is default for gzip.
     """
     for f in os.listdir(path):
         if not f.lower().endswith("gz"):
             with open(f, 'rb') as f_in, \
-                    GzipFile('{}.gz'.format(f), 'wb') as f_out:
-                f_out.writelines(f_in)
+                GzipFile('{}.gz'.format(f), 'wb',
+                         compresslevel=compresslevel) as f_out:
+                shutil.copyfileobj(f_in, f_out)
             os.remove(f)
 
 
