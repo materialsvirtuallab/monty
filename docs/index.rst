@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.8.2
+------
+1. Fasetr gzip.
+
 v0.8.1
 ------
 1. Update gcd for deprecated fractions.gcd in py >= 3.5. Try math.gcd by default first.
