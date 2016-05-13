@@ -11,6 +11,7 @@ import numpy as np
 import json
 import datetime
 import six
+import collections
 
 from monty.json import MSONable, MSONError, MontyEncoder, MontyDecoder, \
     jsanitize
@@ -102,6 +103,13 @@ class JsonTest(unittest.TestCase):
         clean_strict = jsanitize(d, strict=True)
         self.assertEqual(clean_strict["hello"]["a"], 1)
         self.assertEqual(clean_strict["hello"]["b"], 2)
+
+        d = {"dt": datetime.datetime.now()}
+        clean = jsanitize(d)
+        self.assertIsInstance(clean["dt"], six.string_types)
+        clean = jsanitize(d, allow_bson=True)
+        self.assertIsInstance(clean["dt"], datetime.datetime)
+
 
 if __name__ == "__main__":
     unittest.main()
