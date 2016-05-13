@@ -22,6 +22,11 @@ try:
 except ImportError:
     np = None
 
+try:
+    import bson
+except ImportError:
+    bson = None
+
 
 class MSONable(object):
     """
@@ -189,7 +194,7 @@ class MSONError(Exception):
     pass
 
 
-def jsanitize(obj, strict=False):
+def jsanitize(obj, strict=False, allow_objectid=False):
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
@@ -198,12 +203,15 @@ def jsanitize(obj, strict=False):
 
     Args:
         obj: input json-like object.
-        strict: This parameters sets the behavior when clean encounters an
-            object it does not understand. If strict is True, clean will
-            try to get the as_dict() attribute of the object. If no such
-            attribute is found, an attribute error will be thrown. If strict is
-            False, clean will simply call str(object) to convert the
+        strict (bool): This parameters sets the behavior when clean
+            encounters an object it does not understand. If strict is True,
+            clean will try to get the as_dict() attribute of the object. If
+            no such attribute is found, an attribute error will be thrown. If
+            strict is False, clean will simply call str(object) to convert the
             object to a string representation.
+        allow_objectid (bool): This parameters sets the behavior when clean
+            encounters an objectid. If True, objectids will be ignored,
+            allowing for insertion into MongoDb databases.
 
     Returns:
         Sanitized dict that can be json serialized.
@@ -219,6 +227,8 @@ def jsanitize(obj, strict=False):
         return obj
     elif obj is None:
         return None
+    elif bson is not None and isinstance(obj, bson.objectid.ObjectId):
+        return obj
     else:
         if not strict:
             return obj.__str__()
