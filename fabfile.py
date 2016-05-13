@@ -81,7 +81,6 @@ def release_github():
             elif read:
                 desc.append(l.rstrip())
 
-    desc.pop(0)
     payload = {
         "tag_name": "v" + ver,
         "target_commitish": "master",
