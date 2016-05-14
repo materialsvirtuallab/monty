@@ -15,12 +15,17 @@ import json
 import datetime
 import six
 import inspect
-
+import collections
 
 try:
     import numpy as np
 except ImportError:
     np = None
+
+try:
+    import bson
+except ImportError:
+    bson = None
 
 
 class MSONable(object):
@@ -189,7 +194,7 @@ class MSONError(Exception):
     pass
 
 
-def jsanitize(obj, strict=False):
+def jsanitize(obj, strict=False, allow_bson=False):
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
@@ -198,27 +203,35 @@ def jsanitize(obj, strict=False):
 
     Args:
         obj: input json-like object.
-        strict: This parameters sets the behavior when clean encounters an
-            object it does not understand. If strict is True, clean will
-            try to get the as_dict() attribute of the object. If no such
-            attribute is found, an attribute error will be thrown. If strict is
-            False, clean will simply call str(object) to convert the
-            object to a string representation.
+        strict (bool): This parameters sets the behavior when jsanitize
+            encounters an object it does not understand. If strict is True,
+            jsanitize will try to get the as_dict() attribute of the object. If
+            no such attribute is found, an attribute error will be thrown. If
+            strict is False, jsanitize will simply call str(object) to convert
+            the object to a string representation.
+        allow_bson (bool): This parameters sets the behavior when jsanitize
+            encounters an bson supported type such as objectid and datetime. If
+            True, such bson types will be ignored, allowing for proper
+            insertion into MongoDb databases.
 
     Returns:
         Sanitized dict that can be json serialized.
     """
+    if allow_bson and (isinstance(obj, datetime.datetime) or \
+            (bson is not None and isinstance(obj, bson.objectid.ObjectId))):
+        return obj
     if isinstance(obj, (list, tuple)):
-        return [jsanitize(i, strict=strict) for i in obj]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
     elif np is not None and isinstance(obj, np.ndarray):
-        return [jsanitize(i, strict=strict) for i in obj]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
     elif isinstance(obj, dict):
-        return {k.__str__(): jsanitize(v, strict=strict)
+        return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
                 for k, v in obj.items()}
     elif isinstance(obj, (int, float)):
         return obj
     elif obj is None:
         return None
+
     else:
         if not strict:
             return obj.__str__()
@@ -226,5 +239,6 @@ def jsanitize(obj, strict=False):
             if isinstance(obj, six.string_types):
                 return obj.__str__()
             else:
-                return jsanitize(obj.as_dict(), strict=strict)
+                return jsanitize(obj.as_dict(), strict=strict,
+                                 allow_bson=allow_bson)
 

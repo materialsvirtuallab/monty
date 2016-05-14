@@ -37,6 +37,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.8.4
+------
+1. Support for bson fields in jsanitize.
+
 v0.8.2
 ------
 1. Fasetr gzip.
