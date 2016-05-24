@@ -393,3 +393,53 @@ class TimeoutError(Exception):
 
     def __init__(self, message):
         self.message = message
+
+
+def prof_main(main):
+    """
+    Decorator for profiling main programs.
+    Profiling is activating by prepending the command line options
+    supported by the original main program with the keyword `prof`.
+    Example:
+
+        $ cp src dest
+
+    becomes
+
+        $ cp prof src dest
+
+    The decorated main accept two new arguments:
+
+        prof_file: Name of the output file with profiling data
+            If not given, a temporary file is created
+        sortby: Profiling data are sorted according to this value.
+            default is "time". See sort_stats.
+    """
+    from functools import wraps
+
+    @wraps(main)
+    def wrapper(*args, **kwargs):
+        import sys
+        try:
+            do_prof = sys.argv[1] == "prof"
+            if do_prof: sys.argv.pop(1)
+        except Exception:
+            do_prof = False
+
+        if not do_prof:
+            sys.exit(main())
+        else:
+            print("Entering profiling mode...")
+            import pstats, cProfile, tempfile
+            prof_file = kwargs.get("prof_file", None)
+            if prof_file is None:
+                _, prof_file = tempfile.mkstemp()
+                print("Profiling data stored in %s" % prof_file)
+
+            sortby = kwargs.get("sortby", "time")
+            cProfile.runctx("main()", globals(), locals(), prof_file)
+            s = pstats.Stats(prof_file)
+            s.strip_dirs().sort_stats(sortby).print_stats()
+            sys.exit(0)
+
+    return wrapper
