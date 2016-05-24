@@ -415,8 +415,6 @@ def prof_main(main):
         sortby: Profiling data are sorted according to this value.
             default is "time". See sort_stats.
     """
-    from functools import wraps
-
     @wraps(main)
     def wrapper(*args, **kwargs):
         import sys
