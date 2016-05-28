@@ -179,10 +179,10 @@ def dict2namedtuple(*args, **kwargs):
 
     Example:
 
-        >>> t = dic2namedtuple(foo=1, bar="hello")
+        >>> t = dict2namedtuple(foo=1, bar="hello")
         >>> assert t.foo == 1 and t.bar == "hello"
 
-        >>> t = dic2namedtuple([("foo", 1), ("bar", "hello")])
+        >>> t = dict2namedtuple([("foo", 1), ("bar", "hello")])
         >>> assert t[0] == t.foo and t[1] == t.bar
 
     .. warning::
