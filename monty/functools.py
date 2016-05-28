@@ -408,7 +408,7 @@ def prof_main(main):
 
         $ cp prof src dest
 
-    The decorated main accept two new arguments:
+    The decorated main accepts two new arguments:
 
         prof_file: Name of the output file with profiling data
             If not given, a temporary file is created
@@ -438,6 +438,9 @@ def prof_main(main):
             cProfile.runctx("main()", globals(), locals(), prof_file)
             s = pstats.Stats(prof_file)
             s.strip_dirs().sort_stats(sortby).print_stats()
-            sys.exit(0)
+            if "retval" not in kwargs:
+                sys.exit(0)
+            else:
+                return kwargs["retval"]
 
     return wrapper

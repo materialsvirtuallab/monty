@@ -10,7 +10,7 @@ import sys
 from io import open
 import time
 from monty.functools import lru_cache, lazy_property, return_if_raise, \
-    return_none_if_raise, timeout, TimeoutError
+    return_none_if_raise, timeout, TimeoutError, prof_main
 
 
 class TestLRUCache(unittest.TestCase):
@@ -687,6 +687,29 @@ class TimeoutTest(unittest.TestCase):
             self.assertTrue(False, "Did not timeout!")
         except TimeoutError as ex:
             self.assertEqual(ex.message, "timeout!")
+
+
+class ProfMainTest(unittest.TestCase):
+
+    def test_prof_decorator(self):
+        """Testing prof_main decorator."""
+        import sys
+        @prof_main
+        def main():
+            return sys.exit(1)
+
+        # Have to change argv before calling main.
+        # Will restore original values before returning.
+        bkp_sysargv = sys.argv[:]
+        if len(sys.argv) == 1:
+            sys.argv.append("prof")
+        else:
+            sys.argv[1] = "prof"
+
+        try:
+            assert main(retval="foo") == "foo"
+        finally:
+            sys.argv = bkp_sysargv
 
 
 if __name__ == '__main__':
