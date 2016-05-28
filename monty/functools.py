@@ -398,20 +398,21 @@ class TimeoutError(Exception):
 def prof_main(main):
     """
     Decorator for profiling main programs.
-    Profiling is activating by prepending the command line options
+
+    Profiling is activated by prepending the command line options
     supported by the original main program with the keyword `prof`.
     Example:
 
-        $ cp src dest
+        $ script.py arg --foo=1
 
     becomes
 
-        $ cp prof src dest
+        $ script.py prof arg --foo=1
 
     The decorated main accepts two new arguments:
 
         prof_file: Name of the output file with profiling data
-            If not given, a temporary file is created
+            If not given, a temporary file is created.
         sortby: Profiling data are sorted according to this value.
             default is "time". See sort_stats.
     """
