@@ -15,6 +15,8 @@ class InspectTest(unittest.TestCase):
         assert caller.name == "test_find_caller"
         assert os.path.basename(caller.filename) == "test_inspect.py"
 
+    def test_find_top_pyfile(self):
+        self.assertTrue(find_top_pyfile().endswith(".py"))
 
 if __name__ == "__main__":
     unittest.main()

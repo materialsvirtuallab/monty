@@ -184,12 +184,13 @@ def get_ncpus():
     return -1
 
 
-
 def install_excepthook(hook_type="color", **kwargs):
     """
-    This function replaces the original python traceback with an improved version from Ipython 
-    Use `color` for colourful traceback formatting, `verbose` for Ka-Ping Yee's "cgitb.py" version
-    kwargs are the keyword arguments passed to the constructor. See IPython.core.ultratb.py for more info.
+    This function replaces the original python traceback with an improved
+    version from Ipython. Use `color` for colourful traceback formatting,
+    `verbose` for Ka-Ping Yee's "cgitb.py" version kwargs are the keyword
+    arguments passed to the constructor. See IPython.core.ultratb.py for more
+    info.
 
     Return:
         0 if hook is installed successfully. 
