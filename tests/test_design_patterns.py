@@ -51,10 +51,10 @@ class CachedClassTest(unittest.TestCase):
         self.assertEqual(id(a1a), id(a1b))
         self.assertNotEqual(id(a1a), id(a2))
 
-    def test_pickle(self):
-        a = A(2)
-        o = pickle.dumps(a)
-        self.assertEqual(a, pickle.loads(o))
+    # def test_pickle(self):
+    #     a = A(2)
+    #     o = pickle.dumps(a)
+    #     self.assertEqual(a, pickle.loads(o))
 
 
 if __name__ == "__main__":
