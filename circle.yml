@@ -1,0 +1,16 @@
+machine:
+  timezone:
+    America/Los_Angeles
+  python:
+    version: 2.7.11
+dependencies:
+  override:
+    - pip install -q numpy
+    - pip install -r requirements-travis.txt
+    - python setup.py develop
+test:
+  override:
+    - find . -name "*.pyc" -exec rm '{}' \;
+    - find . -name "test_*.py" -exec chmod -x '{}' \;
+    - nosetests --config=nose.cfg --cover-html --cover-html-dir=$CIRCLE_ARTIFACTS:
+    - coveralls
