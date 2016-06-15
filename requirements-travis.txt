@@ -5,3 +5,4 @@ pyyaml>=3.10
 msgpack-python>=0.4.7
 coverage>=4.1
 coveralls>=1.1
+pymongo
