@@ -13,26 +13,25 @@ def operator_from_str(op):
     raises:
         `KeyError` if invalid string.
 
-    >>> assert operator_from_str("=")(1, 1) and operator_from_str("+")(1, 1) == 2
+    >>> assert operator_from_str("==")(1, 1) and operator_from_str("+")(1,1) == 2
     """
     import operator
-    d= {"==": operator.eq,
-        "!=": operator.ne,
-        ">": operator.gt,
-        ">=": operator.ge,
-        "<": operator.lt,
-        "<=": operator.le,
-        '+' : operator.add,
-        '-' : operator.sub,
-        '*' : operator.mul,
-        '%' : operator.mod,
-        '^' : operator.xor,
-    }
+    d = {"==": operator.eq,
+         "!=": operator.ne,
+         ">": operator.gt,
+         ">=": operator.ge,
+         "<": operator.lt,
+         "<=": operator.le,
+         '+': operator.add,
+         '-': operator.sub,
+         '*': operator.mul,
+         '%': operator.mod,
+         '^': operator.xor,
+         }
 
     try:
-        d['/']=operator.truediv
+        d['/'] = operator.truediv
     except AttributeError:
         pass
 
     return d[op]
-
