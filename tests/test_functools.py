@@ -51,6 +51,24 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(a.cached_func.cache_info().misses, 4)
 
 
+        class TestClass2():
+            @lru_cache(None)
+            def cached_func(self, x):
+                return x
+
+        a = TestClass2()
+        b = TestClass2()
+
+        self.assertEqual(a.cached_func(1), 1)
+        self.assertEqual(b.cached_func(2), 2)
+        self.assertEqual(b.cached_func(3), 3)
+        self.assertEqual(a.cached_func(3), 3)
+        self.assertEqual(a.cached_func(1), 1)
+
+        self.assertEqual(a.cached_func.cache_info().hits, 1)
+        self.assertEqual(a.cached_func.cache_info().misses, 4)
+
+
 class TestCase(unittest.TestCase):
 
     def assertException(self, exc_cls, pattern, func, *args, **kw):
