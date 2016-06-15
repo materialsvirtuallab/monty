@@ -223,7 +223,8 @@ def jsanitize(obj, strict=False, allow_bson=False):
     if isinstance(obj, (list, tuple)):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
     elif np is not None and isinstance(obj, np.ndarray):
-        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in
+                obj.tolist()]
     elif isinstance(obj, dict):
         return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
                 for k, v in obj.items()}
