@@ -57,9 +57,7 @@ class ReverseReadlineTest(unittest.TestCase):
         with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line.strip())
-        print(lines)
-        self.assertEqual("", lines[0].strip())
-        self.assertEqual("HelloWorld", lines[1].strip())
+        self.assertEqual("HelloWorld", lines[-1].strip())
 
     def test_empty_file(self):
         """
