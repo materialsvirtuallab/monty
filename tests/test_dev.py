@@ -8,8 +8,8 @@ __date__ = '1/24/14'
 
 import unittest
 import warnings
-
-from monty.dev import deprecated, requires
+import multiprocessing
+from monty.dev import deprecated, requires, get_ncpus
 
 
 class A:
@@ -121,6 +121,8 @@ class DecoratorTest(unittest.TestCase):
 
         self.assertEqual(use_unittest(), "success")
 
+    def test_get_ncpus(self):
+        self.assertEqual(get_ncpus(), multiprocessing.cpu_count())
 
 if __name__ == "__main__":
     unittest.main()
