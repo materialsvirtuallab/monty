@@ -94,7 +94,7 @@ def release_github():
         "https://api.github.com/repos/materialsvirtuallab/monty/releases",
         data=json.dumps(payload),
         headers={"Authorization": "token " + os.environ["GITHUB_RELEASES_TOKEN"]})
-    print response.text
+    print(response.text)
 
 
 def commit():
