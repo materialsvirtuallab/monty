@@ -6,13 +6,13 @@ import os
 
 from monty.inspect import *
 
-class LittleCatA:
+class LittleCatA(object):
     pass
 
 class LittleCatB(LittleCatA):
     pass
 
-class LittleCatC:
+class LittleCatC(object):
     pass
 
 class LittleCatD(LittleCatB):
