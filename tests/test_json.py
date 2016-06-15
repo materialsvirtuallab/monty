@@ -54,6 +54,9 @@ class MSONableTest(unittest.TestCase):
         d = obj.as_dict()
         self.assertIsNotNone(d)
         self.good_cls.from_dict(d)
+        jsonstr = obj.to_json()
+        d = json.loads(jsonstr)
+        self.assertTrue(d["@class"], "GoodMSONClass")
         obj = self.bad_cls("Hello", "World")
         d = obj.as_dict()
         self.assertIsNotNone(d)
@@ -61,6 +64,13 @@ class MSONableTest(unittest.TestCase):
 
 
 class JsonTest(unittest.TestCase):
+
+    def test_as_from_dict(self):
+        obj = GoodMSONClass(1, 2)
+        s = json.dumps(obj, cls=MontyEncoder)
+        obj2 = json.loads(s, cls=MontyDecoder)
+        self.assertEqual(obj2.a, 1)
+        self.assertEqual(obj2.b, 2)
 
     def test_datetime(self):
         dt = datetime.datetime.now()
