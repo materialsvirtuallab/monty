@@ -120,8 +120,8 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertIsInstance(clean["dt"], datetime.datetime)
 
-        d = {"a": ["b", np.array([1, 2, 3])], "b": ObjectId.from_datetime(
-            datetime.datetime.now())}
+        d = {"a": ["b", np.array([1, 2, 3])],
+             "b": ObjectId.from_datetime(datetime.datetime.now())}
         clean = jsanitize(d)
         self.assertEqual(clean["a"], ['b', [1, 2, 3]])
         self.assertIsInstance(clean["b"], six.string_types)
