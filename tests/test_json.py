@@ -120,6 +120,9 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertIsInstance(clean["dt"], datetime.datetime)
 
+        d = {"a": ["b", np.array([1, 2, 3])]}
+        clean = jsanitize(d)
+        self.assertEqual(clean, {'a': ['b', [1, 2, 3]]})
 
 if __name__ == "__main__":
     unittest.main()
