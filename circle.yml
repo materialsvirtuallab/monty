@@ -12,5 +12,5 @@ test:
   override:
     - find . -name "*.pyc" -exec rm '{}' \;
     - find . -name "test_*.py" -exec chmod -x '{}' \;
-    - nosetests --config=nose.cfg --cover-html --cover-html-dir=$CIRCLE_ARTIFACTS
+    - nosetests --config=nose.cfg --cover-html --cover-html-dir=$CIRCLE_ARTIFACTS monty tests
     - coveralls
