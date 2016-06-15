@@ -23,7 +23,7 @@ class FuncTest(unittest.TestCase):
         s = StringIO()
         logging.basicConfig(level=logging.DEBUG, stream=s)
         add(1, 2)
-        self.assertTrue(s.getvalue().startswith("DEBUG:__main__.add:Called"))
+        self.assertTrue(s.getvalue().startswith("DEBUG:"))
 
 if __name__ == "__main__":
     unittest.main()
