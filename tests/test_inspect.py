@@ -6,6 +6,18 @@ import os
 
 from monty.inspect import *
 
+class LittleCatA:
+    pass
+
+class LittleCatB(LittleCatA):
+    pass
+
+class LittleCatC:
+    pass
+
+class LittleCatD(LittleCatB):
+    pass
+
 
 class InspectTest(unittest.TestCase):
 
@@ -17,6 +29,9 @@ class InspectTest(unittest.TestCase):
 
     def test_find_top_pyfile(self):
         self.assertTrue(find_top_pyfile().endswith(".py"))
+
+    def test_all_subclasses(self):
+        self.assertEqual(all_subclasses(LittleCatA), [LittleCatB, LittleCatD])
 
 if __name__ == "__main__":
     unittest.main()
