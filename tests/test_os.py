@@ -9,7 +9,7 @@ __date__ = '1/24/14'
 import unittest
 import os
 
-from monty.os.path import which, zpath
+from monty.os.path import which, zpath, find_exts
 from monty.os import cd, makedirs_p
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
@@ -24,6 +24,8 @@ class PathTest(unittest.TestCase):
         fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
         self.assertEqual(os.path.join(test_dir, "myfile_gz.gz"), fullzpath)
 
+    def test_find_exts(self):
+        self.assertTrue(len(find_exts(os.path.dirname(__file__), "py")) >= 18)
 
 class CdTest(unittest.TestCase):
 
