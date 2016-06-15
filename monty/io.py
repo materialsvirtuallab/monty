@@ -118,8 +118,12 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
         file.readline() method, except the lines are returned from the back
         of the file.
     """
-
-    file_size = os.path.getsize(m_file.name)
+    try:
+        file_size = os.path.getsize(m_file.name)
+    except AttributeError:
+        # Bz2 files do not have name attribute. Just set file_size to above
+        # max_mem for now.
+        file_size = max_mem + 1
 
     # If the file size is within our desired RAM use, just reverse it in memory
     # GZip files must use this method because there is no way to negative seek
@@ -135,7 +139,7 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
 
         buf = ""
         m_file.seek(0, 2)
-        lastchar = m_file.read(1)
+        lastchar = m_file.read(1).decode("utf-8")
         trailing_newline = (lastchar == "\n")
 
         while 1:
@@ -152,7 +156,7 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
                 # Need to fill buffer
                 toread = min(blk_size, pos)
                 m_file.seek(pos - toread, 0)
-                buf = m_file.read(toread) + buf
+                buf = m_file.read(toread).decode("utf-8") + buf
                 m_file.seek(pos - toread, 0)
                 if pos == toread:
                     buf = "\n" + buf

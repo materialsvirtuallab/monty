@@ -10,7 +10,10 @@ import unittest
 import os
 from io import open
 
-from monty.io import reverse_readline, zopen, FileLock, FileLockException, reverse_readfile
+import bz2
+
+from monty.io import reverse_readline, zopen, FileLock, FileLockException, \
+    reverse_readfile, get_open_fds
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -43,6 +46,18 @@ class ReverseReadlineTest(unittest.TestCase):
                                  "read_backwards read {} whereas it should "
                                  "have read {}".format(
                                  int(line), self.NUMLINES - idx))
+
+    def test_reverse_readline_bz2(self):
+        """
+        We are making sure a file containing line numbers is read in reverse
+        order, i.e. the first line that is read corresponds to the last line.
+        number
+        """
+        lines = []
+        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rb") as f:
+            for line in reverse_readline(f):
+                lines.append(line)
+        self.assertEqual("\n\nHelloWorld.", "".join(lines))
 
 
     def test_empty_file(self):
