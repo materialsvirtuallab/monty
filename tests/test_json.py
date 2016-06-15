@@ -23,14 +23,6 @@ class GoodMSONClass(MSONable):
         self.a = a
         self.b = b
 
-    def as_dict(self):
-        d = {'a': self.a, 'b': self.b}
-        return d
-
-    @classmethod
-    def from_dict(cls, d):
-        return GoodMSONClass(d['a'], d['b'])
-
 
 class MSONableTest(unittest.TestCase):
 
