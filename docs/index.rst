@@ -8,7 +8,7 @@ Monty - The Missing Complement to Python
 ========================================
 
 .. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master
-.. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master :target: https://coveralls.io/github/materialsvirtuallab/monty?branch=master
+.. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master
 
 Monty is the missing complement to Python. Monty implements supplementary
 useful functions for Python that are not part of the standard library.
