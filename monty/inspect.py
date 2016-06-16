@@ -21,7 +21,6 @@ def find_top_pyfile():
     This function inspects the Cpython frame to find the path of the script.
     """
     import os
-    #from inspect import currentframe, getframeinfo
     frame = currentframe()
     while True:
         if frame.f_back is None:
