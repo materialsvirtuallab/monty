@@ -13,8 +13,10 @@ __date__ = "2/28/14"
 
 import unittest
 import os
+import sys
 
-from monty.termcolor import cprint, cprint_map, enable, get_terminal_size
+from monty.termcolor import cprint, cprint_map, enable, get_terminal_size, \
+    stream_has_colours
 
 
 class FuncTest(unittest.TestCase):
@@ -70,6 +72,9 @@ class FuncTest(unittest.TestCase):
         # Test terminal size.
         print("terminal size: %s", get_terminal_size())
         enable(False)
+
+    def test_stream_has_colors(self):
+        self.assertTrue(stream_has_colours(sys.stdout))
 
 if __name__ == '__main__':
     unittest.main()
