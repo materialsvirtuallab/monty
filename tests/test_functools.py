@@ -10,7 +10,7 @@ import sys
 from io import open
 import time
 from monty.functools import lru_cache, lazy_property, return_if_raise, \
-    return_none_if_raise, timeout, TimeoutError, prof_main, benchmark
+    return_none_if_raise, timeout, TimeoutError, prof_main
 
 
 class TestLRUCache(unittest.TestCase):
