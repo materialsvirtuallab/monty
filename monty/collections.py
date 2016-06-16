@@ -127,6 +127,8 @@ class MongoDict(object):
     >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
     >>> assert m.a.b == 1 and m.x == 2
     >>> assert "a" in m and "b" in m.a
+    >>> m["a"]
+    {'b': 1}
 
     .. note:: 
 
