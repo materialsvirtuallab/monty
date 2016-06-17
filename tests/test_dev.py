@@ -9,7 +9,7 @@ __date__ = '1/24/14'
 import unittest
 import warnings
 import multiprocessing
-from monty.dev import deprecated, requires, get_ncpus
+from monty.dev import deprecated, requires, get_ncpus, install_excepthook
 
 
 class A:
@@ -123,6 +123,9 @@ class DecoratorTest(unittest.TestCase):
 
     def test_get_ncpus(self):
         self.assertEqual(get_ncpus(), multiprocessing.cpu_count())
+
+    def test_install_except_hook(self):
+        install_excepthook()
 
 if __name__ == "__main__":
     unittest.main()
