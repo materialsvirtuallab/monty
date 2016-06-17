@@ -16,18 +16,18 @@ from monty.functools import lru_cache, lazy_property, return_if_raise, \
 class TestLRUCache(unittest.TestCase):
     def test_function(self):
         @lru_cache(2)
-        def cached_func(a, b):
-            return a + b
+        def cached_func(a, b, c=3):
+            return a + b + c
 
         #call a few times to get some stats
-        self.assertEqual(cached_func(1, 2), 3)
-        self.assertEqual(cached_func(3, 2), 5)
-        self.assertEqual(cached_func(3, 2), 5)
-        self.assertEqual(cached_func(1, 2), 3)
-        self.assertEqual(cached_func(4, 2), 6)
-        self.assertEqual(cached_func(4, 2), 6)
-        self.assertEqual(cached_func(3, 2), 5)
-        self.assertEqual(cached_func(1, 2), 3)
+        self.assertEqual(cached_func(1, 2, c=4), 7)
+        self.assertEqual(cached_func(3, 2), 8)
+        self.assertEqual(cached_func(3, 2), 8)
+        self.assertEqual(cached_func(1, 2, c=4), 7)
+        self.assertEqual(cached_func(4, 2), 9)
+        self.assertEqual(cached_func(4, 2), 9)
+        self.assertEqual(cached_func(3, 2), 8)
+        self.assertEqual(cached_func(1, 2), 6)
 
         self.assertEqual(cached_func.cache_info().hits, 3)
         self.assertEqual(cached_func.cache_info().misses, 5)
