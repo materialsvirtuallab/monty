@@ -14,11 +14,14 @@ from monty.os import cd, makedirs_p
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
+
 class PathTest(unittest.TestCase):
 
     def test_which(self):
         py = which("python")
         self.assertEqual(os.path.basename(py), "python")
+        self.assertEqual("/usr/bin/find", which("/usr/bin/find"))
+        self.assertIs(which("non_existent_exe"), None)
 
     def test_zpath(self):
         fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
@@ -26,6 +29,12 @@ class PathTest(unittest.TestCase):
 
     def test_find_exts(self):
         self.assertTrue(len(find_exts(os.path.dirname(__file__), "py")) >= 18)
+        self.assertEqual(len(find_exts(os.path.dirname(__file__), "bz2")), 1)
+        self.assertEqual(len(find_exts(os.path.dirname(__file__), "bz2",
+                                       exclude_dirs="test_files")), 0)
+        self.assertEqual(len(find_exts(os.path.dirname(__file__), "bz2",
+                                       include_dirs="test_files")), 1)
+
 
 class CdTest(unittest.TestCase):
 
