@@ -228,7 +228,7 @@ def jsanitize(obj, strict=False, allow_bson=False):
     elif isinstance(obj, dict):
         return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
                 for k, v in obj.items()}
-    elif isinstance(obj, (int, float, long)):
+    elif isinstance(obj, six.integer_types + tuple([float])):
         return obj
     elif obj is None:
         return None
