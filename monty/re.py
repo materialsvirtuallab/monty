@@ -54,4 +54,9 @@ def regrep(filename, patterns, reverse=False, terminate_on_match=False,
         if terminate_on_match and all([
                 len(matches.get(k, [])) for k in compiled.keys()]):
             break
+    try:
+        # Try to close open file handle. Pass if it is a generator.
+        gen.close()
+    except:
+        pass
     return matches
