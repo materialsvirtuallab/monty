@@ -18,13 +18,15 @@ import requests
 import json
 import os
 
-from fabric.api import local, lcd
+from invoke import task
+from monty.os import cd
 from monty import __version__ as ver
 
 
-def make_doc():
-    with lcd("docs"):
-        local("sphinx-apidoc -o . -f ../monty")
+@task
+def make_doc(ctx):
+    with cd("docs"):
+        ctx.run("sphinx-apidoc -o . -f ../monty")
         for f in glob.glob("docs/*.rst"):
             if f.startswith('docs/monty') and f.endswith('rst'):
                 newoutput = []
@@ -47,29 +49,33 @@ def make_doc():
 
                 with open(f, 'w') as fid:
                     fid.write("".join(newoutput))
-        local("make html")
+        ctx.run("make html")
 
         #This makes sure monty.org works to redirect to the Gihub page
-        local("echo \"monty.org\" > _build/html/CNAME")
+        ctx.run("echo \"monty.org\" > _build/html/CNAME")
         #Avoid ths use of jekyll so that _dir works as intended.
-        local("touch _build/html/.nojekyll")
+        ctx.run("touch _build/html/.nojekyll")
 
 
-def publish():
-    local("python setup.py release")
+@task
+def publish(ctx):
+    ctx.run("python setup.py release")
 
 
-def test():
-    local("nosetests")
+@task
+def test(ctx):
+    ctx.run("nosetests")
 
 
-def setver():
-    local("sed s/version=.*,/version=\\\"{}\\\",/ setup.py > newsetup"
+@task
+def setver(ctx):
+    ctx.run("sed s/version=.*,/version=\\\"{}\\\",/ setup.py > newsetup"
           .format(ver))
-    local("mv newsetup setup.py")
+    ctx.run("mv newsetup setup.py")
 
 
-def release_github():
+@task
+def release_github(ctx):
     desc = []
     read = False
     with open("docs/index.rst") as f:
@@ -97,15 +103,17 @@ def release_github():
     print(response.text)
 
 
-def commit():
-    local("git commit -a -m \"v%s release\"" % ver)
-    local("git push")
+@task
+def commit(ctx):
+    ctx.run("git commit -a -m \"v%s release\"" % ver)
+    ctx.run("git push")
 
 
-def release():
-    setver()
-    test()
-    make_doc()
-    publish()
-    commit()
-    release_github()
+@task
+def release(ctx):
+    setver(ctx)
+    test(ctx)
+    make_doc(ctx)
+    publish(ctx)
+    commit(ctx)
+    release_github(ctx)
