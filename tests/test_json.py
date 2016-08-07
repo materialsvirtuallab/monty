@@ -52,7 +52,7 @@ class MSONableTest(unittest.TestCase):
         obj = self.bad_cls("Hello", "World")
         d = obj.as_dict()
         self.assertIsNotNone(d)
-        self.assertRaises(MSONError, self.bad_cls.from_dict, d)
+        self.assertRaises(TypeError, self.bad_cls.from_dict, d)
 
 
 class JsonTest(unittest.TestCase):
