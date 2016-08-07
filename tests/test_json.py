@@ -13,7 +13,7 @@ import datetime
 import six
 from bson.objectid import ObjectId
 
-from monty.json import MSONable, MSONError, MontyEncoder, MontyDecoder, \
+from monty.json import MSONable, MontyEncoder, MontyDecoder, \
     jsanitize
 
 
