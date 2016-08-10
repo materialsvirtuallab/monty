@@ -13,8 +13,7 @@ import datetime
 import six
 from bson.objectid import ObjectId
 
-from monty.json import MSONable, MSONError, MontyEncoder, MontyDecoder, \
-    jsanitize
+from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
 
 class GoodMSONClass(MSONable):
@@ -52,7 +51,7 @@ class MSONableTest(unittest.TestCase):
         obj = self.bad_cls("Hello", "World")
         d = obj.as_dict()
         self.assertIsNotNone(d)
-        self.assertRaises(MSONError, self.bad_cls.from_dict, d)
+        self.assertRaises(TypeError, self.bad_cls.from_dict, d)
 
 
 class JsonTest(unittest.TestCase):

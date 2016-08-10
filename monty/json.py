@@ -3,19 +3,10 @@ JSON serialization and deserialization utilities.
 """
 
 from __future__ import absolute_import, unicode_literals
-
-__author__ = "Shyue Ping Ong"
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = "0.1"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "ongsp@ucsd.edu"
-__date__ = "1/24/14"
-
 import json
 import datetime
 import six
 import inspect
-import collections
 
 try:
     import numpy as np
@@ -26,6 +17,13 @@ try:
     import bson
 except ImportError:
     bson = None
+
+__author__ = "Shyue Ping Ong"
+__copyright__ = "Copyright 2014, The Materials Virtual Lab"
+__version__ = "0.1"
+__maintainer__ = "Shyue Ping Ong"
+__email__ = "ongsp@ucsd.edu"
+__date__ = "1/24/14"
 
 
 class MSONable(object):
@@ -58,23 +56,15 @@ class MSONable(object):
                     if hasattr(a, "as_dict"):
                         a = a.as_dict()
                     d[c] = a
+        if hasattr(self, "kwargs"):
+            d.update(**self.kwargs)
         return d
 
     @classmethod
     def from_dict(cls, d):
-        """
-        This implements a default from_dict method which supports all
-        classes that simply saves all init arguments in a "init_args"
-        key. Otherwise, the MSONAble class must override this class method.
-        """
-        try:
-            kwargs = {k: v for k, v in d.items()
-                      if k in inspect.getargspec(cls.__init__).args}
-            return cls(**kwargs)
-        except TypeError:
-            raise MSONError("Unable to deserialize from given dict. If you have"
-                            "customized the as_dict method, you may need to "
-                            "override the from_dict method as well.")
+        decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items()
+                   if not k.startswith("@")}
+        return cls(**decoded)
 
     def to_json(self):
         """

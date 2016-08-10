@@ -39,6 +39,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.9.0
+------
+1. Improved default as and from_dict.
+
 v0.8.5
 ------
 1. Minor bug fixes.
