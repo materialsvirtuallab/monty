@@ -100,7 +100,7 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, datetime.datetime):
             return {"@module": "datetime", "@class": "datetime",
                     "string": o.__str__()}
-        elif np is not None:
+        if np is not None:
             if isinstance(o, np.ndarray):
                 return {"@module": "numpy",
                         "@class": "array",
@@ -108,6 +108,11 @@ class MontyEncoder(json.JSONEncoder):
                         "data": o.tolist()}
             elif isinstance(o, np.generic):
                 return o.item()
+        if bson is not None:
+            if isinstance(o, bson.objectid.ObjectId):
+                return {"@module": "bson.objectid",
+                        "@class": "ObjectId",
+                        "oid": str(o)}
 
         try:
             d = o.as_dict()
@@ -157,6 +162,8 @@ class MontyDecoder(json.JSONDecoder):
                     return dt
                 elif modname == "numpy" and classname == "array":
                     return np.array(d["data"], dtype=d["dtype"])
+                elif modname == "bson.objectid" and classname == "ObjectId":
+                    return bson.objectid.ObjectId(d["oid"])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):

@@ -89,6 +89,13 @@ class JsonTest(unittest.TestCase):
         x = np.min([1, 2, 3]) > 2
         self.assertRaises(TypeError, json.dumps, x)
 
+    def test_objectid(self):
+        oid = ObjectId('562e8301218dcbbc3d7d91ce')
+        self.assertRaises(TypeError, json.dumps, oid)
+        djson = json.dumps(oid, cls=MontyEncoder)
+        x = json.loads(djson, cls=MontyDecoder)
+        self.assertEqual(type(x), ObjectId)
+
     def test_jsanitize(self):
         #clean_json should have no effect on None types.
         d = {"hello": 1, "world": None}
