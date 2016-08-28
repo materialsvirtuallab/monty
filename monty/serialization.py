@@ -18,19 +18,15 @@ from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
 
 try:
-    import ruamel.yaml as yaml
-except ImportError:
-    try:
-        import yaml
-    except ImportError:
-        yaml = None
-
-if yaml:
+    import yaml
     # Use CLoader for faster performance where possible.
     try:
         from yaml import CLoader as Loader, CDumper as Dumper
     except ImportError:
         from yaml import Loader, Dumper
+except ImportError:
+    yaml = None
+    Loader = None
 
 try:
     import msgpack
