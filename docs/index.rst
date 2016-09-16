@@ -39,6 +39,10 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.9.2
+------
+1. Minor update.
+
 v0.9.1
 ------
 1. bson.objectid.ObjectId support for MontyEncoder and MontyDecoder.
