@@ -162,7 +162,8 @@ class MontyDecoder(json.JSONDecoder):
                     return dt
                 elif modname == "numpy" and classname == "array":
                     return np.array(d["data"], dtype=d["dtype"])
-                elif modname == "bson.objectid" and classname == "ObjectId":
+                elif (bson is not None) and modname == "bson.objectid" and \
+                        classname == "ObjectId":
                     return bson.objectid.ObjectId(d["oid"])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
