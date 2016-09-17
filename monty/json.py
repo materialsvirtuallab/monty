@@ -151,7 +151,7 @@ class MontyDecoder(json.JSONDecoder):
             else:
                 modname = None
                 classname = None
-            if modname:
+            if modname and modname != "bson.objectid":
                 if modname == "datetime" and classname == "datetime":
                     try:
                         dt = datetime.datetime.strptime(d["string"],
@@ -162,9 +162,7 @@ class MontyDecoder(json.JSONDecoder):
                     return dt
                 elif modname == "numpy" and classname == "array":
                     return np.array(d["data"], dtype=d["dtype"])
-                elif (bson is not None) and modname == "bson.objectid" and \
-                        classname == "ObjectId":
-                    return bson.objectid.ObjectId(d["oid"])
+
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
@@ -173,6 +171,10 @@ class MontyDecoder(json.JSONDecoder):
                             if k not in ["@module", "@class"]}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
+            elif (bson is not None) and modname == "bson.objectid" and \
+                            classname == "ObjectId":
+                return bson.objectid.ObjectId(d["oid"])
+
             return {self.process_decoded(k): self.process_decoded(v)
                     for k, v in d.items()}
         elif isinstance(d, list):
