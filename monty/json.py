@@ -50,7 +50,11 @@ class MSONable(object):
         d = {"@module": self.__class__.__module__,
              "@class": self.__class__.__name__}
         if hasattr(self, "__init__"):
-            for c in inspect.getargspec(self.__init__).args:
+            try:
+                args = list(inspect.signature(self.__init__).keys())
+            except AttributeError:
+                args = inspect.getargspec(self.__init__).args
+            for c in args:
                 if c != "self":
                     a = self.__getattribute__(c)
                     if hasattr(a, "as_dict"):
