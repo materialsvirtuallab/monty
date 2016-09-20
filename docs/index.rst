@@ -39,6 +39,18 @@ Monty is tested to work on Python 2.7 and 3.x.
 Latest Change Log
 =================
 
+v0.9.5
+------
+1. Favor use of inspect.signature in MSONAble.
+
+v0.9.3
+------
+1. Fix monty decoding of bson only if bson is present.
+
+v0.9.2
+------
+1. Minor update.
+
 v0.9.1
 ------
 1. bson.objectid.ObjectId support for MontyEncoder and MontyDecoder.
