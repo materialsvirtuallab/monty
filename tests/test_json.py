@@ -42,6 +42,14 @@ class MSONableTest(unittest.TestCase):
 
         self.bad_cls = BadMSONClass
 
+        class BadMSONClass2(MSONable):
+
+            def __init__(self, a, b):
+                self.a = a
+                self.c = b
+
+        self.bad_cls2 = BadMSONClass2
+
     def test_to_from_dict(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
@@ -54,7 +62,8 @@ class MSONableTest(unittest.TestCase):
         d = obj.as_dict()
         self.assertIsNotNone(d)
         self.assertRaises(TypeError, self.bad_cls.from_dict, d)
-
+        obj = self.bad_cls2("Hello", "World")
+        self.assertRaises(NotImplementedError, obj.as_dict)
 
 class JsonTest(unittest.TestCase):
 
