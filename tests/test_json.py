@@ -65,6 +65,7 @@ class MSONableTest(unittest.TestCase):
         obj = self.bad_cls2("Hello", "World")
         self.assertRaises(NotImplementedError, obj.as_dict)
 
+
 class JsonTest(unittest.TestCase):
 
     def test_as_from_dict(self):

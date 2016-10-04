@@ -1,10 +1,45 @@
 Change log
 ==========
 
+v0.9.5
+------
+1. Favor use of inspect.signature in MSONAble.
+
+v0.9.3
+------
+1. Fix monty decoding of bson only if bson is present.
+
+v0.9.2
+------
+1. Minor update.
+
+v0.9.1
+------
+1. bson.objectid.ObjectId support for MontyEncoder and MontyDecoder.
+
+v0.9.0
+------
+1. Improved default as and from_dict.
+
+v0.8.5
+------
+1. Minor bug fixes.
+
+v0.8.4
+------
+1. Support for bson fields in jsanitize.
+
+v0.8.2
+------
+1. Fasetr gzip.
+
+v0.8.1
+------
+1. Update gcd for deprecated fractions.gcd in py >= 3.5. Try math.gcd by default first.
+
 v0.8.0
 ------
 1. A new collections.tree object, which allows nested defaultdicts.
-
 
 v0.7.2
 ------
