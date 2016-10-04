@@ -18,9 +18,11 @@ from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
 class GoodMSONClass(MSONable):
 
-    def __init__(self, a, b):
+    def __init__(self, a, b, c, d=1):
         self.a = a
         self.b = b
+        self._c = c
+        self._d = d
 
 
 class MSONableTest(unittest.TestCase):
@@ -41,7 +43,7 @@ class MSONableTest(unittest.TestCase):
         self.bad_cls = BadMSONClass
 
     def test_to_from_dict(self):
-        obj = self.good_cls("Hello", "World")
+        obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
         self.assertIsNotNone(d)
         self.good_cls.from_dict(d)
@@ -57,11 +59,13 @@ class MSONableTest(unittest.TestCase):
 class JsonTest(unittest.TestCase):
 
     def test_as_from_dict(self):
-        obj = GoodMSONClass(1, 2)
+        obj = GoodMSONClass(1, 2, 3)
         s = json.dumps(obj, cls=MontyEncoder)
         obj2 = json.loads(s, cls=MontyDecoder)
         self.assertEqual(obj2.a, 1)
         self.assertEqual(obj2.b, 2)
+        self.assertEqual(obj2._c, 3)
+        self.assertEqual(obj2._d, 1)
 
     def test_datetime(self):
         dt = datetime.datetime.now()
@@ -104,7 +108,7 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(json.loads(json.dumps(d)), json.loads(json.dumps(
             clean)))
 
-        d = {"hello": GoodMSONClass(1, 2)}
+        d = {"hello": GoodMSONClass(1, 2, 3)}
         self.assertRaises(TypeError, json.dumps, d)
         clean = jsanitize(d)
         self.assertIsInstance(clean["hello"], six.string_types)

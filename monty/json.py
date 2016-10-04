@@ -56,12 +56,28 @@ class MSONable(object):
                 args = inspect.getargspec(self.__init__).args
             for c in args:
                 if c != "self":
-                    a = self.__getattribute__(c)
+                    try:
+                        a = self.__getattribute__(c)
+
+                    except AttributeError:
+                        try:
+                            a = self.__getattribute__("_" + c)
+                        except AttributeError:
+                            raise NotImplementedError(
+                                "Unable to automatically determine as_dict "
+                                "format from class. MSONAble requires all "
+                                "args to be present as either self.argname or "
+                                "self._argname, and kwargs to be present under"
+                                "a self.kwargs variable to automatically "
+                                "determine the dict format. Alternatively, "
+                                "you can implement both as_dict and from_dict.")
                     if hasattr(a, "as_dict"):
                         a = a.as_dict()
                     d[c] = a
         if hasattr(self, "kwargs"):
             d.update(**self.kwargs)
+        if hasattr(self, "_kwargs"):
+            d.update(**self._kwargs)
         return d
 
     @classmethod
