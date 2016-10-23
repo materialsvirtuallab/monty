@@ -5,13 +5,6 @@ compressed files.
 
 from __future__ import absolute_import
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
 import os
 import bz2
 import gzip
@@ -23,6 +16,14 @@ import mmap
 from io import open
 from monty.tempfile import ScratchDir as ScrDir
 from monty.dev import deprecated
+
+__author__ = 'Shyue Ping Ong'
+__copyright__ = "Copyright 2014, The Materials Virtual Lab"
+__version__ = '0.1'
+__maintainer__ = 'Shyue Ping Ong'
+__email__ = 'ongsp@ucsd.edu'
+__date__ = '1/24/14'
+
 
 PY_VERSION = sys.version_info
 
