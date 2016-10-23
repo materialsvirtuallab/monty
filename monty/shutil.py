@@ -1,4 +1,8 @@
 from __future__ import absolute_import
+import os
+import shutil
+import warnings
+from gzip import GzipFile
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -6,12 +10,6 @@ __version__ = '0.1'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
-
-
-import os
-import shutil
-import warnings
-from gzip import GzipFile
 
 
 def copy_r(src, dst):
@@ -44,7 +42,10 @@ def copy_r(src, dst):
 
 def gzip_dir(path, compresslevel=6):
     """
-    Gzips all files in a directory.
+    Gzips all files in a directory. Note that this is different from
+    shutil.make_archive, which creates a tar archive. The aim of this method
+    is to create gzipped files that can still be read using common Unix-style
+    commands like zless or zcat.
 
     Args:
         path (str): Path to directory.

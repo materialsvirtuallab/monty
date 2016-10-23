@@ -3,6 +3,11 @@ Temporary directory and file creation utilities.
 """
 
 from __future__ import absolute_import
+import os
+import tempfile
+import shutil
+
+from monty.shutil import copy_r
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2012, The Materials Project"
@@ -11,15 +16,16 @@ __maintainer__ = "Shyue Ping Ong"
 __email__ = "ongsp@ucsd.edu"
 __date__ = "3/6/14"
 
-import os
-import tempfile
-import shutil
-
-from monty.shutil import copy_r
-
 
 class ScratchDir(object):
     """
+    .. note::
+
+        With effect from Python 3.2, tempfile.TemporaryDirectory already
+        implements much of the functionality of ScratchDir. However, it does
+        not provide options for copying of files to and from (though it is
+        possible to do this with other methods provided by shutil).
+
     Creates a "with" context manager that automatically handles creation of
     temporary directories (utilizing Python's build in temp directory
     functions) and cleanup when done. This improves on Python's built in
@@ -33,7 +39,6 @@ class ScratchDir(object):
     5. Optionally copy generated output files back to original directory.
     6. Change back to original directory.
     7. Delete temp dir.
-
     """
     SCR_LINK = "scratch_link"
 
