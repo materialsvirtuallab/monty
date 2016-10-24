@@ -6,6 +6,17 @@ Deployment file to facilitate releases of monty.
 
 from __future__ import division
 
+import glob
+import requests
+import json
+import os
+import re
+
+from invoke import task
+from monty.os import cd
+from monty import __version__ as ver
+
+
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2012, The Materials Project"
 __version__ = "0.1"
@@ -13,20 +24,11 @@ __maintainer__ = "Shyue Ping Ong"
 __email__ = "shyue@mit.edu"
 __date__ = "Apr 29, 2012"
 
-import glob
-import requests
-import json
-import os
-
-from invoke import task
-from monty.os import cd
-from monty import __version__ as ver
-
 
 @task
 def make_doc(ctx):
     with cd("docs"):
-        ctx.run("sphinx-apidoc -o . -f ../monty")
+        ctx.run("sphinx-apidoc -d 6 -o . -f ../monty")
         for f in glob.glob("docs/*.rst"):
             if f.startswith('docs/monty') and f.endswith('rst'):
                 newoutput = []
@@ -42,7 +44,8 @@ def make_doc(ctx):
                         else:
                             if not clean.endswith("tests"):
                                 suboutput.append(line)
-                            if clean.startswith("monty") and not clean.endswith("tests"):
+                            if clean.startswith("monty") and not clean.endswith(
+                                    "tests"):
                                 newoutput.extend(suboutput)
                                 subpackage = False
                                 suboutput = []
@@ -50,12 +53,23 @@ def make_doc(ctx):
                 with open(f, 'w') as fid:
                     fid.write("".join(newoutput))
         ctx.run("make html")
+        # ctx.run("cp _static/* _build/html/_static")
 
-        #This makes sure monty.org works to redirect to the Gihub page
-        ctx.run("echo \"monty.org\" > _build/html/CNAME")
-        #Avoid ths use of jekyll so that _dir works as intended.
+        # This makes sure pymatgen.org works to redirect to the Gihub page
+        # ctx.run("echo \"pymatgen.org\" > _build/html/CNAME")
+        # Avoid ths use of jekyll so that _dir works as intended.
         ctx.run("touch _build/html/.nojekyll")
 
+
+@task
+def update_doc(ctx):
+    with cd("docs/_build/html/"):
+        ctx.run("git pull")
+    make_doc(ctx)
+    with cd("docs/_build/html/"):
+        ctx.run("git add .")
+        ctx.run("git commit -a -m \"Update dev docs\"")
+        ctx.run("git push origin gh-pages")
 
 @task
 def publish(ctx):
@@ -113,7 +127,7 @@ def commit(ctx):
 def release(ctx):
     setver(ctx)
     test(ctx)
-    make_doc(ctx)
+    update_doc(ctx)
     publish(ctx)
     commit(ctx)
     release_github(ctx)
