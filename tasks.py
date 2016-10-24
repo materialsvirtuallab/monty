@@ -30,7 +30,7 @@ def make_doc(ctx):
     with cd("docs"):
         ctx.run("sphinx-apidoc -d 6 -o . -f ../monty")
         for f in glob.glob("*.rst"):
-            if f.startswith('docs/monty') and f.endswith('rst'):
+            if f.startswith('monty') and f.endswith('rst'):
                 newoutput = []
                 suboutput = []
                 subpackage = False
