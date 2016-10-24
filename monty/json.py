@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 JSON serialization and deserialization utilities.
 """
@@ -112,10 +113,11 @@ class MSONable(object):
 class MontyEncoder(json.JSONEncoder):
     """
     A Json Encoder which supports the MSONable API, plus adds support for
-    numpy arrays and
+    numpy arrays, datetime objects, bson ObjectIds (requires bson).
 
-    Usage:
-        Add it as a *cls* keyword when using json.dump
+    Usage::
+
+        # Add it as a *cls* keyword when using json.dump
         json.dumps(object, cls=MontyEncoder)
     """
 
@@ -171,7 +173,8 @@ class MontyDecoder(json.JSONDecoder):
     as well.
 
     Usage:
-        Add it as a *cls* keyword when using json.load
+
+        # Add it as a *cls* keyword when using json.load
         json.loads(json_string, cls=MontyDecoder)
     """
 

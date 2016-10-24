@@ -1,5 +1,8 @@
 # coding: utf-8
-"""This module provides support for Unix shell-style wildcards"""
+"""
+This module provides support for Unix shell-style wildcards
+"""
+
 from __future__ import unicode_literals, absolute_import
 
 import fnmatch

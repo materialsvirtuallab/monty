@@ -71,7 +71,7 @@ class requires(object):
 
         @requires(scipy is not None, "scipy is not present.")
         def use_scipy():
-            print scipy.majver
+            print(scipy.majver)
 
     Args:
         condition: Condition necessary to use the class or function.

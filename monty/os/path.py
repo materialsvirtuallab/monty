@@ -1,4 +1,8 @@
+# coding: utf-8
+
 from __future__ import absolute_import
+
+import os
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = 'Copyright 2013, The Materials Project'
@@ -6,9 +10,6 @@ __version__ = '0.1'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
-
-
-import os
 
 
 def which(cmd):
@@ -60,19 +61,22 @@ def zpath(filename):
     return filename
 
 
-def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basename"):
+def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
+              match_mode="basename"):
     """
-    Find all files with the extension listed in `exts` that are located within the directory tree
-    rooted at `top` (including top itself, but excluding '.' and '..')
+    Find all files with the extension listed in `exts` that are located within
+    the directory tree rooted at `top` (including top itself, but excluding
+    '.' and '..')
 
     Args:
         top (str): Root directory
         exts (str or list of strings): List of extensions.
-        exclude_dirs (str): Wildcards used to exclude particular directories. Can be concatenated via `|`
+        exclude_dirs (str): Wildcards used to exclude particular directories.
+            Can be concatenated via `|`
         include_dirs (str): Wildcards used to select particular directories.
-                            `include_dirs` and `exclude_dirs` are mutually exclusive
+            `include_dirs` and `exclude_dirs` are mutually exclusive
         match_mode (str): "basename" if  match should be done on the basename.
-                          "abspath" for absolute path.
+            "abspath" for absolute path.
 
     Returns:
         (list of str): Absolute paths of the files.

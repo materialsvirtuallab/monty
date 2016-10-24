@@ -80,7 +80,9 @@ def _make_key(args, kwds, typed,
 
 
 def lru_cache(maxsize=128, typed=False):
-    """Least-recently-used cache decorator.
+    """
+    Least-recently-used cache decorator, which is a backport of the same
+    function in Python >= 3.2.
 
     If *maxsize* is set to None, the LRU features are disabled and the cache
     can grow without bound.
@@ -96,7 +98,6 @@ def lru_cache(maxsize=128, typed=False):
     Access the underlying function with f.__wrapped__.
 
     See:  http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used
-
     """
 
     # Users should only access the lru_cache through its public API:

@@ -1,6 +1,8 @@
 # coding: utf-8
 from __future__ import division, unicode_literals, absolute_import
 
+import bisect as bs
+
 """
 Additional bisect functions. Taken from
 https://docs.python.org/2/library/bisect.html
@@ -16,8 +18,6 @@ __version__ = '0.1'
 __maintainer__ = 'Matteo Giantomass'
 __email__ = 'gmatteo@gmail.com'
 __date__ = '11/09/14'
-
-import bisect as bs
 
 
 def index(a, x, atol=None):

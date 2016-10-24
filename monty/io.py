@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Augments Python's suite of IO functions with useful transparent support for
 compressed files.

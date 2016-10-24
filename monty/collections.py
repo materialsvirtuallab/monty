@@ -2,15 +2,14 @@
 from __future__ import absolute_import, print_function, unicode_literals,\
     division
 
+import collections
+
 __author__ = 'Shyue Ping Ong'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = '0.1'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
-
-
-import collections
 
 
 def tree():

@@ -122,12 +122,17 @@ Below are some further examples of Monty's features::
     from monty.collections import frozendict
     d = frozendict(a=1)
 
-API docs
---------
+    # A Fabric-inspired cd context, that allows one to change directory to
+    # execute code and transparently changes back to the current working
+    # directory
 
-The API docs are given below. The docs for most classes or methods are clear
-enough for usage. Where there is somewhat greater subtlety in the usage,
-examples are provided.
+    from monty.os import cd
+
+    with cd("/path/to/input_files") as f:
+        execute_code_using_files()
+
+API docs
+========
 
 .. toctree::
 

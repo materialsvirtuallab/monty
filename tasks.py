@@ -29,7 +29,7 @@ __date__ = "Apr 29, 2012"
 def make_doc(ctx):
     with cd("docs"):
         ctx.run("sphinx-apidoc -d 6 -o . -f ../monty")
-        for f in glob.glob("docs/*.rst"):
+        for f in glob.glob("*.rst"):
             if f.startswith('docs/monty') and f.endswith('rst'):
                 newoutput = []
                 suboutput = []
@@ -70,6 +70,7 @@ def update_doc(ctx):
         ctx.run("git add .")
         ctx.run("git commit -a -m \"Update dev docs\"")
         ctx.run("git push origin gh-pages")
+
 
 @task
 def publish(ctx):

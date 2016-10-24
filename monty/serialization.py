@@ -4,14 +4,6 @@ and yaml.
 """
 from __future__ import absolute_import, unicode_literals
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Project'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '7/29/14'
-
-
 import json
 from monty.io import zopen
 from monty.json import MontyEncoder, MontyDecoder
@@ -32,6 +24,13 @@ try:
     import msgpack
 except ImportError:
     msgpack = None
+
+__author__ = 'Shyue Ping Ong'
+__copyright__ = 'Copyright 2013, The Materials Project'
+__version__ = '0.1'
+__maintainer__ = 'Shyue Ping Ong'
+__email__ = 'ongsp@ucsd.edu'
+__date__ = '7/29/14'
 
 
 def loadfn(fn, *args, **kwargs):
