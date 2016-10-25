@@ -4,8 +4,8 @@
    contain the root `toctree` directive.
 
 
-Monty - The Missing Complement to Python
-========================================
+Monty : Python Made Even Easier
+===============================
 
 .. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master
@@ -15,10 +15,7 @@ useful functions for Python that are not part of the standard library.
 Examples include useful utilities like transparent support for zipped files,
 useful design patterns such as singleton and cached_class, and many more.
 
-Why Monty?
-==========
-
-Python is a wonderful programming language and comes with "batteries
+Python is a great programming language and comes with "batteries
 included". However, even Python has missing functionality and/or quirks that
 make it more difficult to do many simple tasks. In the process of
 creating several large scientific frameworks based on Python,
@@ -31,10 +28,7 @@ Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.
 
-Compatibility
--------------
-
-Monty is tested to work on Python 2.7 and 3.x.
+Monty supports Python 2.7-3.x.
 
 Latest Change Log
 =================
