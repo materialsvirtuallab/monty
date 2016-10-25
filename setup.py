@@ -1,7 +1,10 @@
+import os
 from setuptools import setup, find_packages
 from io import open
 
-with open("README.md", "rt") as f:
+current_dir = os.path.dirname(os.path.abspath(__file__))
+
+with open(os.path.join(current_dir, "README.rst"), "rt") as f:
     long_desc = f.read()
 
 setup(
