@@ -43,7 +43,8 @@ v0.9.6
 Installation
 ============
 
-::
+Standard pip install::
+
     pip install monty
 
 Usage
