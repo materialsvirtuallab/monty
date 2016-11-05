@@ -4,8 +4,8 @@
    contain the root `toctree` directive.
 
 
-Monty : Python Made Even Easier
-===============================
+Monty: Python Made Even Easier
+==============================
 
 .. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master
@@ -30,8 +30,8 @@ be a resource to collect the best solutions.
 
 Monty supports Python 2.7-3.x.
 
-Latest Change Log
-=================
+Change Log
+==========
 
 v0.9.6
 ------
@@ -40,16 +40,10 @@ v0.9.6
 
 :doc:`Older versions </changelog>`
 
-Installing monty
-================
+Installation
+============
 
-The easiest way to install monty on any system is to use easy_install or
-pip, as follows::
-
-    easy_install monty
-
-or::
-
+::
     pip install monty
 
 Usage
@@ -62,10 +56,10 @@ will reside. There are two recommended ways of using Monty.
 
 Method 1: Import the monty root::
 
-    import monty as mt
-    with mt.io.zopen("src.gz") as f:
+    import monty as mty
+    with mty.io.zopen("src.gz") as f:
         data = f.read()
-    with mt.io.zopen("dest.bz2", "wb") as f:
+    with mty.io.zopen("dest.bz2", "wb") as f:
         f.write(data)
 
 Method 2: Import specific functions as needed::
@@ -109,7 +103,7 @@ Below are some further examples of Monty's features::
     from monty.io import zopen, reverse_readline
     with zopen("myfile") as f:
         for line in reverse_readline(f):
-            print line
+            print(line)
 
     # A frozen dict (Immutable dict)
 

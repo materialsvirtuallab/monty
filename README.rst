@@ -1,5 +1,5 @@
-Monty : Python Made Even Easier
-===============================
+Monty: Python Made Even Easier
+==============================
 
 .. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master
