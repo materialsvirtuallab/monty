@@ -10,7 +10,11 @@ import unittest
 import os
 from io import open
 
-import bz2
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib2 import Path
+
 
 from monty.io import reverse_readline, zopen, FileLock, FileLockException, \
     reverse_readfile, get_open_fds
@@ -121,6 +125,10 @@ class ZopenTest(unittest.TestCase):
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
 
+        p = Path(test_dir) / "myfile_gz.gz"
+
+        with zopen(p, mode="rt") as f:
+            self.assertEqual(f.read(), "HelloWorld.\n\n")
 
 
 class FileLockTest(unittest.TestCase):
