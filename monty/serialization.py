@@ -43,7 +43,7 @@ def loadfn(fn, *args, **kwargs):
     chosen for ~10x faster parsing.
 
     Args:
-        fn (str): filename
+        fn (str/Path): filename or pathlib.Path.
         \*args: Any of the args supported by json/yaml.load.
         \*\*kwargs: Any of the kwargs supported by json/yaml.load.
 
@@ -85,7 +85,7 @@ def dumpfn(obj, fn, *args, **kwargs):
 
     Args:
         obj (object): Object to dump.
-        fn (str): filename.
+        fn (str/Path): filename or pathlib.Path.
         \*args: Any of the args supported by json/yaml.dump.
         \*\*kwargs: Any of the kwargs supported by json/yaml.dump.
 
