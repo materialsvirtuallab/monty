@@ -64,8 +64,8 @@ def zopen(filename, *args, **kwargs):
             if len(args) > 0:
                 args[0] = "".join([c for c in args[0] if c != "t"])
             if "mode" in kwargs:
-                kwargs["mode"] = "".join([c for c in kwargs["mode"] if c !=
-                                          "t"])
+                kwargs["mode"] = "".join([c for c in kwargs["mode"]
+                                          if c != "t"])
             return bz2.BZ2File(filename, *args, **kwargs)
     elif file_ext in ("GZ", "Z"):
         return gzip.open(filename, *args, **kwargs)

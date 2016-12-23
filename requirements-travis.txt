@@ -6,3 +6,4 @@ msgpack-python>=0.4.7
 coverage>=4.1
 coveralls>=1.1
 pymongo>=3.2.2
+pathlib2
