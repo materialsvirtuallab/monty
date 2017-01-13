@@ -101,7 +101,7 @@ class GzipDirTest(unittest.TestCase):
         with GzipFile("{}.gz".format(full_f)) as g:
             self.assertEquals(g.readline(),u"what")
 
-        self.assertEquals(os.path.getmtime("{}.gz".format(full_f)),self.mtime)
+        self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)),self.mtime)
 
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "gzip_dir"))
