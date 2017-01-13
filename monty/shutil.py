@@ -58,6 +58,7 @@ def gzip_dir(path, compresslevel=6):
                 GzipFile('{}.gz'.format(f), 'wb',
                          compresslevel=compresslevel) as f_out:
                 shutil.copyfileobj(f_in, f_out)
+            shutil.copystat(f,'{}.gz'.format(f))
             os.remove(f)
 
 
