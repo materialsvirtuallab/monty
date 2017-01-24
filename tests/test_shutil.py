@@ -9,10 +9,11 @@ __date__ = '1/24/14'
 import unittest
 import os
 import shutil
+from gzip import GzipFile
 from io import open
 
 from monty.shutil import copy_r, compress_file, decompress_file, \
-    compress_dir, decompress_dir
+    compress_dir, decompress_dir, gzip_dir
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -80,6 +81,32 @@ class CompressFileDirTest(unittest.TestCase):
 
     def tearDown(self):
         os.remove(os.path.join(test_dir, "tempfile"))
+
+class GzipDirTest(unittest.TestCase):
+
+    def setUp(self):
+        os.mkdir(os.path.join(test_dir, "gzip_dir"))
+        with open(os.path.join(test_dir, "gzip_dir", "tempfile"), "w") as f:
+            f.write(u"what")
+
+        self.mtime = os.path.getmtime(os.path.join(test_dir, "gzip_dir",
+                                                   "tempfile"))
+
+    def test_gzip(self):
+        full_f = os.path.join(test_dir, "gzip_dir", "tempfile")
+        gzip_dir(os.path.join(test_dir, "gzip_dir"))
+
+        self.assertTrue(os.path.exists("{}.gz".format(full_f)))
+        self.assertFalse((os.path.exists(full_f)))
+
+        with GzipFile("{}.gz".format(full_f)) as g:
+            self.assertEquals(g.readline().decode("utf-8"), "what")
+
+        self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)),
+                               self.mtime, 4)
+
+    def tearDown(self):
+        shutil.rmtree(os.path.join(test_dir, "gzip_dir"))
 
 
 if __name__ == "__main__":
