@@ -33,6 +33,10 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
+v0.9.7
+------
+1. Minor update for inspect deprecation.
+
 v0.9.6
 ------
 1. Allow private variable names (with leading underscores) to be auto-detected
