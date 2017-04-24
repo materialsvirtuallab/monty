@@ -7,7 +7,10 @@ from __future__ import absolute_import, unicode_literals
 import json
 import datetime
 import six
-import inspect
+try:
+    from inspect import getfullargspec as getargspec
+except ImportError:
+    from inspect import getargspec
 
 try:
     import numpy as np
@@ -67,10 +70,7 @@ class MSONable(object):
         d = {"@module": self.__class__.__module__,
              "@class": self.__class__.__name__}
         if hasattr(self, "__init__"):
-            try:
-                args = list(inspect.signature(self.__init__).keys())
-            except AttributeError:
-                args = inspect.getargspec(self.__init__).args
+            args = getargspec(self.__init__).args
             for c in args:
                 if c != "self":
                     try:
