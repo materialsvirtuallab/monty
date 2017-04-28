@@ -95,7 +95,21 @@ class ScratchDir(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
+                tempdir = tempfile.mkdtemp(dir=self.cwd)
+                copy_r(self.cwd, tempdir)
+                for f in os.listdir(self.cwd):
+                    fpath = os.path.join(self.cwd, f)
+                    try:
+                        if f != os.path.basename(tempdir):
+                            if os.path.isfile(fpath):
+                                os.remove(fpath)
+                            else:
+                                shutil.rmtree(fpath)
+                    except:
+                        # Ignore file not found.
+                        pass
                 copy_r(".", self.cwd)
+                shutil.rmtree(tempdir)
             shutil.rmtree(self.tempdir)
             os.chdir(self.cwd)
             if self.create_symbolic_link:
