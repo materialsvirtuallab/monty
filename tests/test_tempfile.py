@@ -13,7 +13,8 @@ from io import open
 
 from monty.tempfile import ScratchDir
 
-test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
+test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        'test_files')
 
 
 class ScratchDirTest(unittest.TestCase):
@@ -25,6 +26,9 @@ class ScratchDirTest(unittest.TestCase):
         os.mkdir(self.scratch_root)
 
     def test_with_copy(self):
+        # We write a pre-scratch file.
+        with open("pre_scratch_text", "w") as f:
+            f.write(u"write")
 
         with ScratchDir(self.scratch_root, copy_from_current_on_enter=True,
                         copy_to_current_on_exit=True) as d:
@@ -33,11 +37,19 @@ class ScratchDirTest(unittest.TestCase):
             files = os.listdir(d)
             self.assertIn("scratch_text", files)
             self.assertIn("empty_file.txt", files)
+            self.assertIn("pre_scratch_text", files)
 
-        #Make sure the tempdir is deleted.
+            # We remove the pre-scratch file.
+            os.remove("pre_scratch_text")
+
+        # Make sure the tempdir is deleted.
         self.assertFalse(os.path.exists(d))
         files = os.listdir(".")
         self.assertIn("scratch_text", files)
+
+        # We check that the pre-scratch file no longer exists (because it is
+        # deleted in the scratch)
+        self.assertNotIn("pre_scratch_text", files)
         os.remove("scratch_text")
 
     def test_no_copy(self):
@@ -50,7 +62,7 @@ class ScratchDirTest(unittest.TestCase):
             self.assertIn("scratch_text", files)
             self.assertNotIn("empty_file.txt", files)
 
-        #Make sure the tempdir is deleted.
+        # Make sure the tempdir is deleted.
         self.assertFalse(os.path.exists(d))
         files = os.listdir(".")
         self.assertNotIn("scratch_text", files)
