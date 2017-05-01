@@ -10,4 +10,8 @@ __copyright__ = 'Copyright 2014, The Materials Virtual Lab'
 __version__ = '0.9.7'
 __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
+<<<<<<< HEAD
 __date__ = 'Dec 23 2016'
+=======
+__date__ = 'Apr 24 2017'
+>>>>>>> 67cf57ea778b3d5a085f3bd46281dac0dfc2d994

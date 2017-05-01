@@ -10,7 +10,7 @@ with open(os.path.join(current_dir, "README.rst"), "rt") as f:
 setup(
     name="monty",
     packages=find_packages(),
-    version="0.9.6",
+    version="0.9.7",
     install_requires=["six"],
     extras_require={"yaml": ["pyyaml>=3.1"],},
     package_data={},
