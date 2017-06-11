@@ -10,15 +10,12 @@ from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
 
 try:
-    import yaml
-    # Use CLoader for faster performance where possible.
-    try:
-        from yaml import CLoader as Loader, CDumper as Dumper
-    except ImportError:
-        from yaml import Loader, Dumper
+    import ruamel.yaml as yaml
 except ImportError:
-    yaml = None
-    Loader = None
+    try:
+        import yaml
+    except ImportError:
+        yaml = None
 
 try:
     import msgpack
@@ -36,11 +33,9 @@ __date__ = '7/29/14'
 def loadfn(fn, *args, **kwargs):
     """
     Loads json/yaml/msgpack directly from a filename instead of a
-    File-like object. For YAML, PyYAML must be installed. The file type is
+    File-like object. For YAML, ruamel.yaml must be installed. The file type is
     automatically detected. YAML is assumed if the filename contains "yaml"
-    (lower or upper case). Otherwise, json is always assumed. Furthermore, if
-    pyyaml is compiled with the LibYAML library, the CLoader is automatically
-    chosen for ~10x faster parsing.
+    (lower or upper case). Otherwise, json is always assumed.
 
     Args:
         fn (str/Path): filename or pathlib.Path.
@@ -64,10 +59,8 @@ def loadfn(fn, *args, **kwargs):
             if "yaml" in fn.lower():
                 if yaml is None:
                     raise RuntimeError("Loading of YAML files is not "
-                                       "possible as PyYAML is not installed.")
-                if "Loader" not in kwargs:
-                    kwargs["Loader"] = Loader
-                return yaml.load(fp, *args, **kwargs)
+                                       "possible as ruamel.yaml is not installed.")
+                return yaml.safe_load(fp, *args, **kwargs)
             else:
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyDecoder
@@ -77,11 +70,9 @@ def loadfn(fn, *args, **kwargs):
 def dumpfn(obj, fn, *args, **kwargs):
     """
     Dump to a json/yaml directly by filename instead of a File-like object.
-    For YAML, PyYAML must be installed. The file type is automatically
+    For YAML, ruamel.yaml must be installed. The file type is automatically
     detected. YAML is assumed if the filename contains "yaml" (lower or upper
-    case). Otherwise, json is always assumed. Furthermore, if pyyaml is
-    compiled with the LibYAML library, the CDumper is automatically chosen
-    for ~10x faster parsing.
+    case). Otherwise, json is always assumed.
 
     Args:
         obj (object): Object to dump.
@@ -106,10 +97,8 @@ def dumpfn(obj, fn, *args, **kwargs):
             if "yaml" in fn.lower():
                 if yaml is None:
                     raise RuntimeError("Loading of YAML files is not "
-                                       "possible as PyYAML is not installed.")
-                if "Dumper" not in kwargs:
-                    kwargs["Dumper"] = Dumper
-                yaml.dump(obj, fp, *args, **kwargs)
+                                       "possible as ruamel.yaml is not installed.")
+                yaml.safe_dump(obj, fp, *args, **kwargs)
             else:
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyEncoder

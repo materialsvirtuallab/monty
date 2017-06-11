@@ -24,7 +24,7 @@ class SerialTest(unittest.TestCase):
         dumpfn(d, "monte_test.yaml", default_flow_style=False)
         d2 = loadfn("monte_test.yaml")
         self.assertEqual(d, d2)
-        dumpfn(d, "monte_test.yaml", Dumper=Dumper)
+        dumpfn(d, "monte_test.yaml")
         d2 = loadfn("monte_test.yaml")
         os.remove("monte_test.yaml")
         dumpfn(d, "monte_test.mpk")
