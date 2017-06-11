@@ -6,3 +6,4 @@ msgpack-python==0.4.8
 coverage==4.4.1
 coveralls==1.1
 pymongo==3.4.0
+pathlib2; python_version < '3.0'
