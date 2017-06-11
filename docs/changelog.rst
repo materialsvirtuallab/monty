@@ -1,6 +1,19 @@
 Change log
 ==========
 
+v0.9.8
+------
+1. Now ScratchDir functions as it should by replacing the original directory.
+
+v0.9.7
+------
+1. Minor update for inspect deprecation.
+
+v0.9.6
+------
+1. Allow private variable names (with leading underscores) to be auto-detected
+   in default MSONable.
+
 v0.9.5
 ------
 1. Favor use of inspect.signature in MSONAble.

@@ -33,18 +33,10 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
-v0.9.8
+v1.0.0
 ------
-1. Now ScratchDir functions as it should by replacing the original directory.
+1. Ruamel.yaml is now used as the default YAML parser and dumper.
 
-v0.9.7
-------
-1. Minor update for inspect deprecation.
-
-v0.9.6
-------
-1. Allow private variable names (with leading underscores) to be auto-detected
-   in default MSONable.
 
 :doc:`Older versions </changelog>`
 
