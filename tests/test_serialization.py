@@ -10,7 +10,6 @@ import unittest
 import os
 
 from monty.serialization import dumpfn, loadfn
-from yaml import Dumper
 
 
 class SerialTest(unittest.TestCase):
