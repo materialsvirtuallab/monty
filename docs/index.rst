@@ -33,6 +33,10 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
+v1.0.1
+------
+1. Use CLoader and CDumper by default for speed.
+
 v1.0.0
 ------
 1. Ruamel.yaml is now used as the default YAML parser and dumper.
