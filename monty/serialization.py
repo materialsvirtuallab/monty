@@ -11,19 +11,24 @@ from monty.msgpack import default, object_hook
 
 try:
     import ruamel.yaml as yaml
+    try:  # Default to using CLoader and CDumper for speed.
+        from ruamel.yaml import CLoader as Loader
+        from ruamel.yaml import CDumper as Dumper
+    except ImportError:
+        from ruamel.yaml import Loader
+        from ruamel.yaml import Dumper
 except ImportError:
     try:
         import yaml
+        try:  # Default to using CLoader and CDumper for speed.
+            from yaml import CLoader as Loader
+            from yaml import CDumper as Dumper
+        except ImportError:
+            from yaml import Loader
+            from yaml import Dumper
     except ImportError:
         yaml = None
 
-
-try:
-    from ruamel.yaml import CLoader as Loader
-    from ruamel.yaml import CDumper as Dumper
-except ImportError:
-    from yaml import Loader
-    from yaml import Dumper
 
 try:
     import msgpack
