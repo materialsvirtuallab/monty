@@ -123,7 +123,7 @@ class ZopenTest(unittest.TestCase):
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
 
-    @unittest.skipIf(Path is None)
+    @unittest.skipIf(Path is None, "Not Py3k")
     def test_Path_objects(self):
         p = Path / "myfile_gz.gz"
 
