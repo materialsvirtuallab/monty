@@ -9,6 +9,10 @@ __date__ = '1/24/14'
 import unittest
 import os
 from io import open
+try:
+    from pathlib import Path
+except ImportError:
+    Path = None
 
 from monty.io import reverse_readline, zopen, FileLock, FileLockException, \
     reverse_readfile
@@ -119,7 +123,9 @@ class ZopenTest(unittest.TestCase):
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
 
-        p = os.path.join(test_dir, "myfile_gz.gz")
+    @unittest.skipIf(Path is None)
+    def test_Path_objects(self):
+        p = Path / "myfile_gz.gz"
 
         with zopen(p, mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
