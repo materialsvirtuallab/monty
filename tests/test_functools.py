@@ -15,7 +15,7 @@ from monty.functools import lru_cache, lazy_property, return_if_raise, \
 
 class TestLRUCache(unittest.TestCase):
     def test_function(self):
-        @lru_cache(2)
+        @lru_cache(2, typed=True)
         def cached_func(a, b, c=3):
             return a + b + c
 
