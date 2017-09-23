@@ -85,6 +85,10 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(obj2.b, 2)
         self.assertEqual(obj2._c, 3)
         self.assertEqual(obj2._d, 1)
+        listobj = [obj, obj2]
+        s = json.dumps(listobj, cls=MontyEncoder)
+        listobj2 = json.loads(s, cls=MontyDecoder)
+        self.assertEqual(listobj2[0].a.a, 1)
 
     def test_datetime(self):
         dt = datetime.datetime.now()
