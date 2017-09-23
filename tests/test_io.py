@@ -15,7 +15,7 @@ except ImportError:
     Path = None
 
 from monty.io import reverse_readline, zopen, FileLock, FileLockException, \
-    reverse_readfile
+    reverse_readfile, get_open_fds
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -145,6 +145,12 @@ class FileLockTest(unittest.TestCase):
 
     def tearDown(self):
         self.lock.release()
+
+
+class FuncTest(unittest.TestCase):
+
+    def test_get_open_fds(self):
+        self.assertTrue(get_open_fds() > 0)
 
 
 if __name__ == "__main__":

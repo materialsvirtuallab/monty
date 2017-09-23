@@ -18,11 +18,12 @@ from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
 class GoodMSONClass(MSONable):
 
-    def __init__(self, a, b, c, d=1):
+    def __init__(self, a, b, c, d=1, **kwargs):
         self.a = a
         self.b = b
         self._c = c
         self._d = d
+        self.kwargs = kwargs
 
 
 class MSONableTest(unittest.TestCase):
@@ -69,10 +70,18 @@ class MSONableTest(unittest.TestCase):
 class JsonTest(unittest.TestCase):
 
     def test_as_from_dict(self):
-        obj = GoodMSONClass(1, 2, 3)
+        obj = GoodMSONClass(1, 2, 3, hello="world")
         s = json.dumps(obj, cls=MontyEncoder)
         obj2 = json.loads(s, cls=MontyDecoder)
         self.assertEqual(obj2.a, 1)
+        self.assertEqual(obj2.b, 2)
+        self.assertEqual(obj2._c, 3)
+        self.assertEqual(obj2._d, 1)
+        self.assertEqual(obj2.kwargs, {"hello": "world"})
+        obj = GoodMSONClass(obj, 2, 3)
+        s = json.dumps(obj, cls=MontyEncoder)
+        obj2 = json.loads(s, cls=MontyDecoder)
+        self.assertEqual(obj2.a.a, 1)
         self.assertEqual(obj2.b, 2)
         self.assertEqual(obj2._c, 3)
         self.assertEqual(obj2._d, 1)
@@ -83,7 +92,7 @@ class JsonTest(unittest.TestCase):
         d = json.loads(jsonstr, cls=MontyDecoder)
         self.assertEqual(type(d), datetime.datetime)
         self.assertEqual(dt, d)
-        #Test a nested datetime.
+        # Test a nested datetime.
         a = {'dt': dt, "a": 1}
         jsonstr = json.dumps(a, cls=MontyEncoder)
         d = json.loads(jsonstr, cls=MontyDecoder)

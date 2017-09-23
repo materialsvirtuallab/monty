@@ -13,6 +13,7 @@ import sys
 import time
 import errno
 import mmap
+import subprocess
 
 from io import open
 from monty.tempfile import ScratchDir as ScrDir
@@ -21,10 +22,7 @@ from monty.dev import deprecated
 try:
     from pathlib import Path
 except ImportError:
-    try:
-        from pathlib2 import Path
-    except ImportError:
-        Path = None
+    Path = None
 
 __author__ = 'Shyue Ping Ong'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -281,12 +279,10 @@ def get_open_fds():
 
     .. warning: will only work on UNIX-like OS-es.
     """
-    import subprocess
-    import os
-
     pid = os.getpid()
     procs = subprocess.check_output(["lsof", '-w', '-Ff', "-p", str(pid)])
+    procs = procs.decode("utf-8")
 
-    nprocs = len(filter(lambda s: s and s[0] == 'f' and s[1:].isdigit(), procs.split('\n')))
+    return len([s for s in procs.split('\n')
+                if s and s[0] == 'f' and s[1:].isdigit()])
 
-    return nprocs
