@@ -7,6 +7,7 @@ from __future__ import absolute_import, unicode_literals
 import json
 import datetime
 import six
+import inspect
 try:
     from inspect import getfullargspec as getargspec
 except ImportError:
@@ -69,28 +70,29 @@ class MSONable(object):
         """
         d = {"@module": self.__class__.__module__,
              "@class": self.__class__.__name__}
-        if hasattr(self, "__init__"):
-            args = getargspec(self.__init__).args
-            for c in args:
-                if c != "self":
-                    try:
-                        a = self.__getattribute__(c)
-
-                    except AttributeError:
+        for cls in inspect.getmro(self.__class__):
+            if hasattr(cls, "__init__"):
+                args = getargspec(cls.__init__).args
+                for c in args:
+                    if c != "self":
                         try:
-                            a = self.__getattribute__("_" + c)
+                            a = self.__getattribute__(c)
+
                         except AttributeError:
-                            raise NotImplementedError(
-                                "Unable to automatically determine as_dict "
-                                "format from class. MSONAble requires all "
-                                "args to be present as either self.argname or "
-                                "self._argname, and kwargs to be present under"
-                                "a self.kwargs variable to automatically "
-                                "determine the dict format. Alternatively, "
-                                "you can implement both as_dict and from_dict.")
-                    if hasattr(a, "as_dict"):
-                        a = a.as_dict()
-                    d[c] = a
+                            try:
+                                a = self.__getattribute__("_" + c)
+                            except AttributeError:
+                                raise NotImplementedError(
+                                    "Unable to automatically determine as_dict "
+                                    "format from class. MSONAble requires all "
+                                    "args to be present as either self.argname or "
+                                    "self._argname, and kwargs to be present under"
+                                    "a self.kwargs variable to automatically "
+                                    "determine the dict format. Alternatively, "
+                                    "you can implement both as_dict and from_dict.")
+                        if hasattr(a, "as_dict"):
+                            a = a.as_dict()
+                        d[c] = a
         if hasattr(self, "kwargs"):
             d.update(**self.kwargs)
         if hasattr(self, "_kwargs"):
