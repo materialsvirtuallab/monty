@@ -121,7 +121,9 @@ class ScratchDir(object):
                         pass
                 copy_r(".", self.cwd)
                 shutil.rmtree(tempdir)
-            shutil.rmtree(self.tempdir)
+                
             os.chdir(self.cwd)
+            shutil.rmtree(self.tempdir)
+            
             if self.create_symbolic_link:
                 os.remove(ScratchDir.SCR_LINK)
