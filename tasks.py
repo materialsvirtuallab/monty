@@ -100,7 +100,7 @@ def setver(ctx):
 def release_github(ctx):
     desc = []
     read = False
-    with open("docs/index.rst") as f:
+    with open("docs_rst/index.rst") as f:
         for l in f:
             if l.strip() == "v" + ver:
                 read = True
