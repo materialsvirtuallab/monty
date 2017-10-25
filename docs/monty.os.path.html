@@ -1,0 +1,195 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.os.path module &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="monty.bisect module" href="monty.bisect.html" />
+    <link rel="prev" title="monty.os package" href="monty.os.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="monty.bisect.html" title="monty.bisect module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="monty.os.html" title="monty.os package"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" >monty package</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="monty.os.html" accesskey="U">monty.os package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-monty.os.path">
+<span id="monty-os-path-module"></span><h1>monty.os.path module<a class="headerlink" href="#module-monty.os.path" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="monty.os.path.find_exts">
+<code class="descname">find_exts</code><span class="sig-paren">(</span><em>top</em>, <em>exts</em>, <em>exclude_dirs=None</em>, <em>include_dirs=None</em>, <em>match_mode='basename'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#find_exts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.find_exts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find all files with the extension listed in <cite>exts</cite> that are located within
+the directory tree rooted at <cite>top</cite> (including top itself, but excluding
+‘.’ and ‘..’)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>top</strong> (<em>str</em>) – Root directory</li>
+<li><strong>exts</strong> (<em>str</em><em> or </em><em>list of strings</em>) – List of extensions.</li>
+<li><strong>exclude_dirs</strong> (<em>str</em>) – Wildcards used to exclude particular directories.
+Can be concatenated via <cite>|</cite></li>
+<li><strong>include_dirs</strong> (<em>str</em>) – Wildcards used to select particular directories.
+<cite>include_dirs</cite> and <cite>exclude_dirs</cite> are mutually exclusive</li>
+<li><strong>match_mode</strong> (<em>str</em>) – “basename” if  match should be done on the basename.
+“abspath” for absolute path.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Absolute paths of the files.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">(list of str)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Examples:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Find all pdf and ps files starting from the current directory.</span>
+<span class="n">find_exts</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="p">(</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;ps&quot;</span><span class="p">))</span>
+
+<span class="c1"># Find all pdf files, exclude hidden directories and dirs whose name</span>
+<span class="c1"># starts with `_`</span>
+<span class="n">find_exts</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="n">exclude_dirs</span><span class="o">=</span><span class="s2">&quot;_*|.*&quot;</span><span class="p">)</span>
+
+<span class="c1"># Find all ps files, in the directories whose basename starts with</span>
+<span class="c1"># output.</span>
+<span class="n">find_exts</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;ps&quot;</span><span class="p">,</span> <span class="n">include_dirs</span><span class="o">=</span><span class="s2">&quot;output*&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.os.path.which">
+<code class="descname">which</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#which"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.which" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns full path to a executable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cmd</strong> (<em>str</em>) – Executable command to search for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(str) Full path to command. None if it is not found.</td>
+</tr>
+</tbody>
+</table>
+<p>Example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">full_path_to_python</span> <span class="o">=</span> <span class="n">which</span><span class="p">(</span><span class="s2">&quot;python&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.os.path.zpath">
+<code class="descname">zpath</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#zpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.zpath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns an existing (zipped or unzipped) file path given the unzipped
+version. If no path exists, returns the filename unmodified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> – filename without zip extension</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">filename with a zip extension (unless an unzipped version
+exists). If filename is not found, the same filename is returned
+unchanged.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="monty.html">monty package</a><ul>
+  <li><a href="monty.os.html">monty.os package</a><ul>
+      <li>Previous: <a href="monty.os.html" title="previous chapter">monty.os package</a></li>
+      <li>Next: <a href="monty.bisect.html" title="next chapter">monty.bisect module</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/monty.os.path.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

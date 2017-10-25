@@ -1,0 +1,125 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.msgpack module &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="monty.operator module" href="monty.operator.html" />
+    <link rel="prev" title="monty.math module" href="monty.math.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="monty.operator.html" title="monty.operator module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="monty.math.html" title="monty.math module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-monty.msgpack">
+<span id="monty-msgpack-module"></span><h1>monty.msgpack module<a class="headerlink" href="#module-monty.msgpack" title="Permalink to this headline">¶</a></h1>
+<p>msgpack serialization and deserialization utilities. Right now, this is a stub
+using monty.json encoder and decoders. The naming is just for clearer usage with
+msgpack’s default and object_hook naming.</p>
+<dl class="function">
+<dt id="monty.msgpack.default">
+<code class="descname">default</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>For use with msgpack.packb(obj, default=default). Supports Monty’s as_dict
+protocol, numpy arrays and datetime.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.msgpack.object_hook">
+<code class="descname">object_hook</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#object_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.object_hook" title="Permalink to this definition">¶</a></dt>
+<dd><p>For use with msgpack.unpackb(dict, object_hook=object_hook.).  Supports
+Monty’s as_dict protocol, numpy arrays and datetime.</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="monty.html">monty package</a><ul>
+      <li>Previous: <a href="monty.math.html" title="previous chapter">monty.math module</a></li>
+      <li>Next: <a href="monty.operator.html" title="next chapter">monty.operator module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/monty.msgpack.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

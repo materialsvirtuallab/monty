@@ -1,0 +1,195 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.inspect &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for monty.inspect</h1><div class="highlight"><pre>
+<span></span><span class="c1"># coding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Useful additional functions to help get information about live objects</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">from</span> <span class="nn">inspect</span> <span class="k">import</span> <span class="n">currentframe</span><span class="p">,</span> <span class="n">getframeinfo</span><span class="p">,</span> <span class="n">stack</span><span class="p">,</span> <span class="n">getouterframes</span>
+
+
+<div class="viewcode-block" id="all_subclasses"><a class="viewcode-back" href="../../monty.inspect.html#monty.inspect.all_subclasses">[docs]</a><span class="k">def</span> <span class="nf">all_subclasses</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a class `cls`, this recursive function returns a list with</span>
+<span class="sd">    all subclasses, subclasses of subclasses, and so on.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subclasses</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span> 
+    <span class="k">return</span> <span class="n">subclasses</span> <span class="o">+</span> <span class="p">[</span><span class="n">g</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">subclasses</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">all_subclasses</span><span class="p">(</span><span class="n">s</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="find_top_pyfile"><a class="viewcode-back" href="../../monty.inspect.html#monty.inspect.find_top_pyfile">[docs]</a><span class="k">def</span> <span class="nf">find_top_pyfile</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function inspects the Cpython frame to find the path of the script.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span> <span class="nn">os</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="n">currentframe</span><span class="p">()</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">finfo</span> <span class="o">=</span> <span class="n">getframeinfo</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="c1">#print(getframeinfo(frame))</span>
+            <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">finfo</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">f_back</span></div>
+
+
+<div class="viewcode-block" id="caller_name"><a class="viewcode-back" href="../../monty.inspect.html#monty.inspect.caller_name">[docs]</a><span class="k">def</span> <span class="nf">caller_name</span><span class="p">(</span><span class="n">skip</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a name of a caller in the format module.class.method</span>
+<span class="sd">    </span>
+<span class="sd">    `skip` specifies how many levels of stack to skip while getting caller</span>
+<span class="sd">    name. skip=1 means &quot;who calls me&quot;, skip=2 &quot;who calls my caller&quot; etc.</span>
+<span class="sd">       </span>
+<span class="sd">    An empty string is returned if skipped levels exceed stack height</span>
+
+<span class="sd">    Taken from:</span>
+
+<span class="sd">        https://gist.github.com/techtonik/2151727</span>
+
+<span class="sd">    Public Domain, i.e. feel free to copy/paste</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">+</span> <span class="n">skip</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stack</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+      <span class="k">return</span> <span class="s1">&#39;&#39;</span>
+    <span class="n">parentframe</span> <span class="o">=</span> <span class="n">stack</span><span class="p">[</span><span class="n">start</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>    
+    
+    <span class="n">name</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">module</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getmodule</span><span class="p">(</span><span class="n">parentframe</span><span class="p">)</span>
+    <span class="c1"># `modname` can be None when frame is executed directly in console</span>
+    <span class="c1"># TODO(techtonik): consider using __main__</span>
+    <span class="k">if</span> <span class="n">module</span><span class="p">:</span>
+        <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="c1"># detect classname</span>
+    <span class="k">if</span> <span class="s1">&#39;self&#39;</span> <span class="ow">in</span> <span class="n">parentframe</span><span class="o">.</span><span class="n">f_locals</span><span class="p">:</span>
+        <span class="c1"># I don&#39;t know any way to detect call from the object method</span>
+        <span class="c1"># XXX: there seems to be no way to detect static method call - it will</span>
+        <span class="c1">#      be just a function call</span>
+        <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parentframe</span><span class="o">.</span><span class="n">f_locals</span><span class="p">[</span><span class="s1">&#39;self&#39;</span><span class="p">]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+    <span class="n">codename</span> <span class="o">=</span> <span class="n">parentframe</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span>
+    <span class="k">if</span> <span class="n">codename</span> <span class="o">!=</span> <span class="s1">&#39;&lt;module&gt;&#39;</span><span class="p">:</span>  <span class="c1"># top level usually</span>
+        <span class="n">name</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="n">codename</span> <span class="p">)</span> <span class="c1"># function or a method</span>
+    <span class="k">del</span> <span class="n">parentframe</span>
+    <span class="k">return</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="initializer"><a class="viewcode-back" href="../../monty.inspect.html#monty.inspect.initializer">[docs]</a><span class="k">def</span> <span class="nf">initializer</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Automatically assigns the parameters.</span>
+<span class="sd">    http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables</span>
+
+<span class="sd">    &gt;&gt;&gt; class process:</span>
+<span class="sd">    ...     @initializer</span>
+<span class="sd">    ...     def __init__(self, cmd, reachable=False, user=&#39;root&#39;):</span>
+<span class="sd">    ...         pass</span>
+<span class="sd">    &gt;&gt;&gt; p = process(&#39;halt&#39;, True)</span>
+<span class="sd">    &gt;&gt;&gt; p.cmd, p.reachable, p.user</span>
+<span class="sd">    (&#39;halt&#39;, True, &#39;root&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">names</span><span class="p">,</span> <span class="n">varargs</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span> <span class="n">defaults</span> <span class="o">=</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getargspec</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+
+    <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
+    <span class="nd">@wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">):</span>
+        <span class="c1">#print(&quot;names&quot;, names, &quot;defaults&quot;, defaults)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">names</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">args</span><span class="p">))</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">kargs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+
+        <span class="c1"># Avoid TypeError: argument to reversed() must be a sequence</span>
+        <span class="k">if</span> <span class="n">defaults</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">names</span><span class="p">),</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">defaults</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kargs</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

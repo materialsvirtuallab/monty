@@ -1,0 +1,218 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.tempfile &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="../../_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for monty.tempfile</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Temporary directory and file creation utilities.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">pathlib2</span> <span class="k">import</span> <span class="n">Path</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="kn">from</span> <span class="nn">monty.shutil</span> <span class="k">import</span> <span class="n">copy_r</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Shyue Ping Ong&quot;</span>
+<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2012, The Materials Project&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1&quot;</span>
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Shyue Ping Ong&quot;</span>
+<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;ongsp@ucsd.edu&quot;</span>
+<span class="n">__date__</span> <span class="o">=</span> <span class="s2">&quot;3/6/14&quot;</span>
+
+
+<div class="viewcode-block" id="ScratchDir"><a class="viewcode-back" href="../../monty.tempfile.html#monty.tempfile.ScratchDir">[docs]</a><span class="k">class</span> <span class="nc">ScratchDir</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. note::</span>
+
+<span class="sd">        With effect from Python 3.2, tempfile.TemporaryDirectory already</span>
+<span class="sd">        implements much of the functionality of ScratchDir. However, it does</span>
+<span class="sd">        not provide options for copying of files to and from (though it is</span>
+<span class="sd">        possible to do this with other methods provided by shutil).</span>
+
+<span class="sd">    Creates a &quot;with&quot; context manager that automatically handles creation of</span>
+<span class="sd">    temporary directories (utilizing Python&#39;s build in temp directory</span>
+<span class="sd">    functions) and cleanup when done. This improves on Python&#39;s built in</span>
+<span class="sd">    functions by allowing for truly temporary workspace that are deleted</span>
+<span class="sd">    when it is done. The way it works is as follows:</span>
+
+<span class="sd">    1. Create a temp dir in specified root path.</span>
+<span class="sd">    2. Optionally copy input files from current directory to temp dir.</span>
+<span class="sd">    3. Change to temp dir.</span>
+<span class="sd">    4. User performs specified operations.</span>
+<span class="sd">    5. Optionally copy generated output files back to original directory.</span>
+<span class="sd">    6. Change back to original directory.</span>
+<span class="sd">    7. Delete temp dir.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">SCR_LINK</span> <span class="o">=</span> <span class="s2">&quot;scratch_link&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rootpath</span><span class="p">,</span> <span class="n">create_symbolic_link</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">copy_from_current_on_enter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">copy_to_current_on_exit</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes scratch directory given a **root** path. There is no need</span>
+<span class="sd">        to try to create unique directory names. The code will generate a</span>
+<span class="sd">        temporary sub directory in the rootpath. The way to use this is using a</span>
+<span class="sd">        with context manager. Example::</span>
+
+<span class="sd">            with ScratchDir(&quot;/scratch&quot;):</span>
+<span class="sd">                do_something()</span>
+
+<span class="sd">        If the root path does not exist or is None, this will function as a</span>
+<span class="sd">        simple pass through, i.e., nothing happens.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rootpath (str/Path): The path in which to create temp subdirectories.</span>
+<span class="sd">                If this is None, no temp directories will be created and</span>
+<span class="sd">                this will just be a simple pass through.</span>
+<span class="sd">            create_symbolic_link (bool): Whether to create a symbolic link in</span>
+<span class="sd">                the current working directory to the scratch directory</span>
+<span class="sd">                created.</span>
+<span class="sd">            copy_from_current_on_enter (bool): Whether to copy all files from</span>
+<span class="sd">                the current directory (recursively) to the temp dir at the</span>
+<span class="sd">                start, e.g., if input files are needed for performing some</span>
+<span class="sd">                actions. Defaults to False.</span>
+<span class="sd">            copy_to_current_on_exit (bool): Whether to copy files from the</span>
+<span class="sd">                scratch to the current directory (recursively) at the end. E</span>
+<span class="sd">                .g., if output files are generated during the operation.</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">Path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+            <span class="n">rootpath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rootpath</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">rootpath</span><span class="p">)</span> <span class="k">if</span> <span class="n">rootpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> \
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_symbolic_link</span> <span class="o">=</span> <span class="n">create_symbolic_link</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_copy</span> <span class="o">=</span> <span class="n">copy_from_current_on_enter</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end_copy</span> <span class="o">=</span> <span class="n">copy_to_current_on_exit</span>
+
+    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">tempdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cwd</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span><span class="p">):</span>
+            <span class="n">tempdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_copy</span><span class="p">:</span>
+                <span class="n">copy_r</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">tempdir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_symbolic_link</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="n">ScratchDir</span><span class="o">.</span><span class="n">SCR_LINK</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tempdir</span>
+
+    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">end_copy</span><span class="p">:</span>
+                <span class="n">tempdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">)</span>
+                <span class="n">copy_r</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">,</span> <span class="n">tempdir</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">):</span>
+                    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">f</span> <span class="o">!=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">tempdir</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+                                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+                    <span class="k">except</span><span class="p">:</span>
+                        <span class="c1"># Ignore file not found.</span>
+                        <span class="k">pass</span>
+                <span class="n">copy_r</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">)</span>
+                <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
+                
+            <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_symbolic_link</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ScratchDir</span><span class="o">.</span><span class="n">SCR_LINK</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

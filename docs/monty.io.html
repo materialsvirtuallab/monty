@@ -1,0 +1,251 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.io module &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="monty.itertools module" href="monty.itertools.html" />
+    <link rel="prev" title="monty.inspect module" href="monty.inspect.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="monty.itertools.html" title="monty.itertools module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="monty.inspect.html" title="monty.inspect module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-monty.io">
+<span id="monty-io-module"></span><h1>monty.io module<a class="headerlink" href="#module-monty.io" title="Permalink to this headline">¶</a></h1>
+<p>Augments Python’s suite of IO functions with useful transparent support for
+compressed files.</p>
+<dl class="class">
+<dt id="monty.io.FileLock">
+<em class="property">class </em><code class="descname">FileLock</code><span class="sig-paren">(</span><em>file_name</em>, <em>timeout=10</em>, <em>delay=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A file locking mechanism that has context-manager support so you can use
+it in a with statement. This should be relatively cross-compatible as it
+doesn’t rely on msvcrt or fcntl for the locking.
+Taken from <a class="reference external" href="http://www.evanfosmark.com/2009/01/cross-platform-file-locking">http://www.evanfosmark.com/2009/01/cross-platform-file-locking</a>
+-support-in-python/</p>
+<p>Prepare the file locker. Specify the file to lock and optionally
+the maximum timeout and the delay between each attempt to lock.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>file_name</strong> – Name of file to lock.</li>
+<li><strong>timeout</strong> – Maximum timeout for locking. Defaults to 10.</li>
+<li><strong>delay</strong> – Delay between each attempt to lock. Defaults to 0.05.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="monty.io.FileLock.Error">
+<code class="descname">Error</code><a class="headerlink" href="#monty.io.FileLock.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="#monty.io.FileLockException" title="monty.io.FileLockException"><code class="xref py py-class docutils literal"><span class="pre">FileLockException</span></code></a></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="monty.io.FileLock.acquire">
+<code class="descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock.acquire"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock.acquire" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquire the lock, if possible. If the lock is in use, it check again
+every <cite>delay</cite> seconds. It does this until it either gets the lock or
+exceeds <cite>timeout</cite> number of seconds, in which case it throws
+an exception.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="monty.io.FileLock.release">
+<code class="descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get rid of the lock by deleting the lockfile.
+When working in a <cite>with</cite> statement, this gets automatically
+called at the end.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="monty.io.FileLockException">
+<em class="property">exception </em><code class="descname">FileLockException</code><a class="reference internal" href="_modules/monty/io.html#FileLockException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLockException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>Exception raised by FileLock.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.io.get_open_fds">
+<code class="descname">get_open_fds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#get_open_fds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.get_open_fds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number of open file descriptors for current process</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.io.reverse_readfile">
+<code class="descname">reverse_readfile</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>A much faster reverse read of file by using Python’s mmap to generate a
+memory-mapped file. It is slower for very small files than
+reverse_readline, but at least 2x faster for large files (the primary use
+of such a method).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>str</em>) – Name of file to read.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Yields:</th><td class="field-body">Lines from the file in reverse order.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.io.reverse_readline">
+<code class="descname">reverse_readline</code><span class="sig-paren">(</span><em>m_file</em>, <em>blk_size=4096</em>, <em>max_mem=4000000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generator method to read a file line-by-line, but backwards. This allows
+one to efficiently get data at the end of a file.</p>
+<p>Based on code by Peter Astrand &lt;<a class="reference external" href="mailto:astrand&#37;&#52;&#48;cendio&#46;se">astrand<span>&#64;</span>cendio<span>&#46;</span>se</a>&gt;, using modifications by
+Raymond Hettinger and Kevin German.
+<a class="reference external" href="http://code.activestate.com/recipes/439045-read-a-text-file-backwards">http://code.activestate.com/recipes/439045-read-a-text-file-backwards</a>
+-yet-another-implementat/</p>
+<p>Reads file forwards and reverses in memory for files smaller than the
+max_mem parameter, or for gzip files where reverse seeks are not supported.</p>
+<p>Files larger than max_mem are dynamically read backwards.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>m_file</strong> (<em>File</em>) – File stream to read (backwards)</li>
+<li><strong>blk_size</strong> (<em>int</em>) – The buffer size. Defaults to 4096.</li>
+<li><strong>max_mem</strong> (<em>int</em>) – The maximum amount of memory to involve in this
+operation. This is used to determine when to reverse a file
+in-memory versus seeking portions of a file. For bz2 files,
+this sets the maximum block size.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Generator that returns lines from the file. Similar behavior to the
+file.readline() method, except the lines are returned from the back
+of the file.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.io.zopen">
+<code class="descname">zopen</code><span class="sig-paren">(</span><em>filename</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#zopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.zopen" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function wraps around the bz2, gzip and standard python’s open
+function to deal intelligently with bzipped, gzipped or standard text
+files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filename</strong> (<em>str/Path</em>) – filename or pathlib.Path.</li>
+<li><strong>*args</strong> – Standard args for python open(..). E.g., ‘r’ for read, ‘w’ for
+write.</li>
+<li><strong>**kwargs</strong> – Standard kwargs for python open(..).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">File-like object. Supports with context.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="monty.html">monty package</a><ul>
+      <li>Previous: <a href="monty.inspect.html" title="previous chapter">monty.inspect module</a></li>
+      <li>Next: <a href="monty.itertools.html" title="next chapter">monty.itertools module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/monty.io.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

@@ -1,0 +1,151 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.inspect module &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="monty.io module" href="monty.io.html" />
+    <link rel="prev" title="monty.functools module" href="monty.functools.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="monty.io.html" title="monty.io module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="monty.functools.html" title="monty.functools module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-monty.inspect">
+<span id="monty-inspect-module"></span><h1>monty.inspect module<a class="headerlink" href="#module-monty.inspect" title="Permalink to this headline">¶</a></h1>
+<p>Useful additional functions to help get information about live objects</p>
+<dl class="function">
+<dt id="monty.inspect.all_subclasses">
+<code class="descname">all_subclasses</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a class <cite>cls</cite>, this recursive function returns a list with
+all subclasses, subclasses of subclasses, and so on.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.inspect.caller_name">
+<code class="descname">caller_name</code><span class="sig-paren">(</span><em>skip=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a name of a caller in the format module.class.method</p>
+<p><cite>skip</cite> specifies how many levels of stack to skip while getting caller
+name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
+<p>An empty string is returned if skipped levels exceed stack height</p>
+<p>Taken from:</p>
+<blockquote>
+<div><a class="reference external" href="https://gist.github.com/techtonik/2151727">https://gist.github.com/techtonik/2151727</a></div></blockquote>
+<p>Public Domain, i.e. feel free to copy/paste</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.inspect.find_top_pyfile">
+<code class="descname">find_top_pyfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#find_top_pyfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.find_top_pyfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function inspects the Cpython frame to find the path of the script.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.inspect.initializer">
+<code class="descname">initializer</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically assigns the parameters.
+<a class="reference external" href="http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables">http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables</a></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">process</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nd">@initializer</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">reachable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">pass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s1">&#39;halt&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">reachable</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">user</span>
+<span class="go">(&#39;halt&#39;, True, &#39;root&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="monty.html">monty package</a><ul>
+      <li>Previous: <a href="monty.functools.html" title="previous chapter">monty.functools module</a></li>
+      <li>Next: <a href="monty.io.html" title="next chapter">monty.io module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/monty.inspect.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

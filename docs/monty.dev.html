@@ -1,0 +1,200 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.dev module &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="monty.fnmatch module" href="monty.fnmatch.html" />
+    <link rel="prev" title="monty.design_patterns module" href="monty.design_patterns.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="monty.fnmatch.html" title="monty.fnmatch module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="monty.design_patterns.html" title="monty.design_patterns module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-monty.dev">
+<span id="monty-dev-module"></span><h1>monty.dev module<a class="headerlink" href="#module-monty.dev" title="Permalink to this headline">¶</a></h1>
+<p>This module implements several useful functions and decorators that can be
+particularly useful for developers. E.g., deprecating methods / classes, etc.</p>
+<dl class="function">
+<dt id="monty.dev.deprecated">
+<code class="descname">deprecated</code><span class="sig-paren">(</span><em>replacement=None</em>, <em>message=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#deprecated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.deprecated" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator to mark classes or functions as deprecated,
+with a possible replacement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>replacement</strong> (<em>callable</em>) – A replacement class or method.</li>
+<li><strong>message</strong> (<em>str</em>) – A warning message to be displayed.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Original function, but with a warning to use the updated class.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.dev.get_ncpus">
+<code class="descname">get_ncpus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#get_ncpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.get_ncpus" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If you are using Python &gt;= 2.7, multiprocessing.cpu_count() already
+provides the number of CPUs. In fact, this is the first method tried.
+The purpose of this function is to cater to old Python versions that
+still exist on many Linux style clusters.</p>
+</div>
+<p>Number of virtual or physical CPUs on this system, i.e.
+user/real as output by time(1) when called with an optimally scaling
+userspace-only program. Return -1 if ncpus cannot be detected. Taken from:
+<a class="reference external" href="http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of">http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of</a>-
+cpus-in-python</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.dev.install_excepthook">
+<code class="descname">install_excepthook</code><span class="sig-paren">(</span><em>hook_type='color'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#install_excepthook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.install_excepthook" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function replaces the original python traceback with an improved
+version from Ipython. Use <cite>color</cite> for colourful traceback formatting,
+<cite>verbose</cite> for Ka-Ping Yee’s “cgitb.py” version kwargs are the keyword
+arguments passed to the constructor. See IPython.core.ultratb.py for more
+info.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">0 if hook is installed successfully.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="monty.dev.requires">
+<em class="property">class </em><code class="descname">requires</code><span class="sig-paren">(</span><em>condition</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#requires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.requires" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Decorator to mark classes or functions as requiring a specified condition
+to be true. This can be used to present useful error messages for
+optional dependencies. For example, decorating the following code will
+check if scipy is present and if not, a runtime error will be raised if
+someone attempts to call the use_scipy function:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">scipy</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">scipy</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="nd">@requires</span><span class="p">(</span><span class="n">scipy</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;scipy is not present.&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">use_scipy</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">majver</span><span class="p">)</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>condition</strong> – Condition necessary to use the class or function.</li>
+<li><strong>message</strong> – A message to be displayed if the condition is not True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="monty.html">monty package</a><ul>
+      <li>Previous: <a href="monty.design_patterns.html" title="previous chapter">monty.design_patterns module</a></li>
+      <li>Next: <a href="monty.fnmatch.html" title="next chapter">monty.fnmatch module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/monty.dev.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>

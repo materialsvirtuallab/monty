@@ -1,0 +1,259 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>monty.string module &#8212; monty 1.0.2 documentation</title>
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="monty.subprocess module" href="monty.subprocess.html" />
+    <link rel="prev" title="monty.shutil module" href="monty.shutil.html" />
+
+   
+  
+  <link media="only screen and (max-device-width: 480px)" href="_static/small_flask.css" type= "text/css" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="monty.subprocess.html" title="monty.subprocess module"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="monty.shutil.html" title="monty.shutil module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-monty.string">
+<span id="monty-string-module"></span><h1>monty.string module<a class="headerlink" href="#module-monty.string" title="Permalink to this headline">¶</a></h1>
+<p>Useful additional string functions.</p>
+<dl class="function">
+<dt id="monty.string.boxed">
+<code class="descname">boxed</code><span class="sig-paren">(</span><em>msg</em>, <em>ch='='</em>, <em>pad=5</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#boxed"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.boxed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a string in a box</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>msg</strong> – Input string.</li>
+<li><strong>ch</strong> – Character used to form the box.</li>
+<li><strong>pad</strong> – Number of characters ch added before and after msg.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">boxed</span><span class="p">(</span><span class="s2">&quot;hello&quot;</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="go">***********</span>
+<span class="go">** hello **</span>
+<span class="go">***********</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.indent">
+<code class="descname">indent</code><span class="sig-paren">(</span><em>lines</em>, <em>amount</em>, <em>ch=' '</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#indent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.indent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indent the lines in a string by padding each one with proper number of pad characters</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.is_string">
+<code class="descname">is_string</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#is_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.is_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>True if s behaves like a string (duck typing test).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.list_strings">
+<code class="descname">list_strings</code><span class="sig-paren">(</span><em>arg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#list_strings"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.list_strings" title="Permalink to this definition">¶</a></dt>
+<dd><p>Always return a list of strings, given a string or list of strings as
+input.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Examples:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">list_strings</span><span class="p">(</span><span class="s1">&#39;A single string&#39;</span><span class="p">)</span>
+<span class="go">[&#39;A single string&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">list_strings</span><span class="p">([</span><span class="s1">&#39;A single string in a list&#39;</span><span class="p">])</span>
+<span class="go">[&#39;A single string in a list&#39;]</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">list_strings</span><span class="p">([</span><span class="s1">&#39;A&#39;</span><span class="p">,</span><span class="s1">&#39;list&#39;</span><span class="p">,</span><span class="s1">&#39;of&#39;</span><span class="p">,</span><span class="s1">&#39;strings&#39;</span><span class="p">])</span>
+<span class="go">[&#39;A&#39;, &#39;list&#39;, &#39;of&#39;, &#39;strings&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.make_banner">
+<code class="descname">make_banner</code><span class="sig-paren">(</span><em>s</em>, <em>width=78</em>, <em>mark='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#make_banner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.make_banner" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="monty.string.marquee">
+<code class="descname">marquee</code><span class="sig-paren">(</span><em>text=''</em>, <em>width=78</em>, <em>mark='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#marquee"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.marquee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the input string centered in a ‘marquee’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> (<em>str</em>) – Input string</li>
+<li><strong>width</strong> (<em>int</em>) – Width of final output string.</li>
+<li><strong>mark</strong> (<em>str</em>) – Character used to fill string.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Examples:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">marquee</span><span class="p">(</span><span class="s1">&#39;A test&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+<span class="go">&#39;**************** A test ****************&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">marquee</span><span class="p">(</span><span class="s1">&#39;A test&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">mark</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">)</span>
+<span class="go">&#39;---------------- A test ----------------&#39;</span>
+</pre></div>
+</div>
+<p>marquee(‘A test’,40, ‘ ‘)
+‘                 A test                 ‘</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.remove_non_ascii">
+<code class="descname">remove_non_ascii</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#remove_non_ascii"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.remove_non_ascii" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove non-ascii characters in a file. Needed when support for non-ASCII
+is not available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<em>str</em>) – Input string</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String with all non-ascii characters removed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.str2unicode">
+<code class="descname">str2unicode</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#str2unicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.str2unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts strings to unicode in python 2. Ignores Python 3 strings.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<em>str/unicode</em>) – Input string / unicode.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Unicode.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.string.unicode2str">
+<code class="descname">unicode2str</code><span class="sig-paren">(</span><em>s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#unicode2str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.unicode2str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Forces a unicode to a string in Python 2, but transparently handles
+Python 3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>s</strong> (<em>str/unicode</em>) – Input string / unicode.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">str in Python 2. Unchanged otherwise.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="monty.html">monty package</a><ul>
+      <li>Previous: <a href="monty.shutil.html" title="previous chapter">monty.shutil module</a></li>
+      <li>Next: <a href="monty.subprocess.html" title="next chapter">monty.subprocess module</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/monty.string.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+
+    <div class="footer">
+      &copy; Copyright 2014, Shyue Ping Ong.
+    </div>
+
+
+  </body>
+</html>
