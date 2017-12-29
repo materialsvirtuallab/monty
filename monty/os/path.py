@@ -105,11 +105,9 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
     # Build shell-style wildcards.
     from monty.fnmatch import WildCard
     if exclude_dirs is not None:
-        assert include_dirs is None
         exclude_dirs = WildCard(exclude_dirs)
 
     if include_dirs is not None:
-        assert exclude_dirs is None
         include_dirs = WildCard(include_dirs)
 
     mangle = dict(
