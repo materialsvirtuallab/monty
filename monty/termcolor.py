@@ -178,8 +178,8 @@ def colored_map(text, cmap):
 
 def cprint_map(text, cmap, **kwargs):
     """
-    Print colorize text. 
-    cmap is a dict mapping keys to color options. 
+    Print colorize text.
+    cmap is a dict mapping keys to color options.
     kwargs are passed to print function
 
     Example:
@@ -196,8 +196,8 @@ def cprint_map(text, cmap, **kwargs):
 def get_terminal_size():
     """"
     Return the size of the terminal as (nrow, ncols)
-    
-    Based on: 
+
+    Based on:
 
         http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
     """
@@ -208,10 +208,12 @@ def get_terminal_size():
         pass
 
     env = os.environ
+
     def ioctl_GWINSZ(fd):
         try:
             import fcntl, termios, struct
-            rc = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
+            rc = struct.unpack('hh',
+                               fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
             return rc
         except:
             return None

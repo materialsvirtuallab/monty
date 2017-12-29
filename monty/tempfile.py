@@ -116,14 +116,14 @@ class ScratchDir(object):
                                 os.remove(fpath)
                             else:
                                 shutil.rmtree(fpath)
-                    except:
+                    except FileNotFoundError:
                         # Ignore file not found.
                         pass
                 copy_r(".", self.cwd)
                 shutil.rmtree(tempdir)
-                
+
             os.chdir(self.cwd)
             shutil.rmtree(self.tempdir)
-            
+
             if self.create_symbolic_link:
                 os.remove(ScratchDir.SCR_LINK)

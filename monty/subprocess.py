@@ -21,7 +21,7 @@ class Command(object):
         https://gist.github.com/kirpit/1306188
 
     .. attribute:: retcode
-        
+
         Return code of the subprocess
 
     .. attribute:: killed
@@ -40,6 +40,7 @@ class Command(object):
         com = Command("sleep 1").run(timeout=2)
         print(com.retcode, com.killed, com.output, com.output)
     """
+
     def __init__(self, command):
         from .string import is_string
         if is_string(command):
@@ -66,11 +67,11 @@ class Command(object):
 
         def target(**kw):
             try:
-                #print('Thread started')
+                # print('Thread started')
                 self.process = Popen(self.command, **kw)
                 self.output, self.error = self.process.communicate()
                 self.retcode = self.process.returncode
-                #print('Thread stopped')
+                # print('Thread stopped')
             except:
                 import traceback
                 self.error = traceback.format_exc()
@@ -90,7 +91,7 @@ class Command(object):
         thread.join(timeout)
 
         if thread.is_alive():
-            #print("Terminating process")
+            # print("Terminating process")
             self.process.terminate()
             self.killed = True
             thread.join()
