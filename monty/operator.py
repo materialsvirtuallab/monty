@@ -15,7 +15,6 @@ def operator_from_str(op):
 
     >>> assert operator_from_str("==")(1, 1) and operator_from_str("+")(1,1) == 2
     """
-    import operator
     d = {"==": operator.eq,
          "!=": operator.ne,
          ">": operator.gt,

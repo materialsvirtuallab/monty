@@ -14,8 +14,8 @@ import time
 import errno
 import mmap
 import subprocess
+import io
 
-from io import open
 from monty.tempfile import ScratchDir as ScrDir
 from monty.dev import deprecated
 
@@ -68,7 +68,7 @@ def zopen(filename, *args, **kwargs):
     elif file_ext in ("GZ", "Z"):
         return gzip.open(filename, *args, **kwargs)
     else:
-        return open(filename, *args, **kwargs)
+        return io.open(filename, *args, **kwargs)
 
 
 def reverse_readfile(filename):
