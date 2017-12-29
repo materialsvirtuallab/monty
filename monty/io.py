@@ -257,7 +257,7 @@ class FileLock(object):
             self.acquire()
         return self
 
-    def __exit__(self, type, value, traceback):
+    def __exit__(self, type_, value, traceback):
         """
         Activated at the end of the with statement. It automatically releases
         the lock if it isn't locked.

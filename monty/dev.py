@@ -20,7 +20,6 @@ __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -36,6 +35,7 @@ def deprecated(replacement=None, message=None):
     Returns:
         Original function, but with a warning to use the updated class.
     """
+
     def wrap(old):
         def wrapped(*args, **kwargs):
             msg = "%s is deprecated" % old.__name__
@@ -52,7 +52,9 @@ def deprecated(replacement=None, message=None):
             warnings.simplefilter('default')
             warnings.warn(msg, DeprecationWarning, stacklevel=2)
             return old(*args, **kwargs)
+
         return wrapped
+
     return wrap
 
 
@@ -77,6 +79,7 @@ class requires(object):
         condition: Condition necessary to use the class or function.
         message: A message to be displayed if the condition is not True.
     """
+
     def __init__(self, condition, message):
         self.condition = condition
         self.message = message
@@ -87,6 +90,7 @@ class requires(object):
             if not self.condition:
                 raise RuntimeError(self.message)
             return _callable(*args, **kwargs)
+
         return decorated
 
 
@@ -200,13 +204,14 @@ def install_excepthook(hook_type="color", **kwargs):
     info.
 
     Return:
-        0 if hook is installed successfully. 
+        0 if hook is installed successfully.
     """
     try:
         from IPython.core import ultratb
     except ImportError:
         import warnings
-        warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
+        warnings.warn(
+            "Cannot install excepthook, IPyhon.core.ultratb not available")
         return 1
 
     # Select the hook.

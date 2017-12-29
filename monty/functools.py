@@ -41,9 +41,9 @@ class _HashedSeq(list):
 
     __slots__ = 'hashvalue'
 
-    def __init__(self, tup, hash=hash):
+    def __init__(self, tup, hashfunc=hash):
         self[:] = tup
-        self.hashvalue = hash(tup)
+        self.hashvalue = hashfunc(tup)
 
     def __hash__(self):
         return self.hashvalue
@@ -51,8 +51,7 @@ class _HashedSeq(list):
 
 def _make_key(args, kwds, typed,
               kwd_mark=(object(),),
-              fasttypes={int, str, frozenset, type(None)},
-              sorted=sorted, tuple=tuple, type=type, len=len):
+              fasttypes={int, str, frozenset, type(None)}):
     """
     Make a cache key from optionally typed positional and keyword arguments
 
@@ -322,7 +321,7 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
             except exception_tuple:
                 return retval_if_exc
             else:
-                raise
+                raise RuntimeError()
         return wrapper
     return decorator
 

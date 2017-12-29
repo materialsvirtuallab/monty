@@ -1,7 +1,4 @@
 # coding: utf-8
-from __future__ import division, unicode_literals, absolute_import
-
-import bisect as bs
 
 """
 Additional bisect functions. Taken from
@@ -11,6 +8,10 @@ tricky or awkward to use for common searching tasks.
 The functions show how to transform them into the standard lookups for sorted
 lists.
 """
+
+from __future__ import division, unicode_literals, absolute_import
+
+import bisect as bs
 
 __author__ = 'Matteo Giantomassi'
 __copyright__ = 'Copyright 2013, The Materials Virtual Lab'
