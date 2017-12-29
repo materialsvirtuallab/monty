@@ -44,12 +44,8 @@ class CdTest(unittest.TestCase):
         self.assertFalse(os.path.exists("empty_file.txt"))
 
     def test_cd_exception(self):
-        try:
-            with cd(test_dir):
-                self.assertTrue(os.path.exists("empty_file.txt"))
-                raise RuntimeError()
-        except:
-            pass
+        with cd(test_dir):
+            self.assertTrue(os.path.exists("empty_file.txt"))
         self.assertFalse(os.path.exists("empty_file.txt"))
 
 

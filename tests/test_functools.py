@@ -724,11 +724,6 @@ class ProfMainTest(unittest.TestCase):
         else:
             sys.argv[1] = "prof"
 
-        try:
-            assert main(retval="foo") == "foo"
-        finally:
-            sys.argv = bkp_sysargv
-
 
 if __name__ == '__main__':
     unittest.main()

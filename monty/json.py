@@ -8,6 +8,7 @@ import json
 import datetime
 import six
 import inspect
+
 try:
     from inspect import getfullargspec as getargspec
 except ImportError:
@@ -212,7 +213,7 @@ class MontyDecoder(json.JSONDecoder):
                 return np.array(d["data"], dtype=d["dtype"])
 
             elif (bson is not None) and modname == "bson.objectid" and \
-                            classname == "ObjectId":
+                    classname == "ObjectId":
                 return bson.objectid.ObjectId(d["oid"])
 
             return {self.process_decoded(k): self.process_decoded(v)
@@ -222,8 +223,8 @@ class MontyDecoder(json.JSONDecoder):
 
         return d
 
-    def decode(self, *args, **kwargs):
-        d = json.JSONDecoder.decode(self, *args, **kwargs)
+    def decode(self, s):
+        d = json.JSONDecoder.decode(self, s)
         return self.process_decoded(d)
 
 
@@ -258,7 +259,8 @@ def jsanitize(obj, strict=False, allow_bson=False):
         Sanitized dict that can be json serialized.
     """
     if allow_bson and (isinstance(obj, datetime.datetime) or \
-            (bson is not None and isinstance(obj, bson.objectid.ObjectId))):
+                       (bson is not None and isinstance(obj,
+                                                        bson.objectid.ObjectId))):
         return obj
     if isinstance(obj, (list, tuple)):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
@@ -282,4 +284,3 @@ def jsanitize(obj, strict=False, allow_bson=False):
             else:
                 return jsanitize(obj.as_dict(), strict=strict,
                                  allow_bson=allow_bson)
-
