@@ -1,5 +1,5 @@
 nose==1.3.7
-numpy==1.13.3
+numpy==1.14.0
 six==1.11.0
 ruamel.yaml==0.15.35
 msgpack-python==0.4.8
