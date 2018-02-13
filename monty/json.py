@@ -258,7 +258,7 @@ def jsanitize(obj, strict=False, allow_bson=False):
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if allow_bson and (isinstance(obj, datetime.datetime) or \
+    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or \
                        (bson is not None and isinstance(obj,
                                                         bson.objectid.ObjectId))):
         return obj
