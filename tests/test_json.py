@@ -151,5 +151,11 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(clean["a"], ['b', [1, 2, 3]])
         self.assertIsInstance(clean["b"], six.string_types)
 
+        d = {"a": bytes([0, 1, 2])}
+        clean = jsanitize(d, allow_bson=True)
+        self.assertEqual(clean["a"], bytes([0, 1, 2]))
+        self.assertIsInstance(clean["a"], bytes)
+
+
 if __name__ == "__main__":
     unittest.main()
