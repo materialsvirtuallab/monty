@@ -12,6 +12,7 @@ import json
 import datetime
 import six
 from bson.objectid import ObjectId
+from ast import literal_eval
 
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
@@ -155,6 +156,11 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertEqual(clean["a"], bytes([0, 1, 2]))
         self.assertIsInstance(clean["a"], bytes)
+
+        clean = jsanitize(d)
+        self.assertEqual(clean["a"],str(bytes([0, 1, 2])))
+        self.assertEqual(literal_eval(clean["a"]),bytes([0, 1, 2]))
+        self.assertIsInstance(clean["a"],str)
 
 
 if __name__ == "__main__":
