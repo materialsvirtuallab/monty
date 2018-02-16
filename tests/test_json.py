@@ -13,6 +13,7 @@ import datetime
 import six
 from bson.objectid import ObjectId
 from ast import literal_eval
+from builtins import bytes, str
 
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
