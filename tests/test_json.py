@@ -153,16 +153,11 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(clean["a"], ['b', [1, 2, 3]])
         self.assertIsInstance(clean["b"], six.string_types)
 
-        d = {"a": six.binary_type([0, 1, 2])}
+        rnd_bin = six.binary_type(np.random.rand(10))
+        d = {"a": six.binary_type(rnd_bin)}
         clean = jsanitize(d, allow_bson=True)
-        self.assertEqual(clean["a"], six.binary_type([0, 1, 2]))
+        self.assertEqual(clean["a"], six.binary_type(rnd_bin))
         self.assertIsInstance(clean["a"], six.binary_type)
-
-        clean = jsanitize(d)
-        self.assertEqual(clean["a"], str(six.binary_type([0, 1, 2])))
-        self.assertEqual(literal_eval(clean["a"]), six.binary_type([0, 1, 2]))
-        self.assertIsInstance(clean["a"], str)
-
 
 if __name__ == "__main__":
     unittest.main()
