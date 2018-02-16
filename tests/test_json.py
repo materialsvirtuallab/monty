@@ -13,7 +13,7 @@ import datetime
 import six
 from bson.objectid import ObjectId
 from ast import literal_eval
-from builtins import bytes, str
+
 
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
@@ -126,7 +126,7 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(type(x), ObjectId)
 
     def test_jsanitize(self):
-        #clean_json should have no effect on None types.
+        # clean_json should have no effect on None types.
         d = {"hello": 1, "world": None}
         clean = jsanitize(d)
         self.assertIsNone(clean["world"])
@@ -153,15 +153,15 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(clean["a"], ['b', [1, 2, 3]])
         self.assertIsInstance(clean["b"], six.string_types)
 
-        d = {"a": bytes([0, 1, 2])}
+        d = {"a": six.binary_type([0, 1, 2])}
         clean = jsanitize(d, allow_bson=True)
-        self.assertEqual(clean["a"], bytes([0, 1, 2]))
-        self.assertIsInstance(clean["a"], bytes)
+        self.assertEqual(clean["a"], six.binary_type([0, 1, 2]))
+        self.assertIsInstance(clean["a"], six.binary_type)
 
         clean = jsanitize(d)
-        self.assertEqual(clean["a"],str(bytes([0, 1, 2])))
-        self.assertEqual(literal_eval(clean["a"]),bytes([0, 1, 2]))
-        self.assertIsInstance(clean["a"],str)
+        self.assertEqual(clean["a"], str(six.binary_type([0, 1, 2])))
+        self.assertEqual(literal_eval(clean["a"]), six.binary_type([0, 1, 2]))
+        self.assertIsInstance(clean["a"], str)
 
 
 if __name__ == "__main__":
