@@ -87,7 +87,7 @@ def reverse_readfile(filename):
     """
     try:
         with zopen(filename, "rb") as f:
-            if isinstance(f, gzip.GzipFile):
+            if isinstance(f, gzip.GzipFile) or isinstance(f, bz2.BZ2File):
                 for l in reversed(f.readlines()):
                     yield l.decode("utf-8").rstrip()
             else:
