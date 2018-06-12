@@ -33,17 +33,9 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
-v1.0.2
+v1.0.3
 ------
-1. Misc bug fixes (tempdir on Windows)
-
-v1.0.1
-------
-1. Use CLoader and CDumper by default for speed.
-
-v1.0.0
-------
-1. Ruamel.yaml is now used as the default YAML parser and dumper.
+1. Bug fix for reverse_readfile for bz2 files (Alex Urban)
 
 
 :doc:`Older versions </changelog>`

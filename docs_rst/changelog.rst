@@ -1,6 +1,18 @@
 Change log
 ==========
 
+v1.0.2
+------
+1. Misc bug fixes (tempdir on Windows)
+
+v1.0.1
+------
+1. Use CLoader and CDumper by default for speed.
+
+v1.0.0
+------
+1. Ruamel.yaml is now used as the default YAML parser and dumper.
+
 v0.9.8
 ------
 1. Now ScratchDir functions as it should by replacing the original directory.
