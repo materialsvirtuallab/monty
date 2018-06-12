@@ -26,7 +26,7 @@ class RegrepTest(unittest.TestCase):
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        fname = os.path.join(test_dir, "three_thousand_lines.txt")
+        fname = os.path.join(test_dir, "3000_lines.txt")
         matches = regrep(fname, {"1": "1(\d+)", "3": "3(\d+)"}, postprocess=int)
         self.assertEqual(len(matches["1"]), 1380)
         self.assertEqual(len(matches["3"]), 571)
