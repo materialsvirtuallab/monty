@@ -1,5 +1,5 @@
-monty\.subprocess module
-========================
+monty.subprocess module
+=======================
 
 .. automodule:: monty.subprocess
     :members:

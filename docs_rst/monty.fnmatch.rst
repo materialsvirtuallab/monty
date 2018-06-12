@@ -1,5 +1,5 @@
-monty\.fnmatch module
-=====================
+monty.fnmatch module
+====================
 
 .. automodule:: monty.fnmatch
     :members:

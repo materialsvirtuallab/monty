@@ -1,5 +1,5 @@
-monty\.collections module
-=========================
+monty.collections module
+========================
 
 .. automodule:: monty.collections
     :members:

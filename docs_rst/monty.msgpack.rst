@@ -1,5 +1,5 @@
-monty\.msgpack module
-=====================
+monty.msgpack module
+====================
 
 .. automodule:: monty.msgpack
     :members:

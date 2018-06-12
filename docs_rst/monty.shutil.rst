@@ -1,5 +1,5 @@
-monty\.shutil module
-====================
+monty.shutil module
+===================
 
 .. automodule:: monty.shutil
     :members:

@@ -1,5 +1,5 @@
-monty\.serialization module
-===========================
+monty.serialization module
+==========================
 
 .. automodule:: monty.serialization
     :members:

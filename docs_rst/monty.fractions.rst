@@ -1,5 +1,5 @@
-monty\.fractions module
-=======================
+monty.fractions module
+======================
 
 .. automodule:: monty.fractions
     :members:

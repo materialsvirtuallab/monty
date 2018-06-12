@@ -1,5 +1,5 @@
-monty\.json module
-==================
+monty.json module
+=================
 
 .. automodule:: monty.json
     :members:

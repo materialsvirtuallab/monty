@@ -1,5 +1,5 @@
-monty\.termcolor module
-=======================
+monty.termcolor module
+======================
 
 .. automodule:: monty.termcolor
     :members:

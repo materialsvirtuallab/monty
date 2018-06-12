@@ -1,5 +1,5 @@
-monty\.tempfile module
-======================
+monty.tempfile module
+=====================
 
 .. automodule:: monty.tempfile
     :members:

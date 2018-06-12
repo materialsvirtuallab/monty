@@ -1,5 +1,5 @@
-monty\.logging module
-=====================
+monty.logging module
+====================
 
 .. automodule:: monty.logging
     :members:

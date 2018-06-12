@@ -1,5 +1,5 @@
-monty\.os\.path module
-======================
+monty.os.path module
+====================
 
 .. automodule:: monty.os.path
     :members:

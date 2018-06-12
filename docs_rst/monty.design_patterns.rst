@@ -1,5 +1,5 @@
-monty\.design\_patterns module
-==============================
+monty.design\_patterns module
+=============================
 
 .. automodule:: monty.design_patterns
     :members:

@@ -1,5 +1,5 @@
-monty\.bisect module
-====================
+monty.bisect module
+===================
 
 .. automodule:: monty.bisect
     :members:

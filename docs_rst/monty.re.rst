@@ -1,5 +1,5 @@
-monty\.re module
-================
+monty.re module
+===============
 
 .. automodule:: monty.re
     :members:

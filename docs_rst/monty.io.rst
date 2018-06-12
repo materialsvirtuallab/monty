@@ -1,5 +1,5 @@
-monty\.io module
-================
+monty.io module
+===============
 
 .. automodule:: monty.io
     :members:

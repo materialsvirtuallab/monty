@@ -1,5 +1,5 @@
-monty\.os package
-=================
+monty.os package
+================
 
 Submodules
 ----------

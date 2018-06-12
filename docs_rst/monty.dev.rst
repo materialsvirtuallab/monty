@@ -1,5 +1,5 @@
-monty\.dev module
-=================
+monty.dev module
+================
 
 .. automodule:: monty.dev
     :members:

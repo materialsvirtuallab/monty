@@ -1,5 +1,5 @@
-monty\.itertools module
-=======================
+monty.itertools module
+======================
 
 .. automodule:: monty.itertools
     :members:

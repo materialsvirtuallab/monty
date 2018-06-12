@@ -1,5 +1,5 @@
-monty\.math module
-==================
+monty.math module
+=================
 
 .. automodule:: monty.math
     :members:

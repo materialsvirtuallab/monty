@@ -1,5 +1,5 @@
-monty\.pprint module
-====================
+monty.pprint module
+===================
 
 .. automodule:: monty.pprint
     :members:

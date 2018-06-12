@@ -1,5 +1,5 @@
-monty\.string module
-====================
+monty.string module
+===================
 
 .. automodule:: monty.string
     :members:

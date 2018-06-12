@@ -1,5 +1,5 @@
-monty\.functools module
-=======================
+monty.functools module
+======================
 
 .. automodule:: monty.functools
     :members:

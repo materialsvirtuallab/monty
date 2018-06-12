@@ -1,5 +1,5 @@
-monty\.inspect module
-=====================
+monty.inspect module
+====================
 
 .. automodule:: monty.inspect
     :members:

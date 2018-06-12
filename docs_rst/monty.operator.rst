@@ -1,5 +1,5 @@
-monty\.operator module
-======================
+monty.operator module
+=====================
 
 .. automodule:: monty.operator
     :members:
