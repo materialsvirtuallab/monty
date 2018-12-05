@@ -13,7 +13,7 @@ from gzip import GzipFile
 from io import open
 
 from monty.shutil import copy_r, compress_file, decompress_file, \
-    compress_dir, decompress_dir, gzip_dir
+    compress_dir, decompress_dir, gzip_dir, remove
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
