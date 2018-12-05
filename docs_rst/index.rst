@@ -33,10 +33,14 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
+v1.0.4
+------
+1. monty.shutil.remove which allows symlinks removal. Also improved 
+   monty.tempfile.ScratchDir cleanup. (@shyamd)
+
 v1.0.3
 ------
 1. Bug fix for reverse_readfile for bz2 files (Alex Urban)
-
 
 :doc:`Older versions </changelog>`
 
