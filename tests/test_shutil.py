@@ -9,11 +9,12 @@ __date__ = '1/24/14'
 import unittest
 import os
 import shutil
+import tempfile
 from gzip import GzipFile
 from io import open
 
 from monty.shutil import copy_r, compress_file, decompress_file, \
-    compress_dir, decompress_dir, gzip_dir
+    compress_dir, decompress_dir, gzip_dir, remove
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -108,6 +109,47 @@ class GzipDirTest(unittest.TestCase):
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "gzip_dir"))
 
+class RemoveTest(unittest.TestCase):
+
+    def setUp(self):
+        self.tempdir = tempfile.mkdtemp(dir=test_dir)
+        self.tempfile = tempfile.mkstemp(dir=self.tempdir)[1]
+
+        os.symlink(self.tempdir, os.path.join(test_dir, "temp_link"))
+        self.templink = os.path.join(test_dir, "temp_link")
+
+    def tearDown(self):
+        if os.path.isfile(self.tempfile):
+            os.remove(self.tempfile)
+
+        if os.path.islink(self.templink):
+            os.unlink(self.templink)
+
+        if os.path.isdir(self.tempdir):
+            shutil.rmtree(self.tempdir)
+
+    def test_remove_file(self):
+        print(os.listdir(test_dir))
+        remove(self.tempfile)
+        self.assertFalse(os.path.isfile(self.tempfile))
+
+    def test_remove_folder(self):
+        remove(self.tempdir)
+        self.assertFalse(os.path.isfile(self.tempfile))
+        self.assertFalse(os.path.isdir(self.tempdir))
+
+    def test_remove_symlink(self):
+        remove(self.templink)
+        self.assertTrue(os.path.isfile(self.tempfile))
+        self.assertTrue(os.path.isdir(self.tempdir))
+        self.assertFalse(os.path.islink(self.templink))
+
+    def test_remove_symlink_follow(self):
+        print(self.tempfile)
+        remove(self.templink, follow_symlink=True)
+        self.assertFalse(os.path.isfile(self.tempfile))
+        self.assertFalse(os.path.isdir(self.tempdir))
+        self.assertFalse(os.path.islink(self.templink))
 
 if __name__ == "__main__":
     unittest.main()

@@ -15,7 +15,7 @@ except ImportError:
     except ImportError:
         Path = None
 
-from monty.shutil import copy_r
+from monty.shutil import copy_r, remove
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2012, The Materials Project"
@@ -106,24 +106,16 @@ class ScratchDir(object):
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
-                tempdir = tempfile.mkdtemp(dir=self.cwd)
-                copy_r(self.cwd, tempdir)
-                for f in os.listdir(self.cwd):
+                files = set(os.listdir(self.tempdir))
+                orig_files = set(os.listdir(self.cwd))
+
+                # First copy files over
+                copy_r(self.tempdir, self.cwd)
+
+                # Delete any files that are now gone
+                for f in orig_files - files:
                     fpath = os.path.join(self.cwd, f)
-                    try:
-                        if f != os.path.basename(tempdir):
-                            if os.path.isfile(fpath):
-                                os.remove(fpath)
-                            else:
-                                shutil.rmtree(fpath)
-                    except FileNotFoundError:
-                        # Ignore file not found.
-                        pass
-                copy_r(".", self.cwd)
-                shutil.rmtree(tempdir)
+                    remove(fpath)
 
             os.chdir(self.cwd)
-            shutil.rmtree(self.tempdir)
-
-            if self.create_symbolic_link:
-                os.remove(ScratchDir.SCR_LINK)
+            remove(self.tempdir)
