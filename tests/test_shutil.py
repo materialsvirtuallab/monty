@@ -9,6 +9,7 @@ __date__ = '1/24/14'
 import unittest
 import os
 import shutil
+import tempfile
 from gzip import GzipFile
 from io import open
 
