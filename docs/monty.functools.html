@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.functools module &#8212; monty 1.0.3 documentation</title>
+    <title>monty.functools module &#8212; monty 1.0.4 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.fractions.html" title="monty.fractions module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -141,12 +141,13 @@ debugging purposes). One can use this decorator to define properties.</p>
 </div>
 </dd></dl>
 
-<dl class="data">
+<dl class="function">
 <dt id="monty.functools.return_none_if_raise">
-<code class="descname">return_none_if_raise</code><em class="property"> = functools.partial(&lt;function return_if_raise&gt;, retval_if_exc=None)</em><a class="headerlink" href="#monty.functools.return_none_if_raise" title="Permalink to this definition">¶</a></dt>
+<code class="descname">return_none_if_raise</code><span class="sig-paren">(</span><em>exception_tuple</em>, <em>*</em>, <em>retval_if_exc=None</em>, <em>disabled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#monty.functools.return_none_if_raise" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator returns None if one of the exceptions is raised.</p>
-<p>&#64;return_none_if_raise(ValueError)
-def method(self):</p>
+<blockquote>
+<div>&#64;return_none_if_raise(ValueError)
+def method(self):</div></blockquote>
 </dd></dl>
 
 <dl class="class">

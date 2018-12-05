@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.shutil module &#8212; monty 1.0.3 documentation</title>
+    <title>monty.shutil module &#8212; monty 1.0.4 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.serialization.html" title="monty.serialization module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -163,6 +163,27 @@ commands like zless or zcat.</p>
 <li><strong>path</strong> (<em>str</em>) – Path to directory.</li>
 <li><strong>compresslevel</strong> (<em>int</em>) – Level of compression, 1-9. 9 is default for
 GzipFile, 6 is default for gzip.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="monty.shutil.remove">
+<code class="descname">remove</code><span class="sig-paren">(</span><em>path</em>, <em>follow_symlink=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.shutil.remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implements an remove function that will delete files, folder trees and symlink trees</p>
+<p>1.) Remove a file
+2.) Remove a symlink and follow into with a recursive rm if follow_symlink
+3.) Remove directory with rmtree</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>path</strong> (<em>str</em>) – path to remove</li>
+<li><strong>follow_symlink</strong> (<em>bool</em>) – follow symlinks and removes whatever is in them</li>
 </ul>
 </td>
 </tr>
