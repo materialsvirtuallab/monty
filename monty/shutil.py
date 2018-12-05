@@ -131,3 +131,24 @@ def decompress_dir(path):
         for f in files:
             decompress_file(os.path.join(parent, f))
 
+
+def remove(path, follow_symlink=False):
+    """
+    Implements an remove function that will delete files, folder trees and symlink trees
+
+    1.) Remove a file
+    2.) Remove a symlink and follow into with a recursive rm if follow_symlink
+    3.) Remove directory with rmtree
+
+    Args:
+        path (str): path to remove
+        follow_symlink(bool): follow symlinks and removes whatever is in them
+    """
+    if os.path.isfile(path):
+        os.remove(path)
+    elif os.path.islink(path):
+        if follow_symlink:
+            remove(os.readlink(path))
+        os.unlink(path)
+    else:
+        shutil.rmtree(path)
