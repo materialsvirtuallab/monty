@@ -129,6 +129,9 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
         file.readline() method, except the lines are returned from the back
         of the file.
     """
+    # Check if the file stream is a bit stream or not
+    is_text = isinstance(m_file, io.TextIOWrapper)
+
     try:
         file_size = os.path.getsize(m_file.name)
     except AttributeError:
@@ -150,7 +153,11 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
 
         buf = ""
         m_file.seek(0, 2)
-        lastchar = m_file.read(1).decode("utf-8")
+        if is_text:
+            lastchar = m_file.read(1)
+        else:
+            lastchar = m_file.read(1).decode("utf-8")
+
         trailing_newline = (lastchar == "\n")
 
         while 1:
@@ -167,7 +174,10 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
                 # Need to fill buffer
                 toread = min(blk_size, pos)
                 m_file.seek(pos - toread, 0)
-                buf = m_file.read(toread).decode("utf-8") + buf
+                if is_text:
+                    buf = m_file.read(toread) + buf
+                else:
+                    buf = m_file.read(toread).decode("utf-8") + buf
                 m_file.seek(pos - toread, 0)
                 if pos == toread:
                     buf = "\n" + buf
