@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.io &#8212; monty 1.0.4 documentation</title>
+    <title>monty.io &#8212; monty 1.0.5 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 1.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 1.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -174,6 +174,9 @@
 <span class="sd">        file.readline() method, except the lines are returned from the back</span>
 <span class="sd">        of the file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if the file stream is a bit stream or not</span>
+    <span class="n">is_text</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m_file</span><span class="p">,</span> <span class="n">io</span><span class="o">.</span><span class="n">TextIOWrapper</span><span class="p">)</span>
+
     <span class="k">try</span><span class="p">:</span>
         <span class="n">file_size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">m_file</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
     <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
@@ -195,7 +198,11 @@
 
         <span class="n">buf</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
         <span class="n">m_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">lastchar</span> <span class="o">=</span> <span class="n">m_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">is_text</span><span class="p">:</span>
+            <span class="n">lastchar</span> <span class="o">=</span> <span class="n">m_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">lastchar</span> <span class="o">=</span> <span class="n">m_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
         <span class="n">trailing_newline</span> <span class="o">=</span> <span class="p">(</span><span class="n">lastchar</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
@@ -212,7 +219,10 @@
                 <span class="c1"># Need to fill buffer</span>
                 <span class="n">toread</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">blk_size</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
                 <span class="n">m_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">toread</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-                <span class="n">buf</span> <span class="o">=</span> <span class="n">m_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">toread</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">buf</span>
+                <span class="k">if</span> <span class="n">is_text</span><span class="p">:</span>
+                    <span class="n">buf</span> <span class="o">=</span> <span class="n">m_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">toread</span><span class="p">)</span> <span class="o">+</span> <span class="n">buf</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">buf</span> <span class="o">=</span> <span class="n">m_file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">toread</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="n">buf</span>
                 <span class="n">m_file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pos</span> <span class="o">-</span> <span class="n">toread</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">pos</span> <span class="o">==</span> <span class="n">toread</span><span class="p">:</span>
                     <span class="n">buf</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">buf</span>

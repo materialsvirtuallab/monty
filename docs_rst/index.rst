@@ -33,6 +33,10 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
+v1.0.5
+------
+1. Bug fix for io.reverse_readfile to ensure txt or binary string.
+
 v1.0.4
 ------
 1. monty.shutil.remove which allows symlinks removal. Also improved 
