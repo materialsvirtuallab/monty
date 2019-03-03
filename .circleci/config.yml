@@ -13,7 +13,6 @@ jobs:
             pip install -q numpy
             pip install -r requirements-travis.txt
             python setup.py develop
-            rm -r coverage_reports
       - run:
           command: |
             source test_env/bin/activate
