@@ -24,7 +24,7 @@ jobs:
           destination: tr1
       - store_test_results:
           path: coverage_reports/
- py2test:
+  py2test:
     docker:
       - image: circleci/python:2.7
     working_directory: ~/monty
