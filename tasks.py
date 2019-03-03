@@ -70,11 +70,11 @@ def make_doc(ctx):
 
 @task
 def update_doc(ctx):
-    ctx.run("git pull")
+    ctx.run("git pull", warn=True)
     make_doc(ctx)
-    ctx.run("git add .")
-    ctx.run("git commit -a -m \"Update dev docs\"")
-    ctx.run("git push")
+    ctx.run("git add .", warn=True)
+    ctx.run("git commit -a -m \"Update dev docs\"", warn=True)
+    ctx.run("git push", warn=True)
 
 
 @task
