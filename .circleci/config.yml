@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           command: |
-            python3 -m test_env test_env
+            python3 -m venv test_env
             source activate test_env
             pip install -q numpy
             pip install -r requirements-travis.txt
