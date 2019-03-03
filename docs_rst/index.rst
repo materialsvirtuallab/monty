@@ -33,6 +33,10 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
+v2.0.0
+------
+1. Support for Path object in zopen.
+
 v1.0.5
 ------
 1. Bug fix for io.reverse_readfile to ensure txt or binary string.
