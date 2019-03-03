@@ -8,12 +8,15 @@ jobs:
       - checkout
       - run:
           command: |
+            python3 -m test_env test_env
+            source activate test_env
             pip install -q numpy
             pip install -r requirements-travis.txt
             python setup.py develop
             rm -r coverage_reports
       - run:
           command: |
+            source activate test_env
             # Add executables and path.
             nosetests --config=nose.cfg --cover-html --cover-html-dir=$CIRCLE_ARTIFACTS monty tests
             coveralls
