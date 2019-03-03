@@ -24,9 +24,34 @@ jobs:
           destination: tr1
       - store_test_results:
           path: coverage_reports/
-
+ py2test:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/monty
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip install --user virtualenv
+            virtualenv test_env
+            source test_env/bin/activate
+            pip install -q numpy
+            pip install -r requirements-travis.txt
+            python setup.py develop
+      - run:
+          command: |
+            source test_env/bin/activate
+            # Add executables and path.
+            nosetests --config=nose.cfg --cover-html --cover-html-dir=$CIRCLE_ARTIFACTS monty tests
+            coveralls
+      - store_artifacts:
+          path: coverage_reports/
+          destination: tr1
+      - store_test_results:
+          path: coverage_reports/
 workflows:
   version: 2
   build_and_test:
     jobs:
       - py3test
+      - py2test

@@ -158,10 +158,10 @@ class FileLockTest(unittest.TestCase):
         self.lock.release()
 
 
-class FuncTest(unittest.TestCase):
-
-    def test_get_open_fds(self):
-        self.assertTrue(get_open_fds() > 0)
+# class FuncTest(unittest.TestCase):
+#
+#     def test_get_open_fds(self):
+#         self.assertTrue(get_open_fds() > 0)
 
 
 if __name__ == "__main__":
