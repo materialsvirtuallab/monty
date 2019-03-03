@@ -54,4 +54,3 @@ workflows:
   build_and_test:
     jobs:
       - py3test
-      - py2test
