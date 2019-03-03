@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  py3test:
+    working_directory: ~/monty
+    steps:
+      - checkout
+      - run:
+          command: |
+            pip install -q numpy
+            pip install -r requirements-travis.txt
+            python setup.py develop
+            rm -r coverage_reports
+      - run:
+          command: |
+            # Add executables and path.
+            nosetests --config=nose.cfg --cover-html --cover-html-dir=$CIRCLE_ARTIFACTS monty tests
+            coveralls
+      - store_artifacts:
+          path: coverage_reports/
+          destination: tr1
+      - store_test_results:
+          path: coverage_reports/
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - py3test
