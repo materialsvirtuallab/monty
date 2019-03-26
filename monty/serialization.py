@@ -58,7 +58,7 @@ def loadfn(fn, *args, **kwargs):
     Returns:
         (object) Result of json/yaml/msgpack.load.
     """
-    if "mpk" in fn.lower():
+    if "mpk" in os.path.basename(fn).lower():
         if msgpack is None:
             raise RuntimeError(
                 "Loading of message pack files is not "
@@ -69,7 +69,7 @@ def loadfn(fn, *args, **kwargs):
             return msgpack.load(fp, *args, **kwargs)
     else:
         with zopen(fn) as fp:
-            if "yaml" in fn.lower():
+            if "yaml" in os.path.basename(fn).lower():
                 if yaml is None:
                     raise RuntimeError("Loading of YAML files is not "
                                        "possible as ruamel.yaml is not installed.")
@@ -98,7 +98,7 @@ def dumpfn(obj, fn, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    if "mpk" in fn.lower():
+    if "mpk" in os.path.basename(fn).lower():
         if msgpack is None:
             raise RuntimeError(
                 "Loading of message pack files is not "
@@ -109,7 +109,7 @@ def dumpfn(obj, fn, *args, **kwargs):
             msgpack.dump(obj, fp, *args, **kwargs)
     else:
         with zopen(fn, "wt") as fp:
-            if "yaml" in fn.lower():
+            if "yaml" in os.path.basename(fn).lower():
                 if yaml is None:
                     raise RuntimeError("Loading of YAML files is not "
                                        "possible as ruamel.yaml is not installed.")
