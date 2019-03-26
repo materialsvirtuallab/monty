@@ -77,6 +77,14 @@ class MSONable(object):
         """
         d = {"@module": self.__class__.__module__,
              "@class": self.__class__.__name__}
+
+        try:
+            parent_module = self.__class__.__module__.split('.')[0]
+            module_version = import_module(parent_module).__version__
+            d["@version"] = u"{}".format(module_version)
+        except AttributeError:
+            d["@version"] = None
+
         args = getargspec(self.__class__.__init__).args
         for c in args:
             if c != "self":
