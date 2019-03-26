@@ -14,7 +14,7 @@ import six
 from bson.objectid import ObjectId
 from ast import literal_eval
 
-
+from monty import __version__ as monty_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
 
@@ -67,6 +67,11 @@ class MSONableTest(unittest.TestCase):
         self.assertRaises(TypeError, self.bad_cls.from_dict, d)
         obj = self.bad_cls2("Hello", "World")
         self.assertRaises(NotImplementedError, obj.as_dict)
+        
+    def test_version(self):
+        obj = self.good_cls("Hello", "World", "Python")
+        d = obj.as_dict()
+        self.assertEqual(d["@version"], monty_version)
 
 
 class JsonTest(unittest.TestCase):
