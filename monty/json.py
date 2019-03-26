@@ -169,9 +169,9 @@ class MontyEncoder(json.JSONEncoder):
                 try:
                     parent_module = o.__class__.__module__.split('.')[0]
                     module_version = import_module(parent_module).__version__
+                    d["@version"] = u"{}".format(module_version)
                 except AttributeError:
-                    module_version = None
-                d["@version"] = u"{}".format(module_version)
+                    d["@version"] = None
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
