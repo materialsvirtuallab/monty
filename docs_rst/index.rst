@@ -33,27 +33,11 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
-v2.0.1
+v2.0.2
 ------
 1. Use basename instead of full path to determine whether file type in loadfn
    and dumpfn. (@JosephMontoya-TRI)
-
-v2.0.0
-------
-1. Support for Path object in zopen.
-
-v1.0.5
-------
-1. Bug fix for io.reverse_readfile to ensure txt or binary string.
-
-v1.0.4
-------
-1. monty.shutil.remove which allows symlinks removal. Also improved 
-   monty.tempfile.ScratchDir cleanup. (@shyamd)
-
-v1.0.3
-------
-1. Bug fix for reverse_readfile for bz2 files (Alex Urban)
+2. Use os.path.splitext to determine zip types in monty.io.zopen.
 
 :doc:`Older versions </changelog>`
 
