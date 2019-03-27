@@ -33,6 +33,11 @@ Monty supports Python 2.7-3.x.
 Change Log
 ==========
 
+v2.0.1
+------
+1. Use basename instead of full path to determine whether file type in loadfn
+   and dumpfn. (@JosephMontoya-TRI)
+
 v2.0.0
 ------
 1. Support for Path object in zopen.

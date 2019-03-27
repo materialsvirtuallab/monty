@@ -53,8 +53,9 @@ def zopen(filename, *args, **kwargs):
     if Path is not None and isinstance(filename, Path):
         filename = str(filename)
 
-    file_ext = filename.split(".")[-1].upper()
-    if file_ext == "BZ2":
+    name, ext = os.path.splitext(filename)
+    ext = ext.upper()
+    if ext == ".BZ2":
         if PY_VERSION[0] >= 3:
             return bz2.open(filename, *args, **kwargs)
         else:
@@ -65,7 +66,7 @@ def zopen(filename, *args, **kwargs):
                 kwargs["mode"] = "".join([c for c in kwargs["mode"]
                                           if c != "t"])
             return bz2.BZ2File(filename, *args, **kwargs)
-    elif file_ext in ("GZ", "Z"):
+    elif ext in (".GZ", ".Z"):
         return gzip.open(filename, *args, **kwargs)
     else:
         return io.open(filename, *args, **kwargs)
