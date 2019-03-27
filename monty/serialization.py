@@ -5,6 +5,7 @@ and yaml.
 from __future__ import absolute_import, unicode_literals
 
 import json
+import os
 from monty.io import zopen
 from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
