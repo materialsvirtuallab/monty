@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2.0.4
+------
+1. Bug fix for invert MSON caused by `@version`.
+
 v2.0.3
 ------
 1. Support for nested MSONAble objects with MontyEncoder and dumpfn.

@@ -232,10 +232,8 @@ class MontyDecoder(json.JSONDecoder):
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
-                    #data = {k: v for k, v in d.items()
-                    #        if not k.startswith("@")}
                     data = {k: v for k, v in d.items()
-                            if k not in ["@class", "@module"]}
+                           if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
             elif np is not None and modname == "numpy" and classname == \
