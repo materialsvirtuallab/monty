@@ -10,6 +10,12 @@ import six
 import inspect
 
 try:
+    from importlib import import_module
+except ImportError:
+    # importlib only available in Python 2.7+, 3.1+
+    importlib = lambda x: x
+
+try:
     from inspect import getfullargspec as getargspec
 except ImportError:
     from inspect import getargspec
@@ -71,6 +77,14 @@ class MSONable(object):
         """
         d = {"@module": self.__class__.__module__,
              "@class": self.__class__.__name__}
+
+        try:
+            parent_module = self.__class__.__module__.split('.')[0]
+            module_version = import_module(parent_module).__version__
+            d["@version"] = u"{}".format(module_version)
+        except AttributeError:
+            d["@version"] = None
+
         args = getargspec(self.__class__.__init__).args
 
         def recursive_as_dict(obj):
@@ -167,6 +181,13 @@ class MontyEncoder(json.JSONEncoder):
                 d["@module"] = u"{}".format(o.__class__.__module__)
             if "@class" not in d:
                 d["@class"] = u"{}".format(o.__class__.__name__)
+            if "@version" not in d:
+                try:
+                    parent_module = o.__class__.__module__.split('.')[0]
+                    module_version = import_module(parent_module).__version__
+                    d["@version"] = u"{}".format(module_version)
+                except AttributeError:
+                    d["@version"] = None
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
