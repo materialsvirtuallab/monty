@@ -73,15 +73,15 @@ class MSONable(object):
              "@class": self.__class__.__name__}
         args = getargspec(self.__class__.__init__).args
 
-        def rec_as_dict(obj):
-            if isinstance(obj, list):
-                return [rec_as_dict(it) for it in obj]
+        def recursive_as_dict(obj):
+            if isinstance(obj, (list, tuple)):
+                return [recursive_as_dict(it) for it in obj]
             elif isinstance(obj, dict):
-                return {kk: rec_as_dict(vv) for kk, vv in obj.items()}
+                return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
             elif hasattr(obj, "as_dict"):
                 return obj.as_dict()
             return obj
-        
+
         for c in args:
             if c != "self":
                 try:
@@ -99,7 +99,7 @@ class MSONable(object):
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
                             "you can implement both as_dict and from_dict.")
-                d[c] = rec_as_dict(a)
+                d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             d.update(**self.kwargs)
         if hasattr(self, "_kwargs"):
