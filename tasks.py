@@ -137,5 +137,5 @@ def release(ctx):
     test(ctx)
     update_doc(ctx)
     publish(ctx)
-    commit(ctx)
+    commit(ctx, warn=True)
     release_github(ctx)
