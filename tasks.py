@@ -127,8 +127,8 @@ def release_github(ctx):
 
 @task
 def commit(ctx):
-    ctx.run("git commit -a -m \"v%s release\"" % ver)
-    ctx.run("git push")
+    ctx.run("git commit -a -m \"v%s release\"" % ver, warn=True)
+    ctx.run("git push", warn=True)
 
 
 @task
@@ -137,5 +137,5 @@ def release(ctx):
     test(ctx)
     update_doc(ctx)
     publish(ctx)
-    commit(ctx, warn=True)
+    commit(ctx)
     release_github(ctx)
