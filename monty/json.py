@@ -100,7 +100,6 @@ class MSONable(object):
             if c != "self":
                 try:
                     a = self.__getattribute__(c)
-
                 except AttributeError:
                     try:
                         a = self.__getattribute__("_" + c)
