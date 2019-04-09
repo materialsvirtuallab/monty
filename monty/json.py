@@ -10,6 +10,12 @@ import six
 import inspect
 
 try:
+    from importlib import import_module
+except ImportError:
+    # importlib only available in Python 2.7+, 3.1+
+    importlib = lambda x: x
+
+try:
     from inspect import getfullargspec as getargspec
 except ImportError:
     from inspect import getargspec
@@ -71,12 +77,29 @@ class MSONable(object):
         """
         d = {"@module": self.__class__.__module__,
              "@class": self.__class__.__name__}
+
+        try:
+            parent_module = self.__class__.__module__.split('.')[0]
+            module_version = import_module(parent_module).__version__
+            d["@version"] = u"{}".format(module_version)
+        except AttributeError:
+            d["@version"] = None
+
         args = getargspec(self.__class__.__init__).args
+
+        def recursive_as_dict(obj):
+            if isinstance(obj, (list, tuple)):
+                return [recursive_as_dict(it) for it in obj]
+            elif isinstance(obj, dict):
+                return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
+            elif hasattr(obj, "as_dict"):
+                return obj.as_dict()
+            return obj
+
         for c in args:
             if c != "self":
                 try:
                     a = self.__getattribute__(c)
-
                 except AttributeError:
                     try:
                         a = self.__getattribute__("_" + c)
@@ -89,9 +112,7 @@ class MSONable(object):
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
                             "you can implement both as_dict and from_dict.")
-                if hasattr(a, "as_dict"):
-                    a = a.as_dict()
-                d[c] = a
+                d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             d.update(**self.kwargs)
         if hasattr(self, "_kwargs"):
@@ -159,6 +180,13 @@ class MontyEncoder(json.JSONEncoder):
                 d["@module"] = u"{}".format(o.__class__.__module__)
             if "@class" not in d:
                 d["@class"] = u"{}".format(o.__class__.__name__)
+            if "@version" not in d:
+                try:
+                    parent_module = o.__class__.__module__.split('.')[0]
+                    module_version = import_module(parent_module).__version__
+                    d["@version"] = u"{}".format(module_version)
+                except AttributeError:
+                    d["@version"] = None
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
@@ -204,8 +232,10 @@ class MontyDecoder(json.JSONDecoder):
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
+                    #data = {k: v for k, v in d.items()
+                    #        if not k.startswith("@")}
                     data = {k: v for k, v in d.items()
-                            if not k.startswith("@")}
+                            if k not in ["@class", "@module"]}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
             elif np is not None and modname == "numpy" and classname == \

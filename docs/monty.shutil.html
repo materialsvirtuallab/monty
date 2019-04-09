@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.shutil module &#8212; monty 2.0.2 documentation</title>
+    <meta charset="utf-8" />
+    <title>monty.shutil module &#8212; monty 2.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -41,7 +39,7 @@
         <li class="right" >
           <a href="monty.serialization.html" title="monty.serialization module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -59,19 +57,15 @@
 <dd><p>Recursively compresses all files in a directory. Note that this
 compresses all files singly, i.e., it does not create a tar archive. For
 that, just use Python tarfile class.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>str</em>) – Path to parent directory.</li>
-<li><strong>compression</strong> (<em>str</em>) – A compression mode. Valid options are “gz” or
-“bz2”. Defaults to gz.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to parent directory.</p></li>
+<li><p><strong>compression</strong> (<em>str</em>) – A compression mode. Valid options are “gz” or
+“bz2”. Defaults to gz.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -80,19 +74,15 @@ that, just use Python tarfile class.</p>
 <dd><p>Compresses a file with the correct extension. Functions like standard
 Unix command line gzip and bzip2 in the sense that the original
 uncompressed files are not retained.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> (<em>str</em>) – Path to file.</li>
-<li><strong>compression</strong> (<em>str</em>) – A compression mode. Valid options are “gz” or
-“bz2”. Defaults to “gz”.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – Path to file.</p></li>
+<li><p><strong>compression</strong> (<em>str</em>) – A compression mode. Valid options are “gz” or
+“bz2”. Defaults to “gz”.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -101,32 +91,25 @@ uncompressed files are not retained.</p>
 <dd><p>Implements a recursive copy function similar to Unix’s “cp -r” command.
 Surprisingly, python does not have a real equivalent. shutil.copytree
 only works if the destination directory is not present.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>src</strong> (<em>str</em>) – Source folder to copy.</li>
-<li><strong>dst</strong> (<em>str</em>) – Destination folder.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em>) – Source folder to copy.</p></li>
+<li><p><strong>dst</strong> (<em>str</em>) – Destination folder.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="monty.shutil.decompress_dir">
 <code class="descname">decompress_dir</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#decompress_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.shutil.decompress_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively decompresses all files in a directory.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Path to parent directory.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – Path to parent directory.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -134,19 +117,15 @@ only works if the destination directory is not present.</p>
 <code class="descname">decompress_file</code><span class="sig-paren">(</span><em>filepath</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#decompress_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.shutil.decompress_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decompresses a file with the correct extension. Automatically detects
 gz, bz2 or z extension.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>filepath</strong> (<em>str</em>) – Path to file.</li>
-<li><strong>compression</strong> (<em>str</em>) – A compression mode. Valid options are “gz” or
-“bz2”. Defaults to “gz”.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> (<em>str</em>) – Path to file.</p></li>
+<li><p><strong>compression</strong> (<em>str</em>) – A compression mode. Valid options are “gz” or
+“bz2”. Defaults to “gz”.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -156,19 +135,15 @@ gz, bz2 or z extension.</p>
 shutil.make_archive, which creates a tar archive. The aim of this method
 is to create gzipped files that can still be read using common Unix-style
 commands like zless or zcat.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>str</em>) – Path to directory.</li>
-<li><strong>compresslevel</strong> (<em>int</em>) – Level of compression, 1-9. 9 is default for
-GzipFile, 6 is default for gzip.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – Path to directory.</p></li>
+<li><p><strong>compresslevel</strong> (<em>int</em>) – Level of compression, 1-9. 9 is default for
+GzipFile, 6 is default for gzip.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
@@ -178,18 +153,14 @@ GzipFile, 6 is default for gzip.</li>
 <p>1.) Remove a file
 2.) Remove a symlink and follow into with a recursive rm if follow_symlink
 3.) Remove directory with rmtree</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>path</strong> (<em>str</em>) – path to remove</li>
-<li><strong>follow_symlink</strong> (<em>bool</em>) – follow symlinks and removes whatever is in them</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> (<em>str</em>) – path to remove</p></li>
+<li><p><strong>follow_symlink</strong> (<em>bool</em>) – follow symlinks and removes whatever is in them</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -221,8 +192,6 @@ GzipFile, 6 is default for gzip.</li>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>

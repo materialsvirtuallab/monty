@@ -1,6 +1,12 @@
 Change log
 ==========
 
+v2.0.3
+------
+1. Support for nested MSONAble objects with MontyEncoder and dumpfn.
+   (@davidwaroquiers)
+2. Add @version to MSONAble. (@mkhorton)
+
 v2.0.0
 ------
 1. Support for Path object in zopen.

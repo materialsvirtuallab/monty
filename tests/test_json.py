@@ -14,7 +14,7 @@ import six
 from bson.objectid import ObjectId
 from ast import literal_eval
 
-
+from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 
 
@@ -25,6 +25,26 @@ class GoodMSONClass(MSONable):
         self.b = b
         self._c = c
         self._d = d
+        self.kwargs = kwargs
+
+    def __eq__(self, other):
+        return (self.a == other.a and self.b == other.b and
+                self._c == other._c and self._d == other._d and
+                self.kwargs == other.kwargs)
+
+
+class GoodNestedMSONClass(MSONable):
+
+    def __init__(self, a_list, b_dict, c_list_dict_list, **kwargs):
+        assert isinstance(a_list, list)
+        assert isinstance(b_dict, dict)
+        assert isinstance(c_list_dict_list, list)
+        assert isinstance(c_list_dict_list[0], dict)
+        first_key = list(c_list_dict_list[0].keys())[0]
+        assert isinstance(c_list_dict_list[0][first_key], list)
+        self.a_list = a_list
+        self.b_dict = b_dict
+        self._c_list_dict_list = c_list_dict_list
         self.kwargs = kwargs
 
 
@@ -76,7 +96,54 @@ class MSONableTest(unittest.TestCase):
         obj = self.bad_cls2("Hello", "World")
         self.assertRaises(NotImplementedError, obj.as_dict)
         obj = self.auto_mson(2, 3)
+        d = obj.as_dict()
+        self.auto_mson.from_dict(d)
         print(obj.as_dict())
+
+    def test_version(self):
+        obj = self.good_cls("Hello", "World", "Python")
+        d = obj.as_dict()
+        self.assertEqual(d["@version"], tests_version)
+
+    def test_nested_to_from_dict(self):
+        GMC = GoodMSONClass
+        a_list = [GMC(1, 1.0, "one"),
+                  GMC(2, 2.0, "two")]
+        b_dict = {"first": GMC(3, 3.0, "three"),
+                  "second": GMC(4, 4.0, "four")}
+        c_list_dict_list = [{"list1": [GMC(5, 5.0, "five"),
+                                       GMC(6, 6.0, "six"),
+                                       GMC(7, 7.0, "seven")],
+                             "list2": [GMC(8, 8.0, "eight")]},
+                            {"list3": [GMC(9, 9.0, "nine"),
+                                       GMC(10, 10.0, "ten"),
+                                       GMC(11, 11.0, "eleven"),
+                                       GMC(12, 12.0, "twelve")],
+                             "list4": [GMC(13, 13.0, "thirteen"),
+                                       GMC(14, 14.0, "fourteen")],
+                             "list5": [GMC(15, 15.0, "fifteen")]}]
+        obj = GoodNestedMSONClass(a_list=a_list,
+                                  b_dict=b_dict,
+                                  c_list_dict_list=c_list_dict_list)
+        obj_dict = obj.as_dict()
+        obj2 = GoodNestedMSONClass.from_dict(obj_dict)
+        self.assertTrue([obj2.a_list[ii] == aa for ii, aa in enumerate(obj.a_list)])
+        self.assertTrue([obj2.b_dict[kk] == val for kk, val in obj.b_dict.items()])
+        self.assertEqual(len(obj.a_list), len(obj2.a_list))
+        self.assertEqual(len(obj.b_dict), len(obj2.b_dict))
+        s = json.dumps(obj_dict)
+        obj3 = json.loads(s, cls=MontyDecoder)
+        self.assertTrue([obj2.a_list[ii] == aa for ii, aa in enumerate(obj3.a_list)])
+        self.assertTrue([obj2.b_dict[kk] == val for kk, val in obj3.b_dict.items()])
+        self.assertEqual(len(obj3.a_list), len(obj2.a_list))
+        self.assertEqual(len(obj3.b_dict), len(obj2.b_dict))
+        s = json.dumps(obj, cls=MontyEncoder)
+        obj4 = json.loads(s, cls=MontyDecoder)
+        self.assertTrue([obj4.a_list[ii] == aa for ii, aa in enumerate(obj.a_list)])
+        self.assertTrue([obj4.b_dict[kk] == val for kk, val in obj.b_dict.items()])
+        self.assertEqual(len(obj.a_list), len(obj4.a_list))
+        self.assertEqual(len(obj.b_dict), len(obj4.b_dict))
+
 
 class JsonTest(unittest.TestCase):
 
