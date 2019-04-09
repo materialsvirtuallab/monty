@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.json module &#8212; monty 2.0.2 documentation</title>
+    <meta charset="utf-8" />
+    <title>monty.json module &#8212; monty 2.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -41,7 +39,7 @@
         <li class="right" >
           <a href="monty.itertools.html" title="monty.itertools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -125,8 +123,9 @@ nested lists and dicts containing pymatgen object will be decoded correctly
 as well.</p>
 <p>Usage:</p>
 <blockquote>
-<div># Add it as a <em>cls</em> keyword when using json.load
-json.loads(json_string, cls=MontyDecoder)</div></blockquote>
+<div><p># Add it as a <em>cls</em> keyword when using json.load
+json.loads(json_string, cls=MontyDecoder)</p>
+</div></blockquote>
 <p><code class="docutils literal notranslate"><span class="pre">object_hook</span></code>, if specified, will be called with the result
 of every JSON object decoded and its return value will be used in
 place of the given <code class="docutils literal notranslate"><span class="pre">dict</span></code>.  This can be used to provide custom
@@ -217,16 +216,14 @@ things: (a) If an object has a to_dict property, return the to_dict
 output. (b) If the &#64;module and &#64;class keys are not in the to_dict,
 add them to the output automatically. If the object has no to_dict
 property, the default Python json encoder default method is called.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>o</strong> – Python object.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Python dict representation.</td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>o</strong> – Python object.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Python dict representation.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -238,30 +235,26 @@ property, the default Python json encoder default method is called.</p>
 some sequence, nested or otherwise, by converting all non-string
 dictionary keys (such as int and float) to strings, and also recursively
 encodes all objects using Monty’s as_dict() protocol.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>obj</strong> – input json-like object.</li>
-<li><strong>strict</strong> (<em>bool</em>) – This parameters sets the behavior when jsanitize
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>obj</strong> – input json-like object.</p></li>
+<li><p><strong>strict</strong> (<em>bool</em>) – This parameters sets the behavior when jsanitize
 encounters an object it does not understand. If strict is True,
 jsanitize will try to get the as_dict() attribute of the object. If
 no such attribute is found, an attribute error will be thrown. If
 strict is False, jsanitize will simply call str(object) to convert
-the object to a string representation.</li>
-<li><strong>allow_bson</strong> (<em>bool</em>) – This parameters sets the behavior when jsanitize
+the object to a string representation.</p></li>
+<li><p><strong>allow_bson</strong> (<em>bool</em>) – This parameters sets the behavior when jsanitize
 encounters an bson supported type such as objectid and datetime. If
 True, such bson types will be ignored, allowing for proper
-insertion into MongoDb databases.</li>
+insertion into MongoDb databases.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Sanitized dict that can be json serialized.</p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Sanitized dict that can be json serialized.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -293,8 +286,6 @@ insertion into MongoDb databases.</li>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
