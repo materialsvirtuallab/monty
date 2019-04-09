@@ -205,7 +205,7 @@ class MontyDecoder(json.JSONDecoder):
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
                     data = {k: v for k, v in d.items()
-                            if k not in ["@module", "@class"]}
+                            if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
             elif np is not None and modname == "numpy" and classname == \

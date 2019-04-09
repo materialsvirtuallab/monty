@@ -53,6 +53,14 @@ class MSONableTest(unittest.TestCase):
 
         self.bad_cls2 = BadMSONClass2
 
+        class AutoMSON(MSONable):
+
+            def __init__(self, a, b):
+                self.a = a
+                self.b = b
+
+        self.auto_mson = AutoMSON
+
     def test_to_from_dict(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
@@ -67,7 +75,8 @@ class MSONableTest(unittest.TestCase):
         self.assertRaises(TypeError, self.bad_cls.from_dict, d)
         obj = self.bad_cls2("Hello", "World")
         self.assertRaises(NotImplementedError, obj.as_dict)
-
+        obj = self.auto_mson(2, 3)
+        print(obj.as_dict())
 
 class JsonTest(unittest.TestCase):
 
@@ -158,6 +167,7 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertEqual(clean["a"], six.binary_type(rnd_bin))
         self.assertIsInstance(clean["a"], six.binary_type)
+
 
 if __name__ == "__main__":
     unittest.main()
