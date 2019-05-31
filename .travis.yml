@@ -5,4 +5,4 @@ python:
   - "3.5"
   - "3.6"
 install: "pip install -r requirements-travis.txt"
-script: nosetests
+script: pytest
