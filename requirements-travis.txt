@@ -1,4 +1,5 @@
 pytest==4.5.0
+pytest-cov==2.7.1
 numpy==1.16.4
 six==1.12.0
 ruamel.yaml==0.15.96
