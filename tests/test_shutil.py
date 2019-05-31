@@ -101,7 +101,7 @@ class GzipDirTest(unittest.TestCase):
         self.assertFalse((os.path.exists(full_f)))
 
         with GzipFile("{}.gz".format(full_f)) as g:
-            self.assertEquals(g.readline().decode("utf-8"), "what")
+            self.assertEqual(g.readline().decode("utf-8"), "what")
 
         self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)),
                                self.mtime, 4)
