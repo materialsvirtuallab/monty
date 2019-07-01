@@ -155,7 +155,7 @@ class MSONable(object):
                     )
                 elif isinstance(value, list):
                     list_dict = {
-                        f"{key}{seperator}{num}": item for num, item in enumerate(value)
+                        "{}{}{}".format(key,seperator,num): item for num, item in enumerate(value)
                     }
                     flat_dict.update(flatten(list_dict))
                 else:
