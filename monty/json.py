@@ -131,6 +131,39 @@ class MSONable(object):
         """
         return json.dumps(self, cls=MontyEncoder)
 
+    def unsafe_hash(self):
+        """
+        Returns an hash of the current object. This uses a generic but low
+        performance method of converting the object to a dictionary, flattening
+        any nested keys, and then performing a hash on the resulting object
+        """
+
+        def flatten(obj, seperator="."):
+            # Flattens a dictionary
+
+            flat_dict = {}
+            for key, value in obj.items():
+                if isinstance(value, dict):
+                    flat_dict.update(
+                        {
+                            seperator.join([key, _key]): _value
+                            for _key, _value in flatten(value).items()
+                        }
+                    )
+                elif isinstance(value, list):
+                    list_dict = {
+                        f"{key}{seperator}{num}": item for num, item in enumerate(value)
+                    }
+                    flat_dict.update(flatten(list_dict))
+                else:
+                    flat_dict[key] = value
+
+            return flat_dict
+
+        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0])
+        ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
+        return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
+
 
 class MontyEncoder(json.JSONEncoder):
     """
