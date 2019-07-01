@@ -9,6 +9,9 @@ import datetime
 import six
 import inspect
 
+from hashlib import sha1
+from collections import OrderedDict
+
 try:
     from importlib import import_module
 except ImportError:
