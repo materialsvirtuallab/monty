@@ -1,18 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.functools module &#8212; monty 1.0.4 documentation</title>
+    <meta charset="utf-8" />
+    <title>monty.functools module &#8212; monty 2.0.4 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.inspect module" href="monty.inspect.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="monty.fractions.html" title="monty.fractions module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -103,14 +102,15 @@ supported by the original main program with the keyword <cite>prof</cite>.
 <p>$ script.py arg –foo=1</p>
 <p>becomes</p>
 <blockquote>
-<div>$ script.py prof arg –foo=1</div></blockquote>
+<div><p>$ script.py prof arg –foo=1</p>
+</div></blockquote>
 <p>The decorated main accepts two new arguments:</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>prof_file: Name of the output file with profiling data</dt>
-<dd>If not given, a temporary file is created.</dd>
-<dt>sortby: Profiling data are sorted according to this value.</dt>
-<dd>default is “time”. See sort_stats.</dd>
+<div><dl class="simple">
+<dt>prof_file: Name of the output file with profiling data</dt><dd><p>If not given, a temporary file is created.</p>
+</dd>
+<dt>sortby: Profiling data are sorted according to this value.</dt><dd><p>default is “time”. See sort_stats.</p>
+</dd>
 </dl>
 </div></blockquote>
 </dd></dl>
@@ -146,8 +146,9 @@ debugging purposes). One can use this decorator to define properties.</p>
 <code class="descname">return_none_if_raise</code><span class="sig-paren">(</span><em>exception_tuple</em>, <em>*</em>, <em>retval_if_exc=None</em>, <em>disabled=False</em><span class="sig-paren">)</span><a class="headerlink" href="#monty.functools.return_none_if_raise" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator returns None if one of the exceptions is raised.</p>
 <blockquote>
-<div>&#64;return_none_if_raise(ValueError)
-def method(self):</div></blockquote>
+<div><p>&#64;return_none_if_raise(ValueError)
+def method(self):</p>
+</div></blockquote>
 </dd></dl>
 
 <dl class="class">
@@ -156,28 +157,23 @@ def method(self):</div></blockquote>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Timeout function. Use to limit matching to a certain time limit. Note that
 this works only on Unix-based systems as it uses signal. Usage:</p>
-<dl class="docutils">
-<dt>try:</dt>
-<dd><dl class="first last docutils">
-<dt>with timeout(3):</dt>
-<dd>do_stuff()</dd>
+<dl class="simple">
+<dt>try:</dt><dd><dl class="simple">
+<dt>with timeout(3):</dt><dd><p>do_stuff()</p>
+</dd>
 </dl>
 </dd>
-<dt>except TimeoutError:</dt>
-<dd>do_something_else()</dd>
+<dt>except TimeoutError:</dt><dd><p>do_something_else()</p>
+</dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>seconds</strong> (<em>int</em>) – Allowed time for function in seconds.</li>
-<li><strong>error_message</strong> (<em>str</em>) – An error message.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seconds</strong> (<em>int</em>) – Allowed time for function in seconds.</p></li>
+<li><p><strong>error_message</strong> (<em>str</em>) – An error message.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="monty.functools.timeout.handle_timeout">
 <code class="descname">handle_timeout</code><span class="sig-paren">(</span><em>signum</em>, <em>frame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout.handle_timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.timeout.handle_timeout" title="Permalink to this definition">¶</a></dt>
@@ -214,8 +210,6 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>

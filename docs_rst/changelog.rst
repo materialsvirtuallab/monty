@@ -1,6 +1,33 @@
 Change log
 ==========
 
+v2.0.4
+------
+1. Bug fix for invert MSON caused by `@version`.
+
+v2.0.3
+------
+1. Support for nested MSONAble objects with MontyEncoder and dumpfn.
+   (@davidwaroquiers)
+2. Add @version to MSONAble. (@mkhorton)
+
+v2.0.0
+------
+1. Support for Path object in zopen.
+
+v1.0.5
+------
+1. Bug fix for io.reverse_readfile to ensure txt or binary string.
+
+v1.0.4
+------
+1. monty.shutil.remove which allows symlinks removal. Also improved
+   monty.tempfile.ScratchDir cleanup. (@shyamd)
+
+v1.0.3
+------
+1. Bug fix for reverse_readfile for bz2 files (Alex Urban)
+
 v1.0.2
 ------
 1. Misc bug fixes (tempdir on Windows)

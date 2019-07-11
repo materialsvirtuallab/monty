@@ -70,17 +70,17 @@ def make_doc(ctx):
 
 @task
 def update_doc(ctx):
-    ctx.run("git pull")
+    ctx.run("git pull", warn=True)
     make_doc(ctx)
-    ctx.run("git add .")
-    ctx.run("git commit -a -m \"Update dev docs\"")
-    ctx.run("git push")
+    ctx.run("git add .", warn=True)
+    ctx.run("git commit -a -m \"Update dev docs\"", warn=True)
+    ctx.run("git push", warn=True)
 
 
 @task
 def publish(ctx):
     ctx.run("rm dist/*.*", warn=True)
-    ctx.run("python setup.py register sdist bdist_wheel")
+    ctx.run("python setup.py sdist bdist_wheel")
     ctx.run("twine upload dist/*")
 
 
@@ -127,8 +127,8 @@ def release_github(ctx):
 
 @task
 def commit(ctx):
-    ctx.run("git commit -a -m \"v%s release\"" % ver)
-    ctx.run("git push")
+    ctx.run("git commit -a -m \"v%s release\"" % ver, warn=True)
+    ctx.run("git push", warn=True)
 
 
 @task

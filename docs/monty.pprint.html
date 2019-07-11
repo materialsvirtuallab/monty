@@ -1,18 +1,17 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>monty.pprint module &#8212; monty 1.0.4 documentation</title>
+    <meta charset="utf-8" />
+    <title>monty.pprint module &#8212; monty 2.0.4 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.re module" href="monty.re.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="monty.operator.html" title="monty.operator module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 1.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,19 +54,15 @@
 <dl class="function">
 <dt id="monty.pprint.draw_tree">
 <code class="descname">draw_tree</code><span class="sig-paren">(</span><em>node</em>, <em>child_iter=&lt;function &lt;lambda&gt;&gt;</em>, <em>text_str=&lt;function &lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/pprint.html#draw_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.pprint.draw_tree" title="Permalink to this definition">¶</a></dt>
-<dd><table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>node</strong> – the root of the tree to be drawn,</li>
-<li><strong>child_iter</strong> – function that when called with a node, returns an iterable over all its children</li>
-<li><strong>text_str</strong> – turns a node into the text to be displayed in the tree.</li>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>node</strong> – the root of the tree to be drawn,</p></li>
+<li><p><strong>child_iter</strong> – function that when called with a node, returns an iterable over all its children</p></li>
+<li><p><strong>text_str</strong> – turns a node into the text to be displayed in the tree.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p>The default implementations of these two arguments retrieve the children by accessing node.children
 and simply use str(node) to convert a node to a string. The resulting tree is drawn into a buffer and returned as a string.</p>
 <p>Based on <a class="reference external" href="https://pypi.python.org/pypi/asciitree/">https://pypi.python.org/pypi/asciitree/</a></p>
@@ -78,19 +73,15 @@ and simply use str(node) to convert a node to a string. The resulting tree is dr
 <code class="descname">pprint_table</code><span class="sig-paren">(</span><em>table</em>, <em>out=&lt;_io.TextIOWrapper name='&lt;stdout&gt;' mode='w' encoding='UTF-8'&gt;</em>, <em>rstrip=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/pprint.html#pprint_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.pprint.pprint_table" title="Permalink to this definition">¶</a></dt>
 <dd><p>Prints out a table of data, padded for alignment
 Each row must have the same number of columns.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>table</strong> – The table to print. A list of lists.</li>
-<li><strong>out</strong> – Output stream (file-like object)</li>
-<li><strong>rstrip</strong> – if True, trailing withespaces are removed from the entries.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> – The table to print. A list of lists.</p></li>
+<li><p><strong>out</strong> – Output stream (file-like object)</p></li>
+<li><p><strong>rstrip</strong> – if True, trailing withespaces are removed from the entries.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -122,8 +113,6 @@ Each row must have the same number of columns.</p>
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
