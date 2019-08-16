@@ -12,6 +12,6 @@ Module contents
 ---------------
 
 .. automodule:: monty.os
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

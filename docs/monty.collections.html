@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.collections module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.collections module &#8212; monty 2.0.5 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.bisect.html" title="monty.bisect module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -53,7 +53,7 @@
 <span id="monty-collections-module"></span><h1>monty.collections module<a class="headerlink" href="#module-monty.collections" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="monty.collections.AttrDict">
-<em class="property">class </em><code class="descname">AttrDict</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#AttrDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">AttrDict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#AttrDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>Allows to access dict keys as obj.foo in addition
 to the traditional way obj[‘foo’]”</p>
@@ -66,14 +66,14 @@ to the traditional way obj[‘foo’]”</p>
 </div>
 <dl class="method">
 <dt id="monty.collections.AttrDict.copy">
-<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a shallow copy of D<a class="reference internal" href="_modules/monty/collections.html#AttrDict.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict.copy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a shallow copy of D<a class="reference internal" href="_modules/monty/collections.html#AttrDict.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict.copy" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="class">
 <dt id="monty.collections.FrozenAttrDict">
-<em class="property">class </em><code class="descname">FrozenAttrDict</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#FrozenAttrDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.FrozenAttrDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">FrozenAttrDict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#FrozenAttrDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.FrozenAttrDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#monty.collections.frozendict" title="monty.collections.frozendict"><code class="xref py py-class docutils literal notranslate"><span class="pre">monty.collections.frozendict</span></code></a></p>
 <dl class="simple">
 <dt>A dictionary that:</dt><dd><ul class="simple">
@@ -87,7 +87,7 @@ to the traditional way obj[‘foo’]</p></li>
 
 <dl class="class">
 <dt id="monty.collections.MongoDict">
-<em class="property">class </em><code class="descname">MongoDict</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#MongoDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.MongoDict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">MongoDict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#MongoDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.MongoDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This dict-like object allows one to access the entries in a nested dict as attributes.
 Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object
@@ -110,12 +110,12 @@ e.g MongoDict({“keys”: 1}).keys would be the ABC dict method.</p>
 
 <dl class="class">
 <dt id="monty.collections.Namespace">
-<em class="property">class </em><code class="descname">Namespace</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#Namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">Namespace</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#Namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>A dictionary that does not permit to redefine its keys.</p>
 <dl class="method">
 <dt id="monty.collections.Namespace.update">
-<code class="descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em>E</em>, <span class="optional">]</span><em>**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/monty/collections.html#Namespace.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">E</em>, <span class="optional">]</span><em class="sig-param">**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/monty/collections.html#Namespace.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
 If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
 In either case, this is followed by: for k in F:  D[k] = F[k]</p>
@@ -125,7 +125,7 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 
 <dl class="function">
 <dt id="monty.collections.as_set">
-<code class="descname">as_set</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#as_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.as_set" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">as_set</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#as_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.as_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert obj into a set, returns None if obj is None.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">as_set</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">as_set</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="n">as_set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
 </pre></div>
@@ -134,7 +134,7 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 
 <dl class="function">
 <dt id="monty.collections.dict2namedtuple">
-<code class="descname">dict2namedtuple</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#dict2namedtuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.dict2namedtuple" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dict2namedtuple</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#dict2namedtuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.dict2namedtuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">namedtuple</span></code> from a dictionary.</p>
 <p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">dict2namedtuple</span><span class="p">(</span><span class="n">foo</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">bar</span><span class="o">=</span><span class="s2">&quot;hello&quot;</span><span class="p">)</span>
@@ -160,13 +160,13 @@ crucial since a dict is needed to instantiate the tuple!</p></li>
 
 <dl class="class">
 <dt id="monty.collections.frozendict">
-<em class="property">class </em><code class="descname">frozendict</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#frozendict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.frozendict" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">frozendict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#frozendict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.frozendict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>A dictionary that does not permit changes. The naming
 violates PEP8 to be consistent with standard Python’s “frozenset” naming.</p>
 <dl class="method">
 <dt id="monty.collections.frozendict.update">
-<code class="descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em>E</em>, <span class="optional">]</span><em>**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/monty/collections.html#frozendict.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.frozendict.update" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">E</em>, <span class="optional">]</span><em class="sig-param">**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/monty/collections.html#frozendict.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.frozendict.update" title="Permalink to this definition">¶</a></dt>
 <dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
 If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
 In either case, this is followed by: for k in F:  D[k] = F[k]</p>
@@ -176,7 +176,7 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 
 <dl class="function">
 <dt id="monty.collections.tree">
-<code class="descname">tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.tree" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.tree" title="Permalink to this definition">¶</a></dt>
 <dd><p>A tree object, which is effectively a recursive defaultdict that
 adds tree as members.</p>
 <dl class="simple">
@@ -215,10 +215,10 @@ x[‘a’][‘b’][‘c’] = 1</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.inspect module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.inspect module &#8212; monty 2.0.5 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.functools.html" title="monty.functools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -54,14 +54,14 @@
 <p>Useful additional functions to help get information about live objects</p>
 <dl class="function">
 <dt id="monty.inspect.all_subclasses">
-<code class="descname">all_subclasses</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">all_subclasses</code><span class="sig-paren">(</span><em class="sig-param">cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a class <cite>cls</cite>, this recursive function returns a list with
 all subclasses, subclasses of subclasses, and so on.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="monty.inspect.caller_name">
-<code class="descname">caller_name</code><span class="sig-paren">(</span><em>skip=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">caller_name</code><span class="sig-paren">(</span><em class="sig-param">skip=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a name of a caller in the format module.class.method</p>
 <p><cite>skip</cite> specifies how many levels of stack to skip while getting caller
 name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
@@ -75,13 +75,13 @@ name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
 
 <dl class="function">
 <dt id="monty.inspect.find_top_pyfile">
-<code class="descname">find_top_pyfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#find_top_pyfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.find_top_pyfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">find_top_pyfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#find_top_pyfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.find_top_pyfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function inspects the Cpython frame to find the path of the script.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="monty.inspect.initializer">
-<code class="descname">initializer</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initializer</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically assigns the parameters.
 <a class="reference external" href="http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables">http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">process</span><span class="p">:</span>
@@ -119,10 +119,10 @@ name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

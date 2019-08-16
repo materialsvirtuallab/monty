@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.dev module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.dev module &#8212; monty 2.0.5 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.design_patterns.html" title="monty.design_patterns module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,7 +55,7 @@
 particularly useful for developers. E.g., deprecating methods / classes, etc.</p>
 <dl class="function">
 <dt id="monty.dev.deprecated">
-<code class="descname">deprecated</code><span class="sig-paren">(</span><em>replacement=None</em>, <em>message=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#deprecated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.deprecated" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">deprecated</code><span class="sig-paren">(</span><em class="sig-param">replacement=None</em>, <em class="sig-param">message=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#deprecated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.deprecated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to mark classes or functions as deprecated,
 with a possible replacement.</p>
 <dl class="field-list simple">
@@ -73,7 +73,7 @@ with a possible replacement.</p>
 
 <dl class="function">
 <dt id="monty.dev.get_ncpus">
-<code class="descname">get_ncpus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#get_ncpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.get_ncpus" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_ncpus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#get_ncpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.get_ncpus" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you are using Python &gt;= 2.7, multiprocessing.cpu_count() already
@@ -90,7 +90,7 @@ cpus-in-python</p>
 
 <dl class="function">
 <dt id="monty.dev.install_excepthook">
-<code class="descname">install_excepthook</code><span class="sig-paren">(</span><em>hook_type='color'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#install_excepthook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.install_excepthook" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">install_excepthook</code><span class="sig-paren">(</span><em class="sig-param">hook_type='color'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#install_excepthook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.install_excepthook" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function replaces the original python traceback with an improved
 version from Ipython. Use <cite>color</cite> for colourful traceback formatting,
 <cite>verbose</cite> for Ka-Ping Yee’s “cgitb.py” version kwargs are the keyword
@@ -105,7 +105,7 @@ info.</p>
 
 <dl class="class">
 <dt id="monty.dev.requires">
-<em class="property">class </em><code class="descname">requires</code><span class="sig-paren">(</span><em>condition</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#requires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.requires" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param">condition</em>, <em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#requires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.requires" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decorator to mark classes or functions as requiring a specified condition
 to be true. This can be used to present useful error messages for
@@ -156,10 +156,10 @@ someone attempts to call the use_scipy function:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

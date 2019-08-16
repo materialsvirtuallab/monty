@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.design_patterns module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.design_patterns module &#8212; monty 2.0.5 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.collections.html" title="monty.collections module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.5 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -53,7 +53,7 @@
 <span id="monty-design-patterns-module"></span><h1>monty.design_patterns module<a class="headerlink" href="#module-monty.design_patterns" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="monty.design_patterns.NullFile">
-<em class="property">class </em><code class="descname">NullFile</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">NullFile</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A file object that is associated to /dev/null.</p>
 <p>no-op</p>
@@ -61,12 +61,12 @@
 
 <dl class="class">
 <dt id="monty.design_patterns.NullStream">
-<em class="property">class </em><code class="descname">NullStream</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">NullStream</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A fake stream with a no-op write..</p>
 <dl class="method">
 <dt id="monty.design_patterns.NullStream.write">
-<code class="descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream.write" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>no-op</p>
 </dd></dl>
 
@@ -74,7 +74,7 @@
 
 <dl class="function">
 <dt id="monty.design_patterns.cached_class">
-<code class="descname">cached_class</code><span class="sig-paren">(</span><em>klass</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#cached_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.cached_class" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cached_class</code><span class="sig-paren">(</span><em class="sig-param">klass</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#cached_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.cached_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to cache class instances by constructor arguments.
 This results in a class that behaves like a singleton for each
 set of constructor arguments, ensuring efficiency.</p>
@@ -91,7 +91,7 @@ is not cached.</p>
 
 <dl class="function">
 <dt id="monty.design_patterns.singleton">
-<code class="descname">singleton</code><span class="sig-paren">(</span><em>cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#singleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.singleton" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">singleton</code><span class="sig-paren">(</span><em class="sig-param">cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#singleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.singleton" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator can be used to create a singleton out of a class.</p>
 <p>Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@singleton</span>
@@ -127,10 +127,10 @@ is not cached.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>
