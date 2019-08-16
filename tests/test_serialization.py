@@ -49,14 +49,37 @@ class SerialTest(unittest.TestCase):
         self.assertEqual(d, d2)
         os.remove("monte_test.yaml")
 
+        # Test manual formatting specification
+        for fmt in ("json", "yaml"):
+            fn = "monte_test.txt"
+            dumpfn(d, fn, fmt=fmt)
+            d2 = loadfn(fn, fmt=fmt)
+            self.assertEqual(d, d2,
+                             msg="Test file with extension {} did not parse correctly".format(ext))
+            os.remove(fn)
+
+        with self.assertRaises(TypeError):
+            dumpfn(d, 'monte_test.txt', fmt='garbage')
+        with self.assertRaises(TypeError):
+            loadfn('monte_test.txt', fmt='garbage')
+
     @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
     def test_mpk(self):
         d = {"hello": "world"}
+
+        # Test automatic format detection
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
         self.assertEqual(d, {k.decode('utf-8'): v.decode('utf-8')
                              for k, v in d2.items()})
         os.remove("monte_test.mpk")
+
+        # Test manual format specification
+        dumpfn(d, "monte_test.bin", fmt='mpk')
+        d2 = loadfn("monte_test.bin", fmt='mpk')
+        self.assertEqual(d, {k.decode('utf-8'): v.decode('utf-8')
+                             for k, v in d2.items()})
+        os.remove("monte_test.bin")
 
         # Test to ensure basename is respected, and not directory
         with ScratchDir('.'):
