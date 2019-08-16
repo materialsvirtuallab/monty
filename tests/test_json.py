@@ -15,7 +15,7 @@ from bson.objectid import ObjectId
 from ast import literal_eval
 
 from . import __version__ as tests_version
-from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
+from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize, REDIRECT
 
 
 class GoodMSONClass(MSONable):
@@ -269,6 +269,19 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertEqual(clean["a"], six.binary_type(rnd_bin))
         self.assertIsInstance(clean["a"], six.binary_type)
+
+    def test_redirect(self):
+
+        REDIRECT["tests.test_json"] = {"test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}}
+
+        d = {"@class": "test_class", "@module": "tests.test_json", "a": 1, "b": 1, "c": 1}
+
+        obj = json.loads(json.dumps(d), cls=MontyDecoder)
+        self.assertEqual(type(obj),GoodMSONClass)
+
+        d["@class"] = "not_there"
+        obj = json.loads(json.dumps(d), cls=MontyDecoder)
+        self.assertEqual(type(obj),dict)
 
 
 if __name__ == "__main__":
