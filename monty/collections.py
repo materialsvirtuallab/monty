@@ -27,9 +27,6 @@ def tree():
     return collections.defaultdict(tree)
 
 
-
-
-
 class frozendict(dict):
     """
     A dictionary that does not permit changes. The naming
