@@ -27,21 +27,6 @@ def tree():
     return collections.defaultdict(tree)
 
 
-def as_set(obj):
-    """
-    Convert obj into a set, returns None if obj is None.
-
-    >>> assert as_set(None) is None and as_set(1) == set([1]) and as_set(range(1,3)) == set([1, 2])
-    """
-    if obj is None or isinstance(obj, collections.Set):
-        return obj
-
-    if not isinstance(obj, collections.Iterable):
-        return set((obj,))
-    else:
-        return set(obj)
-
-
 class frozendict(dict):
     """
     A dictionary that does not permit changes. The naming
@@ -200,7 +185,7 @@ def dict2namedtuple(*args, **kwargs):
 
         - The order of the items in the namedtuple is not deterministic if
           kwargs are used.
-          namedtuples, however, should always be accessed by attribute hence 
+          namedtuples, however, should always be accessed by attribute hence
           this behaviour should not represent a serious problem.
 
         - Don't use this function in code in which memory and performance are

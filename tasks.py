@@ -86,7 +86,7 @@ def publish(ctx):
 
 @task
 def test(ctx):
-    ctx.run("nosetests")
+    ctx.run("pytest")
 
 
 @task
