@@ -4,13 +4,14 @@ JSON serialization and deserialization utilities.
 """
 
 from __future__ import absolute_import, unicode_literals
+import os
 import json
 import datetime
 import six
 import inspect
 
 from hashlib import sha1
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 try:
     from importlib import import_module
@@ -32,6 +33,40 @@ try:
     import bson
 except ImportError:
     bson = None
+
+
+SETTINGS_FILE = os.path.join(os.path.expanduser("~"), ".monty.yaml")
+
+
+def _load_redirect():
+    try:
+        with open(SETTINGS_FILE, "rt") as f:
+            d = yaml.safe_load(f)
+    except IOError:
+
+        # TODO. IF SETTINGS FILE NOT FOUND search for
+        # environment variable
+        return {}
+
+    # Convert the full paths to module/class
+    redirect_dict = defaultdict(dict)
+    for old_path, new_path in d.get("redirect", {}).items():
+        old_class = old_path.split(".")[-1]
+        old_module = ".".join(old_path.split(".")[:-1])
+
+        new_class = new_path.split(".")[-1]
+        new_module = ".".join(new_path.split(".")[:-1])
+
+        redirect_dict[old_module][old_class] = {
+            "@module": new_module,
+            "@class": new_class,
+        }
+
+    return dict(redirect_dict)
+
+
+REDIRECT = _load_redirect()
+
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -72,6 +107,11 @@ class MSONable(object):
 
     For such classes, you merely need to inherit from MSONable and you do not
     need to implement your own as_dict or from_dict protocol.
+
+    New to Monty V2019.08....
+    Classes can be redirected to moved implementations by putting in the old
+    fully qualified path and new fully qualified path into .mson.yaml in the 
+    home folder
     """
 
     def as_dict(self):
@@ -252,6 +292,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
+                if classname in REDIRECT.get(modname, {}):
+                    modname = REDIRECT[modname][classname]["@module"]
+                    classname = REDIRECT[modname][classname]["@class"]
             else:
                 modname = None
                 classname = None
