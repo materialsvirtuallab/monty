@@ -34,8 +34,6 @@ try:
 except ImportError:
     bson = None
 
-SETTINGS_FILE = os.path.join(os.path.expanduser("~"), ".monty.yaml")
-
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = "0.1"
@@ -44,9 +42,10 @@ __email__ = "ongsp@ucsd.edu"
 __date__ = "1/24/14"
 
 
-def _load_redirect():
+def _load_redirect(redirect_file):
     try:
-        with open(SETTINGS_FILE, "rt") as f:
+        import yaml
+        with open(redirect_file, "rt") as f:
             d = yaml.safe_load(f)
     except IOError:
         # If we can't find the file
@@ -104,11 +103,11 @@ class MSONable(object):
 
     New to Monty V2019.08....
     Classes can be redirected to moved implementations by putting in the old
-    fully qualified path and new fully qualified path into .mson.yaml in the 
+    fully qualified path and new fully qualified path into .monty.yaml in the 
     home folder
     """
 
-    REDIRECT = _load_redirect()
+    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"), ".monty.yaml"))
 
     def as_dict(self):
         """
