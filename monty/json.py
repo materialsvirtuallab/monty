@@ -34,8 +34,14 @@ try:
 except ImportError:
     bson = None
 
-
 SETTINGS_FILE = os.path.join(os.path.expanduser("~"), ".monty.yaml")
+
+__author__ = "Shyue Ping Ong"
+__copyright__ = "Copyright 2014, The Materials Virtual Lab"
+__version__ = "0.1"
+__maintainer__ = "Shyue Ping Ong"
+__email__ = "ongsp@ucsd.edu"
+__date__ = "1/24/14"
 
 
 def _load_redirect():
@@ -43,9 +49,8 @@ def _load_redirect():
         with open(SETTINGS_FILE, "rt") as f:
             d = yaml.safe_load(f)
     except IOError:
-
-        # TODO. IF SETTINGS FILE NOT FOUND search for
-        # environment variable
+        # If we can't find the file
+        # Just use an empty redirect dict
         return {}
 
     # Convert the full paths to module/class
@@ -63,17 +68,6 @@ def _load_redirect():
         }
 
     return dict(redirect_dict)
-
-
-REDIRECT = _load_redirect()
-
-
-__author__ = "Shyue Ping Ong"
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = "0.1"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "ongsp@ucsd.edu"
-__date__ = "1/24/14"
 
 
 class MSONable(object):
@@ -113,6 +107,8 @@ class MSONable(object):
     fully qualified path and new fully qualified path into .mson.yaml in the 
     home folder
     """
+
+    REDIRECT = _load_redirect()
 
     def as_dict(self):
         """
@@ -292,9 +288,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
-                if classname in REDIRECT.get(modname, {}):
-                    modname = REDIRECT[modname][classname]["@module"]
-                    classname = REDIRECT[modname][classname]["@class"]
+                if classname in MSONable.REDIRECT.get(modname, {}):
+                    modname = MSONable.REDIRECT[modname][classname]["@module"]
+                    classname = MSONable.REDIRECT[modname][classname]["@class"]
             else:
                 modname = None
                 classname = None
