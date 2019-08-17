@@ -101,7 +101,7 @@ class MSONable(object):
     For such classes, you merely need to inherit from MSONable and you do not
     need to implement your own as_dict or from_dict protocol.
 
-    New to Monty V2019.08....
+    New to Monty V2.0.6....
     Classes can be redirected to moved implementations by putting in the old
     fully qualified path and new fully qualified path into .monty.yaml in the 
     home folder
