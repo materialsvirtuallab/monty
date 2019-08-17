@@ -1,0 +1,2 @@
+redirect:
+  old_module.old_class : new_module.new_class
