@@ -54,7 +54,7 @@ def _load_redirect(redirect_file):
 
     # Convert the full paths to module/class
     redirect_dict = defaultdict(dict)
-    for old_path, new_path in d.get("redirect", {}).items():
+    for old_path, new_path in d.items():
         old_class = old_path.split(".")[-1]
         old_module = ".".join(old_path.split(".")[:-1])
 
