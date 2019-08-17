@@ -34,6 +34,26 @@ try:
 except ImportError:
     bson = None
 
+try:
+    import ruamel.yaml as yaml
+    try:  # Default to using CLoader and CDumper for speed.
+        from ruamel.yaml import CLoader as Loader
+        from ruamel.yaml import CDumper as Dumper
+    except ImportError:
+        from ruamel.yaml import Loader
+        from ruamel.yaml import Dumper
+except ImportError:
+    try:
+        import yaml
+        try:  # Default to using CLoader and CDumper for speed.
+            from yaml import CLoader as Loader
+            from yaml import CDumper as Dumper
+        except ImportError:
+            from yaml import Loader
+            from yaml import Dumper
+    except ImportError:
+        yaml = None
+
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = "0.1"
@@ -44,7 +64,6 @@ __date__ = "1/24/14"
 
 def _load_redirect(redirect_file):
     try:
-        import yaml
         with open(redirect_file, "rt") as f:
             d = yaml.safe_load(f)
     except IOError:
