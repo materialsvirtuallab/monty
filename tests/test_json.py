@@ -6,6 +6,7 @@ __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
 
+import os
 import unittest
 import numpy as np
 import json
@@ -16,7 +17,9 @@ from ast import literal_eval
 
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
+from monty.json import _load_redirect
 
+test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 class GoodMSONClass(MSONable):
 
@@ -269,6 +272,32 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertEqual(clean["a"], six.binary_type(rnd_bin))
         self.assertIsInstance(clean["a"], six.binary_type)
+
+    def test_redirect(self):
+
+        MSONable.REDIRECT["tests.test_json"] = {
+            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
+        }
+
+        d = {
+            "@class": "test_class",
+            "@module": "tests.test_json",
+            "a": 1,
+            "b": 1,
+            "c": 1,
+        }
+
+        obj = json.loads(json.dumps(d), cls=MontyDecoder)
+        self.assertEqual(type(obj), GoodMSONClass)
+
+        d["@class"] = "not_there"
+        obj = json.loads(json.dumps(d), cls=MontyDecoder)
+        self.assertEqual(type(obj), dict)
+
+    def test_redirect_settings_file(self):
+
+        data = _load_redirect(os.path.join(test_dir,"test_settings.yaml"))
+        self.assertEqual(data, {'old_module': {'old_class': {'@class': 'new_class', '@module': 'new_module'}}})
 
 
 if __name__ == "__main__":

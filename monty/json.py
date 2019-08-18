@@ -4,13 +4,14 @@ JSON serialization and deserialization utilities.
 """
 
 from __future__ import absolute_import, unicode_literals
+import os
 import json
 import datetime
 import six
 import inspect
 
 from hashlib import sha1
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 
 try:
     from importlib import import_module
@@ -33,12 +34,58 @@ try:
 except ImportError:
     bson = None
 
+try:
+    import ruamel.yaml as yaml
+    try:  # Default to using CLoader and CDumper for speed.
+        from ruamel.yaml import CLoader as Loader
+        from ruamel.yaml import CDumper as Dumper
+    except ImportError:
+        from ruamel.yaml import Loader
+        from ruamel.yaml import Dumper
+except ImportError:
+    try:
+        import yaml
+        try:  # Default to using CLoader and CDumper for speed.
+            from yaml import CLoader as Loader
+            from yaml import CDumper as Dumper
+        except ImportError:
+            from yaml import Loader
+            from yaml import Dumper
+    except ImportError:
+        yaml = None
+
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = "0.1"
 __maintainer__ = "Shyue Ping Ong"
 __email__ = "ongsp@ucsd.edu"
 __date__ = "1/24/14"
+
+
+def _load_redirect(redirect_file):
+    try:
+        with open(redirect_file, "rt") as f:
+            d = yaml.safe_load(f)
+    except IOError:
+        # If we can't find the file
+        # Just use an empty redirect dict
+        return {}
+
+    # Convert the full paths to module/class
+    redirect_dict = defaultdict(dict)
+    for old_path, new_path in d.items():
+        old_class = old_path.split(".")[-1]
+        old_module = ".".join(old_path.split(".")[:-1])
+
+        new_class = new_path.split(".")[-1]
+        new_module = ".".join(new_path.split(".")[:-1])
+
+        redirect_dict[old_module][old_class] = {
+            "@module": new_module,
+            "@class": new_class,
+        }
+
+    return dict(redirect_dict)
 
 
 class MSONable(object):
@@ -72,7 +119,17 @@ class MSONable(object):
 
     For such classes, you merely need to inherit from MSONable and you do not
     need to implement your own as_dict or from_dict protocol.
+
+    New to Monty V2.0.6....
+    Classes can be redirected to moved implementations by putting in the old
+    fully qualified path and new fully qualified path into .monty.yaml in the 
+    home folder
+
+    Example:
+    old_module.old_class: new_module.new_class
     """
+
+    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"), ".monty.yaml"))
 
     def as_dict(self):
         """
@@ -252,6 +309,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
+                if classname in MSONable.REDIRECT.get(modname, {}):
+                    modname = MSONable.REDIRECT[modname][classname]["@module"]
+                    classname = MSONable.REDIRECT[modname][classname]["@class"]
             else:
                 modname = None
                 classname = None

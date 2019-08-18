@@ -4,7 +4,7 @@ Change log
 v2.0.5
 ------
 1. Checking for extension type in loadfn and dumpfn now relies on ".json",
-   ".yaml" or ".mpk". Further, not ".yml" and ".yaml" are both recognized as
+   ".yaml" or ".mpk". Further, now ".yml" and ".yaml" are both recognized as
    YAML files. (@clegaspi)
 2. A fmt kwarg is now supported in loadfn and dumpfn to specify the format
    explicitly. (@clegaspi)
