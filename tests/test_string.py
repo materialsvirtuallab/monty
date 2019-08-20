@@ -15,7 +15,7 @@ import unittest
 import random
 import sys
 
-from monty.string import remove_non_ascii, str2unicode, unicode2str
+from monty.string import remove_non_ascii, unicode2str
 
 
 class FuncTest(unittest.TestCase):
@@ -25,12 +25,6 @@ class FuncTest(unittest.TestCase):
         s += "".join(chr(random.randint(128, 150)) for i in range(10))
         clean = remove_non_ascii(s)
         self.assertEqual(len(clean), 10)
-
-    def test_str2unicode(self):
-        if sys.version_info.major < 3:
-            self.assertEqual(type(str2unicode("a")), unicode)
-        else:
-            self.assertEqual(type(str2unicode("a")), str)
 
     def test_unicode2str(self):
         if sys.version_info.major < 3:
