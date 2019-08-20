@@ -49,15 +49,6 @@ class SerialTest(unittest.TestCase):
         self.assertEqual(d, d2)
         os.remove("monte_test.yaml")
 
-        # Test manual formatting specification
-        for fmt in ("json", "yaml"):
-            fn = "monte_test.txt"
-            dumpfn(d, fn, fmt=fmt)
-            d2 = loadfn(fn, fmt=fmt)
-            self.assertEqual(d, d2,
-                             msg="Test file with extension {} did not parse correctly".format(ext))
-            os.remove(fn)
-
         with self.assertRaises(TypeError):
             dumpfn(d, 'monte_test.txt', fmt='garbage')
         with self.assertRaises(TypeError):

@@ -44,7 +44,7 @@ __email__ = 'ongsp@ucsd.edu'
 __date__ = '7/29/14'
 
 
-def loadfn(fn, *args, fmt=None, **kwargs):
+def loadfn(fn, *args, **kwargs):
     """
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z") compressed file.
@@ -55,23 +55,20 @@ def loadfn(fn, *args, fmt=None, **kwargs):
 
     Args:
         fn (str/Path): filename or pathlib.Path.
-        \*args: Any of the args supported by json/yaml.load.
-        fmt (str): manually specify file format to read.
-            Options are "json", "yaml", or "mpk". If None, the
-            file type will be detected automatically.
-        \*\*kwargs: Any of the kwargs supported by json/yaml.load.
+        \\*args: Any of the args supported by json/yaml.load.
+        \\*\\*kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
         (object) Result of json/yaml/msgpack.load.
     """
-    if not fmt:
-        basename = os.path.basename(fn).lower()
-        if ".mpk" in basename:
-            fmt = 'mpk'
-        elif any(ext in basename for ext in (".yaml", ".yml")):
-            fmt = 'yaml'
-        else:
-            fmt = 'json'
+
+    basename = os.path.basename(fn).lower()
+    if ".mpk" in basename:
+        fmt = 'mpk'
+    elif any(ext in basename for ext in (".yaml", ".yml")):
+        fmt = 'yaml'
+    else:
+        fmt = 'json'
 
     if fmt == 'mpk':
         if msgpack is None:
@@ -99,7 +96,7 @@ def loadfn(fn, *args, fmt=None, **kwargs):
                 raise TypeError("Invalid format: {}".format(fmt))
 
 
-def dumpfn(obj, fn, *args, fmt=None, **kwargs):
+def dumpfn(obj, fn, *args, **kwargs):
     """
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z") compressed file.
@@ -111,23 +108,19 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
     Args:
         obj (object): Object to dump.
         fn (str/Path): filename or pathlib.Path.
-        \*args: Any of the args supported by json/yaml.dump.
-        fmt (str): manually specify file format to read.
-            Options are "json", "yaml", or "mpk". If None, the
-            file type will be detected automatically.
-        \*\*kwargs: Any of the kwargs supported by json/yaml.dump.
+        \\*args: Any of the args supported by json/yaml.dump.
+        \\*\\*kwargs: Any of the kwargs supported by json/yaml.dump.
 
     Returns:
         (object) Result of json.load.
     """
-    if not fmt:
-        basename = os.path.basename(fn).lower()
-        if ".mpk" in basename:
-            fmt = 'mpk'
-        elif any(ext in basename for ext in (".yaml", ".yml")):
-            fmt = 'yaml'
-        else:
-            fmt = 'json'
+    basename = os.path.basename(fn).lower()
+    if ".mpk" in basename:
+        fmt = 'mpk'
+    elif any(ext in basename for ext in (".yaml", ".yml")):
+        fmt = 'yaml'
+    else:
+        fmt = 'json'
 
     if fmt == 'mpk':
         if msgpack is None:
