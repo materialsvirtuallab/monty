@@ -43,9 +43,9 @@ def zopen(filename, *args, **kwargs):
 
     Args:
         filename (str/Path): filename or pathlib.Path.
-        \*args: Standard args for python open(..). E.g., 'r' for read, 'w' for
+        \\*args: Standard args for python open(..). E.g., 'r' for read, 'w' for
             write.
-        \*\*kwargs: Standard kwargs for python open(..).
+        \\*\\*kwargs: Standard kwargs for python open(..).
 
     Returns:
         File-like object. Supports with context.
@@ -250,9 +250,10 @@ class FileLock(object):
         self.is_locked = True
 
     def release(self):
-        """ Get rid of the lock by deleting the lockfile.
-            When working in a `with` statement, this gets automatically
-            called at the end.
+        """
+        Get rid of the lock by deleting the lockfile.
+        When working in a `with` statement, this gets automatically
+        called at the end.
         """
         if self.is_locked:
             os.close(self.fd)
@@ -296,4 +297,3 @@ def get_open_fds():
 
     return len([s for s in procs.split('\n')
                 if s and s[0] == 'f' and s[1:].isdigit()])
-

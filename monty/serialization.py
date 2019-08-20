@@ -47,11 +47,13 @@ __date__ = '7/29/14'
 def loadfn(fn, *args, **kwargs):
     """
     Loads json/yaml/msgpack directly from a filename instead of a
-    File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z") compressed file.
-    For YAML, ruamel.yaml must be installed. The file type is automatically detected
-    from the file extension (case insensitive). YAML is assumed if the filename contains
-    ".yaml" or ".yml". Msgpack is assumed if the filename contains ".mpk".
-    JSON is otherwise assumed. The file type can be specified manually with "fmt='type'".
+    File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
+    compressed file.
+    For YAML, ruamel.yaml must be installed. The file type is automatically
+    detected from the file extension (case insensitive).
+    YAML is assumed if the filename contains ".yaml" or ".yml".
+    Msgpack is assumed if the filename contains ".mpk".
+    JSON is otherwise assumed.
 
     Args:
         fn (str/Path): filename or pathlib.Path.
@@ -83,8 +85,8 @@ def loadfn(fn, *args, **kwargs):
         with zopen(fn, 'rt') as fp:
             if fmt == 'yaml':
                 if yaml is None:
-                    raise RuntimeError("Loading of YAML files is not "
-                                       "possible as ruamel.yaml is not installed.")
+                    raise RuntimeError("Loading of YAML files requires "
+                                       "ruamel.yaml.")
                 if "Loader" not in kwargs:
                     kwargs["Loader"] = Loader
                 return yaml.load(fp, *args, **kwargs)
@@ -99,11 +101,13 @@ def loadfn(fn, *args, **kwargs):
 def dumpfn(obj, fn, *args, **kwargs):
     """
     Dump to a json/yaml directly by filename instead of a
-    File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z") compressed file.
-    For YAML, ruamel.yaml must be installed. The file type is automatically detected
-    from the file extension (case insensitive). YAML is assumed if the filename contains
-    ".yaml" or ".yml". Msgpack is assumed if the filename contains ".mpk".
-    JSON is otherwise assumed. The file type can be specified manually with "fmt='type'".
+    File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
+    compressed file.
+    For YAML, ruamel.yaml must be installed. The file type is automatically
+    detected from the file extension (case insensitive). YAML is assumed if the
+    filename contains ".yaml" or ".yml".
+    Msgpack is assumed if the filename contains ".mpk".
+    JSON is otherwise assumed.
 
     Args:
         obj (object): Object to dump.
@@ -135,8 +139,8 @@ def dumpfn(obj, fn, *args, **kwargs):
         with zopen(fn, "wt") as fp:
             if fmt == 'yaml':
                 if yaml is None:
-                    raise RuntimeError("Loading of YAML files is not "
-                                       "possible as ruamel.yaml is not installed.")
+                    raise RuntimeError("Loading of YAML files requires "
+                                       "ruamel.yaml.")
                 if "Dumper" not in kwargs:
                     kwargs["Dumper"] = Dumper
                 yaml.dump(obj, fp, *args, **kwargs)

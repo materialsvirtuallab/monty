@@ -66,7 +66,7 @@ class ScratchDir(object):
         simple pass through, i.e., nothing happens.
 
         Args:
-            rootpath (str/Path): The path in which to create temp subdirectories.
+            rootpath (str/Path): Path in which to create temp subdirectories.
                 If this is None, no temp directories will be created and
                 this will just be a simple pass through.
             create_symbolic_link (bool): Whether to create a symbolic link in

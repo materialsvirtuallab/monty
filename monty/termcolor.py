@@ -108,7 +108,7 @@ def stream_has_colours(stream):
         import curses
         curses.setupterm()
         return curses.tigetnum("colors") > 2
-    except:
+    except Exception:
         return False  # guess false in case of error
 
 
@@ -167,7 +167,8 @@ def colored_map(text, cmap):
         colored_key("foo bar", {bar: "green"})
         colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
     """
-    if not __ISON: return text
+    if not __ISON:
+        return text
     for key, v in cmap.items():
         if isinstance(v, dict):
             text = text.replace(key, colored(key, **v))
@@ -199,23 +200,26 @@ def get_terminal_size():
 
     Based on:
 
-        http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
+        http://stackoverflow.com/questions/566746/how-to-get-console-window-
+        width-in-python
     """
     try:
         rc = os.popen('stty size', 'r').read().split()
         return int(rc[0]), int(rc[1])
-    except:
+    except Exception:
         pass
 
     env = os.environ
 
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl, termios, struct
+            import fcntl
+            import termios
+            import struct
             rc = struct.unpack('hh',
                                fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
             return rc
-        except:
+        except Exception:
             return None
 
     rc = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
@@ -225,7 +229,7 @@ def get_terminal_size():
             fd = os.open(os.ctermid(), os.O_RDONLY)
             rc = ioctl_GWINSZ(fd)
             os.close(fd)
-        except:
+        except Exception:
             pass
 
     if not rc:

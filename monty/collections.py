@@ -84,7 +84,7 @@ class AttrDict(dict):
 class FrozenAttrDict(frozendict):
     """
     A dictionary that:
-        * does not permit changes. 
+        * does not permit changes.
         * Allows to access dict keys as obj.foo in addition
           to the traditional way obj['foo']
     """
@@ -108,20 +108,22 @@ class FrozenAttrDict(frozendict):
 
 class MongoDict(object):
     """
-    This dict-like object allows one to access the entries in a nested dict as attributes. 
-    Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object 
-    is particularly useful if you need to analyze a nested dict interactively (e.g. documents
-    extracted from a MongoDB database).
+    This dict-like object allows one to access the entries in a nested dict as
+    attributes.
+    Entries (attributes) cannot be modified. It also provides Ipython tab
+    completion hence this object is particularly useful if you need to analyze
+    a nested dict interactively (e.g. documents extracted from a MongoDB
+    database).
 
-    >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
+    >>> m = MongoDict({'a': {'b': 1}, 'x': 2})
     >>> assert m.a.b == 1 and m.x == 2
     >>> assert "a" in m and "b" in m.a
     >>> m["a"]
     {'b': 1}
 
-    .. note:: 
+    .. note::
 
-        Cannot inherit from ABC collections.Mapping because otherwise 
+        Cannot inherit from ABC collections.Mapping because otherwise
         dict.keys and dict.items will pollute the namespace.
         e.g MongoDict({"keys": 1}).keys would be the ABC dict method.
     """
@@ -142,7 +144,7 @@ class MongoDict(object):
     def __getattribute__(self, name):
         try:
             return super(MongoDict, self).__getattribute__(name)
-        except:
+        except AttributeError:
             # raise
             try:
                 a = self._mongo_dict_[name]

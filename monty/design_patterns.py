@@ -107,5 +107,4 @@ class NullFile(object):
 class NullStream(object):
     """A fake stream with a no-op write.."""
     def write(*args):
-        """no-op"""
-
+        pass

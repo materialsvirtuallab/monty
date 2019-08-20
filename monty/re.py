@@ -26,7 +26,7 @@ def regrep(filename, patterns, reverse=False, terminate_on_match=False,
     Args:
         filename (str): Filename to grep.
         patterns (dict): A dict of patterns, e.g.,
-            {"energy": "energy\(sigma->0\)\s+=\s+([\d\-\.]+)"}.
+            {"energy": r"energy\\(sigma->0\\)\\s+=\\s+([\\d\\-\\.]+)"}.
         reverse (bool): Read files in reverse. Defaults to false. Useful for
             large files, especially when used with terminate_on_match.
         terminate_on_match (bool): Whether to terminate when there is at
@@ -57,6 +57,6 @@ def regrep(filename, patterns, reverse=False, terminate_on_match=False,
     try:
         # Try to close open file handle. Pass if it is a generator.
         gen.close()
-    except:
+    except Exception:
         pass
     return matches

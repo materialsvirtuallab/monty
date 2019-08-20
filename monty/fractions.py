@@ -24,7 +24,7 @@ def gcd(*numbers):
     Returns the greatest common divisor for a sequence of numbers.
 
     Args:
-        \*numbers: Sequence of numbers.
+        \\*numbers: Sequence of numbers.
 
     Returns:
         (int) Greatest common divisor of numbers.
@@ -40,7 +40,7 @@ def lcm(*numbers):
     Return lowest common multiple of a sequence of numbers.
 
     Args:
-        \*numbers: Sequence of numbers.
+        \\*numbers: Sequence of numbers.
 
     Returns:
         (int) Lowest common multiple of numbers.

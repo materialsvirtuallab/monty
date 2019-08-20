@@ -42,19 +42,6 @@ def unicode2str(s):
     return s.encode('utf-8') if sys.version_info.major < 3 else s
 
 
-def str2unicode(s):
-    """
-    Converts strings to unicode in python 2. Ignores Python 3 strings.
-
-    Args:
-        s (str/unicode): Input string / unicode.
-
-    Returns:
-        Unicode.
-    """
-    return unicode(s) if sys.version_info.major < 3 else s
-
-
 def is_string(s):
     """True if s behaves like a string (duck typing test)."""
     try:
@@ -108,10 +95,10 @@ def marquee(text="", width=78, mark='*'):
     '                 A test                 '
     """
     if not text:
-        return (mark*width)[:width]
+        return (mark * width)[:width]
 
-    nmark = (width-len(text)-2)//len(mark)//2
-    if nmark < 0: 
+    nmark = (width - len(text) - 2) // len(mark) // 2
+    if nmark < 0:
         nmark = 0
 
     marks = mark * nmark
@@ -138,7 +125,7 @@ def boxed(msg, ch="=", pad=5):
     return "\n".join([len(msg) * ch,
                       msg,
                       len(msg) * ch,
-                     ])
+                      ])
 
 
 def make_banner(s, width=78, mark="*"):
@@ -147,6 +134,9 @@ def make_banner(s, width=78, mark="*"):
 
 
 def indent(lines, amount, ch=' '):
-    """Indent the lines in a string by padding each one with proper number of pad characters"""
+    """
+    Indent the lines in a string by padding each one with proper number of pad
+    characters
+    """
     padding = amount * ch
     return padding + ('\n' + padding).join(lines.split('\n'))

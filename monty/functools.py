@@ -18,7 +18,7 @@ from functools import update_wrapper, wraps, partial
 
 try:
     from threading import RLock
-except:
+except ImportError:
     class RLock:
         """Dummy reentrant lock for builds without threads"""
 
@@ -129,7 +129,7 @@ def lru_cache(maxsize=128, typed=False):
         if maxsize == 0:
 
             def wrapper(*args, **kwds):
-                # No caching -- just a statistics update after a successful call
+                # No caching - just a statistics update after a successful call
                 result = user_function(*args, **kwds)
                 misses[0] += 1
                 return result
@@ -168,7 +168,7 @@ def lru_cache(maxsize=128, typed=False):
                 result = user_function(*args, **kwds)
                 with lock:
                     if key in cache:
-                        # Getting here means that this same key was added to the
+                        # Getting here means that this same key was added to
                         # cache while the lock was released.  Since the link
                         # update is already done, we need only return the
                         # computed result and update the count of misses.
@@ -180,8 +180,8 @@ def lru_cache(maxsize=128, typed=False):
                         oldroot[RESULT] = result
                         # Empty the oldest link and make it the new root.
                         # Keep a reference to the old key and old result to
-                        # prevent their ref counts from going to zero during the
-                        # update. That will prevent potentially arbitrary object
+                        # prevent their ref counts from going to zero during
+                        # update. That will prevent arbitrary object
                         # clean-up code (i.e. __del__) from running while we're
                         # still adjusting the links.
                         r[0] = oldroot[NEXT]
@@ -403,7 +403,8 @@ def prof_main(main):
         import sys
         try:
             do_prof = sys.argv[1] == "prof"
-            if do_prof: sys.argv.pop(1)
+            if do_prof:
+                sys.argv.pop(1)
         except Exception:
             do_prof = False
 
@@ -411,7 +412,9 @@ def prof_main(main):
             sys.exit(main())
         else:
             print("Entering profiling mode...")
-            import pstats, cProfile, tempfile
+            import pstats
+            import cProfile
+            import tempfile
             prof_file = kwargs.get("prof_file", None)
             if prof_file is None:
                 _, prof_file = tempfile.mkstemp()

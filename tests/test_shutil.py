@@ -5,7 +5,6 @@ __maintainer__ = 'Shyue Ping Ong'
 __email__ = 'ongsp@ucsd.edu'
 __date__ = '1/24/14'
 
-
 import unittest
 import os
 import shutil
@@ -54,7 +53,6 @@ class CopyRTest(unittest.TestCase):
             txt = f.read()
             self.assertEqual(txt, "what")
 
-
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "cpr_src"))
         shutil.rmtree(os.path.join(test_dir, "cpr_dst"))
@@ -83,6 +81,7 @@ class CompressFileDirTest(unittest.TestCase):
     def tearDown(self):
         os.remove(os.path.join(test_dir, "tempfile"))
 
+
 class GzipDirTest(unittest.TestCase):
 
     def setUp(self):
@@ -108,6 +107,7 @@ class GzipDirTest(unittest.TestCase):
 
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "gzip_dir"))
+
 
 class RemoveTest(unittest.TestCase):
 
@@ -150,6 +150,7 @@ class RemoveTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(self.tempfile))
         self.assertFalse(os.path.isdir(self.tempdir))
         self.assertFalse(os.path.islink(self.templink))
+
 
 if __name__ == "__main__":
     unittest.main()

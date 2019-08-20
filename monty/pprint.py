@@ -46,11 +46,13 @@ def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
     """
     Args:
         node: the root of the tree to be drawn,
-        child_iter: function that when called with a node, returns an iterable over all its children
+        child_iter: function that when called with a node, returns an iterable
+            over all its children
         text_str: turns a node into the text to be displayed in the tree.
 
-    The default implementations of these two arguments retrieve the children by accessing node.children
-    and simply use str(node) to convert a node to a string. The resulting tree is drawn into a buffer and returned as a string.
+    The default implementations of these two arguments retrieve the children
+    by accessing node.children and simply use str(node) to convert a node to a
+    string. The resulting tree is drawn into a buffer and returned as a string.
 
     Based on https://pypi.python.org/pypi/asciitree/
     """

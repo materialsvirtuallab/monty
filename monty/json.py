@@ -17,7 +17,8 @@ try:
     from importlib import import_module
 except ImportError:
     # importlib only available in Python 2.7+, 3.1+
-    importlib = lambda x: x
+    def importlib(x):
+        return x
 
 try:
     from inspect import getfullargspec as getargspec
@@ -122,14 +123,15 @@ class MSONable(object):
 
     New to Monty V2.0.6....
     Classes can be redirected to moved implementations by putting in the old
-    fully qualified path and new fully qualified path into .monty.yaml in the 
+    fully qualified path and new fully qualified path into .monty.yaml in the
     home folder
 
     Example:
     old_module.old_class: new_module.new_class
     """
 
-    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"), ".monty.yaml"))
+    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"),
+                                           ".monty.yaml"))
 
     def as_dict(self):
         """
@@ -212,7 +214,8 @@ class MSONable(object):
                     )
                 elif isinstance(value, list):
                     list_dict = {
-                        "{}{}{}".format(key,seperator,num): item for num, item in enumerate(value)
+                        "{}{}{}".format(key, seperator, num): item
+                        for num, item in enumerate(value)
                     }
                     flat_dict.update(flatten(list_dict))
                 else:
@@ -220,7 +223,8 @@ class MSONable(object):
 
             return flat_dict
 
-        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0])
+        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(),
+                              key=lambda x: x[0])
         ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
@@ -329,7 +333,7 @@ class MontyDecoder(json.JSONDecoder):
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
                     data = {k: v for k, v in d.items()
-                           if not k.startswith("@")}
+                            if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
             elif np is not None and modname == "numpy" and classname == \
@@ -382,9 +386,9 @@ def jsanitize(obj, strict=False, allow_bson=False):
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or \
-                       (bson is not None and isinstance(obj,
-                                                        bson.objectid.ObjectId))):
+    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or
+                       (bson is not None and
+                        isinstance(obj, bson.objectid.ObjectId))):
         return obj
     if isinstance(obj, (list, tuple)):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]

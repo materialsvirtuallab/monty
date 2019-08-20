@@ -56,10 +56,10 @@ def gzip_dir(path, compresslevel=6):
         full_f = os.path.join(path, f)
         if not f.lower().endswith("gz"):
             with open(full_f, 'rb') as f_in, \
-                GzipFile('{}.gz'.format(full_f), 'wb',
-                         compresslevel=compresslevel) as f_out:
+                    GzipFile('{}.gz'.format(full_f), 'wb',
+                             compresslevel=compresslevel) as f_out:
                 shutil.copyfileobj(f_in, f_out)
-            shutil.copystat(full_f,'{}.gz'.format(full_f))
+            shutil.copystat(full_f, '{}.gz'.format(full_f))
             os.remove(full_f)
 
 
@@ -134,7 +134,8 @@ def decompress_dir(path):
 
 def remove(path, follow_symlink=False):
     """
-    Implements an remove function that will delete files, folder trees and symlink trees
+    Implements an remove function that will delete files, folder trees and
+    symlink trees
 
     1.) Remove a file
     2.) Remove a symlink and follow into with a recursive rm if follow_symlink

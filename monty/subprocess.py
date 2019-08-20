@@ -72,7 +72,7 @@ class Command(object):
                 self.output, self.error = self.process.communicate()
                 self.retcode = self.process.returncode
                 # print('Thread stopped')
-            except:
+            except Exception:
                 import traceback
                 self.error = traceback.format_exc()
                 self.retcode = -1
