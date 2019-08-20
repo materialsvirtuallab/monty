@@ -42,11 +42,18 @@
             
   <div class="section" id="change-log">
 <h1>Change log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="v2-0-6">
+<h2>v2.0.6<a class="headerlink" href="#v2-0-6" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Revert py27 incompatible fmt spec for loadfn and dumpfn for now. This is
+a much less common use case.</p></li>
+</ol>
+</div>
 <div class="section" id="v2-0-5">
 <h2>v2.0.5<a class="headerlink" href="#v2-0-5" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
 <li><p>Checking for extension type in loadfn and dumpfn now relies on “.json”,
-“.yaml” or “.mpk”. Further, not “.yml” and “.yaml” are both recognized as
+“.yaml” or “.mpk”. Further, now “.yml” and “.yaml” are both recognized as
 YAML files. (&#64;clegaspi)</p></li>
 <li><p>A fmt kwarg is now supported in loadfn and dumpfn to specify the format
 explicitly. (&#64;clegaspi)</p></li>
@@ -452,6 +459,7 @@ decompress_file and decompress_dir methods.</p></li>
   <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Change log</a><ul>
+<li><a class="reference internal" href="#v2-0-6">v2.0.6</a></li>
 <li><a class="reference internal" href="#v2-0-5">v2.0.5</a></li>
 <li><a class="reference internal" href="#v2-0-4">v2.0.4</a></li>
 <li><a class="reference internal" href="#v2-0-3">v2.0.3</a></li>

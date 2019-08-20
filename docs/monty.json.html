@@ -92,6 +92,17 @@ classes of such form. An example is given below:</p>
 </div>
 <p>For such classes, you merely need to inherit from MSONable and you do not
 need to implement your own as_dict or from_dict protocol.</p>
+<p>New to Monty V2.0.6….
+Classes can be redirected to moved implementations by putting in the old
+fully qualified path and new fully qualified path into .monty.yaml in the
+home folder</p>
+<p>Example:
+old_module.old_class: new_module.new_class</p>
+<dl class="attribute">
+<dt id="monty.json.MSONable.REDIRECT">
+<code class="sig-name descname">REDIRECT</code><em class="property"> = {}</em><a class="headerlink" href="#monty.json.MSONable.REDIRECT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 <dl class="method">
 <dt id="monty.json.MSONable.as_dict">
 <code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.as_dict" title="Permalink to this definition">¶</a></dt>

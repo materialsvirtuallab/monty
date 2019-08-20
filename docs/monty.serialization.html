@@ -55,7 +55,7 @@
 and yaml.</p>
 <dl class="function">
 <dt id="monty.serialization.dumpfn">
-<code class="sig-name descname">dumpfn</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">fn</em>, <em class="sig-param">*args</em>, <em class="sig-param">fmt=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#dumpfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.dumpfn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">dumpfn</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">fn</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#dumpfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.dumpfn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dump to a json/yaml directly by filename instead of a
 File-like object. File may also be a BZ2 (“.BZ2”) or GZIP (“.GZ”, “.Z”) compressed file.
 For YAML, ruamel.yaml must be installed. The file type is automatically detected
@@ -68,9 +68,6 @@ JSON is otherwise assumed. The file type can be specified manually with “fmt=�
 <li><p><strong>obj</strong> (<em>object</em>) – Object to dump.</p></li>
 <li><p><strong>fn</strong> (<em>str/Path</em>) – filename or pathlib.Path.</p></li>
 <li><p><strong>*args</strong> – Any of the args supported by json/yaml.dump.</p></li>
-<li><p><strong>fmt</strong> (<em>str</em>) – manually specify file format to read.
-Options are “json”, “yaml”, or “mpk”. If None, the
-file type will be detected automatically.</p></li>
 <li><p><strong>**kwargs</strong> – Any of the kwargs supported by json/yaml.dump.</p></li>
 </ul>
 </dd>
@@ -82,7 +79,7 @@ file type will be detected automatically.</p></li>
 
 <dl class="function">
 <dt id="monty.serialization.loadfn">
-<code class="sig-name descname">loadfn</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">*args</em>, <em class="sig-param">fmt=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#loadfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.loadfn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">loadfn</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#loadfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.loadfn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads json/yaml/msgpack directly from a filename instead of a
 File-like object. File may also be a BZ2 (“.BZ2”) or GZIP (“.GZ”, “.Z”) compressed file.
 For YAML, ruamel.yaml must be installed. The file type is automatically detected
@@ -94,9 +91,6 @@ JSON is otherwise assumed. The file type can be specified manually with “fmt=�
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fn</strong> (<em>str/Path</em>) – filename or pathlib.Path.</p></li>
 <li><p><strong>*args</strong> – Any of the args supported by json/yaml.load.</p></li>
-<li><p><strong>fmt</strong> (<em>str</em>) – manually specify file format to read.
-Options are “json”, “yaml”, or “mpk”. If None, the
-file type will be detected automatically.</p></li>
 <li><p><strong>**kwargs</strong> – Any of the kwargs supported by json/yaml.load.</p></li>
 </ul>
 </dd>

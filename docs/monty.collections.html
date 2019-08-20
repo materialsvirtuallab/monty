@@ -124,15 +124,6 @@ In either case, this is followed by: for k in F:  D[k] = F[k]</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="monty.collections.as_set">
-<code class="sig-name descname">as_set</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#as_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.as_set" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert obj into a set, returns None if obj is None.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">as_set</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">as_set</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">])</span> <span class="ow">and</span> <span class="n">as_set</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">))</span> <span class="o">==</span> <span class="nb">set</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="function">
 <dt id="monty.collections.dict2namedtuple">
 <code class="sig-name descname">dict2namedtuple</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#dict2namedtuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.dict2namedtuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Helper function to create a <code class="xref py py-class docutils literal notranslate"><span class="pre">namedtuple</span></code> from a dictionary.</p>
