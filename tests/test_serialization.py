@@ -65,13 +65,6 @@ class SerialTest(unittest.TestCase):
                              for k, v in d2.items()})
         os.remove("monte_test.mpk")
 
-        # Test manual format specification
-        dumpfn(d, "monte_test.bin", fmt='mpk')
-        d2 = loadfn("monte_test.bin", fmt='mpk')
-        self.assertEqual(d, {k.decode('utf-8'): v.decode('utf-8')
-                             for k, v in d2.items()})
-        os.remove("monte_test.bin")
-
         # Test to ensure basename is respected, and not directory
         with ScratchDir('.'):
             os.mkdir("mpk_test")
