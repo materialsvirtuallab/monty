@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2.0.6
+------
+1. Revert py27 incompatible fmt spec for loadfn and dumpfn for now. This is
+   a much less common use case.
+
 v2.0.5
 ------
 1. Checking for extension type in loadfn and dumpfn now relies on ".json",
