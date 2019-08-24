@@ -18,6 +18,7 @@ jobs:
             source test_env/bin/activate
             # Add executables and path.
             pytest --cov=monty --cov-report html:coverage_reports monty tests
+            pycodestyle monty
             coveralls
       - store_artifacts:
           path: coverage_reports/
@@ -42,13 +43,8 @@ jobs:
           command: |
             source test_env/bin/activate
             # Add executables and path.
-            pytest --cov=monty --cov-report html:coverage_reports monty tests
-            coveralls
-      - store_artifacts:
-          path: coverage_reports/
-          destination: tr1
-      - store_test_results:
-          path: coverage_reports/
+            pytest monty tests
+            pycodestyle monty
 workflows:
   version: 2
   build_and_test:
