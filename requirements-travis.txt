@@ -6,5 +6,5 @@ ruamel.yaml==0.16.5
 msgpack-python==0.5.6
 coverage==4.5.4
 coveralls==1.8.2
-pymongo==3.8.0
+pymongo==3.9.0
 pycodestyle==2.5.0
