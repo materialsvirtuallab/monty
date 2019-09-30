@@ -145,7 +145,7 @@ class MSONable(object):
             parent_module = self.__class__.__module__.split('.')[0]
             module_version = import_module(parent_module).__version__
             d["@version"] = u"{}".format(module_version)
-        except (AttributeError, ModuleNotFoundError):
+        except (AttributeError, ModuleNotFoundError, ImportError):
             d["@version"] = None
 
         args = getargspec(self.__class__.__init__).args
@@ -285,7 +285,7 @@ class MontyEncoder(json.JSONEncoder):
                     parent_module = o.__class__.__module__.split('.')[0]
                     module_version = import_module(parent_module).__version__
                     d["@version"] = u"{}".format(module_version)
-                except (AttributeError, ModuleNotFoundError):
+                except (AttributeError, ModuleNotFoundError, ImportError):
                     d["@version"] = None
             return d
         except AttributeError:
