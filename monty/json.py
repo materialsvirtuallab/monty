@@ -12,6 +12,7 @@ import inspect
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
+from enum import Enum
 
 try:
     from importlib import import_module
@@ -144,7 +145,7 @@ class MSONable(object):
             parent_module = self.__class__.__module__.split('.')[0]
             module_version = import_module(parent_module).__version__
             d["@version"] = u"{}".format(module_version)
-        except AttributeError:
+        except (AttributeError, ImportError):
             d["@version"] = None
 
         args = getargspec(self.__class__.__init__).args
@@ -179,6 +180,8 @@ class MSONable(object):
             d.update(**self.kwargs)
         if hasattr(self, "_kwargs"):
             d.update(**self._kwargs)
+        if isinstance(self, Enum):
+            d.update({"value": self.value})
         return d
 
     @classmethod
@@ -282,7 +285,7 @@ class MontyEncoder(json.JSONEncoder):
                     parent_module = o.__class__.__module__.split('.')[0]
                     module_version = import_module(parent_module).__version__
                     d["@version"] = u"{}".format(module_version)
-                except AttributeError:
+                except (AttributeError, ImportError):
                     d["@version"] = None
             return d
         except AttributeError:
