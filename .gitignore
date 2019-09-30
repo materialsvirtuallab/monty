@@ -37,6 +37,7 @@ nosetests.xml
 .project
 .pydevproject
 .idea
+.mypy_cache
 
 # vim files
 *.swp
