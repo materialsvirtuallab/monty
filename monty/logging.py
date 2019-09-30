@@ -7,7 +7,7 @@ Logging tools
 import logging
 import datetime
 import functools
-
+import argparse
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,6 @@ def enable_logging(main):
     """
     @functools.wraps(main)
     def wrapper(*args, **kwargs):
-        import argparse
         parser = argparse.ArgumentParser()
 
         parser.add_argument(

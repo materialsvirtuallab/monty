@@ -3,10 +3,9 @@
 Useful additional functions to help get information about live objects
 """
 
+import os
 import inspect
-from inspect import currentframe, getframeinfo
-
-from inspect import getfullargspec
+from inspect import currentframe, getframeinfo, getfullargspec
 
 
 def all_subclasses(cls):
@@ -22,7 +21,6 @@ def find_top_pyfile():
     """
     This function inspects the Cpython frame to find the path of the script.
     """
-    import os
     frame = currentframe()
     while True:
         if frame.f_back is None:

@@ -3,6 +3,7 @@
 Some common design patterns such as singleton and cached classes.
 """
 
+import os
 from functools import wraps
 
 
@@ -102,7 +103,6 @@ class NullFile:
         """
         Pass through
         """
-        import os
         return open(os.devnull, 'w')
 
     def __init__(self):

@@ -4,6 +4,11 @@ Additional tools for iteration.
 """
 import itertools
 
+try:
+    import numpy as np
+except ImportError:
+    np = None
+
 
 def chunks(items, n):
     """
@@ -30,7 +35,6 @@ def iterator_from_slice(s):
 
         The function returns an infinite iterator if s.stop is None
     """
-    import numpy as np
     start = s.start if s.start is not None else 0
     step = s.step if s.step is not None else 1
 

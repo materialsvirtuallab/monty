@@ -26,6 +26,10 @@ Copyright (c) 2008-2011 Volvox Development Team
 ANSII Color formatting for output in terminal.
 """
 import os
+import fcntl
+import termios
+import struct
+import curses
 
 __all__ = ['colored', 'cprint']
 
@@ -88,7 +92,6 @@ def stream_has_colours(stream):
     if not stream.isatty():
         return False  # auto color only on TTYs
     try:
-        import curses
         curses.setupterm()
         return curses.tigetnum("colors") > 2
     except Exception:
@@ -196,9 +199,7 @@ def get_terminal_size():
 
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl
-            import termios
-            import struct
+
             rc = struct.unpack('hh',
                                fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
             return rc

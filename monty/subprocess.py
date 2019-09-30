@@ -3,6 +3,11 @@
 """
 Calling shell processes.
 """
+import shlex
+import threading
+import traceback
+
+from .string import is_string
 
 __author__ = 'Matteo Giantomass'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -47,11 +52,8 @@ class Command:
         """
         :param command: Command to execute
         """
-        from .string import is_string
         if is_string(command):
-            import shlex
             command = shlex.split(command)
-
         self.command = command
         self.process = None
         self.retcode = None
@@ -78,7 +80,6 @@ class Command:
                 self.retcode = self.process.returncode
                 # print('Thread stopped')
             except Exception:
-                import traceback
                 self.error = traceback.format_exc()
                 self.retcode = -1
 
@@ -90,7 +91,6 @@ class Command:
             kwargs['stderr'] = PIPE
 
         # thread
-        import threading
         thread = threading.Thread(target=target, kwargs=kwargs)
         thread.start()
         thread.join(timeout)

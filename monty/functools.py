@@ -2,6 +2,11 @@
 functools, especially backported from Python 3.
 """
 
+import signal
+import sys
+import cProfile
+import pstats
+import tempfile
 from collections import namedtuple
 from functools import update_wrapper, wraps, partial
 from threading import RLock
@@ -350,12 +355,10 @@ class timeout:
         raise TimeoutError(self.error_message)
 
     def __enter__(self):
-        import signal
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(self.seconds)
 
     def __exit__(self, type, value, traceback):
-        import signal
         signal.alarm(0)
 
 
@@ -395,7 +398,6 @@ def prof_main(main):
 
     @wraps(main)
     def wrapper(*args, **kwargs):
-        import sys
         try:
             do_prof = sys.argv[1] == "prof"
             if do_prof:
@@ -407,9 +409,6 @@ def prof_main(main):
             sys.exit(main())
         else:
             print("Entering profiling mode...")
-            import pstats
-            import cProfile
-            import tempfile
             prof_file = kwargs.get("prof_file", None)
             if prof_file is None:
                 _, prof_file = tempfile.mkstemp()

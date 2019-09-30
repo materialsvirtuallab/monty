@@ -4,6 +4,7 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
 import re
+import sys
 import logging
 import warnings
 import os
@@ -207,7 +208,6 @@ def install_excepthook(hook_type="color", **kwargs):
     try:
         from IPython.core import ultratb  # type: ignore
     except ImportError:
-        import warnings
         warnings.warn(
             "Cannot install excepthook, IPyhon.core.ultratb not available")
         return 1
@@ -221,6 +221,5 @@ def install_excepthook(hook_type="color", **kwargs):
     if hook is None:
         return 2
 
-    import sys
     sys.excepthook = hook(**kwargs)
     return 0
