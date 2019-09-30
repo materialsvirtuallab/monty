@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v3.0.0
+------
+1. Py3 only version.
+
 v2.0.7
 ------
 1. MSONable now supports Enum types. (@mkhorton)
