@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2.0.7
+------
+1. MSONable now supports Enum types. (@mkhorton)
+
 v2.0.6
 ------
 1. Revert py27 incompatible fmt spec for loadfn and dumpfn for now. This is
