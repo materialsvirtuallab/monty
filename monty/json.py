@@ -32,25 +32,8 @@ except ImportError:
 
 try:
     import ruamel.yaml as yaml
-
-    try:  # Default to using CLoader and CDumper for speed.
-        from ruamel.yaml import CLoader as Loader
-        from ruamel.yaml import CDumper as Dumper
-    except ImportError:
-        from ruamel.yaml import Loader  # type: ignore
-        from ruamel.yaml import Dumper  # type: ignore
 except ImportError:
-    try:
-        import yaml  # type: ignore
-
-        try:  # Default to using CLoader and CDumper for speed.
-            from yaml import CLoader as Loader  # type: ignore
-            from yaml import CDumper as Dumper  # type: ignore
-        except ImportError:
-            from yaml import Loader  # type: ignore
-            from yaml import Dumper  # type: ignore
-    except ImportError:
-        yaml = None  # type: ignore
+    import yaml  # type: ignore
 
 
 def _load_redirect(redirect_file):

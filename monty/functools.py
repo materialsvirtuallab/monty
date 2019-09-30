@@ -180,7 +180,6 @@ def lru_cache(maxsize=128, typed=False):
                         # still adjusting the links.
                         r[0] = oldroot[NEXT]
                         oldkey = r[0][KEY]
-                        oldresult = r[0][RESULT]
                         r[0][KEY] = r[0][RESULT] = None
                         # Now update the cache dictionary.
                         del cache[oldkey]
@@ -379,6 +378,12 @@ class TimeoutError(Exception):
     """
     Exception class for timeouts.
     """
+
+    def __init__(self, message):
+        """
+        :param message: Error message
+        """
+        self.message = message
 
 
 def prof_main(main):
