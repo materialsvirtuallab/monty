@@ -4,9 +4,6 @@
 Calling shell processes.
 """
 
-from __future__ import absolute_import, print_function, division, \
-    unicode_literals
-
 __author__ = 'Matteo Giantomass'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = '0.1'

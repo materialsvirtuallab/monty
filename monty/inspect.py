@@ -2,16 +2,11 @@
 """
 Useful additional functions to help get information about live objects
 """
-from __future__ import absolute_import, division, print_function, \
-    unicode_literals
 
 import inspect
 from inspect import currentframe, getframeinfo
 
-try:
-    from inspect import getfullargspec
-except ImportError:
-    from inspect import getargspec as getfullargspec  # type: ignore
+from inspect import getfullargspec
 
 
 def all_subclasses(cls):

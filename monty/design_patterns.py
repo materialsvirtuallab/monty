@@ -3,8 +3,6 @@
 Some common design patterns such as singleton and cached classes.
 """
 
-from __future__ import absolute_import
-
 from functools import wraps
 
 

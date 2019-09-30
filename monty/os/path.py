@@ -2,8 +2,6 @@
 """
 Path based methods, e.g., which, zpath, etc.
 """
-from __future__ import absolute_import
-
 import os
 
 __author__ = 'Shyue Ping Ong'

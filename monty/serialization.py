@@ -2,8 +2,6 @@
 This module implements serialization support for common formats such as json
 and yaml.
 """
-from __future__ import absolute_import, unicode_literals
-
 import json
 import os
 from monty.io import zopen

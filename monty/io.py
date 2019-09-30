@@ -4,24 +4,16 @@ Augments Python's suite of IO functions with useful transparent support for
 compressed files.
 """
 
-from __future__ import absolute_import
-
 import os
 import bz2
 import gzip
-import sys
 import time
 import errno
 import mmap
 import subprocess
 import io
 
-try:
-    from pathlib import Path
-except ImportError:
-    Path = None  # type: ignore
-
-PY_VERSION = sys.version_info
+from pathlib import Path
 
 
 def zopen(filename, *args, **kwargs):
@@ -45,20 +37,10 @@ def zopen(filename, *args, **kwargs):
     name, ext = os.path.splitext(filename)
     ext = ext.upper()
     if ext == ".BZ2":
-        if PY_VERSION[0] >= 3:
-            return bz2.open(filename, *args, **kwargs)
-        else:
-            args = list(args)
-            if len(args) > 0:
-                args[0] = "".join([c for c in args[0] if c != "t"])
-            if "mode" in kwargs:
-                kwargs["mode"] = "".join([c for c in kwargs["mode"]
-                                          if c != "t"])
-            return bz2.BZ2File(filename, *args, **kwargs)
-    elif ext in (".GZ", ".Z"):
+        return bz2.open(filename, *args, **kwargs)
+    if ext in (".GZ", ".Z"):
         return gzip.open(filename, *args, **kwargs)
-    else:
-        return io.open(filename, *args, **kwargs)
+    return io.open(filename, *args, **kwargs)
 
 
 def reverse_readfile(filename):

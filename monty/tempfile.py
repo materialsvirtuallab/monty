@@ -2,26 +2,12 @@
 Temporary directory and file creation utilities.
 """
 
-from __future__ import absolute_import
 import os
 import tempfile
 
-try:
-    from pathlib import Path
-except ImportError:
-    try:
-        from pathlib2 import Path  # type: ignore
-    except ImportError:
-        Path = None  # type: ignore
+from pathlib import Path
 
 from monty.shutil import copy_r, remove
-
-__author__ = "Shyue Ping Ong"
-__copyright__ = "Copyright 2012, The Materials Project"
-__version__ = "0.1"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "ongsp@ucsd.edu"
-__date__ = "3/6/14"
 
 
 class ScratchDir(object):

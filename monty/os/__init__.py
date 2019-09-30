@@ -2,8 +2,6 @@
 Os functions, e.g., cd, makedirs_p.
 """
 
-from __future__ import absolute_import
-
 import os
 import errno
 

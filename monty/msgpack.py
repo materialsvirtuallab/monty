@@ -4,8 +4,6 @@ using monty.json encoder and decoders. The naming is just for clearer usage with
 msgpack's default and object_hook naming.
 """
 
-from __future__ import absolute_import, unicode_literals
-
 from monty.json import MontyEncoder, MontyDecoder
 
 

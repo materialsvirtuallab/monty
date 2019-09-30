@@ -2,22 +2,9 @@
 functools, especially backported from Python 3.
 """
 
-from __future__ import absolute_import
-
 from collections import namedtuple
 from functools import update_wrapper, wraps, partial
-
-try:
-    from threading import RLock
-except ImportError:
-    class RLock:  # type: ignore
-        """Dummy reentrant lock for builds without threads"""
-
-        def __enter__(self):
-            pass
-
-        def __exit__(self, exctype, excinst, exctb):
-            pass
+from threading import RLock
 
 _CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 

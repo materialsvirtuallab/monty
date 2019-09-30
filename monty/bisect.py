@@ -9,8 +9,6 @@ The functions show how to transform them into the standard lookups for sorted
 lists.
 """
 
-from __future__ import division, unicode_literals, absolute_import
-
 import bisect as bs
 
 __author__ = 'Matteo Giantomassi'

@@ -3,11 +3,9 @@
 JSON serialization and deserialization utilities.
 """
 
-from __future__ import absolute_import, unicode_literals
 import os
 import json
 import datetime
-import six
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
@@ -15,10 +13,7 @@ from enum import Enum
 
 from importlib import import_module
 
-try:
-    from inspect import getfullargspec as getargspec
-except ImportError:
-    from inspect import getargspec  # type: ignore
+from inspect import getfullargspec
 
 try:
     import numpy as np
@@ -120,7 +115,7 @@ class MSONable(object):
         except (AttributeError, ImportError):
             d["@version"] = None
 
-        args = getargspec(self.__class__.__init__).args
+        args = getfullargspec(self.__class__.__init__).args
 
         def recursive_as_dict(obj):
             if isinstance(obj, (list, tuple)):
@@ -382,7 +377,7 @@ def jsanitize(obj, strict=False, allow_bson=False):
     elif isinstance(obj, dict):
         return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
                 for k, v in obj.items()}
-    elif isinstance(obj, six.integer_types + tuple([float])):
+    elif isinstance(obj, (int, float)):
         return obj
     elif obj is None:
         return None
@@ -391,7 +386,7 @@ def jsanitize(obj, strict=False, allow_bson=False):
         if not strict:
             return obj.__str__()
         else:
-            if isinstance(obj, six.string_types):
+            if isinstance(obj, str):
                 return obj.__str__()
             else:
                 return jsanitize(obj.as_dict(), strict=strict,

@@ -3,10 +3,7 @@
 Pretty printing functions.
 """
 
-from __future__ import absolute_import, print_function, division, \
-    unicode_literals
-from six.moves import cStringIO
-
+from io import StringIO
 import sys
 
 
@@ -63,7 +60,7 @@ def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
 
 
 def _draw_tree(node, prefix, child_iter, text_str):
-    buf = cStringIO()
+    buf = StringIO()
 
     children = list(child_iter(node))
 

@@ -3,8 +3,6 @@
 This module provides support for Unix shell-style wildcards
 """
 
-from __future__ import unicode_literals, absolute_import
-
 import fnmatch
 
 from monty.string import list_strings

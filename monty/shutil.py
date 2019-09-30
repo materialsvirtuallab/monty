@@ -2,18 +2,10 @@
 Copying and zipping utilities. Works on directories mostly.
 """
 
-from __future__ import absolute_import
 import os
 import shutil
 import warnings
 from gzip import GzipFile
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
 
 
 def copy_r(src, dst):

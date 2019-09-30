@@ -2,14 +2,7 @@
 """
 Math functions.
 """
-from __future__ import absolute_import, division
-
-try:
-    # New Py>=3.5 import
-    from math import gcd as pygcd
-except ImportError:
-    # Deprecated import from Py3.5 onwards.
-    from fractions import gcd as pygcd
+from math import gcd as pygcd
 
 
 def gcd(*numbers):

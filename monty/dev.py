@@ -3,8 +3,6 @@ This module implements several useful functions and decorators that can be
 particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
-from __future__ import absolute_import
-
 import re
 import logging
 import warnings

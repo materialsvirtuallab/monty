@@ -3,8 +3,6 @@
 Helpful regex based functions. E.g., grepping.
 """
 
-from __future__ import division, unicode_literals, absolute_import
-
 import re
 from monty.io import zopen, reverse_readfile
 import collections
