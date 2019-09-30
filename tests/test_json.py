@@ -14,6 +14,7 @@ import datetime
 import six
 from bson.objectid import ObjectId
 from ast import literal_eval
+from enum import Enum
 
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
@@ -49,6 +50,11 @@ class GoodNestedMSONClass(MSONable):
         self.b_dict = b_dict
         self._c_list_dict_list = c_list_dict_list
         self.kwargs = kwargs
+
+
+class EnumTest(MSONable, Enum):
+    a = 1
+    b = 2
 
 
 class MSONableTest(unittest.TestCase):
@@ -181,6 +187,14 @@ class MSONableTest(unittest.TestCase):
         self.assertTrue([obj4.b_dict[kk] == val for kk, val in obj.b_dict.items()])
         self.assertEqual(len(obj.a_list), len(obj4.a_list))
         self.assertEqual(len(obj.b_dict), len(obj4.b_dict))
+        
+    def test_enum_serialization(self):
+    
+        e = EnumTest.a
+        d = e.as_dict()
+        e_new = EnumTest.from_dict(d)
+        self.assertEqual(e_new.name, e.name)
+        self.assertEqual(e_new.value, e.value)
 
 
 class JsonTest(unittest.TestCase):
