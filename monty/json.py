@@ -12,6 +12,7 @@ import inspect
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
+from enum import Enum
 
 try:
     from importlib import import_module
@@ -179,6 +180,8 @@ class MSONable(object):
             d.update(**self.kwargs)
         if hasattr(self, "_kwargs"):
             d.update(**self._kwargs)
+        if isinstance(self, Enum):
+            d.update({"value": self.value})
         return d
 
     @classmethod
