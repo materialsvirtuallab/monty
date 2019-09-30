@@ -10,4 +10,3 @@ script:
   - pydocstyle monty
   - mypy
   - flake8 --count --show-source --statistics monty
-  - flake8 --count --exit-zero --max-complexity=10 --statistics monty
