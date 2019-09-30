@@ -61,8 +61,8 @@ def list_strings(arg):
     """
     if is_string(arg):
         return [arg]
-    else:
-        return arg
+
+    return arg
 
 
 def marquee(text="", width=78, mark='*'):

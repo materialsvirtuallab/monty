@@ -57,7 +57,7 @@ def _load_redirect(redirect_file):
     return dict(redirect_dict)
 
 
-class MSONable(object):
+class MSONable:
     """
     This is a mix-in base class specifying an API for msonable objects. MSON
     is Monty JSON. Essentially, MSONable objects must implement an as_dict
@@ -120,9 +120,9 @@ class MSONable(object):
         def recursive_as_dict(obj):
             if isinstance(obj, (list, tuple)):
                 return [recursive_as_dict(it) for it in obj]
-            elif isinstance(obj, dict):
+            if isinstance(obj, dict):
                 return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
-            elif hasattr(obj, "as_dict"):
+            if hasattr(obj, "as_dict"):
                 return obj.as_dict()
             return obj
 
@@ -144,11 +144,11 @@ class MSONable(object):
                             "you can implement both as_dict and from_dict.")
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
-            d.update(**self.kwargs)
+            d.update(**self.kwargs)  # pylint: disable=E1101
         if hasattr(self, "_kwargs"):
-            d.update(**self._kwargs)
+            d.update(**self._kwargs)  # pylint: disable=E1101
         if isinstance(self, Enum):
-            d.update({"value": self.value})
+            d.update({"value": self.value})  # pylint: disable=E1101
         return d
 
     @classmethod
@@ -214,7 +214,7 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def default(self, o):
+    def default(self, o):  # pylint: disable=E0202
         """
         Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
@@ -237,7 +237,7 @@ class MontyEncoder(json.JSONEncoder):
                         "@class": "array",
                         "dtype": o.dtype.__str__(),
                         "data": o.tolist()}
-            elif isinstance(o, np.generic):
+            if isinstance(o, np.generic):
                 return o.item()
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
@@ -320,7 +320,8 @@ class MontyDecoder(json.JSONDecoder):
 
             return {self.process_decoded(k): self.process_decoded(v)
                     for k, v in d.items()}
-        elif isinstance(d, list):
+
+        if isinstance(d, list):
             return [self.process_decoded(x) for x in d]
 
         return d
@@ -371,23 +372,21 @@ def jsanitize(obj, strict=False, allow_bson=False):
         return obj
     if isinstance(obj, (list, tuple)):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
-    elif np is not None and isinstance(obj, np.ndarray):
+    if np is not None and isinstance(obj, np.ndarray):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in
                 obj.tolist()]
-    elif isinstance(obj, dict):
+    if isinstance(obj, dict):
         return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
                 for k, v in obj.items()}
-    elif isinstance(obj, (int, float)):
+    if isinstance(obj, (int, float)):
         return obj
-    elif obj is None:
+    if obj is None:
         return None
 
-    else:
-        if not strict:
-            return obj.__str__()
-        else:
-            if isinstance(obj, str):
-                return obj.__str__()
-            else:
-                return jsanitize(obj.as_dict(), strict=strict,
-                                 allow_bson=allow_bson)
+    if not strict:
+        return obj.__str__()
+
+    if isinstance(obj, str):
+        return obj.__str__()
+
+    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson)

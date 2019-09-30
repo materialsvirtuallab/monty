@@ -9,7 +9,7 @@ from threading import RLock
 _CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
 
-class _HashedSeq(list):
+class _HashedSeq(list):  # pylint: disable=C0205
     """
     This class guarantees that hash() will be called no more than once
     per element.  This is important because the lru_cache() will hash
@@ -54,7 +54,7 @@ def _make_key(args, kwds, typed,
         key += tuple(type(v) for v in args)
         if kwds:
             key += tuple(type(v) for k, v in sorted_items)
-    elif len(key) == 1 and type(key[0]) in fasttypes:
+    elif len(key) == 1 and isinstance(key[0], fasttypes):
         return key[0]
     return _HashedSeq(key)
 
@@ -205,7 +205,7 @@ def lru_cache(maxsize=128, typed=False):
     return decorating_function
 
 
-class lazy_property(object):
+class lazy_property:
     """
     lazy_property descriptor
 
@@ -228,7 +228,7 @@ class lazy_property(object):
             raise AttributeError("'%s' object has no attribute '__dict__'"
                                  % (inst_cls.__name__,))
 
-        name = self.__name__
+        name = self.__name__  # pylint: disable=E1101
         if name.startswith('__') and not name.endswith('__'):
             name = '_%s%s' % (inst_cls.__name__, name)
 
@@ -301,10 +301,8 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
                 return func(*args, **kwargs)
             try:
                 return func(*args, **kwargs)
-            except exception_tuple:
+            except exception_tuple:  # pylint: disable=E0712
                 return retval_if_exc
-            else:
-                raise RuntimeError()
 
         return wrapper
 
@@ -322,7 +320,7 @@ This decorator returns None if one of the exceptions is raised.
 """
 
 
-class timeout(object):
+class timeout:
     """
     Timeout function. Use to limit matching to a certain time limit. Note that
     this works only on Unix-based systems as it uses signal. Usage:

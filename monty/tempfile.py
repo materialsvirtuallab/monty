@@ -10,7 +10,7 @@ from pathlib import Path
 from monty.shutil import copy_r, remove
 
 
-class ScratchDir(object):
+class ScratchDir:
     """
     .. note::
 

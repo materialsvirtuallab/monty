@@ -49,7 +49,7 @@ def deprecated(replacement=None, message=None):
     return wrap
 
 
-class requires(object):
+class requires:
     """
     Decorator to mark classes or functions as requiring a specified condition
     to be true. This can be used to present useful error messages for

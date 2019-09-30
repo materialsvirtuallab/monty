@@ -59,7 +59,7 @@ def reverse_readfile(filename):
     """
     try:
         with zopen(filename, "rb") as f:
-            if isinstance(f, gzip.GzipFile) or isinstance(f, bz2.BZ2File):
+            if isinstance(f, (gzip.GzipFile, bz2.BZ2File)):
                 for l in reversed(f.readlines()):
                     yield l.decode("utf-8").rstrip()
             else:
@@ -162,7 +162,7 @@ class FileLockException(Exception):
     """Exception raised by FileLock."""
 
 
-class FileLock(object):
+class FileLock:
     """
     A file locking mechanism that has context-manager support so you can use
     it in a with statement. This should be relatively cross-compatible as it

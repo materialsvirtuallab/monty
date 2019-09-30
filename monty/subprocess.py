@@ -12,7 +12,7 @@ __email__ = 'gmatteo@gmail.com'
 __date__ = '10/26/14'
 
 
-class Command(object):
+class Command:
     """
     Enables to run subprocess commands in a different thread with TIMEOUT
     option.

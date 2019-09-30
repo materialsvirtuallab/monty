@@ -95,7 +95,7 @@ def cached_class(klass):
     return _decorated
 
 
-class NullFile(object):
+class NullFile:
     """A file object that is associated to /dev/null."""
 
     def __new__(cls):
@@ -109,10 +109,10 @@ class NullFile(object):
         """no-op"""
 
 
-class NullStream(object):
+class NullStream:
     """A fake stream with a no-op write.."""
 
-    def write(*args):
+    def write(*args):  # pylint: disable=E0211
         """
         Does nothing...
         :param args:

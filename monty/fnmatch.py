@@ -8,7 +8,7 @@ import fnmatch
 from monty.string import list_strings
 
 
-class WildCard(object):
+class WildCard:
     """
     This object provides an easy-to-use interface for filename matching with
     shell patterns (fnmatch).

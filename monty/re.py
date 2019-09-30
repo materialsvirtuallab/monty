@@ -4,8 +4,9 @@ Helpful regex based functions. E.g., grepping.
 """
 
 import re
-from monty.io import zopen, reverse_readfile
 import collections
+
+from monty.io import zopen, reverse_readfile
 
 
 def regrep(filename, patterns, reverse=False, terminate_on_match=False,

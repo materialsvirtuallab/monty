@@ -9,3 +9,4 @@ script:
   - pydocstyle monty
   - mypy monty tests
   - flake8 --count --show-source --statistics monty
+  - pylint monty

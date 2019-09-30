@@ -37,9 +37,9 @@ def iterator_from_slice(s):
     if s.stop is None:
         # Infinite iterator.
         return itertools.count(start=start, step=step)
-    else:
-        # xrange-like iterator that supports float.
-        return iter(np.arange(start, s.stop, step))
+
+    # xrange-like iterator that supports float.
+    return iter(np.arange(start, s.stop, step))
 
 
 def iuptri(items, diago=True, with_inds=False):

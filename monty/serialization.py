@@ -82,12 +82,12 @@ def loadfn(fn, *args, **kwargs):
                 if "Loader" not in kwargs:
                     kwargs["Loader"] = Loader
                 return yaml.load(fp, *args, **kwargs)
-            elif fmt == 'json':
+            if fmt == 'json':
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyDecoder
                 return json.load(fp, *args, **kwargs)
-            else:
-                raise TypeError("Invalid format: {}".format(fmt))
+
+            raise TypeError("Invalid format: {}".format(fmt))
 
 
 def dumpfn(obj, fn, *args, **kwargs):

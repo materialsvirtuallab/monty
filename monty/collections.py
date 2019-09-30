@@ -128,7 +128,7 @@ class FrozenAttrDict(frozendict):
             name, self.__class__.__name__))
 
 
-class MongoDict(object):
+class MongoDict:
     """
     This dict-like object allows one to access the entries in a nested dict as
     attributes.
