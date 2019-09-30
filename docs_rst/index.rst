@@ -28,16 +28,16 @@ Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.
 
-Monty supports Python 2.7-3.x.
+Monty currently supports Python 2.7-3.x, but please note that with effect from
+v3.x, which will be released in Jan 2020, we will completely abandon Py2.7
+support, in line with most other Python packages.
 
 Change Log
 ==========
 
-v2.0.2
+v2.0.7
 ------
-1. Use basename instead of full path to determine whether file type in loadfn
-   and dumpfn. (@JosephMontoya-TRI)
-2. Use os.path.splitext to determine zip types in monty.io.zopen.
+1. MSONable now supports Enum types. (@mkhorton)
 
 :doc:`Older versions </changelog>`
 
