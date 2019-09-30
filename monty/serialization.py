@@ -72,7 +72,7 @@ def loadfn(fn, *args, **kwargs):
         if "object_hook" not in kwargs:
             kwargs["object_hook"] = object_hook
         with zopen(fn, "rb") as fp:
-            return msgpack.load(fp, *args, **kwargs)
+            return msgpack.load(fp, *args, **kwargs)  # pylint: disable=E1101
     else:
         with zopen(fn, 'rt') as fp:
             if fmt == 'yaml':
@@ -126,7 +126,7 @@ def dumpfn(obj, fn, *args, **kwargs):
         if "default" not in kwargs:
             kwargs["default"] = default
         with zopen(fn, "wb") as fp:
-            msgpack.dump(obj, fp, *args, **kwargs)
+            msgpack.dump(obj, fp, *args, **kwargs)  # pylint: disable=E1101
     else:
         with zopen(fn, "wt") as fp:
             if fmt == 'yaml':

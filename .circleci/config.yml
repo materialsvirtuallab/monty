@@ -34,7 +34,7 @@ jobs:
           command: |
             python3 -m venv test_env
             source test_env/bin/activate
-            pip install --upgrade pycodestyle mypy pydocstyle flake8 pylint
+            pip install --quiet --upgrade pycodestyle mypy pydocstyle flake8 pylint
             # Add executables and path.
             pycodestyle monty
             pydocstyle monty
