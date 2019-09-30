@@ -47,11 +47,10 @@
 <span class="sd">Helpful regex based functions. E.g., grepping.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">monty.io</span> <span class="k">import</span> <span class="n">zopen</span><span class="p">,</span> <span class="n">reverse_readfile</span>
 <span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">from</span> <span class="nn">monty.io</span> <span class="k">import</span> <span class="n">zopen</span><span class="p">,</span> <span class="n">reverse_readfile</span>
 
 
 <div class="viewcode-block" id="regrep"><a class="viewcode-back" href="../../monty.re.html#monty.re.regrep">[docs]</a><span class="k">def</span> <span class="nf">regrep</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">patterns</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">terminate_on_match</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

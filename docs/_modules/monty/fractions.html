@@ -46,14 +46,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Math functions.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="c1"># New Py&gt;=3.5 import</span>
-    <span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">gcd</span> <span class="k">as</span> <span class="n">pygcd</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="c1"># Deprecated import from Py3.5 onwards.</span>
-    <span class="kn">from</span> <span class="nn">fractions</span> <span class="k">import</span> <span class="n">gcd</span> <span class="k">as</span> <span class="n">pygcd</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="k">import</span> <span class="n">gcd</span> <span class="k">as</span> <span class="n">pygcd</span>
 
 
 <div class="viewcode-block" id="gcd"><a class="viewcode-back" href="../../monty.fractions.html#monty.fractions.gcd">[docs]</a><span class="k">def</span> <span class="nf">gcd</span><span class="p">(</span><span class="o">*</span><span class="n">numbers</span><span class="p">):</span>

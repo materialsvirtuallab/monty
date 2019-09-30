@@ -47,8 +47,7 @@
 <span class="sd">Some common design patterns such as singleton and cached classes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
 
 
@@ -141,24 +140,23 @@
     <span class="k">return</span> <span class="n">_decorated</span></div>
 
 
-<div class="viewcode-block" id="NullFile"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullFile">[docs]</a><span class="k">class</span> <span class="nc">NullFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="NullFile"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullFile">[docs]</a><span class="k">class</span> <span class="nc">NullFile</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A file object that is associated to /dev/null.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Pass through</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">import</span> <span class="nn">os</span>
         <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;no-op&quot;&quot;&quot;</span></div>
 
 
-<div class="viewcode-block" id="NullStream"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream">[docs]</a><span class="k">class</span> <span class="nc">NullStream</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="NullStream"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream">[docs]</a><span class="k">class</span> <span class="nc">NullStream</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A fake stream with a no-op write..&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="NullStream.write"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="NullStream.write"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>  <span class="c1"># pylint: disable=E0211</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Does nothing...</span>
 <span class="sd">        :param args:</span>

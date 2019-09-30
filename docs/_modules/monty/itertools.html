@@ -46,9 +46,12 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Additional tools for iteration.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
-
 <span class="kn">import</span> <span class="nn">itertools</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">np</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="chunks"><a class="viewcode-back" href="../../monty.itertools.html#monty.itertools.chunks">[docs]</a><span class="k">def</span> <span class="nf">chunks</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
@@ -76,16 +79,15 @@
 
 <span class="sd">        The function returns an infinite iterator if s.stop is None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
     <span class="n">start</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">0</span>
     <span class="n">step</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># Infinite iterator.</span>
         <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">step</span><span class="o">=</span><span class="n">step</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># xrange-like iterator that supports float.</span>
-        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span></div>
+
+    <span class="c1"># xrange-like iterator that supports float.</span>
+    <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">step</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="iuptri"><a class="viewcode-back" href="../../monty.itertools.html#monty.itertools.iuptri">[docs]</a><span class="k">def</span> <span class="nf">iuptri</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">diago</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">with_inds</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>

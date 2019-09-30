@@ -47,9 +47,8 @@
 <span class="sd">particularly useful for developers. E.g., deprecating methods / classes, etc.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -95,7 +94,7 @@
     <span class="k">return</span> <span class="n">wrap</span></div>
 
 
-<div class="viewcode-block" id="requires"><a class="viewcode-back" href="../../monty.dev.html#monty.dev.requires">[docs]</a><span class="k">class</span> <span class="nc">requires</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="requires"><a class="viewcode-back" href="../../monty.dev.html#monty.dev.requires">[docs]</a><span class="k">class</span> <span class="nc">requires</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorator to mark classes or functions as requiring a specified condition</span>
 <span class="sd">    to be true. This can be used to present useful error messages for</span>
@@ -253,7 +252,6 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="k">import</span> <span class="n">ultratb</span>  <span class="c1"># type: ignore</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">warnings</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;Cannot install excepthook, IPyhon.core.ultratb not available&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
@@ -267,7 +265,6 @@
     <span class="k">if</span> <span class="n">hook</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2</span>
 
-    <span class="kn">import</span> <span class="nn">sys</span>
     <span class="n">sys</span><span class="o">.</span><span class="n">excepthook</span> <span class="o">=</span> <span class="n">hook</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">return</span> <span class="mi">0</span></div>
 </pre></div>

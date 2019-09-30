@@ -69,58 +69,45 @@
 
 <span class="sd">ANSII Color formatting for output in terminal.</span>
 <span class="sd">&quot;&quot;&quot;</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> <span class="n">absolute_import</span>
-
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">fcntl</span>
+<span class="kn">import</span> <span class="nn">termios</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">curses</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;colored&#39;</span><span class="p">,</span> <span class="s1">&#39;cprint&#39;</span><span class="p">]</span>
 
 <span class="n">VERSION</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="n">ATTRIBUTES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span>
-        <span class="s1">&#39;bold&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;dark&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;underline&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;blink&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;reverse&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;concealed&#39;</span>
-    <span class="p">],</span>
-        <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
-    <span class="p">))</span>
+    <span class="n">bold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">dark</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">underline</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">blink</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">reverse</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">concealed</span><span class="o">=</span><span class="mi">8</span>
 <span class="p">)</span>
-<span class="k">del</span> <span class="n">ATTRIBUTES</span><span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">]</span>
 
 <span class="n">HIGHLIGHTS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span>
-        <span class="s1">&#39;on_grey&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_red&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_green&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_yellow&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_blue&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_magenta&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_cyan&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;on_white&#39;</span>
-    <span class="p">],</span>
-        <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">40</span><span class="p">,</span> <span class="mi">48</span><span class="p">))</span>
-    <span class="p">))</span>
+    <span class="n">on_grey</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">on_red</span><span class="o">=</span><span class="mi">41</span><span class="p">,</span>
+    <span class="n">on_green</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">on_yellow</span><span class="o">=</span><span class="mi">43</span><span class="p">,</span>
+    <span class="n">on_blue</span><span class="o">=</span><span class="mi">44</span><span class="p">,</span>
+    <span class="n">on_magenta</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+    <span class="n">on_cyan</span><span class="o">=</span><span class="mi">46</span><span class="p">,</span>
+    <span class="n">on_white</span><span class="o">=</span><span class="mi">47</span>
 <span class="p">)</span>
 
 <span class="n">COLORS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span>
-        <span class="s1">&#39;grey&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;red&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;green&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;yellow&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;blue&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;magenta&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;cyan&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;white&#39;</span><span class="p">,</span>
-    <span class="p">],</span>
-        <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">38</span><span class="p">))</span>
-    <span class="p">))</span>
+    <span class="n">grey</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">red</span><span class="o">=</span><span class="mi">31</span><span class="p">,</span>
+    <span class="n">green</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
+    <span class="n">yellow</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
+    <span class="n">blue</span><span class="o">=</span><span class="mi">34</span><span class="p">,</span>
+    <span class="n">magenta</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span>
+    <span class="n">cyan</span><span class="o">=</span><span class="mi">36</span><span class="p">,</span>
+    <span class="n">white</span><span class="o">=</span><span class="mi">37</span>
 <span class="p">)</span>
 
 <span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
@@ -149,7 +136,6 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">stream</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
         <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># auto color only on TTYs</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">curses</span>
         <span class="n">curses</span><span class="o">.</span><span class="n">setupterm</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">curses</span><span class="o">.</span><span class="n">tigetnum</span><span class="p">(</span><span class="s2">&quot;colors&quot;</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
@@ -257,9 +243,7 @@
 
     <span class="k">def</span> <span class="nf">ioctl_GWINSZ</span><span class="p">(</span><span class="n">fd</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="kn">import</span> <span class="nn">fcntl</span>
-            <span class="kn">import</span> <span class="nn">termios</span>
-            <span class="kn">import</span> <span class="nn">struct</span>
+
             <span class="n">rc</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">,</span>
                                <span class="n">fcntl</span><span class="o">.</span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TIOCGWINSZ</span><span class="p">,</span> <span class="s1">&#39;1234&#39;</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">rc</span>
