@@ -12,10 +12,10 @@ from io import open
 try:
     from pathlib import Path
 except ImportError:
-    Path = None
+    Path = None  # type: ignore
 
 from monty.io import reverse_readline, zopen, FileLock, FileLockException, \
-    reverse_readfile, get_open_fds
+    reverse_readfile
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 

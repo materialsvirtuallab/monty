@@ -8,5 +8,5 @@ script:
   - pytest
   - pycodestyle monty
   - pydocstyle monty
-  - mypy
+  - mypy monty tests
   - flake8 --count --show-source --statistics monty
