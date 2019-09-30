@@ -1,3 +1,7 @@
+"""
+Copying and zipping utilities. Works on directories mostly.
+"""
+
 from __future__ import absolute_import
 import os
 import shutil

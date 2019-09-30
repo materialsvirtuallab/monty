@@ -7,10 +7,11 @@ from __future__ import absolute_import, division, print_function, \
 
 import inspect
 from inspect import currentframe, getframeinfo
+
 try:
-    from inspect import getfullargspec as getargspec
+    from inspect import getfullargspec
 except ImportError:
-    from inspect import getargspec
+    from inspect import getargspec as getfullargspec  # type: ignore
 
 
 def all_subclasses(cls):
@@ -90,7 +91,7 @@ def initializer(func):
     >>> p.cmd, p.reachable, p.user
     ('halt', True, 'root')
     """
-    names, varargs, keywords, defaults = getargspec(func)
+    names, varargs, keywords, defaults = getfullargspec(func)  # type: ignore
 
     from functools import wraps
     @wraps(func)

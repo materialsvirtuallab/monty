@@ -4,22 +4,13 @@ functools, especially backported from Python 3.
 
 from __future__ import absolute_import
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '8/29/14'
-
-
 from collections import namedtuple
 from functools import update_wrapper, wraps, partial
-
 
 try:
     from threading import RLock
 except ImportError:
-    class RLock:
+    class RLock:  # type: ignore
         """Dummy reentrant lock for builds without threads"""
 
         def __enter__(self):
@@ -27,7 +18,6 @@ except ImportError:
 
         def __exit__(self, exctype, excinst, exctb):
             pass
-
 
 _CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
@@ -42,6 +32,10 @@ class _HashedSeq(list):
     __slots__ = 'hashvalue'
 
     def __init__(self, tup, hashfunc=hash):
+        """
+        :param tup: Tuple.
+        :param hashfunc: Hash function.
+        """
         self[:] = tup
         self.hashvalue = hashfunc(tup)
 
@@ -111,19 +105,19 @@ def lru_cache(maxsize=128, typed=False):
         raise TypeError('Expected maxsize to be an integer or None')
 
     # Constants shared by all lru cache instances:
-    sentinel = object()          # unique object used to signal cache misses
-    make_key = _make_key         # build a key from the function arguments
-    PREV, NEXT, KEY, RESULT = 0, 1, 2, 3   # names for the link fields
+    sentinel = object()  # unique object used to signal cache misses
+    make_key = _make_key  # build a key from the function arguments
+    PREV, NEXT, KEY, RESULT = 0, 1, 2, 3  # names for the link fields
 
     def decorating_function(user_function):
         cache = {}
         hits = [0]
         misses = [0]
         full = [False]
-        cache_get = cache.get    # bound method to lookup a key or return None
-        lock = RLock()           # because linkedlist updates aren't threadsafe
-        root = []                # root of the circular doubly linked list
-        root[:] = [root, root, None, None]     # initialize by pointing to self
+        cache_get = cache.get  # bound method to lookup a key or return None
+        lock = RLock()  # because linkedlist updates aren't threadsafe
+        root = []  # root of the circular doubly linked list
+        root[:] = [root, root, None, None]  # initialize by pointing to self
         r = [root]
 
         if maxsize == 0:
@@ -234,6 +228,9 @@ class lazy_property(object):
     """
 
     def __init__(self, func):
+        """
+        :param func: Function to decorate.
+        """
         self.__func = func
         wraps(self.__func)(self)
 
@@ -322,7 +319,9 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
                 return retval_if_exc
             else:
                 raise RuntimeError()
+
         return wrapper
+
     return decorator
 
 
@@ -348,6 +347,7 @@ class timeout(object):
     except TimeoutError:
         do_something_else()
     """
+
     def __init__(self, seconds=1, error_message='Timeout'):
         """
         Args:
@@ -359,6 +359,10 @@ class timeout(object):
         self.error_message = error_message
 
     def handle_timeout(self, signum, frame):
+        """
+        :param signum: Return signal from call.
+        :param frame:
+        """
         raise TimeoutError(self.error_message)
 
     def __enter__(self):
@@ -372,9 +376,9 @@ class timeout(object):
 
 
 class TimeoutError(Exception):
-
-    def __init__(self, message):
-        self.message = message
+    """
+    Exception class for timeouts.
+    """
 
 
 def prof_main(main):
@@ -398,6 +402,7 @@ def prof_main(main):
         sortby: Profiling data are sorted according to this value.
             default is "time". See sort_stats.
     """
+
     @wraps(main)
     def wrapper(*args, **kwargs):
         import sys

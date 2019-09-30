@@ -3,7 +3,11 @@ python:
   - "2.7"
   - "3.5"
   - "3.6"
-install: "pip install -r requirements-travis.txt"
+install: "pip install -r requirements-ci.txt"
 script:
   - pytest
   - pycodestyle monty
+  - pydocstyle
+  - mypy
+  - flake8 --count --show-source --statistics monty
+  - flake8 --count --exit-zero --max-complexity=10 --statistics monty

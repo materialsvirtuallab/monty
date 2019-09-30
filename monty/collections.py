@@ -1,15 +1,13 @@
 # coding: utf-8
+
+"""
+Useful collection classes, e.g., tree, frozendict, etc.
+"""
+
 from __future__ import absolute_import, print_function, unicode_literals, \
     division
 
 import collections
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
 
 
 def tree():
@@ -34,12 +32,20 @@ class frozendict(dict):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         dict.__init__(self, *args, **kwargs)
 
     def __setitem__(self, key, val):
         raise KeyError("Cannot overwrite existing key: %s" % str(key))
 
     def update(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         raise KeyError("Cannot update a %s" % self.__class__.__name__)
 
 
@@ -47,6 +53,10 @@ class Namespace(dict):
     """A dictionary that does not permit to redefine its keys."""
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         self.update(*args, **kwargs)
 
     def __setitem__(self, key, val):
@@ -56,6 +66,10 @@ class Namespace(dict):
         dict.__setitem__(self, key, val)
 
     def update(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         for k, v in dict(*args, **kwargs).items():
             self[k] = v
 
@@ -73,10 +87,17 @@ class AttrDict(dict):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
 
     def copy(self):
+        """
+        :return: Copy of AttrDict
+        """
         newd = super(AttrDict, self).copy()
         return self.__class__(**newd)
 
@@ -90,6 +111,10 @@ class FrozenAttrDict(frozendict):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         super(FrozenAttrDict, self).__init__(*args, **kwargs)
 
     def __getattribute__(self, name):
@@ -129,6 +154,10 @@ class MongoDict(object):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         self.__dict__["_mongo_dict_"] = dict(*args, **kwargs)
 
     def __repr__(self):

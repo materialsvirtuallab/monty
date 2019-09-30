@@ -8,28 +8,22 @@ import os
 import json
 import datetime
 import six
-import inspect
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
 from enum import Enum
 
-try:
-    from importlib import import_module
-except ImportError:
-    # importlib only available in Python 2.7+, 3.1+
-    def importlib(x):
-        return x
+from importlib import import_module
 
 try:
     from inspect import getfullargspec as getargspec
 except ImportError:
-    from inspect import getargspec
+    from inspect import getargspec  # type: ignore
 
 try:
     import numpy as np
 except ImportError:
-    np = None
+    np = None  # type: ignore
 
 try:
     import bson
@@ -38,30 +32,25 @@ except ImportError:
 
 try:
     import ruamel.yaml as yaml
+
     try:  # Default to using CLoader and CDumper for speed.
         from ruamel.yaml import CLoader as Loader
         from ruamel.yaml import CDumper as Dumper
     except ImportError:
-        from ruamel.yaml import Loader
-        from ruamel.yaml import Dumper
+        from ruamel.yaml import Loader  # type: ignore
+        from ruamel.yaml import Dumper  # type: ignore
 except ImportError:
     try:
-        import yaml
-        try:  # Default to using CLoader and CDumper for speed.
-            from yaml import CLoader as Loader
-            from yaml import CDumper as Dumper
-        except ImportError:
-            from yaml import Loader
-            from yaml import Dumper
-    except ImportError:
-        yaml = None
+        import yaml  # type: ignore
 
-__author__ = "Shyue Ping Ong"
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = "0.1"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "ongsp@ucsd.edu"
-__date__ = "1/24/14"
+        try:  # Default to using CLoader and CDumper for speed.
+            from yaml import CLoader as Loader  # type: ignore
+            from yaml import CDumper as Dumper  # type: ignore
+        except ImportError:
+            from yaml import Loader  # type: ignore
+            from yaml import Dumper  # type: ignore
+    except ImportError:
+        yaml = None  # type: ignore
 
 
 def _load_redirect(redirect_file):
@@ -186,6 +175,10 @@ class MSONable(object):
 
     @classmethod
     def from_dict(cls, d):
+        """
+        :param d: Dict representation.
+        :return: MSONable class.
+        """
         decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items()
                    if not k.startswith("@")}
         return cls(**decoded)
@@ -355,6 +348,12 @@ class MontyDecoder(json.JSONDecoder):
         return d
 
     def decode(self, s):
+        """
+        Overrides decode from JSONDecoder.
+
+        :param s: string
+        :return: Object.
+        """
         d = json.JSONDecoder.decode(self, s)
         return self.process_decoded(d)
 
@@ -363,7 +362,6 @@ class MSONError(Exception):
     """
     Exception class for serialization errors.
     """
-    pass
 
 
 def jsanitize(obj, strict=False, allow_bson=False):

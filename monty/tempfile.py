@@ -5,15 +5,14 @@ Temporary directory and file creation utilities.
 from __future__ import absolute_import
 import os
 import tempfile
-import shutil
 
 try:
     from pathlib import Path
 except ImportError:
     try:
-        from pathlib2 import Path
+        from pathlib2 import Path  # type: ignore
     except ImportError:
-        Path = None
+        Path = None  # type: ignore
 
 from monty.shutil import copy_r, remove
 

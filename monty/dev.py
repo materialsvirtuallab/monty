@@ -13,13 +13,6 @@ import subprocess
 import multiprocessing
 import functools
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
 logger = logging.getLogger(__name__)
 
 
@@ -81,10 +74,17 @@ class requires(object):
     """
 
     def __init__(self, condition, message):
+        """
+        :param condition: A expression returning a bool.
+        :param message: Message to display if condition is False.
+        """
         self.condition = condition
         self.message = message
 
     def __call__(self, _callable):
+        """
+        :param _callable: Callable function.
+        """
         @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
@@ -134,7 +134,7 @@ def get_ncpus():
 
     # jython
     try:
-        from java.lang import Runtime
+        from java.lang import Runtime  # type: ignore
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
         if res > 0:
@@ -207,7 +207,7 @@ def install_excepthook(hook_type="color", **kwargs):
         0 if hook is installed successfully.
     """
     try:
-        from IPython.core import ultratb
+        from IPython.core import ultratb  # type: ignore
     except ImportError:
         import warnings
         warnings.warn(

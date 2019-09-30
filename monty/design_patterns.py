@@ -1,15 +1,11 @@
 # coding: utf-8
+"""
+Some common design patterns such as singleton and cached classes.
+"""
 
 from __future__ import absolute_import
 
 from functools import wraps
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2014, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
 
 
 def singleton(cls):
@@ -31,6 +27,7 @@ def singleton(cls):
         if cls not in instances:
             instances[cls] = cls()
         return instances[cls]
+
     return getinstance
 
 
@@ -60,6 +57,12 @@ def cached_class(klass):
         __doc__ = klass.__doc__
 
         def __new__(cls, *args, **kwargs):
+            """
+            Pass through...
+            :param args:
+            :param kwargs:
+            :return:
+            """
             key = (cls,) + args + tuple(kwargs.items())
             try:
                 inst = cache.get(key, None)
@@ -96,7 +99,11 @@ def cached_class(klass):
 
 class NullFile(object):
     """A file object that is associated to /dev/null."""
+
     def __new__(cls):
+        """
+        Pass through
+        """
         import os
         return open(os.devnull, 'w')
 
@@ -106,5 +113,10 @@ class NullFile(object):
 
 class NullStream(object):
     """A fake stream with a no-op write.."""
+
     def write(*args):
+        """
+        Does nothing...
+        :param args:
+        """
         pass

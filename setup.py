@@ -12,7 +12,7 @@ setup(
     packages=find_packages(),
     version="2.0.6",
     install_requires=["six"],
-    extras_require={"yaml": ["ruamel.yaml"],},
+    extras_require={"yaml": ["ruamel.yaml"], },
     package_data={},
     author="Shyue Ping Ong",
     author_email="ongsp@ucsd.edu",

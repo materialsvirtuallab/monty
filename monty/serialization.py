@@ -12,40 +12,34 @@ from monty.msgpack import default, object_hook
 
 try:
     import ruamel.yaml as yaml
+
     try:  # Default to using CLoader and CDumper for speed.
         from ruamel.yaml import CLoader as Loader
         from ruamel.yaml import CDumper as Dumper
     except ImportError:
-        from ruamel.yaml import Loader
-        from ruamel.yaml import Dumper
+        from ruamel.yaml import Loader  # type: ignore
+        from ruamel.yaml import Dumper  # type: ignore
 except ImportError:
     try:
-        import yaml
-        try:  # Default to using CLoader and CDumper for speed.
-            from yaml import CLoader as Loader
-            from yaml import CDumper as Dumper
-        except ImportError:
-            from yaml import Loader
-            from yaml import Dumper
-    except ImportError:
-        yaml = None
+        import yaml  # type: ignore
 
+        try:  # Default to using CLoader and CDumper for speed.
+            from yaml import CLoader as Loader  # type: ignore
+            from yaml import CDumper as Dumper  # type: ignore
+        except ImportError:
+            from yaml import Loader  # type: ignore
+            from yaml import Dumper  # type: ignore
+    except ImportError:
+        yaml = None  # type: ignore
 
 try:
     import msgpack
 except ImportError:
     msgpack = None
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Project'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '7/29/14'
-
 
 def loadfn(fn, *args, **kwargs):
-    """
+    r"""
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
     compressed file.
@@ -57,8 +51,8 @@ def loadfn(fn, *args, **kwargs):
 
     Args:
         fn (str/Path): filename or pathlib.Path.
-        \\*args: Any of the args supported by json/yaml.load.
-        \\*\\*kwargs: Any of the kwargs supported by json/yaml.load.
+        *args: Any of the args supported by json/yaml.load.
+        **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
         (object) Result of json/yaml/msgpack.load.
@@ -99,7 +93,7 @@ def loadfn(fn, *args, **kwargs):
 
 
 def dumpfn(obj, fn, *args, **kwargs):
-    """
+    r"""
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
     compressed file.
@@ -112,8 +106,8 @@ def dumpfn(obj, fn, *args, **kwargs):
     Args:
         obj (object): Object to dump.
         fn (str/Path): filename or pathlib.Path.
-        \\*args: Any of the args supported by json/yaml.dump.
-        \\*\\*kwargs: Any of the kwargs supported by json/yaml.dump.
+        *args: Any of the args supported by json/yaml.dump.
+        **kwargs: Any of the kwargs supported by json/yaml.dump.
 
     Returns:
         (object) Result of json.load.

@@ -1,5 +1,7 @@
 # coding: utf-8
-
+"""
+Path based methods, e.g., which, zpath, etc.
+"""
 from __future__ import absolute_import
 
 import os
@@ -26,6 +28,7 @@ def which(cmd):
 
         full_path_to_python = which("python")
     """
+
     def is_exe(fp):
         return os.path.isfile(fp) and os.access(fp, os.X_OK)
 

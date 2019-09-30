@@ -195,7 +195,7 @@ def cprint_map(text, cmap, **kwargs):
 
 
 def get_terminal_size():
-    """"
+    """
     Return the size of the terminal as (nrow, ncols)
 
     Based on:

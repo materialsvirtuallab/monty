@@ -16,36 +16,25 @@ import mmap
 import subprocess
 import io
 
-from monty.tempfile import ScratchDir as ScrDir
-from monty.dev import deprecated
-
 try:
     from pathlib import Path
 except ImportError:
-    Path = None
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
+    Path = None  # type: ignore
 
 PY_VERSION = sys.version_info
 
 
 def zopen(filename, *args, **kwargs):
-    """
+    r"""
     This function wraps around the bz2, gzip and standard python's open
     function to deal intelligently with bzipped, gzipped or standard text
     files.
 
     Args:
         filename (str/Path): filename or pathlib.Path.
-        \\*args: Standard args for python open(..). E.g., 'r' for read, 'w' for
+        *args: Standard args for python open(..). E.g., 'r' for read, 'w' for
             write.
-        \\*\\*kwargs: Standard kwargs for python open(..).
+        **kwargs: Standard kwargs for python open(..).
 
     Returns:
         File-like object. Supports with context.
@@ -185,11 +174,6 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
             else:
                 # Start-of-file
                 return
-
-
-@deprecated(ScrDir)
-class ScratchDir(ScrDir):
-    pass
 
 
 class FileLockException(Exception):

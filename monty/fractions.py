@@ -11,20 +11,13 @@ except ImportError:
     # Deprecated import from Py3.5 onwards.
     from fractions import gcd as pygcd
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '8/6/14'
-
 
 def gcd(*numbers):
-    """
+    r"""
     Returns the greatest common divisor for a sequence of numbers.
 
     Args:
-        \\*numbers: Sequence of numbers.
+        *numbers: Sequence of numbers.
 
     Returns:
         (int) Greatest common divisor of numbers.
@@ -36,11 +29,11 @@ def gcd(*numbers):
 
 
 def lcm(*numbers):
-    """
+    r"""
     Return lowest common multiple of a sequence of numbers.
 
     Args:
-        \\*numbers: Sequence of numbers.
+        *numbers: Sequence of numbers.
 
     Returns:
         (int) Lowest common multiple of numbers.

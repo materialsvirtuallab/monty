@@ -1,4 +1,9 @@
 # coding: utf-8
+
+"""
+Calling shell processes.
+"""
+
 from __future__ import absolute_import, print_function, division, \
     unicode_literals
 
@@ -42,6 +47,9 @@ class Command(object):
     """
 
     def __init__(self, command):
+        """
+        :param command: Command to execute
+        """
         from .string import is_string
         if is_string(command):
             import shlex

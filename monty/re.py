@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-#TODO: Write module doc.
+Helpful regex based functions. E.g., grepping.
 """
 
 from __future__ import division, unicode_literals, absolute_import
@@ -10,17 +10,9 @@ from monty.io import zopen, reverse_readfile
 import collections
 
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '6/2/15'
-
-
 def regrep(filename, patterns, reverse=False, terminate_on_match=False,
            postprocess=str):
-    """
+    r"""
     A powerful regular expression version of grep.
 
     Args:
