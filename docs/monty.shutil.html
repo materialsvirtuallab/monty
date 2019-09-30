@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.shutil module &#8212; monty 2.0.6 documentation</title>
+    <title>monty.shutil module &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.serialization.html" title="monty.serialization module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,6 +51,7 @@
             
   <div class="section" id="module-monty.shutil">
 <span id="monty-shutil-module"></span><h1>monty.shutil module<a class="headerlink" href="#module-monty.shutil" title="Permalink to this headline">¶</a></h1>
+<p>Copying and zipping utilities. Works on directories mostly.</p>
 <dl class="function">
 <dt id="monty.shutil.compress_dir">
 <code class="sig-name descname">compress_dir</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">compression='gz'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#compress_dir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.shutil.compress_dir" title="Permalink to this definition">¶</a></dt>
@@ -149,7 +150,8 @@ GzipFile, 6 is default for gzip.</p></li>
 <dl class="function">
 <dt id="monty.shutil.remove">
 <code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">follow_symlink=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.shutil.remove" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements an remove function that will delete files, folder trees and symlink trees</p>
+<dd><p>Implements an remove function that will delete files, folder trees and
+symlink trees</p>
 <p>1.) Remove a file
 2.) Remove a symlink and follow into with a recursive rm if follow_symlink
 3.) Remove directory with rmtree</p>

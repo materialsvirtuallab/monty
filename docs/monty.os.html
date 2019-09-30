@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.os package &#8212; monty 2.0.6 documentation</title>
+    <title>monty.os package &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.html" title="monty package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -61,6 +61,7 @@
 </div>
 <div class="section" id="module-monty.os">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-monty.os" title="Permalink to this headline">¶</a></h2>
+<p>Os functions, e.g., cd, makedirs_p.</p>
 <dl class="function">
 <dt id="monty.os.cd">
 <code class="sig-name descname">cd</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os.html#cd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.cd" title="Permalink to this definition">¶</a></dt>
@@ -83,8 +84,9 @@ afterwards. E.g.,</p>
 <dl class="function">
 <dt id="monty.os.makedirs_p">
 <code class="sig-name descname">makedirs_p</code><span class="sig-paren">(</span><em class="sig-param">path</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os.html#makedirs_p"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.makedirs_p" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapper for os.makedirs that does not raise an exception if the directory already exists, in the fashion of
-“mkdir -p” command. The check is performed in a thread-safe way</p>
+<dd><p>Wrapper for os.makedirs that does not raise an exception if the directory
+already exists, in the fashion of “mkdir -p” command. The check is
+performed in a thread-safe way</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

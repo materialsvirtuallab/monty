@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.collections &#8212; monty 2.0.6 documentation</title>
+    <title>monty.collections &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -43,17 +43,15 @@
             
   <h1>Source code for monty.collections</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Useful collection classes, e.g., tree, frozendict, etc.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">unicode_literals</span><span class="p">,</span> \
     <span class="n">division</span>
 
 <span class="kn">import</span> <span class="nn">collections</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2014, The Materials Virtual Lab&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span>
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;ongsp@ucsd.edu&#39;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s1">&#39;1/24/14&#39;</span>
 
 
 <div class="viewcode-block" id="tree"><a class="viewcode-back" href="../../monty.collections.html#monty.collections.tree">[docs]</a><span class="k">def</span> <span class="nf">tree</span><span class="p">():</span>
@@ -78,12 +76,20 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">dict</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Cannot overwrite existing key: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
 
 <div class="viewcode-block" id="frozendict.update"><a class="viewcode-back" href="../../monty.collections.html#monty.collections.frozendict.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Cannot update a </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span></div></div>
 
 
@@ -91,6 +97,10 @@
     <span class="sd">&quot;&quot;&quot;A dictionary that does not permit to redefine its keys.&quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
@@ -100,6 +110,10 @@
         <span class="nb">dict</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Namespace.update"><a class="viewcode-back" href="../../monty.collections.html#monty.collections.Namespace.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span></div></div>
 
@@ -117,10 +131,17 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">AttrDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="bp">self</span>
 
 <div class="viewcode-block" id="AttrDict.copy"><a class="viewcode-back" href="../../monty.collections.html#monty.collections.AttrDict.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :return: Copy of AttrDict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">newd</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">AttrDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="o">**</span><span class="n">newd</span><span class="p">)</span></div></div>
 
@@ -128,12 +149,16 @@
 <div class="viewcode-block" id="FrozenAttrDict"><a class="viewcode-back" href="../../monty.collections.html#monty.collections.FrozenAttrDict">[docs]</a><span class="k">class</span> <span class="nc">FrozenAttrDict</span><span class="p">(</span><span class="n">frozendict</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A dictionary that:</span>
-<span class="sd">        * does not permit changes. </span>
+<span class="sd">        * does not permit changes.</span>
 <span class="sd">        * Allows to access dict keys as obj.foo in addition</span>
 <span class="sd">          to the traditional way obj[&#39;foo&#39;]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">FrozenAttrDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
@@ -152,25 +177,31 @@
 
 <div class="viewcode-block" id="MongoDict"><a class="viewcode-back" href="../../monty.collections.html#monty.collections.MongoDict">[docs]</a><span class="k">class</span> <span class="nc">MongoDict</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    This dict-like object allows one to access the entries in a nested dict as attributes. </span>
-<span class="sd">    Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object </span>
-<span class="sd">    is particularly useful if you need to analyze a nested dict interactively (e.g. documents</span>
-<span class="sd">    extracted from a MongoDB database).</span>
+<span class="sd">    This dict-like object allows one to access the entries in a nested dict as</span>
+<span class="sd">    attributes.</span>
+<span class="sd">    Entries (attributes) cannot be modified. It also provides Ipython tab</span>
+<span class="sd">    completion hence this object is particularly useful if you need to analyze</span>
+<span class="sd">    a nested dict interactively (e.g. documents extracted from a MongoDB</span>
+<span class="sd">    database).</span>
 
-<span class="sd">    &gt;&gt;&gt; m = MongoDict({&#39;a&#39;: {&#39;b&#39;: 1}, &#39;x&#39;: 2}) </span>
+<span class="sd">    &gt;&gt;&gt; m = MongoDict({&#39;a&#39;: {&#39;b&#39;: 1}, &#39;x&#39;: 2})</span>
 <span class="sd">    &gt;&gt;&gt; assert m.a.b == 1 and m.x == 2</span>
 <span class="sd">    &gt;&gt;&gt; assert &quot;a&quot; in m and &quot;b&quot; in m.a</span>
 <span class="sd">    &gt;&gt;&gt; m[&quot;a&quot;]</span>
 <span class="sd">    {&#39;b&#39;: 1}</span>
 
-<span class="sd">    .. note:: </span>
+<span class="sd">    .. note::</span>
 
-<span class="sd">        Cannot inherit from ABC collections.Mapping because otherwise </span>
+<span class="sd">        Cannot inherit from ABC collections.Mapping because otherwise</span>
 <span class="sd">        dict.keys and dict.items will pollute the namespace.</span>
 <span class="sd">        e.g MongoDict({&quot;keys&quot;: 1}).keys would be the ABC dict method.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        :param args: Passthrough arguments for standard dict.</span>
+<span class="sd">        :param kwargs: Passthrough keyword arguments for standard dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s2">&quot;_mongo_dict_&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -186,7 +217,7 @@
     <span class="k">def</span> <span class="nf">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">MongoDict</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="c1"># raise</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mongo_dict_</span><span class="p">[</span><span class="n">name</span><span class="p">]</span>

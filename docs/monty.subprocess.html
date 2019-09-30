@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.subprocess module &#8212; monty 2.0.6 documentation</title>
+    <title>monty.subprocess module &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.string.html" title="monty.string module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,6 +51,7 @@
             
   <div class="section" id="module-monty.subprocess">
 <span id="monty-subprocess-module"></span><h1>monty.subprocess module<a class="headerlink" href="#module-monty.subprocess" title="Permalink to this headline">¶</a></h1>
+<p>Calling shell processes.</p>
 <dl class="class">
 <dt id="monty.subprocess.Command">
 <em class="property">class </em><code class="sig-name descname">Command</code><span class="sig-paren">(</span><em class="sig-param">command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/subprocess.html#Command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.subprocess.Command" title="Permalink to this definition">¶</a></dt>
@@ -90,6 +91,11 @@ option.</p>
 <p class="rubric">Example</p>
 <p>com = Command(“sleep 1”).run(timeout=2)
 print(com.retcode, com.killed, com.output, com.output)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>command</strong> – Command to execute</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="monty.subprocess.Command.run">
 <code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">timeout=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/subprocess.html#Command.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.subprocess.Command.run" title="Permalink to this definition">¶</a></dt>

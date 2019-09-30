@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.string module &#8212; monty 2.0.6 documentation</title>
+    <title>monty.string module &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.shutil.html" title="monty.shutil module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -76,7 +76,8 @@
 <dl class="function">
 <dt id="monty.string.indent">
 <code class="sig-name descname">indent</code><span class="sig-paren">(</span><em class="sig-param">lines</em>, <em class="sig-param">amount</em>, <em class="sig-param">ch=' '</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#indent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.indent" title="Permalink to this definition">¶</a></dt>
-<dd><p>Indent the lines in a string by padding each one with proper number of pad characters</p>
+<dd><p>Indent the lines in a string by padding each one with proper number of pad
+characters</p>
 </dd></dl>
 
 <dl class="function">
@@ -111,7 +112,19 @@ input.</p>
 <dl class="function">
 <dt id="monty.string.make_banner">
 <code class="sig-name descname">make_banner</code><span class="sig-paren">(</span><em class="sig-param">s</em>, <em class="sig-param">width=78</em>, <em class="sig-param">mark='*'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#make_banner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.make_banner" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> – String</p></li>
+<li><p><strong>width</strong> – Width of banner. Defaults to 78.</p></li>
+<li><p><strong>mark</strong> – The mark used to create the banner.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Banner string.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="function">
 <dt id="monty.string.marquee">
@@ -151,20 +164,6 @@ is not available.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>String with all non-ascii characters removed.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="function">
-<dt id="monty.string.str2unicode">
-<code class="sig-name descname">str2unicode</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#str2unicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.string.str2unicode" title="Permalink to this definition">¶</a></dt>
-<dd><p>Converts strings to unicode in python 2. Ignores Python 3 strings.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>s</strong> (<em>str/unicode</em>) – Input string / unicode.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Unicode.</p>
 </dd>
 </dl>
 </dd></dl>

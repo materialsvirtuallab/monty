@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.string &#8212; monty 2.0.6 documentation</title>
+    <title>monty.string &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -49,13 +49,6 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s2">&quot;Shyue Ping Ong&quot;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2012, The Materials Project&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1&quot;</span>
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s2">&quot;Shyue Ping Ong&quot;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s2">&quot;ongsp@ucsd.edu&quot;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s2">&quot;2/28/14&quot;</span>
 
 
 <div class="viewcode-block" id="remove_non_ascii"><a class="viewcode-back" href="../../monty.string.html#monty.string.remove_non_ascii">[docs]</a><span class="k">def</span> <span class="nf">remove_non_ascii</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -84,19 +77,6 @@
 <span class="sd">        str in Python 2. Unchanged otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">s</span></div>
-
-
-<div class="viewcode-block" id="str2unicode"><a class="viewcode-back" href="../../monty.string.html#monty.string.str2unicode">[docs]</a><span class="k">def</span> <span class="nf">str2unicode</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Converts strings to unicode in python 2. Ignores Python 3 strings.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        s (str/unicode): Input string / unicode.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        Unicode.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">unicode</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">s</span></div>
 
 
 <div class="viewcode-block" id="is_string"><a class="viewcode-back" href="../../monty.string.html#monty.string.is_string">[docs]</a><span class="k">def</span> <span class="nf">is_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -152,10 +132,10 @@
 <span class="sd">    &#39;                 A test                 &#39;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">mark</span><span class="o">*</span><span class="n">width</span><span class="p">)[:</span><span class="n">width</span><span class="p">]</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">mark</span> <span class="o">*</span> <span class="n">width</span><span class="p">)[:</span><span class="n">width</span><span class="p">]</span>
 
-    <span class="n">nmark</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span><span class="o">//</span><span class="nb">len</span><span class="p">(</span><span class="n">mark</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
-    <span class="k">if</span> <span class="n">nmark</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span> 
+    <span class="n">nmark</span> <span class="o">=</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">//</span> <span class="nb">len</span><span class="p">(</span><span class="n">mark</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="n">nmark</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">nmark</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">marks</span> <span class="o">=</span> <span class="n">mark</span> <span class="o">*</span> <span class="n">nmark</span>
@@ -182,16 +162,25 @@
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
                       <span class="n">msg</span><span class="p">,</span>
                       <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
-                     <span class="p">])</span></div>
+                      <span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="make_banner"><a class="viewcode-back" href="../../monty.string.html#monty.string.make_banner">[docs]</a><span class="k">def</span> <span class="nf">make_banner</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">78</span><span class="p">,</span> <span class="n">mark</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param s: String</span>
+<span class="sd">    :param width: Width of banner. Defaults to 78.</span>
+<span class="sd">    :param mark: The mark used to create the banner.</span>
+<span class="sd">    :return: Banner string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">banner</span> <span class="o">=</span> <span class="n">marquee</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">mark</span><span class="o">=</span><span class="n">mark</span><span class="p">)</span>
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">*</span> <span class="n">mark</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">banner</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">*</span> <span class="n">mark</span></div>
 
 
 <div class="viewcode-block" id="indent"><a class="viewcode-back" href="../../monty.string.html#monty.string.indent">[docs]</a><span class="k">def</span> <span class="nf">indent</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Indent the lines in a string by padding each one with proper number of pad characters&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Indent the lines in a string by padding each one with proper number of pad</span>
+<span class="sd">    characters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">padding</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">*</span> <span class="n">ch</span>
     <span class="k">return</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span></div>
 </pre></div>

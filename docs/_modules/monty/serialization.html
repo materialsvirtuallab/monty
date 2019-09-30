@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.serialization &#8212; monty 2.0.6 documentation</title>
+    <title>monty.serialization &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,51 +56,47 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">ruamel.yaml</span> <span class="k">as</span> <span class="nn">yaml</span>
+
     <span class="k">try</span><span class="p">:</span>  <span class="c1"># Default to using CLoader and CDumper for speed.</span>
         <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="k">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span>
         <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="k">import</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="k">import</span> <span class="n">Loader</span>
-        <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="k">import</span> <span class="n">Dumper</span>
+        <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="k">import</span> <span class="n">Loader</span>  <span class="c1"># type: ignore</span>
+        <span class="kn">from</span> <span class="nn">ruamel.yaml</span> <span class="k">import</span> <span class="n">Dumper</span>  <span class="c1"># type: ignore</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">yaml</span>
-        <span class="k">try</span><span class="p">:</span>  <span class="c1"># Default to using CLoader and CDumper for speed.</span>
-            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span>
-            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>
-        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">Loader</span>
-            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">Dumper</span>
-    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="n">yaml</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="kn">import</span> <span class="nn">yaml</span>  <span class="c1"># type: ignore</span>
 
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># Default to using CLoader and CDumper for speed.</span>
+            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">CLoader</span> <span class="k">as</span> <span class="n">Loader</span>  <span class="c1"># type: ignore</span>
+            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">CDumper</span> <span class="k">as</span> <span class="n">Dumper</span>  <span class="c1"># type: ignore</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">Loader</span>  <span class="c1"># type: ignore</span>
+            <span class="kn">from</span> <span class="nn">yaml</span> <span class="k">import</span> <span class="n">Dumper</span>  <span class="c1"># type: ignore</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">yaml</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">msgpack</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">msgpack</span> <span class="o">=</span> <span class="kc">None</span>
 
-<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s1">&#39;Copyright 2013, The Materials Project&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span>
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;ongsp@ucsd.edu&#39;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s1">&#39;7/29/14&#39;</span>
-
 
 <div class="viewcode-block" id="loadfn"><a class="viewcode-back" href="../../monty.serialization.html#monty.serialization.loadfn">[docs]</a><span class="k">def</span> <span class="nf">loadfn</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads json/yaml/msgpack directly from a filename instead of a</span>
-<span class="sd">    File-like object. File may also be a BZ2 (&quot;.BZ2&quot;) or GZIP (&quot;.GZ&quot;, &quot;.Z&quot;) compressed file.</span>
-<span class="sd">    For YAML, ruamel.yaml must be installed. The file type is automatically detected</span>
-<span class="sd">    from the file extension (case insensitive). YAML is assumed if the filename contains</span>
-<span class="sd">    &quot;.yaml&quot; or &quot;.yml&quot;. Msgpack is assumed if the filename contains &quot;.mpk&quot;.</span>
-<span class="sd">    JSON is otherwise assumed. The file type can be specified manually with &quot;fmt=&#39;type&#39;&quot;.</span>
+<span class="sd">    File-like object. File may also be a BZ2 (&quot;.BZ2&quot;) or GZIP (&quot;.GZ&quot;, &quot;.Z&quot;)</span>
+<span class="sd">    compressed file.</span>
+<span class="sd">    For YAML, ruamel.yaml must be installed. The file type is automatically</span>
+<span class="sd">    detected from the file extension (case insensitive).</span>
+<span class="sd">    YAML is assumed if the filename contains &quot;.yaml&quot; or &quot;.yml&quot;.</span>
+<span class="sd">    Msgpack is assumed if the filename contains &quot;.mpk&quot;.</span>
+<span class="sd">    JSON is otherwise assumed.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        fn (str/Path): filename or pathlib.Path.</span>
-<span class="sd">        \\*args: Any of the args supported by json/yaml.load.</span>
-<span class="sd">        \\*\\*kwargs: Any of the kwargs supported by json/yaml.load.</span>
+<span class="sd">        *args: Any of the args supported by json/yaml.load.</span>
+<span class="sd">        **kwargs: Any of the kwargs supported by json/yaml.load.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        (object) Result of json/yaml/msgpack.load.</span>
@@ -127,8 +123,8 @@
         <span class="k">with</span> <span class="n">zopen</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s1">&#39;rt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;yaml&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">yaml</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Loading of YAML files is not &quot;</span>
-                                       <span class="s2">&quot;possible as ruamel.yaml is not installed.&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Loading of YAML files requires &quot;</span>
+                                       <span class="s2">&quot;ruamel.yaml.&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="s2">&quot;Loader&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;Loader&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Loader</span>
                 <span class="k">return</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -141,19 +137,21 @@
 
 
 <div class="viewcode-block" id="dumpfn"><a class="viewcode-back" href="../../monty.serialization.html#monty.serialization.dumpfn">[docs]</a><span class="k">def</span> <span class="nf">dumpfn</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dump to a json/yaml directly by filename instead of a</span>
-<span class="sd">    File-like object. File may also be a BZ2 (&quot;.BZ2&quot;) or GZIP (&quot;.GZ&quot;, &quot;.Z&quot;) compressed file.</span>
-<span class="sd">    For YAML, ruamel.yaml must be installed. The file type is automatically detected</span>
-<span class="sd">    from the file extension (case insensitive). YAML is assumed if the filename contains</span>
-<span class="sd">    &quot;.yaml&quot; or &quot;.yml&quot;. Msgpack is assumed if the filename contains &quot;.mpk&quot;.</span>
-<span class="sd">    JSON is otherwise assumed. The file type can be specified manually with &quot;fmt=&#39;type&#39;&quot;.</span>
+<span class="sd">    File-like object. File may also be a BZ2 (&quot;.BZ2&quot;) or GZIP (&quot;.GZ&quot;, &quot;.Z&quot;)</span>
+<span class="sd">    compressed file.</span>
+<span class="sd">    For YAML, ruamel.yaml must be installed. The file type is automatically</span>
+<span class="sd">    detected from the file extension (case insensitive). YAML is assumed if the</span>
+<span class="sd">    filename contains &quot;.yaml&quot; or &quot;.yml&quot;.</span>
+<span class="sd">    Msgpack is assumed if the filename contains &quot;.mpk&quot;.</span>
+<span class="sd">    JSON is otherwise assumed.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        obj (object): Object to dump.</span>
 <span class="sd">        fn (str/Path): filename or pathlib.Path.</span>
-<span class="sd">        \\*args: Any of the args supported by json/yaml.dump.</span>
-<span class="sd">        \\*\\*kwargs: Any of the kwargs supported by json/yaml.dump.</span>
+<span class="sd">        *args: Any of the args supported by json/yaml.dump.</span>
+<span class="sd">        **kwargs: Any of the kwargs supported by json/yaml.dump.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        (object) Result of json.load.</span>
@@ -179,8 +177,8 @@
         <span class="k">with</span> <span class="n">zopen</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="s2">&quot;wt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s1">&#39;yaml&#39;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">yaml</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Loading of YAML files is not &quot;</span>
-                                       <span class="s2">&quot;possible as ruamel.yaml is not installed.&quot;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Loading of YAML files requires &quot;</span>
+                                       <span class="s2">&quot;ruamel.yaml.&quot;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="s2">&quot;Dumper&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
                     <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;Dumper&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Dumper</span>
                 <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">fp</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

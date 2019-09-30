@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.functools module &#8212; monty 2.0.6 documentation</title>
+    <title>monty.functools module &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.fractions.html" title="monty.fractions module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,6 +56,12 @@
 <dt id="monty.functools.TimeoutError">
 <em class="property">exception </em><code class="sig-name descname">TimeoutError</code><span class="sig-paren">(</span><em class="sig-param">message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#TimeoutError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.TimeoutError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception class for timeouts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> – Error message</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -65,6 +71,11 @@
 <p>lazy_property descriptor</p>
 <p>Used as a decorator to create lazy attributes. Lazy attributes
 are evaluated on first use.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>func</strong> – Function to decorate.</p>
+</dd>
+</dl>
 <dl class="method">
 <dt id="monty.functools.lazy_property.invalidate">
 <em class="property">classmethod </em><code class="sig-name descname">invalidate</code><span class="sig-paren">(</span><em class="sig-param">inst</em>, <em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property.invalidate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.lazy_property.invalidate" title="Permalink to this definition">¶</a></dt>
@@ -177,7 +188,15 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
 <dl class="method">
 <dt id="monty.functools.timeout.handle_timeout">
 <code class="sig-name descname">handle_timeout</code><span class="sig-paren">(</span><em class="sig-param">signum</em>, <em class="sig-param">frame</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout.handle_timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.timeout.handle_timeout" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signum</strong> – Return signal from call.</p></li>
+<li><p><strong>frame</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

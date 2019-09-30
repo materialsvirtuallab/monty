@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.design_patterns &#8212; monty 2.0.6 documentation</title>
+    <title>monty.design_patterns &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -43,17 +43,13 @@
             
   <h1>Source code for monty.design_patterns</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Some common design patterns such as singleton and cached classes.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
 
 <span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">wraps</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s1">&#39;Copyright 2014, The Materials Virtual Lab&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span>
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;ongsp@ucsd.edu&#39;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s1">&#39;1/24/14&#39;</span>
 
 
 <div class="viewcode-block" id="singleton"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.singleton">[docs]</a><span class="k">def</span> <span class="nf">singleton</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -75,6 +71,7 @@
         <span class="k">if</span> <span class="bp">cls</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">instances</span><span class="p">:</span>
             <span class="n">instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">instances</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
+
     <span class="k">return</span> <span class="n">getinstance</span></div>
 
 
@@ -104,6 +101,12 @@
         <span class="vm">__doc__</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__doc__</span>
 
         <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Pass through...</span>
+<span class="sd">            :param args:</span>
+<span class="sd">            :param kwargs:</span>
+<span class="sd">            :return:</span>
+<span class="sd">            &quot;&quot;&quot;</span>
             <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="bp">cls</span><span class="p">,)</span> <span class="o">+</span> <span class="n">args</span> <span class="o">+</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">inst</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -140,7 +143,11 @@
 
 <div class="viewcode-block" id="NullFile"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullFile">[docs]</a><span class="k">class</span> <span class="nc">NullFile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A file object that is associated to /dev/null.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Pass through</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">os</span>
         <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
 
@@ -150,9 +157,13 @@
 
 <div class="viewcode-block" id="NullStream"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream">[docs]</a><span class="k">class</span> <span class="nc">NullStream</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A fake stream with a no-op write..&quot;&quot;&quot;</span>
-<div class="viewcode-block" id="NullStream.write"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;no-op&quot;&quot;&quot;</span></div></div>
 
+<div class="viewcode-block" id="NullStream.write"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Does nothing...</span>
+<span class="sd">        :param args:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
 </pre></div>
 
           </div>

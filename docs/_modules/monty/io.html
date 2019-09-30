@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.io &#8212; monty 2.0.6 documentation</title>
+    <title>monty.io &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -60,36 +60,25 @@
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">io</span>
 
-<span class="kn">from</span> <span class="nn">monty.tempfile</span> <span class="k">import</span> <span class="n">ScratchDir</span> <span class="k">as</span> <span class="n">ScrDir</span>
-<span class="kn">from</span> <span class="nn">monty.dev</span> <span class="k">import</span> <span class="n">deprecated</span>
-
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2014, The Materials Virtual Lab&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span>
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;ongsp@ucsd.edu&#39;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s1">&#39;1/24/14&#39;</span>
-
+    <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># type: ignore</span>
 
 <span class="n">PY_VERSION</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span>
 
 
 <div class="viewcode-block" id="zopen"><a class="viewcode-back" href="../../monty.io.html#monty.io.zopen">[docs]</a><span class="k">def</span> <span class="nf">zopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function wraps around the bz2, gzip and standard python&#39;s open</span>
 <span class="sd">    function to deal intelligently with bzipped, gzipped or standard text</span>
 <span class="sd">    files.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        filename (str/Path): filename or pathlib.Path.</span>
-<span class="sd">        \*args: Standard args for python open(..). E.g., &#39;r&#39; for read, &#39;w&#39; for</span>
+<span class="sd">        *args: Standard args for python open(..). E.g., &#39;r&#39; for read, &#39;w&#39; for</span>
 <span class="sd">            write.</span>
-<span class="sd">        \*\*kwargs: Standard kwargs for python open(..).</span>
+<span class="sd">        **kwargs: Standard kwargs for python open(..).</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        File-like object. Supports with context.</span>
@@ -231,11 +220,6 @@
                 <span class="k">return</span></div>
 
 
-<span class="nd">@deprecated</span><span class="p">(</span><span class="n">ScrDir</span><span class="p">)</span>
-<span class="k">class</span> <span class="nc">ScratchDir</span><span class="p">(</span><span class="n">ScrDir</span><span class="p">):</span>
-    <span class="k">pass</span>
-
-
 <div class="viewcode-block" id="FileLockException"><a class="viewcode-back" href="../../monty.io.html#monty.io.FileLockException">[docs]</a><span class="k">class</span> <span class="nc">FileLockException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Exception raised by FileLock.&quot;&quot;&quot;</span></div>
 
@@ -294,9 +278,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">is_locked</span> <span class="o">=</span> <span class="kc">True</span></div>
 
 <div class="viewcode-block" id="FileLock.release"><a class="viewcode-back" href="../../monty.io.html#monty.io.FileLock.release">[docs]</a>    <span class="k">def</span> <span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Get rid of the lock by deleting the lockfile.</span>
-<span class="sd">            When working in a `with` statement, this gets automatically</span>
-<span class="sd">            called at the end.</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get rid of the lock by deleting the lockfile.</span>
+<span class="sd">        When working in a `with` statement, this gets automatically</span>
+<span class="sd">        called at the end.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_locked</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fd</span><span class="p">)</span>
@@ -340,7 +325,6 @@
 
     <span class="k">return</span> <span class="nb">len</span><span class="p">([</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">procs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()])</span></div>
-
 </pre></div>
 
           </div>

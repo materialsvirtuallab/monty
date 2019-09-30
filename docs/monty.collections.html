@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.collections module &#8212; monty 2.0.6 documentation</title>
+    <title>monty.collections module &#8212; monty 2.0.7 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.bisect.html" title="monty.bisect module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,6 +51,7 @@
             
   <div class="section" id="module-monty.collections">
 <span id="monty-collections-module"></span><h1>monty.collections module<a class="headerlink" href="#module-monty.collections" title="Permalink to this headline">¶</a></h1>
+<p>Useful collection classes, e.g., tree, frozendict, etc.</p>
 <dl class="class">
 <dt id="monty.collections.AttrDict">
 <em class="property">class </em><code class="sig-name descname">AttrDict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#AttrDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict" title="Permalink to this definition">¶</a></dt>
@@ -64,10 +65,23 @@ to the traditional way obj[‘foo’]”</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">d</span><span class="o">.</span><span class="n">bar</span> <span class="o">==</span> <span class="s2">&quot;hello&quot;</span>
 </pre></div>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="monty.collections.AttrDict.copy">
-<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; a shallow copy of D<a class="reference internal" href="_modules/monty/collections.html#AttrDict.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict.copy" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<code class="sig-name descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#AttrDict.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.AttrDict.copy" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Copy of AttrDict</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -83,16 +97,26 @@ to the traditional way obj[‘foo’]</p></li>
 </ul>
 </dd>
 </dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
 <dt id="monty.collections.MongoDict">
 <em class="property">class </em><code class="sig-name descname">MongoDict</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#MongoDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.MongoDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>This dict-like object allows one to access the entries in a nested dict as attributes.
-Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object
-is particularly useful if you need to analyze a nested dict interactively (e.g. documents
-extracted from a MongoDB database).</p>
+<p>This dict-like object allows one to access the entries in a nested dict as
+attributes.
+Entries (attributes) cannot be modified. It also provides Ipython tab
+completion hence this object is particularly useful if you need to analyze
+a nested dict interactively (e.g. documents extracted from a MongoDB
+database).</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">m</span> <span class="o">=</span> <span class="n">MongoDict</span><span class="p">({</span><span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span> <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">})</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="n">m</span><span class="o">.</span><span class="n">a</span><span class="o">.</span><span class="n">b</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">m</span><span class="o">.</span><span class="n">x</span> <span class="o">==</span> <span class="mi">2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">assert</span> <span class="s2">&quot;a&quot;</span> <span class="ow">in</span> <span class="n">m</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">in</span> <span class="n">m</span><span class="o">.</span><span class="n">a</span>
@@ -106,6 +130,14 @@ extracted from a MongoDB database).</p>
 dict.keys and dict.items will pollute the namespace.
 e.g MongoDict({“keys”: 1}).keys would be the ABC dict method.</p>
 </div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="class">
@@ -113,12 +145,25 @@ e.g MongoDict({“keys”: 1}).keys would be the ABC dict method.</p>
 <em class="property">class </em><code class="sig-name descname">Namespace</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#Namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>A dictionary that does not permit to redefine its keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="monty.collections.Namespace.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">E</em>, <span class="optional">]</span><em class="sig-param">**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/monty/collections.html#Namespace.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
-If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
-In either case, this is followed by: for k in F:  D[k] = F[k]</p>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#Namespace.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.Namespace.update" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -155,12 +200,25 @@ crucial since a dict is needed to instantiate the tuple!</p></li>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></p>
 <p>A dictionary that does not permit changes. The naming
 violates PEP8 to be consistent with standard Python’s “frozenset” naming.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 <dl class="method">
 <dt id="monty.collections.frozendict.update">
-<code class="sig-name descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param">E</em>, <span class="optional">]</span><em class="sig-param">**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/monty/collections.html#frozendict.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.frozendict.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
-If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
-In either case, this is followed by: for k in F:  D[k] = F[k]</p>
+<code class="sig-name descname">update</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/collections.html#frozendict.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.collections.frozendict.update" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Passthrough arguments for standard dict.</p></li>
+<li><p><strong>kwargs</strong> – Passthrough keyword arguments for standard dict.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
