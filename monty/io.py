@@ -12,11 +12,11 @@ import errno
 import mmap
 import subprocess
 import io
-
+from typing import Union, IO, Generator
 from pathlib import Path
 
 
-def zopen(filename, *args, **kwargs):
+def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     r"""
     This function wraps around the bz2, gzip and standard python's open
     function to deal intelligently with bzipped, gzipped or standard text
@@ -43,7 +43,7 @@ def zopen(filename, *args, **kwargs):
     return io.open(filename, *args, **kwargs)
 
 
-def reverse_readfile(filename):
+def reverse_readfile(filename) -> Generator[str]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
@@ -73,7 +73,7 @@ def reverse_readfile(filename):
         return
 
 
-def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
+def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str]:
     """
     Generator method to read a file line-by-line, but backwards. This allows
     one to efficiently get data at the end of a file.
