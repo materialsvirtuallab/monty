@@ -43,7 +43,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     return io.open(filename, *args, **kwargs)
 
 
-def reverse_readfile(filename) -> Generator[str, str, None]:
+def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
