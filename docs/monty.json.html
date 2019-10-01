@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.json module &#8212; monty 3.0.0 documentation</title>
+    <title>monty.json module &#8212; monty 3.0.1 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.itertools.html" title="monty.itertools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -105,7 +105,7 @@ old_module.old_class: new_module.new_class</p>
 
 <dl class="method">
 <dt id="monty.json.MSONable.as_dict">
-<code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.as_dict" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/monty/json.html#MSONable.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>A JSON serializable dict representation of an object.</p>
 </dd></dl>
 
@@ -124,7 +124,7 @@ old_module.old_class: new_module.new_class</p>
 
 <dl class="method">
 <dt id="monty.json.MSONable.to_json">
-<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.to_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.to_json" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/monty/json.html#MSONable.to_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.to_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a json string representation of the MSONable object.</p>
 </dd></dl>
 
@@ -244,7 +244,7 @@ that can’t otherwise be serialized.  It should return a JSON encodable
 version of the object or raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
 <dl class="method">
 <dt id="monty.json.MontyEncoder.default">
-<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param">o</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyEncoder.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyEncoder.default" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param">o</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/monty/json.html#MontyEncoder.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyEncoder.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overriding default method for JSON encoding. This method does two
 things: (a) If an object has a to_dict property, return the to_dict
 output. (b) If the &#64;module and &#64;class keys are not in the to_dict,

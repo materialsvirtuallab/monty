@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.io &#8212; monty 3.0.0 documentation</title>
+    <title>monty.io &#8212; monty 3.0.1 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,11 +56,11 @@
 <span class="kn">import</span> <span class="nn">mmap</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">io</span>
-
+<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Generator</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 
 
-<div class="viewcode-block" id="zopen"><a class="viewcode-back" href="../../monty.io.html#monty.io.zopen">[docs]</a><span class="k">def</span> <span class="nf">zopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="zopen"><a class="viewcode-back" href="../../monty.io.html#monty.io.zopen">[docs]</a><span class="k">def</span> <span class="nf">zopen</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IO</span><span class="p">:</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This function wraps around the bz2, gzip and standard python&#39;s open</span>
 <span class="sd">    function to deal intelligently with bzipped, gzipped or standard text</span>
@@ -87,7 +87,7 @@
     <span class="k">return</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="reverse_readfile"><a class="viewcode-back" href="../../monty.io.html#monty.io.reverse_readfile">[docs]</a><span class="k">def</span> <span class="nf">reverse_readfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="reverse_readfile"><a class="viewcode-back" href="../../monty.io.html#monty.io.reverse_readfile">[docs]</a><span class="k">def</span> <span class="nf">reverse_readfile</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A much faster reverse read of file by using Python&#39;s mmap to generate a</span>
 <span class="sd">    memory-mapped file. It is slower for very small files than</span>
@@ -117,7 +117,7 @@
         <span class="k">return</span></div>
 
 
-<div class="viewcode-block" id="reverse_readline"><a class="viewcode-back" href="../../monty.io.html#monty.io.reverse_readline">[docs]</a><span class="k">def</span> <span class="nf">reverse_readline</span><span class="p">(</span><span class="n">m_file</span><span class="p">,</span> <span class="n">blk_size</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span> <span class="n">max_mem</span><span class="o">=</span><span class="mi">4000000</span><span class="p">):</span>
+<div class="viewcode-block" id="reverse_readline"><a class="viewcode-back" href="../../monty.io.html#monty.io.reverse_readline">[docs]</a><span class="k">def</span> <span class="nf">reverse_readline</span><span class="p">(</span><span class="n">m_file</span><span class="p">,</span> <span class="n">blk_size</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span> <span class="n">max_mem</span><span class="o">=</span><span class="mi">4000000</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Generator</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Generator method to read a file line-by-line, but backwards. This allows</span>
 <span class="sd">    one to efficiently get data at the end of a file.</span>

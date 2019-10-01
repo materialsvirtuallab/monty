@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.io module &#8212; monty 3.0.0 documentation</title>
+    <title>monty.io module &#8212; monty 3.0.1 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.inspect.html" title="monty.inspect module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -113,7 +113,7 @@ called at the end.</p>
 
 <dl class="function">
 <dt id="monty.io.reverse_readfile">
-<code class="sig-name descname">reverse_readfile</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reverse_readfile</code><span class="sig-paren">(</span><em class="sig-param">filename: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A much faster reverse read of file by using Python’s mmap to generate a
 memory-mapped file. It is slower for very small files than
 reverse_readline, but at least 2x faster for large files (the primary use
@@ -130,7 +130,7 @@ of such a method).</p>
 
 <dl class="function">
 <dt id="monty.io.reverse_readline">
-<code class="sig-name descname">reverse_readline</code><span class="sig-paren">(</span><em class="sig-param">m_file</em>, <em class="sig-param">blk_size=4096</em>, <em class="sig-param">max_mem=4000000</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reverse_readline</code><span class="sig-paren">(</span><em class="sig-param">m_file</em>, <em class="sig-param">blk_size=4096</em>, <em class="sig-param">max_mem=4000000</em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator method to read a file line-by-line, but backwards. This allows
 one to efficiently get data at the end of a file.</p>
 <p>Based on code by Peter Astrand &lt;<a class="reference external" href="mailto:astrand&#37;&#52;&#48;cendio&#46;se">astrand<span>&#64;</span>cendio<span>&#46;</span>se</a>&gt;, using modifications by
@@ -161,7 +161,7 @@ of the file.</p>
 
 <dl class="function">
 <dt id="monty.io.zopen">
-<code class="sig-name descname">zopen</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#zopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.zopen" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">zopen</code><span class="sig-paren">(</span><em class="sig-param">filename: Union[str, pathlib.Path], *args, **kwargs</em><span class="sig-paren">)</span> &#x2192; IO<a class="reference internal" href="_modules/monty/io.html#zopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.zopen" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function wraps around the bz2, gzip and standard python’s open
 function to deal intelligently with bzipped, gzipped or standard text
 files.</p>
