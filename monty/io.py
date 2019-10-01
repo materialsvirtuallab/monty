@@ -43,7 +43,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     return io.open(filename, *args, **kwargs)
 
 
-def reverse_readfile(filename) -> Generator[str]:
+def reverse_readfile(filename) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
@@ -73,7 +73,7 @@ def reverse_readfile(filename) -> Generator[str]:
         return
 
 
-def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str]:
+def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str, str, None]:
     """
     Generator method to read a file line-by-line, but backwards. This allows
     one to efficiently get data at the end of a file.
