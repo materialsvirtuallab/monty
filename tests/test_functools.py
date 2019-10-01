@@ -7,6 +7,7 @@ __date__ = '8/29/14'
 
 import unittest
 import sys
+import platform
 from io import open
 import time
 from monty.functools import lru_cache, lazy_property, return_if_raise, \
@@ -698,6 +699,7 @@ class TryOrReturnTest(unittest.TestCase):
 
 class TimeoutTest(unittest.TestCase):
 
+    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_with(self):
         try:
             with timeout(1, "timeout!"):

@@ -8,6 +8,7 @@ __date__ = '1/24/14'
 
 import unittest
 import os
+import platform
 
 from monty.os.path import which, zpath, find_exts
 from monty.os import cd, makedirs_p
@@ -17,6 +18,7 @@ test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
 class PathTest(unittest.TestCase):
 
+    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_which(self):
         py = which("python")
         self.assertEqual(os.path.basename(py), "python")
