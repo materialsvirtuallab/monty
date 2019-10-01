@@ -20,7 +20,7 @@ install:
 build: false
 
 test_script:
-  - "pytest monty"
+  - "pytest"
 
 notifications:
   - provider: Email

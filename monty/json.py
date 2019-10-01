@@ -31,6 +31,9 @@ except ImportError:
     import yaml  # type: ignore
 
 
+__version__ = "3.0.0"
+
+
 def _load_redirect(redirect_file):
     try:
         with open(redirect_file, "rt") as f:
@@ -110,10 +113,10 @@ class MSONable:
 
         try:
             parent_module = self.__class__.__module__.split('.')[0]
-            module_version = import_module(parent_module).__version__
+            module_version = import_module(parent_module).__version__  # type: ignore
             d["@version"] = u"{}".format(module_version)
         except (AttributeError, ImportError):
-            d["@version"] = None
+            d["@version"] = None  # type: ignore
 
         args = getfullargspec(self.__class__.__init__).args
 
@@ -144,9 +147,10 @@ class MSONable:
                             "you can implement both as_dict and from_dict.")
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
-            d.update(**self.kwargs)  # pylint: disable=E1101
+            # type: ignore
+            d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
         if hasattr(self, "_kwargs"):
-            d.update(**self._kwargs)  # pylint: disable=E1101
+            d.update(**getattr(self, "_kwargs"))  # pylint: disable=E1101
         if isinstance(self, Enum):
             d.update({"value": self.value})  # pylint: disable=E1101
         return d
@@ -254,7 +258,7 @@ class MontyEncoder(json.JSONEncoder):
             if "@version" not in d:
                 try:
                     parent_module = o.__class__.__module__.split('.')[0]
-                    module_version = import_module(parent_module).__version__
+                    module_version = import_module(parent_module).__version__  # type: ignore
                     d["@version"] = u"{}".format(module_version)
                 except (AttributeError, ImportError):
                     d["@version"] = None
