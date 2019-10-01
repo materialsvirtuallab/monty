@@ -2,6 +2,7 @@ import unittest
 
 from monty.subprocess import Command
 
+
 class CommandTest(unittest.TestCase):
     def test_command(self):
         """Test Command class"""

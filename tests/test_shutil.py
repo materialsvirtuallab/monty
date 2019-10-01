@@ -1,13 +1,7 @@
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2014, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
 import unittest
 import os
 import shutil
+import platform
 import tempfile
 from gzip import GzipFile
 from io import open
@@ -111,6 +105,7 @@ class GzipDirTest(unittest.TestCase):
 
 class RemoveTest(unittest.TestCase):
 
+    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_file(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)
         tempf = tempfile.mkstemp(dir=tempdir)[1]
@@ -118,11 +113,13 @@ class RemoveTest(unittest.TestCase):
         self.assertFalse(os.path.isfile(tempf))
         shutil.rmtree(tempdir)
 
+    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_folder(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)
         remove(tempdir)
         self.assertFalse(os.path.isdir(tempdir))
 
+    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_symlink(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)
         tempf = tempfile.mkstemp(dir=tempdir)[1]
@@ -135,6 +132,7 @@ class RemoveTest(unittest.TestCase):
         self.assertFalse(os.path.islink(templink))
         remove(tempdir)
 
+    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_symlink_follow(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)
         tempf = tempfile.mkstemp(dir=tempdir)[1]

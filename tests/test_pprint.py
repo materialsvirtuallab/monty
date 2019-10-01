@@ -1,8 +1,8 @@
 # coding: utf-8
-#!/usr/bin/env python
-from  monty.pprint import pprint_table, draw_tree
+from monty.pprint import pprint_table, draw_tree
 
 import unittest
+
 
 class PprintTableTest(unittest.TestCase):
     def test_print(self):

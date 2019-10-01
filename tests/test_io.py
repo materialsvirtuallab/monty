@@ -1,14 +1,7 @@
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2014, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
-
 import unittest
 import os
 from io import open
+
 try:
     from pathlib import Path
 except ImportError:
@@ -70,7 +63,6 @@ class ReverseReadlineTest(unittest.TestCase):
 
 
 class ReverseReadfileTest(unittest.TestCase):
-
     NUMLINES = 3000
 
     def test_reverse_readfile(self):
@@ -84,7 +76,7 @@ class ReverseReadfileTest(unittest.TestCase):
             self.assertEqual(int(line), self.NUMLINES - idx,
                              "read_backwards read {} whereas it should "
                              "have read {}".format(
-                             int(line), self.NUMLINES - idx))
+                                 int(line), self.NUMLINES - idx))
 
     def test_reverse_readfile_gz(self):
         """
@@ -97,7 +89,7 @@ class ReverseReadfileTest(unittest.TestCase):
             self.assertEqual(int(line), self.NUMLINES - idx,
                              "read_backwards read {} whereas it should "
                              "have read {}".format(
-                             int(line), self.NUMLINES - idx))
+                                 int(line), self.NUMLINES - idx))
 
     def test_reverse_readfile_bz2(self):
         """
@@ -110,7 +102,7 @@ class ReverseReadfileTest(unittest.TestCase):
             self.assertEqual(int(line), self.NUMLINES - idx,
                              "read_backwards read {} whereas it should "
                              "have read {}".format(
-                             int(line), self.NUMLINES - idx))
+                                 int(line), self.NUMLINES - idx))
 
     def test_empty_file(self):
         """
@@ -156,12 +148,6 @@ class FileLockTest(unittest.TestCase):
 
     def tearDown(self):
         self.lock.release()
-
-
-# class FuncTest(unittest.TestCase):
-#
-#     def test_get_open_fds(self):
-#         self.assertTrue(get_open_fds() > 0)
 
 
 if __name__ == "__main__":

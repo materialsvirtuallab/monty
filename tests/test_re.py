@@ -4,14 +4,6 @@ import unittest
 import os
 from monty.re import regrep
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '6/2/15'
-
-
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
 
@@ -33,6 +25,7 @@ class RegrepTest(unittest.TestCase):
                          terminate_on_match=True, postprocess=int)
         self.assertEqual(len(matches["1"]), 1)
         self.assertEqual(len(matches["3"]), 11)
+
 
 if __name__ == "__main__":
     unittest.main()

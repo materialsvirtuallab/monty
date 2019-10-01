@@ -3,14 +3,18 @@ import unittest
 
 from monty.inspect import *
 
+
 class LittleCatA(object):
     pass
+
 
 class LittleCatB(LittleCatA):
     pass
 
+
 class LittleCatC(object):
     pass
+
 
 class LittleCatD(LittleCatB):
     pass
