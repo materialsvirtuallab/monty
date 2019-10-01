@@ -101,7 +101,7 @@ class MSONable:
     REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"),
                                            ".monty.yaml"))
 
-    def as_dict(self):
+    def as_dict(self) -> dict:
         """
         A JSON serializable dict representation of an object.
         """
@@ -161,7 +161,7 @@ class MSONable:
                    if not k.startswith("@")}
         return cls(**decoded)
 
-    def to_json(self):
+    def to_json(self) -> str:
         """
         Returns a json string representation of the MSONable object.
         """
@@ -214,7 +214,7 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def default(self, o):  # pylint: disable=E0202
+    def default(self, o) -> dict:  # pylint: disable=E0202
         """
         Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
