@@ -1,8 +1,6 @@
 # coding: utf-8
 #!/usr/bin/env python
 
-from __future__ import division, unicode_literals
-
 __author__ = 'Shyue Ping Ong'
 __copyright__ = 'Copyright 2014, The Materials Virtual Lab'
 __version__ = '0.1'

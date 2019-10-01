@@ -32,7 +32,7 @@ try:
     import termios
     import struct
     import curses
-except OSError:
+except (OSError, ModuleNotFoundError):
     pass
 
 __all__ = ['colored', 'cprint']

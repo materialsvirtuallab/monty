@@ -7,11 +7,9 @@ __date__ = '1/24/14'
 
 
 import unittest
-
-from six.moves import StringIO
+from io import StringIO
 
 import logging
-import time
 from monty.logging import logged
 
 @logged()

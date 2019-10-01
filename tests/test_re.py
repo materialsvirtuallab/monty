@@ -1,7 +1,4 @@
 # coding: utf-8
-#!/usr/bin/env python
-
-from __future__ import division, unicode_literals
 
 import unittest
 import os
@@ -27,12 +24,12 @@ class RegrepTest(unittest.TestCase):
         number
         """
         fname = os.path.join(test_dir, "3000_lines.txt")
-        matches = regrep(fname, {"1": "1(\d+)", "3": "3(\d+)"}, postprocess=int)
+        matches = regrep(fname, {"1": r"1(\d+)", "3": r"3(\d+)"}, postprocess=int)
         self.assertEqual(len(matches["1"]), 1380)
         self.assertEqual(len(matches["3"]), 571)
         self.assertEqual(matches["1"][0][0][0], 0)
 
-        matches = regrep(fname, {"1": "1(\d+)", "3": "3(\d+)"}, reverse=True,
+        matches = regrep(fname, {"1": r"1(\d+)", "3": r"3(\d+)"}, reverse=True,
                          terminate_on_match=True, postprocess=int)
         self.assertEqual(len(matches["1"]), 1)
         self.assertEqual(len(matches["3"]), 11)
