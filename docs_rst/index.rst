@@ -9,6 +9,7 @@ Monty: Python Made Even Easier
 
 .. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master
+.. image:: https://anaconda.org/conda-forge/monty/badges/downloads.svg
 
 Monty is the missing complement to Python. Monty implements supplementary
 useful functions for Python that are not part of the standard library.
