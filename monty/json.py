@@ -28,8 +28,10 @@ except ImportError:
 try:
     import ruamel.yaml as yaml
 except ImportError:
-    import yaml  # type: ignore
-
+    try:
+        import yaml  # type: ignore
+    except ImportError:
+        yaml = None  # type: ignore
 
 __version__ = "3.0.0"
 
