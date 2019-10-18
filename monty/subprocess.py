@@ -6,8 +6,10 @@ Calling shell processes.
 import shlex
 import threading
 import traceback
+from subprocess import Popen, PIPE
 
 from .string import is_string
+
 
 __author__ = 'Matteo Giantomass'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -70,7 +72,6 @@ class Command:
 
         Return: self
         """
-        from subprocess import Popen, PIPE
 
         def target(**kw):
             try:

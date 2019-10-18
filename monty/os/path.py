@@ -4,6 +4,9 @@ Path based methods, e.g., which, zpath, etc.
 """
 import os
 
+from monty.fnmatch import WildCard
+from monty.string import list_strings
+
 
 def which(cmd):
     """
@@ -88,7 +91,6 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
         # output.
         find_exts(".", "ps", include_dirs="output*"))
     """
-    from monty.string import list_strings
     exts = list_strings(exts)
 
     # Handle file!
@@ -97,7 +99,6 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
                                              for ext in exts) else []
 
     # Build shell-style wildcards.
-    from monty.fnmatch import WildCard
     if exclude_dirs is not None:
         exclude_dirs = WildCard(exclude_dirs)
 

@@ -6,6 +6,7 @@ Useful additional functions to help get information about live objects
 import os
 import inspect
 from inspect import currentframe, getframeinfo, getfullargspec
+from functools import wraps
 
 
 def all_subclasses(cls):
@@ -86,7 +87,6 @@ def initializer(func):
     """
     names, varargs, keywords, defaults = getfullargspec(func)  # type: ignore
 
-    from functools import wraps
     @wraps(func)
     def wrapper(self, *args, **kargs):
         for name, arg in list(zip(names[1:], args)) + list(kargs.items()):

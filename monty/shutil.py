@@ -7,6 +7,8 @@ import shutil
 import warnings
 from gzip import GzipFile
 
+from .io import zopen
+
 
 def copy_r(src, dst):
     """
@@ -72,7 +74,6 @@ def compress_file(filepath, compression="gz"):
     """
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
-    from monty.io import zopen
     if not filepath.lower().endswith(".%s" % compression):
         with open(filepath, 'rb') as f_in, \
                 zopen('%s.%s' % (filepath, compression), 'wb') as f_out:
@@ -108,7 +109,6 @@ def decompress_file(filepath):
     """
     toks = filepath.split(".")
     file_ext = toks[-1].upper()
-    from monty.io import zopen
     if file_ext in ["BZ2", "GZ", "Z"]:
         with open(".".join(toks[0:-1]), 'wb') as f_out, \
                 zopen(filepath, 'rb') as f_in:
