@@ -133,7 +133,7 @@ def get_ncpus():
 
     # jython
     try:
-        from java.lang import Runtime  # pylint: disable=import-outside-toplevel  # type: ignore
+        from java.lang import Runtime  # pylint: disable=import-outside-toplevel
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
         if res > 0:
@@ -206,7 +206,7 @@ def install_excepthook(hook_type="color", **kwargs):
         0 if hook is installed successfully.
     """
     try:
-        from IPython.core import ultratb  # pylint: disable=import-outside-toplevel  # type: ignore
+        from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
     except ImportError:
         warnings.warn(
             "Cannot install excepthook, IPyhon.core.ultratb not available")
