@@ -74,7 +74,7 @@ class MSONable:
     dynamically deserialize the class. E.g.::
 
         d["@module"] = self.__class__.__module__
-        d["@module"] = self.__class__.__name__
+        d["@class"] = self.__class__.__name__
 
     A default implementation is provided in MSONable, which automatically
     determines if the class already contains self.argname or self._argname
