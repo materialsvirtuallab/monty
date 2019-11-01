@@ -174,8 +174,8 @@ class MSONable:
         # if d contains args that are not valid, warn user (may be due to deprecation)
         invalid_keys = {k for k in d.keys() if (k not in args) and (not k.startswith("@"))}
         if invalid_keys:
-            msg = "Trying to de-serialize dictionary into {}, "
-            "contains invalid key(s): {}.".format(cls.__name__, invalid_keys)
+            msg = "Trying to de-serialize dictionary into {}, "\
+                  "contains invalid key(s): {}.".format(cls.__name__, invalid_keys)
             if "@version" in d:
                 msg += " Dictionary was serialized using {} version {}."\
                     .format(d["@module"], d["@version"])
