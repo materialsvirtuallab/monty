@@ -176,6 +176,7 @@ class MSONable:
         if invalid_keys:
             msg = "Trying to de-serialize dictionary into {}, "\
                   "contains invalid key(s): {}.".format(cls.__name__, invalid_keys)
+            msg += " Valid keys are: {}".format(args)
             if "@version" in d:
                 msg += " Dictionary was serialized using {} version {}."\
                     .format(d["@module"], d["@version"])
