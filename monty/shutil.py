@@ -55,8 +55,8 @@ def gzip_dir(path, compresslevel=6):
             full_f = os.path.abspath(os.path.join(root, f))
             if not f.lower().endswith("gz") and not os.path.isdir(full_f):
                 with open(full_f, "rb") as f_in, GzipFile(
-                    "{}.gz".format(full_f), "wb", compresslevel=compresslevel
-                ) as f_out:
+                        "{}.gz".format(full_f),
+                        "wb", compresslevel=compresslevel) as f_out:
                     shutil.copyfileobj(f_in, f_out)
                 shutil.copystat(full_f, "{}.gz".format(full_f))
                 os.remove(full_f)
