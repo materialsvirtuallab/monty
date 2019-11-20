@@ -51,7 +51,7 @@ def gzip_dir(path, compresslevel=6):
         compresslevel (int): Level of compression, 1-9. 9 is default for
             GzipFile, 6 is default for gzip.
     """
-    for f in glob.glob("{}/**".format(path),recursive=True):
+    for f in glob.glob("{}/**".format(path), recursive=True):
         if not f.lower().endswith("gz") and not os.path.isdir(f):
             with open(f, 'rb') as f_in, \
                     GzipFile('{}.gz'.format(f), 'wb',
