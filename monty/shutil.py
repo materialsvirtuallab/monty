@@ -50,15 +50,16 @@ def gzip_dir(path, compresslevel=6):
         compresslevel (int): Level of compression, 1-9. 9 is default for
             GzipFile, 6 is default for gzip.
     """
-    for f in os.listdir(path):
-        full_f = os.path.join(path, f)
-        if not f.lower().endswith("gz"):
-            with open(full_f, 'rb') as f_in, \
-                    GzipFile('{}.gz'.format(full_f), 'wb',
-                             compresslevel=compresslevel) as f_out:
-                shutil.copyfileobj(f_in, f_out)
-            shutil.copystat(full_f, '{}.gz'.format(full_f))
-            os.remove(full_f)
+    for root, _, files in os.walk(path):
+        for f in files:
+            full_f = os.path.abspath(os.path.join(root, f))
+            if not f.lower().endswith("gz") and not os.path.isdir(full_f):
+                with open(full_f, "rb") as f_in, GzipFile(
+                    "{}.gz".format(full_f), "wb", compresslevel=compresslevel
+                ) as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+                shutil.copystat(full_f, "{}.gz".format(full_f))
+                os.remove(full_f)
 
 
 def compress_file(filepath, compression="gz"):
