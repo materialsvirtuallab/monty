@@ -99,6 +99,21 @@ class GzipDirTest(unittest.TestCase):
         self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)),
                                self.mtime, 4)
 
+    def test_handle_sub_dirs(self):
+        sub_dir = os.path.join(test_dir, "gzip_dir", "sub_dir")
+        sub_file = os.path.join(sub_dir, "new_tempfile")
+        os.mkdir(sub_dir)
+        with open(sub_file, "w") as f:
+            f.write(u"anotherwhat")
+
+        gzip_dir(os.path.join(test_dir, "gzip_dir"))
+
+        self.assertTrue(os.path.exists("{}.gz".format(sub_file)))
+        self.assertFalse((os.path.exists(sub_file)))
+
+        with GzipFile("{}.gz".format(sub_file)) as g:
+            self.assertEqual(g.readline().decode("utf-8"), "anotherwhat")
+
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "gzip_dir"))
 
