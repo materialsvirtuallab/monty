@@ -9,6 +9,6 @@ coveralls==1.9.2
 pymongo==3.9.0
 pycodestyle==2.5.0
 mypy==0.750
-pydocstyle==5.0.0
+pydocstyle==5.0.1
 flake8==3.7.9
 pylint==2.4.4
