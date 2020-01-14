@@ -8,6 +8,7 @@ import datetime
 from bson.objectid import ObjectId
 from enum import Enum
 from collections import namedtuple
+from collections import OrderedDict
 
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
@@ -219,6 +220,15 @@ class MSONableTest(unittest.TestCase):
         assert bfromdict.b.y == b.b.y
         assert bfromdict.b.zzz == b.b.zzz
 
+    def test_OrderedDict_serialization(self):
+        od = OrderedDict([('val1', 1), ('val2', 2)])
+        od['val3'] = '3'
+        a = GoodMSONClass(a=1, b=od, c=1)
+        assert list(a.b.keys()) == ['val1', 'val2', 'val3']
+        afromdict = GoodMSONClass.from_dict(a.as_dict())
+        assert type(afromdict.b) is OrderedDict
+        assert list(afromdict.b.keys()) == ['val1', 'val2', 'val3']
+
 
 class JsonTest(unittest.TestCase):
 
@@ -333,6 +343,38 @@ class JsonTest(unittest.TestCase):
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
         self.assertEqual(data, {'old_module': {'old_class': {'@class': 'new_class', '@module': 'new_module'}}})
+
+    def test_complex_enc_dec(self):
+        a = tuple([0, 2, 4])
+        a_jsonstr = json.dumps(a, cls=MontyEncoder)
+        a_from_jsonstr = json.loads(a_jsonstr, cls=MontyDecoder)
+        assert type(a_from_jsonstr) is tuple
+
+        nt = namedtuple('A', ['x', 'y', 'zzz'])
+        nt2 = namedtuple('ABC', ['ab', 'cd', 'ef'])
+        od = OrderedDict([('val1', 1), ('val2', GoodMSONClass(a=a, b=nt2(1, 2, 3), c=1))])
+        od['val3'] = '3'
+
+        obj = nt(x=a, y=od, zzz=[1, 2, 3])
+        obj_jsonstr = json.dumps(obj, cls=MontyEncoder)
+        obj_from_jsonstr = json.loads(obj_jsonstr, cls=MontyDecoder)
+
+        assert is_namedtuple(obj_from_jsonstr) is True
+        assert obj_from_jsonstr.__class__.__name__ == 'A'
+        assert type(obj_from_jsonstr.x) is tuple
+        assert obj_from_jsonstr.x == (0, 2, 4)
+        assert type(obj_from_jsonstr.y) is OrderedDict
+        assert list(obj_from_jsonstr.y.keys()) == ['val1', 'val2', 'val3']
+        assert obj_from_jsonstr.y['val1'] == 1
+        assert type(obj_from_jsonstr.y['val2']) is GoodMSONClass
+        assert type(obj_from_jsonstr.y['val2'].a) is tuple
+        assert obj_from_jsonstr.y['val2'].a == (0, 2, 4)
+        assert is_namedtuple(obj_from_jsonstr.y['val2'].b) is True
+        assert obj_from_jsonstr.y['val2'].b.__class__.__name__ == 'ABC'
+        assert obj_from_jsonstr.y['val2'].b.ab == 1
+        assert obj_from_jsonstr.y['val2'].b.cd == 2
+        assert obj_from_jsonstr.y['val2'].b.ef == 3
+        assert obj_from_jsonstr.y['val3'] == '3'
 
 
 if __name__ == "__main__":

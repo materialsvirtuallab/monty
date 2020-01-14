@@ -66,6 +66,35 @@ def _load_redirect(redirect_file):
     return dict(redirect_dict)
 
 
+def _recursive_as_dict(obj):
+    """Recursive function to prepare serialization of objects.
+
+    Takes care of tuples, namedtuples, OrderedDict, objects with an as_dict method.
+    """
+    if is_namedtuple(obj):
+        return {"namedtuple_as_list": [_recursive_as_dict(it) for it in obj],
+                "fields": obj._fields,
+                "fields_defaults": obj._fields_defaults,
+                "typename": obj.__class__.__name__,
+                "@module": "builtins",
+                "@class": "namedtuple"}
+    if isinstance(obj, tuple):
+        return {"tuple_as_list": [_recursive_as_dict(it) for it in obj],
+                "@module": "builtins",
+                "@class": "tuple"}
+    if isinstance(obj, OrderedDict):
+        return {"ordereddict_as_list": [[key, _recursive_as_dict(val)] for key, val in obj.items()],
+                "@module": "builtins",
+                "@class": "OrderedDict"}
+    if isinstance(obj, list):
+        return [_recursive_as_dict(it) for it in obj]
+    if isinstance(obj, dict):
+        return {kk: _recursive_as_dict(vv) for kk, vv in obj.items()}
+    if hasattr(obj, "as_dict"):
+        return obj.as_dict()
+    return obj
+
+
 class MSONable:
     """
     This is a mix-in base class specifying an API for msonable objects. MSON
@@ -126,26 +155,6 @@ class MSONable:
 
         args = getfullargspec(self.__class__.__init__).args
 
-        def recursive_as_dict(obj):
-            if is_namedtuple(obj):
-                return {"namedtuple_as_list": [recursive_as_dict(it) for it in obj],
-                        "fields": obj._fields,
-                        "fields_defaults": obj._fields_defaults,
-                        "typename": obj.__class__.__name__,
-                        "@module": "builtins",
-                        "@class": "namedtuple"}
-            if isinstance(obj, tuple):
-                return {"tuple_as_list": [recursive_as_dict(it) for it in obj],
-                        "@module": "builtins",
-                        "@class": "tuple"}
-            if isinstance(obj, list):
-                return [recursive_as_dict(it) for it in obj]
-            if isinstance(obj, dict):
-                return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
-            if hasattr(obj, "as_dict"):
-                return obj.as_dict()
-            return obj
-
         for c in args:
             if c != "self":
                 try:
@@ -162,7 +171,7 @@ class MSONable:
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
                             "you can implement both as_dict and from_dict.")
-                d[c] = recursive_as_dict(a)
+                d[c] = _recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
             d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
@@ -266,6 +275,8 @@ class MontyEncoder(json.JSONEncoder):
                         "@class": "ObjectId",
                         "oid": str(o)}
 
+        # Is this still useful as we are now calling the _recursive_as_dict
+        #  method (which takes care of as_dict's) before the encoding ?
         try:
             d = o.as_dict()
             if "@module" not in d:
@@ -282,6 +293,17 @@ class MontyEncoder(json.JSONEncoder):
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
+
+    def encode(self, o):
+        """MontyEncoder's encode method.
+
+        First, prepares the object by recursively transforming tuples, namedtuples,
+        object having an as_dict method and others to encodable python objects.
+        """
+        # This cannot go in the default method because default is called as a last resort,
+        # such that tuples and namedtuples have already been transformed to lists by json's encode method.
+        o = _recursive_as_dict(o)
+        return super().encode(o)
 
 
 class MontyDecoder(json.JSONDecoder):
@@ -329,6 +351,8 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "namedtuple":
                         nt = namedtuple(d['typename'], d['fields'], defaults=d['fields_defaults'])
                         return nt(*[self.process_decoded(item) for item in d['namedtuple_as_list']])
+                    if classname == "OrderedDict":
+                        return OrderedDict([(key, self.process_decoded(val)) for key, val in d['ordereddict_as_list']])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
