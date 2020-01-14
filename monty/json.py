@@ -362,7 +362,8 @@ class MontyDecoder(json.JSONDecoder):
                         if sys.version_info < (3, 7):
                             nt = namedtuple(d['typename'], d['fields'])
                         else:
-                            nt = namedtuple(d['typename'], d['fields'], defaults=d['fields_defaults'])
+                            nt = namedtuple(d['typename'], d['fields'],
+                                            defaults=d['fields_defaults'])  # pylint: disable=E1123
                         return nt(*[self.process_decoded(item) for item in d['namedtuple_as_list']])
                     if classname == "OrderedDict":
                         return OrderedDict([(key, self.process_decoded(val)) for key, val in d['ordereddict_as_list']])
