@@ -9,6 +9,7 @@ import datetime
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
+from collections import namedtuple
 from enum import Enum
 
 from importlib import import_module
@@ -32,6 +33,9 @@ except ImportError:
         import yaml  # type: ignore
     except ImportError:
         yaml = None  # type: ignore
+
+from monty.collections import is_namedtuple
+
 
 __version__ = "3.0.0"
 
@@ -123,7 +127,18 @@ class MSONable:
         args = getfullargspec(self.__class__.__init__).args
 
         def recursive_as_dict(obj):
-            if isinstance(obj, (list, tuple)):
+            if is_namedtuple(obj):
+                return {"namedtuple_as_list": [recursive_as_dict(it) for it in obj],
+                        "fields": obj._fields,
+                        "fields_defaults": obj._fields_defaults,
+                        "typename": obj.__class__.__name__,
+                        "@module": "builtins",
+                        "@class": "namedtuple"}
+            if isinstance(obj, tuple):
+                return {"tuple_as_list": [recursive_as_dict(it) for it in obj],
+                        "@module": "builtins",
+                        "@class": "tuple"}
+            if isinstance(obj, list):
                 return [recursive_as_dict(it) for it in obj]
             if isinstance(obj, dict):
                 return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
@@ -308,6 +323,12 @@ class MontyDecoder(json.JSONDecoder):
                         dt = datetime.datetime.strptime(d["string"],
                                                         "%Y-%m-%d %H:%M:%S")
                     return dt
+                if modname == "builtins":
+                    if classname == "tuple":
+                        return tuple([self.process_decoded(item) for item in d['tuple_as_list']])
+                    if classname == "namedtuple":
+                        nt = namedtuple(d['typename'], d['fields'], defaults=d['fields_defaults'])
+                        return nt(*[self.process_decoded(item) for item in d['namedtuple_as_list']])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):

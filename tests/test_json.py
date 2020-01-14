@@ -7,10 +7,12 @@ import json
 import datetime
 from bson.objectid import ObjectId
 from enum import Enum
+from collections import namedtuple
 
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 from monty.json import _load_redirect
+from monty.collections import is_namedtuple
 
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -187,6 +189,35 @@ class MSONableTest(unittest.TestCase):
         e_new = EnumTest.from_dict(d)
         self.assertEqual(e_new.name, e.name)
         self.assertEqual(e_new.value, e.value)
+
+    def test_tuple_serialization(self):
+        a = GoodMSONClass(a=1, b=tuple(), c=1)
+        afromdict = GoodMSONClass.from_dict(a.as_dict())
+        assert type(a.b) is tuple
+        assert type(afromdict.b) is tuple
+        assert a.b == afromdict.b
+        a = GoodMSONClass(a=1, b=[1, tuple([2, tuple([1, 2, 3, 4])])], c=1)
+        afromdict = GoodMSONClass.from_dict(a.as_dict())
+        assert type(a.b) is list
+        assert type(afromdict.b) is list
+        assert afromdict.b[0] == 1
+        assert type(afromdict.b[1]) is tuple
+        assert afromdict.b[1][0] == 2
+        assert type(afromdict.b[1][1]) is tuple
+        assert afromdict.b[1][1] == (1, 2, 3, 4)
+
+    def test_namedtuple_serialization(self):
+        a = namedtuple('A', ['x', 'y', 'zzz'])
+        b = GoodMSONClass(a=1, b=a(1, 2, 3), c=1)
+        assert is_namedtuple(b.b) is True
+        assert b.b._fields == ('x', 'y', 'zzz')
+        bfromdict = GoodMSONClass.from_dict(b.as_dict())
+        assert is_namedtuple(bfromdict.b) is True
+        assert bfromdict.b._fields == ('x', 'y', 'zzz')
+        assert bfromdict.b == b.b
+        assert bfromdict.b.x == b.b.x
+        assert bfromdict.b.y == b.b.y
+        assert bfromdict.b.zzz == b.b.zzz
 
 
 class JsonTest(unittest.TestCase):
