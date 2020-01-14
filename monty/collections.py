@@ -226,5 +226,5 @@ def dict2namedtuple(*args, **kwargs):
 
 
 def is_namedtuple(obj):
-    return isinstance(obj, tuple) and hasattr(obj, "_fields") and \
-           hasattr(obj, "_fields_defaults") and hasattr(obj, "_asdict")
+    """Test if an object is a class generated from collections.namedtuple."""
+    return isinstance(obj, tuple) and hasattr(obj, "_fields") and hasattr(obj, "_asdict")

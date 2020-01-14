@@ -6,6 +6,7 @@ JSON serialization and deserialization utilities.
 import os
 import json
 import datetime
+import sys
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
@@ -72,6 +73,12 @@ def _recursive_as_dict(obj):
     Takes care of tuples, namedtuples, OrderedDict, objects with an as_dict method.
     """
     if is_namedtuple(obj):
+        if sys.version_info < (3, 7):  # default values for namedtuples were introduced in python 3.7.
+            return {"namedtuple_as_list": [_recursive_as_dict(it) for it in obj],
+                    "fields": obj._fields,
+                    "typename": obj.__class__.__name__,
+                    "@module": "builtins",
+                    "@class": "namedtuple"}
         return {"namedtuple_as_list": [_recursive_as_dict(it) for it in obj],
                 "fields": obj._fields,
                 "fields_defaults": obj._fields_defaults,
@@ -349,7 +356,13 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "tuple":
                         return tuple([self.process_decoded(item) for item in d['tuple_as_list']])
                     if classname == "namedtuple":
-                        nt = namedtuple(d['typename'], d['fields'], defaults=d['fields_defaults'])
+                        # default values for collections.namedtuple have been introduced in python 3.7
+                        # it is probably not essential to deserialize the defaults if the object was serialized with
+                        # python >= 3.7 and deserialized with python < 3.7.
+                        if sys.version_info < (3, 7):
+                            nt = namedtuple(d['typename'], d['fields'])
+                        else:
+                            nt = namedtuple(d['typename'], d['fields'], defaults=d['fields_defaults'])
                         return nt(*[self.process_decoded(item) for item in d['namedtuple_as_list']])
                     if classname == "OrderedDict":
                         return OrderedDict([(key, self.process_decoded(val)) for key, val in d['ordereddict_as_list']])
