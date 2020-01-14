@@ -1,8 +1,11 @@
 import unittest
 import os
 
+from collections import namedtuple
+
 from monty.collections import frozendict, Namespace, AttrDict, \
     FrozenAttrDict, tree
+from monty.collections import is_namedtuple
 
 test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
 
@@ -47,6 +50,28 @@ class TreeTest(unittest.TestCase):
         self.assertNotIn('c', x['a'])
         self.assertIn('c', x['a']['b'])
         self.assertEqual(x['a']['b']['c']['d'], 1)
+
+
+def test_is_namedtuple():
+    a_nt = namedtuple('a', ['x', 'y', 'z'])
+    a1 = a_nt(1, 2, 3)
+    assert a1 == (1, 2, 3)
+    assert is_namedtuple(a1) is True
+    a_t = tuple([1, 2])
+    assert a_t == (1, 2)
+    assert is_namedtuple(a_t) is False
+
+    class SubList(list):
+        def _fields(self):
+            return []
+        def _fields_defaults(self):
+            return []
+        def _asdict(self):
+            return {}
+
+    sublist = SubList([3, 2, 1])
+    assert sublist == [3, 2, 1]
+    assert is_namedtuple(sublist) is False
 
 
 if __name__ == "__main__":

@@ -223,3 +223,8 @@ def dict2namedtuple(*args, **kwargs):
     d.update(**kwargs)
     return collections.namedtuple(typename="dict2namedtuple",
                                   field_names=list(d.keys()))(**d)
+
+
+def is_namedtuple(obj):
+    return isinstance(obj, tuple) and hasattr(obj, "_fields") and \
+           hasattr(obj, "_fields_defaults") and hasattr(obj, "_asdict")
