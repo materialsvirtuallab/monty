@@ -18,7 +18,7 @@ jobs:
             source test_env/bin/activate
             # Add executables and path.
             pytest --cov=monty --cov-report html:coverage_reports monty tests
-            coveralls
+            # coveralls
       - store_artifacts:
           path: coverage_reports/
           destination: tr1
