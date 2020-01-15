@@ -227,4 +227,12 @@ def dict2namedtuple(*args, **kwargs):
 
 def is_namedtuple(obj):
     """Test if an object is a class generated from collections.namedtuple."""
-    return isinstance(obj, tuple) and hasattr(obj, "_fields") and hasattr(obj, "_asdict")
+    return (isinstance(obj, tuple) and hasattr(obj, "_fields") and
+            hasattr(obj, "_asdict") and (not hasattr(obj, '_field_types')))
+
+
+def is_NamedTuple(obj):
+    """Test if an object is a class generated from typing.NamedTuple."""
+    return (isinstance(obj, tuple) and hasattr(obj, "_fields") and
+            hasattr(obj, "_asdict") and hasattr(obj, '_field_types') and
+            hasattr(obj, '__annotations__'))
