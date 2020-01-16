@@ -4,7 +4,7 @@ import sys
 
 from collections import namedtuple
 from typing import NamedTuple
-import pytest
+import pytest  # type: ignore  # Ignore pytest import for mypy
 
 from monty.collections import frozendict, Namespace, AttrDict, \
     FrozenAttrDict, tree
