@@ -244,6 +244,6 @@ def validate_NamedTuple(obj):
         raise ValueError('Cannot validate object of type "{}".'.format(obj.__class__.__name__))
     for field, field_type in obj._field_types.items():
         value = getattr(obj, field)
-        if not type(value) is field_type:
+        if isinstance(value, field_type):
             return False
     return True
