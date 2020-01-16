@@ -236,3 +236,14 @@ def is_NamedTuple(obj):
     return (isinstance(obj, tuple) and hasattr(obj, "_fields") and
             hasattr(obj, "_asdict") and hasattr(obj, '_field_types') and
             hasattr(obj, '__annotations__'))
+
+
+def validate_NamedTuple(obj):
+    """Validates whether the items in the NamedTuple have the correct type."""
+    if not is_NamedTuple(obj):
+        raise ValueError('Cannot validate object of type "{}".'.format(obj.__class__.__name__))
+    for field, field_type in obj._field_types.items():
+        value = getattr(obj, field)
+        if not type(value) is field_type:
+            return False
+    return True
