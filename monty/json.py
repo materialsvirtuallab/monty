@@ -77,21 +77,21 @@ def _recursive_as_dict(obj):
             return {"namedtuple_as_list": [_recursive_as_dict(it) for it in obj],
                     "fields": obj._fields,
                     "typename": obj.__class__.__name__,
-                    "@module": "builtins",
+                    "@module": "@builtins",
                     "@class": "namedtuple"}
         return {"namedtuple_as_list": [_recursive_as_dict(it) for it in obj],
                 "fields": obj._fields,
                 "fields_defaults": obj._fields_defaults,
                 "typename": obj.__class__.__name__,
-                "@module": "builtins",
+                "@module": "@builtins",
                 "@class": "namedtuple"}
     if isinstance(obj, tuple):
         return {"tuple_as_list": [_recursive_as_dict(it) for it in obj],
-                "@module": "builtins",
+                "@module": "@builtins",
                 "@class": "tuple"}
     if isinstance(obj, OrderedDict):
         return {"ordereddict_as_list": [[key, _recursive_as_dict(val)] for key, val in obj.items()],
-                "@module": "builtins",
+                "@module": "@builtins",
                 "@class": "OrderedDict"}
     if isinstance(obj, list):
         return [_recursive_as_dict(it) for it in obj]
@@ -352,7 +352,7 @@ class MontyDecoder(json.JSONDecoder):
                         dt = datetime.datetime.strptime(d["string"],
                                                         "%Y-%m-%d %H:%M:%S")
                     return dt
-                if modname == "builtins":
+                if modname == "@builtins":
                     if classname == "tuple":
                         return tuple([self.process_decoded(item) for item in d['tuple_as_list']])
                     if classname == "namedtuple":
