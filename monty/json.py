@@ -148,6 +148,10 @@ def _recursive_as_dict(obj):
         return d
     # The order of the ifs matter here as namedtuples and NamedTuples are instances (subclasses) of tuples,
     # same for OrderedDict which is an instance (subclass) of dict.
+    if isinstance(obj, set):
+        return {"set_as_list": [_recursive_as_dict(it) for it in obj],
+                "@module": "@builtins",
+                "@class": "set"}
     if isinstance(obj, tuple):
         return {"tuple_as_list": [_recursive_as_dict(it) for it in obj],
                 "@module": "@builtins",
@@ -418,6 +422,8 @@ class MontyDecoder(json.JSONDecoder):
                 if modname == "@builtins":
                     if classname == "tuple":
                         return tuple([self.process_decoded(item) for item in d['tuple_as_list']])
+                    if classname == "set":
+                        return set([self.process_decoded(item) for item in d['set_as_list']])
                     if classname == "collections.namedtuple":
                         # default values for collections.namedtuple have been introduced in python 3.7
                         # it is probably not essential to deserialize the defaults if the object was serialized with

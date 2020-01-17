@@ -210,6 +210,11 @@ class MSONableTest(unittest.TestCase):
         assert type(afromdict.b[1][1]) is tuple
         assert afromdict.b[1][1] == (1, 2, 3, 4)
 
+    def test_set_serialization(self):
+        a = GoodMSONClass(a={1, 2, 3}, b={'q', 'r'}, c=[14])
+        afromdict = GoodMSONClass.from_dict(a.as_dict())
+        assert type(afromdict.a) is set
+
     def test_namedtuple_serialization(self):
         a = namedtuple('A', ['x', 'y', 'zzz'])
         b = GoodMSONClass(a=1, b=a(1, 2, 3), c=1)
@@ -478,6 +483,14 @@ class JsonTest(unittest.TestCase):
         assert obj_from_jsonstr.y['val2'].b.cd == 2
         assert obj_from_jsonstr.y['val2'].b.ef == 3
         assert obj_from_jsonstr.y['val3'] == '3'
+
+    def test_set_json(self):
+        myset = {1, 2, 3}
+        myset_jsonstr = json.dumps(myset, cls=MontyEncoder)
+        myset_from_jsonstr = json.loads(myset_jsonstr, cls=MontyDecoder)
+        assert type(myset_from_jsonstr) is set
+        assert myset_from_jsonstr == myset
+
 
 
 if __name__ == "__main__":
