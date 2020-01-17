@@ -5,15 +5,18 @@ import unittest
 import numpy as np
 import json
 import datetime
+import sys
 from bson.objectid import ObjectId
 from enum import Enum
 from collections import namedtuple
 from collections import OrderedDict
+from typing import NamedTuple
 
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 from monty.json import _load_redirect
 from monty.collections import is_namedtuple
+from monty.collections import is_NamedTuple
 
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -228,6 +231,82 @@ class MSONableTest(unittest.TestCase):
         afromdict = GoodMSONClass.from_dict(a.as_dict())
         assert type(afromdict.b) is OrderedDict
         assert list(afromdict.b.keys()) == ['val1', 'val2', 'val3']
+        assert afromdict.b == a.b
+
+    def test_NamedTuple_serialization(self):
+        # "Old style" typing.NamedTuple definition
+        A = NamedTuple('MyNamedTuple', [('int1', int), ('str1', str), ('int2', int)])
+        A_NT = A(1, 'a', 3)
+        a = GoodMSONClass(a=1, b=A_NT, c=1)
+        assert is_NamedTuple(a.b)
+        afromdict = GoodMSONClass.from_dict(a.as_dict())
+        assert is_NamedTuple(afromdict.b)
+        assert afromdict.b.__class__.__name__ == 'MyNamedTuple'
+        assert afromdict.b._field_types == a.b._field_types
+        assert afromdict.b == a.b
+
+        # "New style" typing.NamedTuple definition with class with type annotations (for python >= 3.6)
+        # This will not work for python < 3.6, leading to a SyntaxError hence the exec here.
+        try:
+            exec('class SomeNT(NamedTuple):\n\
+            aaa: int\n\
+            bbb: float\n\
+            ccc: str\n\
+            global SomeNT')  # Make the SomeNT class available globally
+
+            myNT = SomeNT(1, 2.1, 'a')
+
+            a = GoodMSONClass(a=1, b=myNT, c=1)
+            assert is_NamedTuple(a.b)
+            afromdict = GoodMSONClass.from_dict(a.as_dict())
+            assert is_NamedTuple(afromdict.b)
+            assert afromdict.b.__class__.__name__ == 'SomeNT'
+            assert afromdict.b._field_types == a.b._field_types
+            assert afromdict.b == a.b
+        except SyntaxError:
+            # Make sure we get this SyntaxError only in the case of python < 3.6.
+            assert sys.version_info < (3, 6)
+
+        try:
+            exec('class SomeNT(NamedTuple):\n\
+            """My NamedTuple docstring."""\n\
+            aaa: int\n\
+            bbb: float = 1.0\n\
+            ccc: str = \'hello\'\n\
+            global SomeNT')  # Make the SomeNT class available globally
+
+            myNT = SomeNT(1, 2.1, 'a')
+
+            a = GoodMSONClass(a=1, b=myNT, c=1)
+            assert is_NamedTuple(a.b)
+            afromdict = GoodMSONClass.from_dict(a.as_dict())
+            assert is_NamedTuple(afromdict.b)
+            assert afromdict.b.__class__.__name__ == 'SomeNT'
+            assert afromdict.b._field_types == a.b._field_types
+            assert afromdict.b == a.b
+            assert afromdict.b.__doc__ == a.b.__doc__
+        except SyntaxError:
+            # Make sure we get this SyntaxError only in the case of python < 3.6.
+            assert sys.version_info < (3, 6)
+
+        # Testing "normal classes" types in NamedTuple serialization
+        A = NamedTuple('MyNamedTuple', [('int1', int),
+                                        ('gmsoncls', GoodMSONClass),
+                                        ('gnestedmsoncls', GoodNestedMSONClass)])
+        A_NT = A(1,
+                 GoodMSONClass(a=1, b=2, c=3),
+                 GoodNestedMSONClass(a_list=[3, 4],
+                                     b_dict={'a': 2},
+                                     c_list_dict_list=[{'ab': ['a', 'b'],
+                                                        '34': [3, 4]}]))
+        a = GoodMSONClass(a=1, b=A_NT, c=1)
+        afromdict = GoodMSONClass.from_dict(a.as_dict())
+        assert afromdict.b._field_types == a.b._field_types
+        assert a.a == afromdict.a
+        assert a.b.gmsoncls == afromdict.b.gmsoncls
+        assert a.b.gnestedmsoncls.a_list == afromdict.b.gnestedmsoncls.a_list
+        assert a.b.gnestedmsoncls.b_dict == afromdict.b.gnestedmsoncls.b_dict
+        assert a.b.gnestedmsoncls._c_list_dict_list == afromdict.b.gnestedmsoncls._c_list_dict_list
 
 
 class JsonTest(unittest.TestCase):
@@ -354,6 +433,30 @@ class JsonTest(unittest.TestCase):
         nt2 = namedtuple('ABC', ['ab', 'cd', 'ef'])
         od = OrderedDict([('val1', 1), ('val2', GoodMSONClass(a=a, b=nt2(1, 2, 3), c=1))])
         od['val3'] = '3'
+
+        NT = NamedTuple('MyTypingNamedTuple', [('A1', int), ('A2', float), ('B1', str)])
+        a_NT = NT(2, 3.1, 'hello')
+        a_NT_jsonstr = json.dumps(a_NT, cls=MontyEncoder)
+        a_NT_from_jsonstr = json.loads(a_NT_jsonstr, cls=MontyDecoder)
+        assert is_NamedTuple(a_NT_from_jsonstr) is True
+
+        try:
+            exec('class NT_def(NamedTuple):\n\
+            """My NamedTuple with defaults."""\n\
+            aaa: int\n\
+            bbb: float = 1.0\n\
+            ccc: str = \'hello\'\n\
+            global NT_def')  # Make the NT_def class available globally
+
+            myNT = NT_def(1, 2.1)
+            myNT_jsonstr = json.dumps(myNT, cls=MontyEncoder)
+            myNT_from_jsonstr = json.loads(myNT_jsonstr, cls=MontyDecoder)
+            assert is_NamedTuple(myNT_from_jsonstr)
+            assert myNT_from_jsonstr.__doc__ == 'My NamedTuple with defaults.'
+            assert myNT_from_jsonstr.ccc == 'hello'
+        except SyntaxError:
+            # Make sure we get this SyntaxError only in the case of python < 3.6.
+            assert sys.version_info < (3, 6)
 
         obj = nt(x=a, y=od, zzz=[1, 2, 3])
         obj_jsonstr = json.dumps(obj, cls=MontyEncoder)
