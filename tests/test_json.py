@@ -492,6 +492,5 @@ class JsonTest(unittest.TestCase):
         assert myset_from_jsonstr == myset
 
 
-
 if __name__ == "__main__":
     unittest.main()

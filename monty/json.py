@@ -68,6 +68,7 @@ def _load_redirect(redirect_file):
 
     return dict(redirect_dict)
 
+
 # (Private) helper methods and variables for the serialization of
 #  types for typing.NamedTuple's.
 _typ2name = {typ: typ.__name__ for typ in (bool, int, float, complex,
@@ -88,7 +89,7 @@ def _serialize_type(typ):
                "@class": "@types",
                "type": _typ2name[typ]}
     # None/NoneType is a special case
-    if typ is type(None) or typ is None:
+    if typ is type(None) or typ is None:  # noqa - disable pycodestyle check here
         return {"@module": "@builtins",
                 "@class": "@types",
                 "type": "NoneType"}
@@ -142,7 +143,8 @@ def _recursive_as_dict(obj):
              "@class": "typing.NamedTuple"}
         if sys.version_info >= (3, 6):  # default values for typing.NamedTuple's were introduced in python 3.6.
             try:
-                d["fields_defaults"] = [(field, _recursive_as_dict(field_default)) for field, field_default in  obj._field_defaults.items()]
+                d["fields_defaults"] = [(field, _recursive_as_dict(field_default))
+                                        for field, field_default in obj._field_defaults.items()]
             except AttributeError:
                 d["fields_defaults"] = []
         return d
@@ -423,7 +425,7 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "tuple":
                         return tuple([self.process_decoded(item) for item in d['tuple_as_list']])
                     if classname == "set":
-                        return set([self.process_decoded(item) for item in d['set_as_list']])
+                        return {self.process_decoded(item) for item in d['set_as_list']}
                     if classname == "collections.namedtuple":
                         # default values for collections.namedtuple have been introduced in python 3.7
                         # it is probably not essential to deserialize the defaults if the object was serialized with
@@ -435,14 +437,18 @@ class MontyDecoder(json.JSONDecoder):
                                             defaults=d['fields_defaults'])  # pylint: disable=E1123
                         return nt(*[self.process_decoded(item) for item in d['namedtuple_as_list']])
                     if classname == "typing.NamedTuple":
-                        NT = NamedTuple(d['typename'], [(field, _deserialize_type(field_type)) for field, field_type in zip(d['fields'], d['fields_types'])])
+                        NT = NamedTuple(d['typename'], [(field, _deserialize_type(field_type))
+                                                        for field, field_type in zip(d['fields'], d['fields_types'])])
                         NT.__doc__ = d['doc']
                         # default values for typing.NamedTuple have been introduced in python 3.6
                         if sys.version_info >= (3, 6):
-                            NT._field_defaults = OrderedDict([(field, self.process_decoded(default)) for field, default in d['fields_defaults']])
-                        return NT(*[self.process_decoded(item) for item in d['NamedTuple_as_list']])
+                            NT._field_defaults = OrderedDict([(field, self.process_decoded(default))
+                                                              for field, default in d['fields_defaults']])
+                        return NT(*[self.process_decoded(item)  # pylint: disable=E1102
+                                    for item in d['NamedTuple_as_list']])  # pylint: disable=E1102
                     if classname == "OrderedDict":
-                        return OrderedDict([(key, self.process_decoded(val)) for key, val in d['ordereddict_as_list']])
+                        return OrderedDict([(key, self.process_decoded(val))
+                                            for key, val in d['ordereddict_as_list']])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
