@@ -54,8 +54,7 @@ class SerialTest(unittest.TestCase):
         # Test automatic format detection
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
-        self.assertEqual(d, {k.decode('utf-8'): v.decode('utf-8')
-                             for k, v in d2.items()})
+        self.assertEqual(d, {k: v for k, v in d2.items()})
         os.remove("monte_test.mpk")
 
         # Test to ensure basename is respected, and not directory
