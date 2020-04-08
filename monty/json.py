@@ -15,6 +15,8 @@ from importlib import import_module
 
 from inspect import getfullargspec
 
+from warnings import warn
+
 try:
     import numpy as np
 except ImportError:
@@ -163,8 +165,23 @@ class MSONable:
         :param d: Dict representation.
         :return: MSONable class.
         """
+
+        # only pass valid args to class
+        args = getfullargspec(cls).args
         decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items()
-                   if not k.startswith("@")}
+                   if (k in args) and (not k.startswith("@"))}
+
+        # if d contains args that are not valid, warn user (may be due to deprecation)
+        invalid_keys = {k for k in d.keys() if (k not in args) and (not k.startswith("@"))}
+        if invalid_keys:
+            msg = "Trying to de-serialize dictionary into {}, "\
+                  "contains invalid key(s): {}.".format(cls.__name__, invalid_keys)
+            msg += " Valid keys are: {}".format(args)
+            if "@version" in d:
+                msg += " Dictionary was serialized using {} version {}."\
+                    .format(d["@module"], d["@version"])
+            warn(msg)
+
         return cls(**decoded)
 
     def to_json(self) -> str:
