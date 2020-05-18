@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-    monty.os
+   monty.os
 
 Submodules
 ----------
@@ -41,6 +41,6 @@ Module contents
 ---------------
 
 .. automodule:: monty
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

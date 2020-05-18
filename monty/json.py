@@ -3,45 +3,66 @@
 JSON serialization and deserialization utilities.
 """
 
-from __future__ import absolute_import, unicode_literals
+import os
 import json
 import datetime
-import six
-import inspect
 
 from hashlib import sha1
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
+from enum import Enum
 
-try:
-    from importlib import import_module
-except ImportError:
-    # importlib only available in Python 2.7+, 3.1+
-    importlib = lambda x: x
+from importlib import import_module
 
-try:
-    from inspect import getfullargspec as getargspec
-except ImportError:
-    from inspect import getargspec
+from inspect import getfullargspec
 
 try:
     import numpy as np
 except ImportError:
-    np = None
+    np = None  # type: ignore
 
 try:
     import bson
 except ImportError:
     bson = None
 
-__author__ = "Shyue Ping Ong"
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = "0.1"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "ongsp@ucsd.edu"
-__date__ = "1/24/14"
+try:
+    import ruamel.yaml as yaml
+except ImportError:
+    try:
+        import yaml  # type: ignore
+    except ImportError:
+        yaml = None  # type: ignore
+
+__version__ = "3.0.0"
 
 
-class MSONable(object):
+def _load_redirect(redirect_file):
+    try:
+        with open(redirect_file, "rt") as f:
+            d = yaml.safe_load(f)
+    except IOError:
+        # If we can't find the file
+        # Just use an empty redirect dict
+        return {}
+
+    # Convert the full paths to module/class
+    redirect_dict = defaultdict(dict)
+    for old_path, new_path in d.items():
+        old_class = old_path.split(".")[-1]
+        old_module = ".".join(old_path.split(".")[:-1])
+
+        new_class = new_path.split(".")[-1]
+        new_module = ".".join(new_path.split(".")[:-1])
+
+        redirect_dict[old_module][old_class] = {
+            "@module": new_module,
+            "@class": new_class,
+        }
+
+    return dict(redirect_dict)
+
+
+class MSONable:
     """
     This is a mix-in base class specifying an API for msonable objects. MSON
     is Monty JSON. Essentially, MSONable objects must implement an as_dict
@@ -53,7 +74,7 @@ class MSONable(object):
     dynamically deserialize the class. E.g.::
 
         d["@module"] = self.__class__.__module__
-        d["@module"] = self.__class__.__name__
+        d["@class"] = self.__class__.__name__
 
     A default implementation is provided in MSONable, which automatically
     determines if the class already contains self.argname or self._argname
@@ -72,9 +93,20 @@ class MSONable(object):
 
     For such classes, you merely need to inherit from MSONable and you do not
     need to implement your own as_dict or from_dict protocol.
+
+    New to Monty V2.0.6....
+    Classes can be redirected to moved implementations by putting in the old
+    fully qualified path and new fully qualified path into .monty.yaml in the
+    home folder
+
+    Example:
+    old_module.old_class: new_module.new_class
     """
 
-    def as_dict(self):
+    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"),
+                                           ".monty.yaml"))
+
+    def as_dict(self) -> dict:
         """
         A JSON serializable dict representation of an object.
         """
@@ -83,19 +115,19 @@ class MSONable(object):
 
         try:
             parent_module = self.__class__.__module__.split('.')[0]
-            module_version = import_module(parent_module).__version__
+            module_version = import_module(parent_module).__version__  # type: ignore
             d["@version"] = u"{}".format(module_version)
-        except AttributeError:
-            d["@version"] = None
+        except (AttributeError, ImportError):
+            d["@version"] = None  # type: ignore
 
-        args = getargspec(self.__class__.__init__).args
+        args = getfullargspec(self.__class__.__init__).args
 
         def recursive_as_dict(obj):
             if isinstance(obj, (list, tuple)):
                 return [recursive_as_dict(it) for it in obj]
-            elif isinstance(obj, dict):
+            if isinstance(obj, dict):
                 return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
-            elif hasattr(obj, "as_dict"):
+            if hasattr(obj, "as_dict"):
                 return obj.as_dict()
             return obj
 
@@ -117,18 +149,25 @@ class MSONable(object):
                             "you can implement both as_dict and from_dict.")
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
-            d.update(**self.kwargs)
+            # type: ignore
+            d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
         if hasattr(self, "_kwargs"):
-            d.update(**self._kwargs)
+            d.update(**getattr(self, "_kwargs"))  # pylint: disable=E1101
+        if isinstance(self, Enum):
+            d.update({"value": self.value})  # pylint: disable=E1101
         return d
 
     @classmethod
     def from_dict(cls, d):
+        """
+        :param d: Dict representation.
+        :return: MSONable class.
+        """
         decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items()
                    if not k.startswith("@")}
         return cls(**decoded)
 
-    def to_json(self):
+    def to_json(self) -> str:
         """
         Returns a json string representation of the MSONable object.
         """
@@ -155,7 +194,8 @@ class MSONable(object):
                     )
                 elif isinstance(value, list):
                     list_dict = {
-                        "{}{}{}".format(key,seperator,num): item for num, item in enumerate(value)
+                        "{}{}{}".format(key, seperator, num): item
+                        for num, item in enumerate(value)
                     }
                     flat_dict.update(flatten(list_dict))
                 else:
@@ -163,7 +203,8 @@ class MSONable(object):
 
             return flat_dict
 
-        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0])
+        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(),
+                              key=lambda x: x[0])
         ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
@@ -179,7 +220,7 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def default(self, o):
+    def default(self, o) -> dict:  # pylint: disable=E0202
         """
         Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
@@ -202,7 +243,7 @@ class MontyEncoder(json.JSONEncoder):
                         "@class": "array",
                         "dtype": o.dtype.__str__(),
                         "data": o.tolist()}
-            elif isinstance(o, np.generic):
+            if isinstance(o, np.generic):
                 return o.item()
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
@@ -219,9 +260,9 @@ class MontyEncoder(json.JSONEncoder):
             if "@version" not in d:
                 try:
                     parent_module = o.__class__.__module__.split('.')[0]
-                    module_version = import_module(parent_module).__version__
+                    module_version = import_module(parent_module).__version__  # type: ignore
                     d["@version"] = u"{}".format(module_version)
-                except AttributeError:
+                except (AttributeError, ImportError):
                     d["@version"] = None
             return d
         except AttributeError:
@@ -252,6 +293,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
+                if classname in MSONable.REDIRECT.get(modname, {}):
+                    modname = MSONable.REDIRECT[modname][classname]["@module"]
+                    classname = MSONable.REDIRECT[modname][classname]["@class"]
             else:
                 modname = None
                 classname = None
@@ -269,7 +313,7 @@ class MontyDecoder(json.JSONDecoder):
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
                     data = {k: v for k, v in d.items()
-                           if not k.startswith("@")}
+                            if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
             elif np is not None and modname == "numpy" and classname == \
@@ -282,12 +326,19 @@ class MontyDecoder(json.JSONDecoder):
 
             return {self.process_decoded(k): self.process_decoded(v)
                     for k, v in d.items()}
-        elif isinstance(d, list):
+
+        if isinstance(d, list):
             return [self.process_decoded(x) for x in d]
 
         return d
 
     def decode(self, s):
+        """
+        Overrides decode from JSONDecoder.
+
+        :param s: string
+        :return: Object.
+        """
         d = json.JSONDecoder.decode(self, s)
         return self.process_decoded(d)
 
@@ -296,7 +347,6 @@ class MSONError(Exception):
     """
     Exception class for serialization errors.
     """
-    pass
 
 
 def jsanitize(obj, strict=False, allow_bson=False):
@@ -322,29 +372,27 @@ def jsanitize(obj, strict=False, allow_bson=False):
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or \
-                       (bson is not None and isinstance(obj,
-                                                        bson.objectid.ObjectId))):
+    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or
+                       (bson is not None and
+                        isinstance(obj, bson.objectid.ObjectId))):
         return obj
     if isinstance(obj, (list, tuple)):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
-    elif np is not None and isinstance(obj, np.ndarray):
+    if np is not None and isinstance(obj, np.ndarray):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in
                 obj.tolist()]
-    elif isinstance(obj, dict):
+    if isinstance(obj, dict):
         return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
                 for k, v in obj.items()}
-    elif isinstance(obj, six.integer_types + tuple([float])):
+    if isinstance(obj, (int, float)):
         return obj
-    elif obj is None:
+    if obj is None:
         return None
 
-    else:
-        if not strict:
-            return obj.__str__()
-        else:
-            if isinstance(obj, six.string_types):
-                return obj.__str__()
-            else:
-                return jsanitize(obj.as_dict(), strict=strict,
-                                 allow_bson=allow_bson)
+    if not strict:
+        return obj.__str__()
+
+    if isinstance(obj, str):
+        return obj.__str__()
+
+    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson)

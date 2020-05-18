@@ -3,22 +3,14 @@ This module implements several useful functions and decorators that can be
 particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
-from __future__ import absolute_import
-
 import re
+import sys
 import logging
 import warnings
 import os
 import subprocess
 import multiprocessing
 import functools
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +50,7 @@ def deprecated(replacement=None, message=None):
     return wrap
 
 
-class requires(object):
+class requires:
     """
     Decorator to mark classes or functions as requiring a specified condition
     to be true. This can be used to present useful error messages for
@@ -81,10 +73,17 @@ class requires(object):
     """
 
     def __init__(self, condition, message):
+        """
+        :param condition: A expression returning a bool.
+        :param message: Message to display if condition is False.
+        """
         self.condition = condition
         self.message = message
 
     def __call__(self, _callable):
+        """
+        :param _callable: Callable function.
+        """
         @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
@@ -134,7 +133,7 @@ def get_ncpus():
 
     # jython
     try:
-        from java.lang import Runtime
+        from java.lang import Runtime  # pylint: disable=import-outside-toplevel
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
         if res > 0:
@@ -207,9 +206,8 @@ def install_excepthook(hook_type="color", **kwargs):
         0 if hook is installed successfully.
     """
     try:
-        from IPython.core import ultratb
+        from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
     except ImportError:
-        import warnings
         warnings.warn(
             "Cannot install excepthook, IPyhon.core.ultratb not available")
         return 1
@@ -223,6 +221,5 @@ def install_excepthook(hook_type="color", **kwargs):
     if hook is None:
         return 2
 
-    import sys
     sys.excepthook = hook(**kwargs)
     return 0

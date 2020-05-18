@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.serialization module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.serialization module &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.re.html" title="monty.re module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -55,11 +55,15 @@
 and yaml.</p>
 <dl class="function">
 <dt id="monty.serialization.dumpfn">
-<code class="descname">dumpfn</code><span class="sig-paren">(</span><em>obj</em>, <em>fn</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#dumpfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.dumpfn" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dump to a json/yaml directly by filename instead of a File-like object.
+<code class="sig-name descname">dumpfn</code><span class="sig-paren">(</span><em class="sig-param">obj</em>, <em class="sig-param">fn</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#dumpfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.dumpfn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dump to a json/yaml directly by filename instead of a
+File-like object. File may also be a BZ2 (“.BZ2”) or GZIP (“.GZ”, “.Z”)
+compressed file.
 For YAML, ruamel.yaml must be installed. The file type is automatically
-detected. YAML is assumed if the filename contains “yaml” (lower or upper
-case). Otherwise, json is always assumed.</p>
+detected from the file extension (case insensitive). YAML is assumed if the
+filename contains “.yaml” or “.yml”.
+Msgpack is assumed if the filename contains “.mpk”.
+JSON is otherwise assumed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -77,11 +81,15 @@ case). Otherwise, json is always assumed.</p>
 
 <dl class="function">
 <dt id="monty.serialization.loadfn">
-<code class="descname">loadfn</code><span class="sig-paren">(</span><em>fn</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#loadfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.loadfn" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">loadfn</code><span class="sig-paren">(</span><em class="sig-param">fn</em>, <em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/serialization.html#loadfn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.serialization.loadfn" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads json/yaml/msgpack directly from a filename instead of a
-File-like object. For YAML, ruamel.yaml must be installed. The file type is
-automatically detected. YAML is assumed if the filename contains “yaml”
-(lower or upper case). Otherwise, json is always assumed.</p>
+File-like object. File may also be a BZ2 (“.BZ2”) or GZIP (“.GZ”, “.Z”)
+compressed file.
+For YAML, ruamel.yaml must be installed. The file type is automatically
+detected from the file extension (case insensitive).
+YAML is assumed if the filename contains “.yaml” or “.yml”.
+Msgpack is assumed if the filename contains “.mpk”.
+JSON is otherwise assumed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -120,10 +128,10 @@ automatically detected. YAML is assumed if the filename contains “yaml”
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

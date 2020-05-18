@@ -2,30 +2,15 @@
 Temporary directory and file creation utilities.
 """
 
-from __future__ import absolute_import
 import os
 import tempfile
-import shutil
 
-try:
-    from pathlib import Path
-except ImportError:
-    try:
-        from pathlib2 import Path
-    except ImportError:
-        Path = None
+from pathlib import Path
 
 from monty.shutil import copy_r, remove
 
-__author__ = "Shyue Ping Ong"
-__copyright__ = "Copyright 2012, The Materials Project"
-__version__ = "0.1"
-__maintainer__ = "Shyue Ping Ong"
-__email__ = "ongsp@ucsd.edu"
-__date__ = "3/6/14"
 
-
-class ScratchDir(object):
+class ScratchDir:
     """
     .. note::
 
@@ -66,7 +51,7 @@ class ScratchDir(object):
         simple pass through, i.e., nothing happens.
 
         Args:
-            rootpath (str/Path): The path in which to create temp subdirectories.
+            rootpath (str/Path): Path in which to create temp subdirectories.
                 If this is None, no temp directories will be created and
                 this will just be a simple pass through.
             create_symbolic_link (bool): Whether to create a symbolic link in

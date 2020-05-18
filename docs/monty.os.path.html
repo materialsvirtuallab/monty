@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.os.path module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.os.path module &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.os.html" title="monty.os package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" >monty package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="monty.os.html" accesskey="U">monty.os package</a> &#187;</li> 
       </ul>
@@ -52,9 +52,10 @@
             
   <div class="section" id="module-monty.os.path">
 <span id="monty-os-path-module"></span><h1>monty.os.path module<a class="headerlink" href="#module-monty.os.path" title="Permalink to this headline">¶</a></h1>
+<p>Path based methods, e.g., which, zpath, etc.</p>
 <dl class="function">
 <dt id="monty.os.path.find_exts">
-<code class="descname">find_exts</code><span class="sig-paren">(</span><em>top</em>, <em>exts</em>, <em>exclude_dirs=None</em>, <em>include_dirs=None</em>, <em>match_mode='basename'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#find_exts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.find_exts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">find_exts</code><span class="sig-paren">(</span><em class="sig-param">top</em>, <em class="sig-param">exts</em>, <em class="sig-param">exclude_dirs=None</em>, <em class="sig-param">include_dirs=None</em>, <em class="sig-param">match_mode='basename'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#find_exts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.find_exts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find all files with the extension listed in <cite>exts</cite> that are located within
 the directory tree rooted at <cite>top</cite> (including top itself, but excluding
 ‘.’ and ‘..’)</p>
@@ -95,7 +96,7 @@ Can be concatenated via <cite>|</cite></p></li>
 
 <dl class="function">
 <dt id="monty.os.path.which">
-<code class="descname">which</code><span class="sig-paren">(</span><em>cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#which"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.which" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">which</code><span class="sig-paren">(</span><em class="sig-param">cmd</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#which"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.which" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns full path to a executable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -113,7 +114,7 @@ Can be concatenated via <cite>|</cite></p></li>
 
 <dl class="function">
 <dt id="monty.os.path.zpath">
-<code class="descname">zpath</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#zpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.zpath" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">zpath</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#zpath"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.os.path.zpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an existing (zipped or unzipped) file path given the unzipped
 version. If no path exists, returns the filename unmodified.</p>
 <dl class="field-list simple">
@@ -154,10 +155,10 @@ unchanged.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

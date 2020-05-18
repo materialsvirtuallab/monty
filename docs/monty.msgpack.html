@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.msgpack module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.msgpack module &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.math.html" title="monty.math module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -56,14 +56,14 @@ using monty.json encoder and decoders. The naming is just for clearer usage with
 msgpack’s default and object_hook naming.</p>
 <dl class="function">
 <dt id="monty.msgpack.default">
-<code class="descname">default</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.default" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>For use with msgpack.packb(obj, default=default). Supports Monty’s as_dict
 protocol, numpy arrays and datetime.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="monty.msgpack.object_hook">
-<code class="descname">object_hook</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#object_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.object_hook" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_hook</code><span class="sig-paren">(</span><em class="sig-param">d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#object_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.object_hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>For use with msgpack.unpackb(dict, object_hook=object_hook.).  Supports
 Monty’s as_dict protocol, numpy arrays and datetime.</p>
 </dd></dl>
@@ -92,10 +92,10 @@ Monty’s as_dict protocol, numpy arrays and datetime.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

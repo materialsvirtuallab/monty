@@ -1,7 +1,13 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function, division
-
+"""
+Additional tools for iteration.
+"""
 import itertools
+
+try:
+    import numpy as np
+except ImportError:
+    np = None
 
 
 def chunks(items, n):
@@ -29,16 +35,15 @@ def iterator_from_slice(s):
 
         The function returns an infinite iterator if s.stop is None
     """
-    import numpy as np
     start = s.start if s.start is not None else 0
     step = s.step if s.step is not None else 1
 
     if s.stop is None:
         # Infinite iterator.
         return itertools.count(start=start, step=step)
-    else:
-        # xrange-like iterator that supports float.
-        return iter(np.arange(start, s.stop, step))
+
+    # xrange-like iterator that supports float.
+    return iter(np.arange(start, s.stop, step))
 
 
 def iuptri(items, diago=True, with_inds=False):

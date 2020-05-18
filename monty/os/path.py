@@ -1,15 +1,11 @@
 # coding: utf-8
-
-from __future__ import absolute_import
-
+"""
+Path based methods, e.g., which, zpath, etc.
+"""
 import os
 
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Project'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
+from monty.fnmatch import WildCard
+from monty.string import list_strings
 
 
 def which(cmd):
@@ -26,6 +22,7 @@ def which(cmd):
 
         full_path_to_python = which("python")
     """
+
     def is_exe(fp):
         return os.path.isfile(fp) and os.access(fp, os.X_OK)
 
@@ -94,7 +91,6 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
         # output.
         find_exts(".", "ps", include_dirs="output*"))
     """
-    from monty.string import list_strings
     exts = list_strings(exts)
 
     # Handle file!
@@ -103,7 +99,6 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
                                              for ext in exts) else []
 
     # Build shell-style wildcards.
-    from monty.fnmatch import WildCard
     if exclude_dirs is not None:
         exclude_dirs = WildCard(exclude_dirs)
 

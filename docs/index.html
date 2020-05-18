@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Monty: Python Made Even Easier &#8212; monty 2.0.4 documentation</title>
+    <title>Monty: Python Made Even Easier &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -35,7 +35,7 @@
         <li class="right" >
           <a href="monty.html" title="monty package"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">monty 2.0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">monty 3.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -48,7 +48,7 @@
 <h1>Monty: Python Made Even Easier<a class="headerlink" href="#monty-python-made-even-easier" title="Permalink to this headline">¶</a></h1>
 <img alt="https://travis-ci.org/materialsvirtuallab/monty.png?branch=master" src="https://travis-ci.org/materialsvirtuallab/monty.png?branch=master" />
 <img alt="https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master" src="https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master" />
-<p>Monty is the missing complement to Python. Monty implements supplementary
+<img alt="https://anaconda.org/conda-forge/monty/badges/downloads.svg" src="https://anaconda.org/conda-forge/monty/badges/downloads.svg" /><p>Monty is the missing complement to Python. Monty implements supplementary
 useful functions for Python that are not part of the standard library.
 Examples include useful utilities like transparent support for zipped files,
 useful design patterns such as singleton and cached_class, and many more.</p>
@@ -63,16 +63,28 @@ are looking for solutions to the same problems.</p>
 <p>Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.</p>
-<p>Monty supports Python 2.7-3.x.</p>
+<p>Monty currently supports Python 2.7-3.x, but please note that with effect from
+v3.x, which will be released in Jan 2020, we will completely abandon Py2.7
+support, in line with most other Python packages.</p>
 </div>
 <div class="section" id="change-log">
 <h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="v2-0-2">
-<h2>v2.0.2<a class="headerlink" href="#v2-0-2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="v3-0-1">
+<h2>v3.0.1<a class="headerlink" href="#v3-0-1" title="Permalink to this headline">¶</a></h2>
 <ol class="arabic simple">
-<li><p>Use basename instead of full path to determine whether file type in loadfn
-and dumpfn. (&#64;JosephMontoya-TRI)</p></li>
-<li><p>Use os.path.splitext to determine zip types in monty.io.zopen.</p></li>
+<li><p>Bug fixes for Windows.</p></li>
+</ol>
+</div>
+<div class="section" id="v3-0-0">
+<h2>v3.0.0<a class="headerlink" href="#v3-0-0" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>Py3 only version.</p></li>
+</ol>
+</div>
+<div class="section" id="v2-0-7">
+<h2>v2.0.7<a class="headerlink" href="#v2-0-7" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><p>MSONable now supports Enum types. (&#64;mkhorton)</p></li>
 </ol>
 <p><a class="reference internal" href="changelog.html"><span class="doc">Older versions</span></a></p>
 </div>
@@ -255,7 +267,9 @@ follows:</p>
   <ul>
 <li><a class="reference internal" href="#">Monty: Python Made Even Easier</a></li>
 <li><a class="reference internal" href="#change-log">Change Log</a><ul>
-<li><a class="reference internal" href="#v2-0-2">v2.0.2</a></li>
+<li><a class="reference internal" href="#v3-0-1">v3.0.1</a></li>
+<li><a class="reference internal" href="#v3-0-0">v3.0.0</a></li>
+<li><a class="reference internal" href="#v2-0-7">v2.0.7</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
@@ -279,10 +293,10 @@ follows:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

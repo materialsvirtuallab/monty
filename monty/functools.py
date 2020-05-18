@@ -2,37 +2,19 @@
 functools, especially backported from Python 3.
 """
 
-from __future__ import absolute_import
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '8/29/14'
-
-
+import signal
+import sys
+import cProfile
+import pstats
+import tempfile
 from collections import namedtuple
 from functools import update_wrapper, wraps, partial
-
-
-try:
-    from threading import RLock
-except:
-    class RLock:
-        """Dummy reentrant lock for builds without threads"""
-
-        def __enter__(self):
-            pass
-
-        def __exit__(self, exctype, excinst, exctb):
-            pass
-
+from threading import RLock
 
 _CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
 
-class _HashedSeq(list):
+class _HashedSeq(list):  # pylint: disable=C0205
     """
     This class guarantees that hash() will be called no more than once
     per element.  This is important because the lru_cache() will hash
@@ -42,6 +24,10 @@ class _HashedSeq(list):
     __slots__ = 'hashvalue'
 
     def __init__(self, tup, hashfunc=hash):
+        """
+        :param tup: Tuple.
+        :param hashfunc: Hash function.
+        """
         self[:] = tup
         self.hashvalue = hashfunc(tup)
 
@@ -73,7 +59,7 @@ def _make_key(args, kwds, typed,
         key += tuple(type(v) for v in args)
         if kwds:
             key += tuple(type(v) for k, v in sorted_items)
-    elif len(key) == 1 and type(key[0]) in fasttypes:
+    elif len(key) == 1 and isinstance(key[0], fasttypes):
         return key[0]
     return _HashedSeq(key)
 
@@ -111,25 +97,25 @@ def lru_cache(maxsize=128, typed=False):
         raise TypeError('Expected maxsize to be an integer or None')
 
     # Constants shared by all lru cache instances:
-    sentinel = object()          # unique object used to signal cache misses
-    make_key = _make_key         # build a key from the function arguments
-    PREV, NEXT, KEY, RESULT = 0, 1, 2, 3   # names for the link fields
+    sentinel = object()  # unique object used to signal cache misses
+    make_key = _make_key  # build a key from the function arguments
+    PREV, NEXT, KEY, RESULT = 0, 1, 2, 3  # names for the link fields
 
     def decorating_function(user_function):
         cache = {}
         hits = [0]
         misses = [0]
         full = [False]
-        cache_get = cache.get    # bound method to lookup a key or return None
-        lock = RLock()           # because linkedlist updates aren't threadsafe
-        root = []                # root of the circular doubly linked list
-        root[:] = [root, root, None, None]     # initialize by pointing to self
+        cache_get = cache.get  # bound method to lookup a key or return None
+        lock = RLock()  # because linkedlist updates aren't threadsafe
+        root = []  # root of the circular doubly linked list
+        root[:] = [root, root, None, None]  # initialize by pointing to self
         r = [root]
 
         if maxsize == 0:
 
             def wrapper(*args, **kwds):
-                # No caching -- just a statistics update after a successful call
+                # No caching - just a statistics update after a successful call
                 result = user_function(*args, **kwds)
                 misses[0] += 1
                 return result
@@ -168,7 +154,7 @@ def lru_cache(maxsize=128, typed=False):
                 result = user_function(*args, **kwds)
                 with lock:
                     if key in cache:
-                        # Getting here means that this same key was added to the
+                        # Getting here means that this same key was added to
                         # cache while the lock was released.  Since the link
                         # update is already done, we need only return the
                         # computed result and update the count of misses.
@@ -180,13 +166,12 @@ def lru_cache(maxsize=128, typed=False):
                         oldroot[RESULT] = result
                         # Empty the oldest link and make it the new root.
                         # Keep a reference to the old key and old result to
-                        # prevent their ref counts from going to zero during the
-                        # update. That will prevent potentially arbitrary object
+                        # prevent their ref counts from going to zero during
+                        # update. That will prevent arbitrary object
                         # clean-up code (i.e. __del__) from running while we're
                         # still adjusting the links.
                         r[0] = oldroot[NEXT]
                         oldkey = r[0][KEY]
-                        oldresult = r[0][RESULT]
                         r[0][KEY] = r[0][RESULT] = None
                         # Now update the cache dictionary.
                         del cache[oldkey]
@@ -225,7 +210,7 @@ def lru_cache(maxsize=128, typed=False):
     return decorating_function
 
 
-class lazy_property(object):
+class lazy_property:
     """
     lazy_property descriptor
 
@@ -234,6 +219,9 @@ class lazy_property(object):
     """
 
     def __init__(self, func):
+        """
+        :param func: Function to decorate.
+        """
         self.__func = func
         wraps(self.__func)(self)
 
@@ -245,7 +233,7 @@ class lazy_property(object):
             raise AttributeError("'%s' object has no attribute '__dict__'"
                                  % (inst_cls.__name__,))
 
-        name = self.__name__
+        name = self.__name__  # pylint: disable=E1101
         if name.startswith('__') and not name.endswith('__'):
             name = '_%s%s' % (inst_cls.__name__, name)
 
@@ -318,11 +306,11 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
                 return func(*args, **kwargs)
             try:
                 return func(*args, **kwargs)
-            except exception_tuple:
+            except exception_tuple:  # pylint: disable=E0712
                 return retval_if_exc
-            else:
-                raise RuntimeError()
+
         return wrapper
+
     return decorator
 
 
@@ -337,7 +325,7 @@ This decorator returns None if one of the exceptions is raised.
 """
 
 
-class timeout(object):
+class timeout:
     """
     Timeout function. Use to limit matching to a certain time limit. Note that
     this works only on Unix-based systems as it uses signal. Usage:
@@ -348,6 +336,7 @@ class timeout(object):
     except TimeoutError:
         do_something_else()
     """
+
     def __init__(self, seconds=1, error_message='Timeout'):
         """
         Args:
@@ -359,21 +348,29 @@ class timeout(object):
         self.error_message = error_message
 
     def handle_timeout(self, signum, frame):
+        """
+        :param signum: Return signal from call.
+        :param frame:
+        """
         raise TimeoutError(self.error_message)
 
     def __enter__(self):
-        import signal
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(self.seconds)
 
     def __exit__(self, type, value, traceback):
-        import signal
         signal.alarm(0)
 
 
 class TimeoutError(Exception):
+    """
+    Exception class for timeouts.
+    """
 
     def __init__(self, message):
+        """
+        :param message: Error message
+        """
         self.message = message
 
 
@@ -398,12 +395,13 @@ def prof_main(main):
         sortby: Profiling data are sorted according to this value.
             default is "time". See sort_stats.
     """
+
     @wraps(main)
     def wrapper(*args, **kwargs):
-        import sys
         try:
             do_prof = sys.argv[1] == "prof"
-            if do_prof: sys.argv.pop(1)
+            if do_prof:
+                sys.argv.pop(1)
         except Exception:
             do_prof = False
 
@@ -411,7 +409,6 @@ def prof_main(main):
             sys.exit(main())
         else:
             print("Entering profiling mode...")
-            import pstats, cProfile, tempfile
             prof_file = kwargs.get("prof_file", None)
             if prof_file is None:
                 _, prof_file = tempfile.mkstemp()

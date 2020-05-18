@@ -1,15 +1,4 @@
 # coding: utf-8
-#!/usr/bin/env python
-
-from __future__ import division, unicode_literals
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2014, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
 
 import unittest
 

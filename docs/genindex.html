@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Index &#8212; monty 2.0.4 documentation</title>
+    <title>Index &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -79,8 +79,6 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="monty.json.html#monty.json.MSONable.as_dict">as_dict() (MSONable method)</a>
-</li>
-      <li><a href="monty.collections.html#monty.collections.as_set">as_set() (in module monty.collections)</a>
 </li>
       <li><a href="monty.collections.html#monty.collections.AttrDict">AttrDict (class in monty.collections)</a>
 </li>
@@ -190,7 +188,7 @@
 </li>
       <li><a href="monty.inspect.html#monty.inspect.find_top_pyfile">find_top_pyfile() (in module monty.inspect)</a>
 </li>
-      <li><a href="monty.json.html#monty.json.MSONable.from_dict">from_dict() (monty.json.MSONable class method)</a>
+      <li><a href="monty.json.html#monty.json.MSONable.from_dict">from_dict() (MSONable class method)</a>
 </li>
       <li><a href="monty.collections.html#monty.collections.FrozenAttrDict">FrozenAttrDict (class in monty.collections)</a>
 </li>
@@ -240,7 +238,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="monty.dev.html#monty.dev.install_excepthook">install_excepthook() (in module monty.dev)</a>
 </li>
-      <li><a href="monty.functools.html#monty.functools.lazy_property.invalidate">invalidate() (monty.functools.lazy_property class method)</a>
+      <li><a href="monty.functools.html#monty.functools.lazy_property.invalidate">invalidate() (lazy_property class method)</a>
 </li>
       <li><a href="monty.string.html#monty.string.is_string">is_string() (in module monty.string)</a>
 </li>
@@ -414,6 +412,8 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="monty.json.html#monty.json.MSONable.REDIRECT">REDIRECT (MSONable attribute)</a>
+</li>
       <li><a href="monty.re.html#monty.re.regrep">regrep() (in module monty.re)</a>
 </li>
       <li><a href="monty.io.html#monty.io.FileLock.release">release() (FileLock method)</a>
@@ -446,13 +446,11 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="monty.tempfile.html#monty.tempfile.ScratchDir.SCR_LINK">SCR_LINK (ScratchDir attribute)</a>
 </li>
-      <li><a href="monty.tempfile.html#monty.tempfile.ScratchDir">ScratchDir (class in monty.tempfile)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="monty.design_patterns.html#monty.design_patterns.singleton">singleton() (in module monty.design_patterns)</a>
+      <li><a href="monty.tempfile.html#monty.tempfile.ScratchDir">ScratchDir (class in monty.tempfile)</a>
 </li>
-      <li><a href="monty.string.html#monty.string.str2unicode">str2unicode() (in module monty.string)</a>
+      <li><a href="monty.design_patterns.html#monty.design_patterns.singleton">singleton() (in module monty.design_patterns)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -477,6 +475,8 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="monty.string.html#monty.string.unicode2str">unicode2str() (in module monty.string)</a>
+</li>
+      <li><a href="monty.json.html#monty.json.MSONable.unsafe_hash">unsafe_hash() (MSONable method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -527,10 +527,10 @@
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

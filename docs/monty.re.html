@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.re module &#8212; monty 2.0.4 documentation</title>
+    <title>monty.re module &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.pprint.html" title="monty.pprint module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
       </ul>
     </div>  
@@ -51,17 +51,17 @@
             
   <div class="section" id="module-monty.re">
 <span id="monty-re-module"></span><h1>monty.re module<a class="headerlink" href="#module-monty.re" title="Permalink to this headline">¶</a></h1>
-<p>#TODO: Write module doc.</p>
+<p>Helpful regex based functions. E.g., grepping.</p>
 <dl class="function">
 <dt id="monty.re.regrep">
-<code class="descname">regrep</code><span class="sig-paren">(</span><em>filename</em>, <em>patterns</em>, <em>reverse=False</em>, <em>terminate_on_match=False</em>, <em>postprocess=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/re.html#regrep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.re.regrep" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">regrep</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">patterns</em>, <em class="sig-param">reverse=False</em>, <em class="sig-param">terminate_on_match=False</em>, <em class="sig-param">postprocess=&lt;class 'str'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/re.html#regrep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.re.regrep" title="Permalink to this definition">¶</a></dt>
 <dd><p>A powerful regular expression version of grep.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – Filename to grep.</p></li>
 <li><p><strong>patterns</strong> (<em>dict</em>) – A dict of patterns, e.g.,
-{“energy”: “energy(sigma-&gt;0)s+=s+([d-.]+)”}.</p></li>
+{“energy”: r”energy\(sigma-&gt;0\)\s+=\s+([\d-.]+)”}.</p></li>
 <li><p><strong>reverse</strong> (<em>bool</em>) – Read files in reverse. Defaults to false. Useful for
 large files, especially when used with terminate_on_match.</p></li>
 <li><p><strong>terminate_on_match</strong> (<em>bool</em>) – Whether to terminate when there is at
@@ -112,10 +112,10 @@ that 0-based indexing is used.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

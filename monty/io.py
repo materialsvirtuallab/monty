@@ -4,48 +4,29 @@ Augments Python's suite of IO functions with useful transparent support for
 compressed files.
 """
 
-from __future__ import absolute_import
-
 import os
 import bz2
 import gzip
-import sys
 import time
 import errno
 import mmap
 import subprocess
 import io
-
-from monty.tempfile import ScratchDir as ScrDir
-from monty.dev import deprecated
-
-try:
-    from pathlib import Path
-except ImportError:
-    Path = None
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
+from typing import Union, IO, Generator
+from pathlib import Path
 
 
-PY_VERSION = sys.version_info
-
-
-def zopen(filename, *args, **kwargs):
-    """
+def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
+    r"""
     This function wraps around the bz2, gzip and standard python's open
     function to deal intelligently with bzipped, gzipped or standard text
     files.
 
     Args:
         filename (str/Path): filename or pathlib.Path.
-        \*args: Standard args for python open(..). E.g., 'r' for read, 'w' for
+        *args: Standard args for python open(..). E.g., 'r' for read, 'w' for
             write.
-        \*\*kwargs: Standard kwargs for python open(..).
+        **kwargs: Standard kwargs for python open(..).
 
     Returns:
         File-like object. Supports with context.
@@ -56,23 +37,13 @@ def zopen(filename, *args, **kwargs):
     name, ext = os.path.splitext(filename)
     ext = ext.upper()
     if ext == ".BZ2":
-        if PY_VERSION[0] >= 3:
-            return bz2.open(filename, *args, **kwargs)
-        else:
-            args = list(args)
-            if len(args) > 0:
-                args[0] = "".join([c for c in args[0] if c != "t"])
-            if "mode" in kwargs:
-                kwargs["mode"] = "".join([c for c in kwargs["mode"]
-                                          if c != "t"])
-            return bz2.BZ2File(filename, *args, **kwargs)
-    elif ext in (".GZ", ".Z"):
+        return bz2.open(filename, *args, **kwargs)
+    if ext in (".GZ", ".Z"):
         return gzip.open(filename, *args, **kwargs)
-    else:
-        return io.open(filename, *args, **kwargs)
+    return io.open(filename, *args, **kwargs)
 
 
-def reverse_readfile(filename):
+def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
@@ -88,7 +59,7 @@ def reverse_readfile(filename):
     """
     try:
         with zopen(filename, "rb") as f:
-            if isinstance(f, gzip.GzipFile) or isinstance(f, bz2.BZ2File):
+            if isinstance(f, (gzip.GzipFile, bz2.BZ2File)):
                 for l in reversed(f.readlines()):
                     yield l.decode("utf-8").rstrip()
             else:
@@ -102,7 +73,7 @@ def reverse_readfile(filename):
         return
 
 
-def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
+def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str, str, None]:
     """
     Generator method to read a file line-by-line, but backwards. This allows
     one to efficiently get data at the end of a file.
@@ -187,16 +158,11 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000):
                 return
 
 
-@deprecated(ScrDir)
-class ScratchDir(ScrDir):
-    pass
-
-
 class FileLockException(Exception):
     """Exception raised by FileLock."""
 
 
-class FileLock(object):
+class FileLock:
     """
     A file locking mechanism that has context-manager support so you can use
     it in a with statement. This should be relatively cross-compatible as it
@@ -250,9 +216,10 @@ class FileLock(object):
         self.is_locked = True
 
     def release(self):
-        """ Get rid of the lock by deleting the lockfile.
-            When working in a `with` statement, this gets automatically
-            called at the end.
+        """
+        Get rid of the lock by deleting the lockfile.
+        When working in a `with` statement, this gets automatically
+        called at the end.
         """
         if self.is_locked:
             os.close(self.fd)
@@ -296,4 +263,3 @@ def get_open_fds():
 
     return len([s for s in procs.split('\n')
                 if s and s[0] == 'f' and s[1:].isdigit()])
-

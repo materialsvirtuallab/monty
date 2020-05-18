@@ -1,4 +1,6 @@
-from __future__ import absolute_import
+"""
+Os functions, e.g., cd, makedirs_p.
+"""
 
 import os
 import errno
@@ -36,8 +38,9 @@ def cd(path):
 
 def makedirs_p(path, **kwargs):
     """
-    Wrapper for os.makedirs that does not raise an exception if the directory already exists, in the fashion of
-    "mkdir -p" command. The check is performed in a thread-safe way
+    Wrapper for os.makedirs that does not raise an exception if the directory
+    already exists, in the fashion of "mkdir -p" command. The check is
+    performed in a thread-safe way
 
     Args:
         path: path of the directory to create

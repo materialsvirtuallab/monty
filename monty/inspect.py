@@ -2,10 +2,11 @@
 """
 Useful additional functions to help get information about live objects
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
 
+import os
 import inspect
-from inspect import currentframe, getframeinfo, stack, getouterframes
+from inspect import currentframe, getframeinfo, getfullargspec
+from functools import wraps
 
 
 def all_subclasses(cls):
@@ -13,7 +14,7 @@ def all_subclasses(cls):
     Given a class `cls`, this recursive function returns a list with
     all subclasses, subclasses of subclasses, and so on.
     """
-    subclasses = cls.__subclasses__() 
+    subclasses = cls.__subclasses__()
     return subclasses + [g for s in subclasses for g in all_subclasses(s)]
 
 
@@ -21,12 +22,10 @@ def find_top_pyfile():
     """
     This function inspects the Cpython frame to find the path of the script.
     """
-    import os
     frame = currentframe()
     while True:
         if frame.f_back is None:
             finfo = getframeinfo(frame)
-            #print(getframeinfo(frame))
             return os.path.abspath(finfo.filename)
 
         frame = frame.f_back
@@ -35,10 +34,10 @@ def find_top_pyfile():
 def caller_name(skip=2):
     """
     Get a name of a caller in the format module.class.method
-    
+
     `skip` specifies how many levels of stack to skip while getting caller
     name. skip=1 means "who calls me", skip=2 "who calls my caller" etc.
-       
+
     An empty string is returned if skipped levels exceed stack height
 
     Taken from:
@@ -50,9 +49,9 @@ def caller_name(skip=2):
     stack = inspect.stack()
     start = 0 + skip
     if len(stack) < start + 1:
-      return ''
-    parentframe = stack[start][0]    
-    
+        return ''
+    parentframe = stack[start][0]
+
     name = []
     module = inspect.getmodule(parentframe)
     # `modname` can be None when frame is executed directly in console
@@ -67,7 +66,7 @@ def caller_name(skip=2):
         name.append(parentframe.f_locals['self'].__class__.__name__)
     codename = parentframe.f_code.co_name
     if codename != '<module>':  # top level usually
-        name.append( codename ) # function or a method
+        name.append(codename)  # function or a method
     del parentframe
     return ".".join(name)
 
@@ -75,7 +74,8 @@ def caller_name(skip=2):
 def initializer(func):
     """
     Automatically assigns the parameters.
-    http://stackoverflow.com/questions/1389180/python-automatically-initialize-instance-variables
+    http://stackoverflow.com/questions/1389180/python-automatically-initialize
+    -instance-variables
 
     >>> class process:
     ...     @initializer
@@ -85,12 +85,10 @@ def initializer(func):
     >>> p.cmd, p.reachable, p.user
     ('halt', True, 'root')
     """
-    names, varargs, keywords, defaults = inspect.getargspec(func)
+    names, varargs, keywords, defaults = getfullargspec(func)  # type: ignore
 
-    from functools import wraps
     @wraps(func)
     def wrapper(self, *args, **kargs):
-        #print("names", names, "defaults", defaults)
         for name, arg in list(zip(names[1:], args)) + list(kargs.items()):
             setattr(self, name, arg)
 
@@ -103,4 +101,3 @@ def initializer(func):
         return func(self, *args, **kargs)
 
     return wrapper
-

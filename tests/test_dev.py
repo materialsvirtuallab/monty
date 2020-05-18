@@ -1,11 +1,3 @@
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2014, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
-
-
 import unittest
 import warnings
 import multiprocessing
@@ -18,7 +10,7 @@ class A:
     def repl_prop(self):
         pass
 
-    @deprecated(repl_prop)
+    @deprecated(repl_prop)  # type: ignore
     @property
     def prop(self):
         pass
@@ -54,7 +46,7 @@ class DecoratorTest(unittest.TestCase):
             def property_a(self):
                 pass
 
-            @property
+            @property  # type: ignore
             @deprecated(property_a)
             def property_b(self):
                 return 'b'
@@ -105,9 +97,9 @@ class DecoratorTest(unittest.TestCase):
     def test_requires(self):
 
         try:
-            import fictitious_mod
+            import fictitious_mod  # type: ignore
         except ImportError:
-            fictitious_mod = None
+            fictitious_mod = None  # type: ignore
 
         @requires(fictitious_mod is not None, "fictitious_mod is not present.")
         def use_fictitious_mod():
@@ -126,6 +118,7 @@ class DecoratorTest(unittest.TestCase):
 
     def test_install_except_hook(self):
         install_excepthook()
+
 
 if __name__ == "__main__":
     unittest.main()

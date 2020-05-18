@@ -1,15 +1,10 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function, unicode_literals, \
-    division
+
+"""
+Useful collection classes, e.g., tree, frozendict, etc.
+"""
 
 import collections
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
 
 
 def tree():
@@ -27,21 +22,6 @@ def tree():
     return collections.defaultdict(tree)
 
 
-def as_set(obj):
-    """
-    Convert obj into a set, returns None if obj is None.
-
-    >>> assert as_set(None) is None and as_set(1) == set([1]) and as_set(range(1,3)) == set([1, 2])
-    """
-    if obj is None or isinstance(obj, collections.Set):
-        return obj
-
-    if not isinstance(obj, collections.Iterable):
-        return set((obj,))
-    else:
-        return set(obj)
-
-
 class frozendict(dict):
     """
     A dictionary that does not permit changes. The naming
@@ -49,12 +29,20 @@ class frozendict(dict):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         dict.__init__(self, *args, **kwargs)
 
     def __setitem__(self, key, val):
         raise KeyError("Cannot overwrite existing key: %s" % str(key))
 
     def update(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         raise KeyError("Cannot update a %s" % self.__class__.__name__)
 
 
@@ -62,6 +50,10 @@ class Namespace(dict):
     """A dictionary that does not permit to redefine its keys."""
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         self.update(*args, **kwargs)
 
     def __setitem__(self, key, val):
@@ -71,6 +63,10 @@ class Namespace(dict):
         dict.__setitem__(self, key, val)
 
     def update(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         for k, v in dict(*args, **kwargs).items():
             self[k] = v
 
@@ -88,10 +84,17 @@ class AttrDict(dict):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
 
     def copy(self):
+        """
+        :return: Copy of AttrDict
+        """
         newd = super(AttrDict, self).copy()
         return self.__class__(**newd)
 
@@ -99,12 +102,16 @@ class AttrDict(dict):
 class FrozenAttrDict(frozendict):
     """
     A dictionary that:
-        * does not permit changes. 
+        * does not permit changes.
         * Allows to access dict keys as obj.foo in addition
           to the traditional way obj['foo']
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         super(FrozenAttrDict, self).__init__(*args, **kwargs)
 
     def __getattribute__(self, name):
@@ -121,27 +128,33 @@ class FrozenAttrDict(frozendict):
             name, self.__class__.__name__))
 
 
-class MongoDict(object):
+class MongoDict:
     """
-    This dict-like object allows one to access the entries in a nested dict as attributes. 
-    Entries (attributes) cannot be modified. It also provides Ipython tab completion hence this object 
-    is particularly useful if you need to analyze a nested dict interactively (e.g. documents
-    extracted from a MongoDB database).
+    This dict-like object allows one to access the entries in a nested dict as
+    attributes.
+    Entries (attributes) cannot be modified. It also provides Ipython tab
+    completion hence this object is particularly useful if you need to analyze
+    a nested dict interactively (e.g. documents extracted from a MongoDB
+    database).
 
-    >>> m = MongoDict({'a': {'b': 1}, 'x': 2}) 
+    >>> m = MongoDict({'a': {'b': 1}, 'x': 2})
     >>> assert m.a.b == 1 and m.x == 2
     >>> assert "a" in m and "b" in m.a
     >>> m["a"]
     {'b': 1}
 
-    .. note:: 
+    .. note::
 
-        Cannot inherit from ABC collections.Mapping because otherwise 
+        Cannot inherit from ABC collections.Mapping because otherwise
         dict.keys and dict.items will pollute the namespace.
         e.g MongoDict({"keys": 1}).keys would be the ABC dict method.
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: Passthrough arguments for standard dict.
+        :param kwargs: Passthrough keyword arguments for standard dict.
+        """
         self.__dict__["_mongo_dict_"] = dict(*args, **kwargs)
 
     def __repr__(self):
@@ -157,7 +170,7 @@ class MongoDict(object):
     def __getattribute__(self, name):
         try:
             return super(MongoDict, self).__getattribute__(name)
-        except:
+        except AttributeError:
             # raise
             try:
                 a = self._mongo_dict_[name]
@@ -200,7 +213,7 @@ def dict2namedtuple(*args, **kwargs):
 
         - The order of the items in the namedtuple is not deterministic if
           kwargs are used.
-          namedtuples, however, should always be accessed by attribute hence 
+          namedtuples, however, should always be accessed by attribute hence
           this behaviour should not represent a serious problem.
 
         - Don't use this function in code in which memory and performance are

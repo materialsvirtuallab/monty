@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.shutil &#8212; monty 2.0.4 documentation</title>
+    <title>monty.shutil &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -42,18 +42,14 @@
           <div class="body" role="main">
             
   <h1>Source code for monty.shutil</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copying and zipping utilities. Works on directories mostly.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">gzip</span> <span class="k">import</span> <span class="n">GzipFile</span>
-
-<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__copyright__</span> <span class="o">=</span> <span class="s2">&quot;Copyright 2014, The Materials Virtual Lab&quot;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s1">&#39;0.1&#39;</span>
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Shyue Ping Ong&#39;</span>
-<span class="n">__email__</span> <span class="o">=</span> <span class="s1">&#39;ongsp@ucsd.edu&#39;</span>
-<span class="n">__date__</span> <span class="o">=</span> <span class="s1">&#39;1/24/14&#39;</span>
 
 
 <div class="viewcode-block" id="copy_r"><a class="viewcode-back" href="../../monty.shutil.html#monty.shutil.copy_r">[docs]</a><span class="k">def</span> <span class="nf">copy_r</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">):</span>
@@ -100,10 +96,10 @@
         <span class="n">full_f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;gz&quot;</span><span class="p">):</span>
             <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">full_f</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_in</span><span class="p">,</span> \
-                <span class="n">GzipFile</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">full_f</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">,</span>
-                         <span class="n">compresslevel</span><span class="o">=</span><span class="n">compresslevel</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
+                    <span class="n">GzipFile</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">full_f</span><span class="p">),</span> <span class="s1">&#39;wb&#39;</span><span class="p">,</span>
+                             <span class="n">compresslevel</span><span class="o">=</span><span class="n">compresslevel</span><span class="p">)</span> <span class="k">as</span> <span class="n">f_out</span><span class="p">:</span>
                 <span class="n">shutil</span><span class="o">.</span><span class="n">copyfileobj</span><span class="p">(</span><span class="n">f_in</span><span class="p">,</span> <span class="n">f_out</span><span class="p">)</span>
-            <span class="n">shutil</span><span class="o">.</span><span class="n">copystat</span><span class="p">(</span><span class="n">full_f</span><span class="p">,</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">full_f</span><span class="p">))</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copystat</span><span class="p">(</span><span class="n">full_f</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">.gz&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">full_f</span><span class="p">))</span>
             <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">full_f</span><span class="p">)</span></div>
 
 
@@ -178,7 +174,8 @@
 
 <div class="viewcode-block" id="remove"><a class="viewcode-back" href="../../monty.shutil.html#monty.shutil.remove">[docs]</a><span class="k">def</span> <span class="nf">remove</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">follow_symlink</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Implements an remove function that will delete files, folder trees and symlink trees</span>
+<span class="sd">    Implements an remove function that will delete files, folder trees and</span>
+<span class="sd">    symlink trees</span>
 
 <span class="sd">    1.) Remove a file</span>
 <span class="sd">    2.) Remove a symlink and follow into with a recursive rm if follow_symlink</span>
@@ -210,10 +207,10 @@
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

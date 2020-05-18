@@ -1,0 +1,31 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Miniconda36-x64"
+      PYTHON_VERSION: "3.6"
+      PYTHON_ARCH: "64"
+      platform: x64
+      STANDALONE: "FALSE"
+      CONDA_PY: "36"
+      CONDA_BUILD: "TRUE"
+      SPLIT_RUN: "FALSE"
+install:
+  # Add the paths
+  - 'set PATH=%PYTHON%;%PYTHON%\Library\bin;%PYTHON%\Scripts;%PATH%'
+  - 'set MPLBACKEND=Agg'
+  # Install the build dependencies of the project via conda and pip
+  - 'conda install --yes --quiet numpy pip'
+  - 'pip install -r requirements-ci.txt'
+  - "python setup.py develop"
+
+build: false
+
+test_script:
+  - "pytest"
+
+notifications:
+  - provider: Email
+    to:
+      - shyuep@gmail.com
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.os &#8212; monty 2.0.4 documentation</title>
+    <title>monty.os &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -42,7 +42,9 @@
           <div class="body" role="main">
             
   <h1>Source code for monty.os</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Os functions, e.g., cd, makedirs_p.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">errno</span>
@@ -80,8 +82,9 @@
 
 <div class="viewcode-block" id="makedirs_p"><a class="viewcode-back" href="../../monty.os.html#monty.os.makedirs_p">[docs]</a><span class="k">def</span> <span class="nf">makedirs_p</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Wrapper for os.makedirs that does not raise an exception if the directory already exists, in the fashion of</span>
-<span class="sd">    &quot;mkdir -p&quot; command. The check is performed in a thread-safe way</span>
+<span class="sd">    Wrapper for os.makedirs that does not raise an exception if the directory</span>
+<span class="sd">    already exists, in the fashion of &quot;mkdir -p&quot; command. The check is</span>
+<span class="sd">    performed in a thread-safe way</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        path: path of the directory to create</span>
@@ -109,10 +112,10 @@
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

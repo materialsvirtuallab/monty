@@ -1,6 +1,15 @@
 # coding: utf-8
-from __future__ import absolute_import, print_function, division, \
-    unicode_literals
+
+"""
+Calling shell processes.
+"""
+import shlex
+import threading
+import traceback
+from subprocess import Popen, PIPE
+
+from .string import is_string
+
 
 __author__ = 'Matteo Giantomass'
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -10,7 +19,7 @@ __email__ = 'gmatteo@gmail.com'
 __date__ = '10/26/14'
 
 
-class Command(object):
+class Command:
     """
     Enables to run subprocess commands in a different thread with TIMEOUT
     option.
@@ -42,11 +51,11 @@ class Command(object):
     """
 
     def __init__(self, command):
-        from .string import is_string
+        """
+        :param command: Command to execute
+        """
         if is_string(command):
-            import shlex
             command = shlex.split(command)
-
         self.command = command
         self.process = None
         self.retcode = None
@@ -63,7 +72,6 @@ class Command(object):
 
         Return: self
         """
-        from subprocess import Popen, PIPE
 
         def target(**kw):
             try:
@@ -72,8 +80,7 @@ class Command(object):
                 self.output, self.error = self.process.communicate()
                 self.retcode = self.process.returncode
                 # print('Thread stopped')
-            except:
-                import traceback
+            except Exception:
                 self.error = traceback.format_exc()
                 self.retcode = -1
 
@@ -85,7 +92,6 @@ class Command(object):
             kwargs['stderr'] = PIPE
 
         # thread
-        import threading
         thread = threading.Thread(target=target, kwargs=kwargs)
         thread.start()
         thread.join(timeout)

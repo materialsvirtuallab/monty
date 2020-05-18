@@ -25,58 +25,49 @@ Copyright (c) 2008-2011 Volvox Development Team
 
 ANSII Color formatting for output in terminal.
 """
-from __future__ import print_function, unicode_literals, absolute_import
-
 import os
+
+try:
+    import fcntl
+    import termios
+    import struct
+    import curses
+except Exception:
+    pass
 
 __all__ = ['colored', 'cprint']
 
 VERSION = (1, 1, 0)
 
 ATTRIBUTES = dict(
-    list(zip([
-        'bold',
-        'dark',
-        '',
-        'underline',
-        'blink',
-        '',
-        'reverse',
-        'concealed'
-    ],
-        list(range(1, 9))
-    ))
+    bold=1,
+    dark=2,
+    underline=4,
+    blink=5,
+    reverse=7,
+    concealed=8
 )
-del ATTRIBUTES['']
 
 HIGHLIGHTS = dict(
-    list(zip([
-        'on_grey',
-        'on_red',
-        'on_green',
-        'on_yellow',
-        'on_blue',
-        'on_magenta',
-        'on_cyan',
-        'on_white'
-    ],
-        list(range(40, 48))
-    ))
+    on_grey=40,
+    on_red=41,
+    on_green=42,
+    on_yellow=43,
+    on_blue=44,
+    on_magenta=45,
+    on_cyan=46,
+    on_white=47
 )
 
 COLORS = dict(
-    list(zip([
-        'grey',
-        'red',
-        'green',
-        'yellow',
-        'blue',
-        'magenta',
-        'cyan',
-        'white',
-    ],
-        list(range(30, 38))
-    ))
+    grey=30,
+    red=31,
+    green=32,
+    yellow=33,
+    blue=34,
+    magenta=35,
+    cyan=36,
+    white=37
 )
 
 RESET = '\033[0m'
@@ -105,10 +96,9 @@ def stream_has_colours(stream):
     if not stream.isatty():
         return False  # auto color only on TTYs
     try:
-        import curses
         curses.setupterm()
         return curses.tigetnum("colors") > 2
-    except:
+    except Exception:
         return False  # guess false in case of error
 
 
@@ -167,7 +157,8 @@ def colored_map(text, cmap):
         colored_key("foo bar", {bar: "green"})
         colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
     """
-    if not __ISON: return text
+    if not __ISON:
+        return text
     for key, v in cmap.items():
         if isinstance(v, dict):
             text = text.replace(key, colored(key, **v))
@@ -194,28 +185,29 @@ def cprint_map(text, cmap, **kwargs):
 
 
 def get_terminal_size():
-    """"
+    """
     Return the size of the terminal as (nrow, ncols)
 
     Based on:
 
-        http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
+        http://stackoverflow.com/questions/566746/how-to-get-console-window-
+        width-in-python
     """
     try:
         rc = os.popen('stty size', 'r').read().split()
         return int(rc[0]), int(rc[1])
-    except:
+    except Exception:
         pass
 
     env = os.environ
 
     def ioctl_GWINSZ(fd):
         try:
-            import fcntl, termios, struct
+
             rc = struct.unpack('hh',
                                fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
             return rc
-        except:
+        except Exception:
             return None
 
     rc = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
@@ -225,7 +217,7 @@ def get_terminal_size():
             fd = os.open(os.ctermid(), os.O_RDONLY)
             rc = ioctl_GWINSZ(fd)
             os.close(fd)
-        except:
+        except Exception:
             pass
 
     if not rc:

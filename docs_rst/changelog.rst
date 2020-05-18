@@ -1,6 +1,31 @@
 Change log
 ==========
 
+v3.0.1
+------
+1. Bug fixes for Windows.
+
+v3.0.0
+------
+1. Py3 only version.
+
+v2.0.7
+------
+1. MSONable now supports Enum types. (@mkhorton)
+
+v2.0.6
+------
+1. Revert py27 incompatible fmt spec for loadfn and dumpfn for now. This is
+   a much less common use case.
+
+v2.0.5
+------
+1. Checking for extension type in loadfn and dumpfn now relies on ".json",
+   ".yaml" or ".mpk". Further, now ".yml" and ".yaml" are both recognized as
+   YAML files. (@clegaspi)
+2. A fmt kwarg is now supported in loadfn and dumpfn to specify the format
+   explicitly. (@clegaspi)
+
 v2.0.4
 ------
 1. Bug fix for invert MSON caused by `@version`.

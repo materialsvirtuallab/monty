@@ -11,46 +11,40 @@ jobs:
             python3 -m venv test_env
             source test_env/bin/activate
             pip install -q numpy
-            pip install -r requirements-travis.txt
+            pip install -r requirements-ci.txt
             python setup.py develop
       - run:
           command: |
             source test_env/bin/activate
             # Add executables and path.
             pytest --cov=monty --cov-report html:coverage_reports monty tests
-            coveralls
+            # coveralls
       - store_artifacts:
           path: coverage_reports/
           destination: tr1
       - store_test_results:
           path: coverage_reports/
-  py2test:
+  linting:
     docker:
-      - image: circleci/python:2.7
+      - image: circleci/python:3.7
     working_directory: ~/monty
     steps:
       - checkout
       - run:
           command: |
-            pip install --user virtualenv
-            virtualenv test_env
+            python3 -m venv test_env
             source test_env/bin/activate
-            pip install -q numpy
-            pip install -r requirements-travis.txt
-            python setup.py develop
-      - run:
-          command: |
-            source test_env/bin/activate
+            pip install --quiet --upgrade pycodestyle mypy pydocstyle flake8 pylint
             # Add executables and path.
-            pytest --cov=monty --cov-report html:coverage_reports monty tests
-            coveralls
-      - store_artifacts:
-          path: coverage_reports/
-          destination: tr1
-      - store_test_results:
-          path: coverage_reports/
+            pycodestyle monty
+            pydocstyle monty
+            mypy monty tests
+            flake8 --count --show-source --statistics monty
+            pylint monty
+
 workflows:
   version: 2
   build_and_test:
     jobs:
       - py3test
+      - linting

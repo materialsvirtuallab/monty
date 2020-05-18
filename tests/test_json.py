@@ -1,21 +1,18 @@
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2014, The Materials Virtual Lab'
 __version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '1/24/14'
 
-
+import os
 import unittest
 import numpy as np
 import json
 import datetime
-import six
 from bson.objectid import ObjectId
-from ast import literal_eval
+from enum import Enum
 
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
+from monty.json import _load_redirect
+
+test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
 class GoodMSONClass(MSONable):
@@ -46,6 +43,11 @@ class GoodNestedMSONClass(MSONable):
         self.b_dict = b_dict
         self._c_list_dict_list = c_list_dict_list
         self.kwargs = kwargs
+
+
+class EnumTest(MSONable, Enum):
+    a = 1
+    b = 2
 
 
 class MSONableTest(unittest.TestCase):
@@ -179,6 +181,13 @@ class MSONableTest(unittest.TestCase):
         self.assertEqual(len(obj.a_list), len(obj4.a_list))
         self.assertEqual(len(obj.b_dict), len(obj4.b_dict))
 
+    def test_enum_serialization(self):
+        e = EnumTest.a
+        d = e.as_dict()
+        e_new = EnumTest.from_dict(d)
+        self.assertEqual(e_new.name, e.name)
+        self.assertEqual(e_new.value, e.value)
+
 
 class JsonTest(unittest.TestCase):
 
@@ -247,14 +256,14 @@ class JsonTest(unittest.TestCase):
         d = {"hello": GoodMSONClass(1, 2, 3)}
         self.assertRaises(TypeError, json.dumps, d)
         clean = jsanitize(d)
-        self.assertIsInstance(clean["hello"], six.string_types)
+        self.assertIsInstance(clean["hello"], str)
         clean_strict = jsanitize(d, strict=True)
         self.assertEqual(clean_strict["hello"]["a"], 1)
         self.assertEqual(clean_strict["hello"]["b"], 2)
 
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
-        self.assertIsInstance(clean["dt"], six.string_types)
+        self.assertIsInstance(clean["dt"], str)
         clean = jsanitize(d, allow_bson=True)
         self.assertIsInstance(clean["dt"], datetime.datetime)
 
@@ -262,13 +271,37 @@ class JsonTest(unittest.TestCase):
              "b": ObjectId.from_datetime(datetime.datetime.now())}
         clean = jsanitize(d)
         self.assertEqual(clean["a"], ['b', [1, 2, 3]])
-        self.assertIsInstance(clean["b"], six.string_types)
+        self.assertIsInstance(clean["b"], str)
 
-        rnd_bin = six.binary_type(np.random.rand(10))
-        d = {"a": six.binary_type(rnd_bin)}
+        rnd_bin = bytes(np.random.rand(10))
+        d = {"a": bytes(rnd_bin)}
         clean = jsanitize(d, allow_bson=True)
-        self.assertEqual(clean["a"], six.binary_type(rnd_bin))
-        self.assertIsInstance(clean["a"], six.binary_type)
+        self.assertEqual(clean["a"], bytes(rnd_bin))
+        self.assertIsInstance(clean["a"], bytes)
+
+    def test_redirect(self):
+        MSONable.REDIRECT["tests.test_json"] = {
+            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
+        }
+
+        d = {
+            "@class": "test_class",
+            "@module": "tests.test_json",
+            "a": 1,
+            "b": 1,
+            "c": 1,
+        }
+
+        obj = json.loads(json.dumps(d), cls=MontyDecoder)
+        self.assertEqual(type(obj), GoodMSONClass)
+
+        d["@class"] = "not_there"
+        obj = json.loads(json.dumps(d), cls=MontyDecoder)
+        self.assertEqual(type(obj), dict)
+
+    def test_redirect_settings_file(self):
+        data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
+        self.assertEqual(data, {'old_module': {'old_class': {'@class': 'new_class', '@module': 'new_module'}}})
 
 
 if __name__ == "__main__":

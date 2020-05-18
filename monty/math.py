@@ -1,18 +1,8 @@
 # coding: utf-8
 
-from __future__ import division, unicode_literals, absolute_import
-
 """
 Addition math functions.
 """
-
-__author__ = 'Shyue Ping Ong'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Shyue Ping Ong'
-__email__ = 'ongsp@ucsd.edu'
-__date__ = '10/28/14'
-
 
 import math
 

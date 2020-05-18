@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>monty.pprint &#8212; monty 2.0.4 documentation</title>
+    <title>monty.pprint &#8212; monty 3.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -43,11 +43,11 @@
             
   <h1>Source code for monty.pprint</h1><div class="highlight"><pre>
 <span></span><span class="c1"># coding: utf-8</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Pretty printing functions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> \
-    <span class="n">unicode_literals</span>
-<span class="kn">from</span> <span class="nn">six.moves</span> <span class="k">import</span> <span class="n">cStringIO</span>
-
+<span class="kn">from</span> <span class="nn">io</span> <span class="k">import</span> <span class="n">StringIO</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
 
@@ -90,11 +90,13 @@
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        node: the root of the tree to be drawn,</span>
-<span class="sd">        child_iter: function that when called with a node, returns an iterable over all its children</span>
+<span class="sd">        child_iter: function that when called with a node, returns an iterable</span>
+<span class="sd">            over all its children</span>
 <span class="sd">        text_str: turns a node into the text to be displayed in the tree.</span>
 
-<span class="sd">    The default implementations of these two arguments retrieve the children by accessing node.children</span>
-<span class="sd">    and simply use str(node) to convert a node to a string. The resulting tree is drawn into a buffer and returned as a string.</span>
+<span class="sd">    The default implementations of these two arguments retrieve the children</span>
+<span class="sd">    by accessing node.children and simply use str(node) to convert a node to a</span>
+<span class="sd">    string. The resulting tree is drawn into a buffer and returned as a string.</span>
 
 <span class="sd">    Based on https://pypi.python.org/pypi/asciitree/</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -102,7 +104,7 @@
 
 
 <span class="k">def</span> <span class="nf">_draw_tree</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="n">child_iter</span><span class="p">,</span> <span class="n">text_str</span><span class="p">):</span>
-    <span class="n">buf</span> <span class="o">=</span> <span class="n">cStringIO</span><span class="p">()</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
 
     <span class="n">children</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">child_iter</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
 
@@ -136,10 +138,10 @@
   </ul></li>
 </ul>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
     </form>
     </div>

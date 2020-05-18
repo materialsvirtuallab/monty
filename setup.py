@@ -10,9 +10,8 @@ with io.open(os.path.join(current_dir, "README.rst"), "rt") as f:
 setup(
     name="monty",
     packages=find_packages(),
-    version="2.0.4",
-    install_requires=["six"],
-    extras_require={"yaml": ["ruamel.yaml"],},
+    version="3.0.2",
+    extras_require={"yaml": ["ruamel.yaml"], },
     package_data={},
     author="Shyue Ping Ong",
     author_email="ongsp@ucsd.edu",
@@ -23,11 +22,7 @@ setup(
     long_description=long_desc,
     keywords=["monty"],
     classifiers=[
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

@@ -9,6 +9,7 @@ Monty: Python Made Even Easier
 
 .. image:: https://travis-ci.org/materialsvirtuallab/monty.png?branch=master
 .. image:: https://coveralls.io/repos/github/materialsvirtuallab/monty/badge.svg?branch=master
+.. image:: https://anaconda.org/conda-forge/monty/badges/downloads.svg
 
 Monty is the missing complement to Python. Monty implements supplementary
 useful functions for Python that are not part of the standard library.
@@ -28,16 +29,24 @@ Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.
 
-Monty supports Python 2.7-3.x.
+Monty currently supports Python 2.7-3.x, but please note that with effect from
+v3.x, which will be released in Jan 2020, we will completely abandon Py2.7
+support, in line with most other Python packages.
 
 Change Log
 ==========
 
-v2.0.2
+v3.0.1
 ------
-1. Use basename instead of full path to determine whether file type in loadfn
-   and dumpfn. (@JosephMontoya-TRI)
-2. Use os.path.splitext to determine zip types in monty.io.zopen.
+1. Bug fixes for Windows.
+
+v3.0.0
+------
+1. Py3 only version.
+
+v2.0.7
+------
+1. MSONable now supports Enum types. (@mkhorton)
 
 :doc:`Older versions </changelog>`
 
