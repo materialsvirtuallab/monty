@@ -3,7 +3,7 @@ pytest-cov==2.8.1
 numpy==1.18.4
 ruamel.yaml==0.16.10
 msgpack==1.0.0
-tqdm==4.46.0
+tqdm==4.46.1
 coverage==5.1
 coveralls==2.0.0
 pymongo==3.10.1
