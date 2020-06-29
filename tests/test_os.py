@@ -12,8 +12,12 @@ class PathTest(unittest.TestCase):
 
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_which(self):
-        py = which("python")
-        self.assertEqual(os.path.basename(py), "python")
+        try:
+            py = which("python3")
+            self.assertEqual(os.path.basename(py), "python3")
+        except:
+            py = which("python")
+            self.assertEqual(os.path.basename(py), "python")
         self.assertEqual("/usr/bin/find", which("/usr/bin/find"))
         self.assertIs(which("non_existent_exe"), None)
 
