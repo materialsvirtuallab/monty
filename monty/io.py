@@ -60,8 +60,8 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
     try:
         with zopen(filename, "rb") as f:
             if isinstance(f, (gzip.GzipFile, bz2.BZ2File)):
-                for l in reversed(f.readlines()):
-                    yield l.decode("utf-8").rstrip()
+                for line in reversed(f.readlines()):
+                    yield line.decode("utf-8").rstrip()
             else:
                 fm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
                 n = len(fm)
