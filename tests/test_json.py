@@ -17,17 +17,18 @@ test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files"
 
 class GoodMSONClass(MSONable):
 
-    def __init__(self, a, b, c, d=1, **kwargs):
+    def __init__(self, a, b, c, d=1, *values, **kwargs):
         self.a = a
         self.b = b
         self._c = c
         self._d = d
+        self.values = values
         self.kwargs = kwargs
 
     def __eq__(self, other):
         return (self.a == other.a and self.b == other.b and
                 self._c == other._c and self._d == other._d and
-                self.kwargs == other.kwargs)
+                self.kwargs == other.kwargs and self.values == other.values)
 
 
 class GoodNestedMSONClass(MSONable):
@@ -199,7 +200,7 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(obj2.b, 2)
         self.assertEqual(obj2._c, 3)
         self.assertEqual(obj2._d, 1)
-        self.assertEqual(obj2.kwargs, {"hello": "world"})
+        self.assertEqual(obj2.kwargs, {"hello": "world", "values": []})
         obj = GoodMSONClass(obj, 2, 3)
         s = json.dumps(obj, cls=MontyEncoder)
         obj2 = json.loads(s, cls=MontyDecoder)
