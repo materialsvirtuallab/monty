@@ -120,7 +120,8 @@ class MSONable:
         except (AttributeError, ImportError):
             d["@version"] = None  # type: ignore
 
-        args = getfullargspec(self.__class__.__init__).args
+        spec = getfullargspec(self.__class__.__init__)
+        args = spec.args
 
         def recursive_as_dict(obj):
             if isinstance(obj, (list, tuple)):
@@ -151,6 +152,8 @@ class MSONable:
         if hasattr(self, "kwargs"):
             # type: ignore
             d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
+        if spec.varargs is not None and getattr(self, spec.varargs, None) is not None:
+            d.update({spec.varargs: getattr(self, spec.varargs)})
         if hasattr(self, "_kwargs"):
             d.update(**getattr(self, "_kwargs"))  # pylint: disable=E1101
         if isinstance(self, Enum):
