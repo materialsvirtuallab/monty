@@ -239,6 +239,18 @@ class JsonTest(unittest.TestCase):
         x = np.min([1, 2, 3]) > 2
         self.assertRaises(TypeError, json.dumps, x)
 
+        x = np.array([1+1j, 2+1j, 3+1j], dtype="complex64")
+        self.assertRaises(TypeError, json.dumps, x)
+        djson = json.dumps(x, cls=MontyEncoder)
+        d = json.loads(djson)
+        self.assertEqual(d["@class"], "array")
+        self.assertEqual(d["@module"], "numpy")
+        self.assertEqual(d["data"], [[1.0,2.0,3.0],[1.0,1.0,1.0]])
+        self.assertEqual(d["dtype"], "complex64")
+        x = json.loads(djson, cls=MontyDecoder)
+        self.assertEqual(type(x), np.ndarray)
+        self.assertEqual(x.dtype, "complex64")
+        
     def test_objectid(self):
         oid = ObjectId('562e8301218dcbbc3d7d91ce')
         self.assertRaises(TypeError, json.dumps, oid)
