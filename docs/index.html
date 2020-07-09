@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Monty: Python Made Even Easier &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monty: Python Made Even Easier &#8212; monty 3.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty package" href="monty.html" />
@@ -35,7 +36,8 @@
         <li class="right" >
           <a href="monty.html" title="monty package"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">monty 3.0.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">monty 3.0.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Monty: Python Made Even Easier</a></li> 
       </ul>
     </div>  
 
@@ -69,25 +71,7 @@ support, in line with most other Python packages.</p>
 </div>
 <div class="section" id="change-log">
 <h1>Change Log<a class="headerlink" href="#change-log" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="v3-0-1">
-<h2>v3.0.1<a class="headerlink" href="#v3-0-1" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li><p>Bug fixes for Windows.</p></li>
-</ol>
-</div>
-<div class="section" id="v3-0-0">
-<h2>v3.0.0<a class="headerlink" href="#v3-0-0" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li><p>Py3 only version.</p></li>
-</ol>
-</div>
-<div class="section" id="v2-0-7">
-<h2>v2.0.7<a class="headerlink" href="#v2-0-7" title="Permalink to this headline">¶</a></h2>
-<ol class="arabic simple">
-<li><p>MSONable now supports Enum types. (&#64;mkhorton)</p></li>
-</ol>
 <p><a class="reference internal" href="changelog.html"><span class="doc">Older versions</span></a></p>
-</div>
 </div>
 <div class="section" id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
@@ -111,7 +95,7 @@ will reside. There are two recommended ways of using Monty.</p>
 </pre></div>
 </div>
 <p>Method 2: Import specific functions as needed:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">monty.io</span> <span class="k">import</span> <span class="n">zopen</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">monty.io</span> <span class="kn">import</span> <span class="n">zopen</span>
 <span class="k">with</span> <span class="n">zopen</span><span class="p">(</span><span class="s2">&quot;file.gz&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="k">with</span> <span class="n">zopen</span><span class="p">(</span><span class="s2">&quot;dest.bz2&quot;</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -126,7 +110,7 @@ appropriate standard library function is chosen to open the files. All the
 typical args and kwargs of “open” are supported. The syntax “zopen” mirrors
 standard Unix’s zless/zgrep commands.</p>
 <p>Below are some further examples of Monty’s features:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">monty.design_patterns</span> <span class="k">import</span> <span class="n">singleton</span><span class="p">,</span> <span class="n">cached_class</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">monty.design_patterns</span> <span class="kn">import</span> <span class="n">singleton</span><span class="p">,</span> <span class="n">cached_class</span>
 
 <span class="c1"># The singleton design pattern</span>
 
@@ -141,26 +125,26 @@ standard Unix’s zless/zgrep commands.</p>
 <span class="nd">@cached_class</span>
 <span class="k">class</span> <span class="nc">B</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">b</span> <span class="o">=</span> <span class="n">b</span>
 
 <span class="c1"># Highly efficient of reading of lines from back of file.</span>
 
-<span class="kn">from</span> <span class="nn">monty.io</span> <span class="k">import</span> <span class="n">zopen</span><span class="p">,</span> <span class="n">reverse_readline</span>
+<span class="kn">from</span> <span class="nn">monty.io</span> <span class="kn">import</span> <span class="n">zopen</span><span class="p">,</span> <span class="n">reverse_readline</span>
 <span class="k">with</span> <span class="n">zopen</span><span class="p">(</span><span class="s2">&quot;myfile&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">reverse_readline</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
 
 <span class="c1"># A frozen dict (Immutable dict)</span>
 
-<span class="kn">from</span> <span class="nn">monty.collections</span> <span class="k">import</span> <span class="n">frozendict</span>
+<span class="kn">from</span> <span class="nn">monty.collections</span> <span class="kn">import</span> <span class="n">frozendict</span>
 <span class="n">d</span> <span class="o">=</span> <span class="n">frozendict</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># A Fabric-inspired cd context, that allows one to change directory to</span>
 <span class="c1"># execute code and transparently changes back to the current working</span>
 <span class="c1"># directory</span>
 
-<span class="kn">from</span> <span class="nn">monty.os</span> <span class="k">import</span> <span class="n">cd</span>
+<span class="kn">from</span> <span class="nn">monty.os</span> <span class="kn">import</span> <span class="n">cd</span>
 
 <span class="k">with</span> <span class="n">cd</span><span class="p">(</span><span class="s2">&quot;/path/to/input_files&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">execute_code_using_files</span><span class="p">()</span>
@@ -198,6 +182,7 @@ standard Unix’s zless/zgrep commands.</p>
 <li class="toctree-l3"><a class="reference internal" href="monty.logging.html">monty.logging module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="monty.math.html">monty.math module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="monty.msgpack.html">monty.msgpack module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="monty.multiprocessing.html">monty.multiprocessing module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="monty.operator.html">monty.operator module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="monty.pprint.html">monty.pprint module</a></li>
 <li class="toctree-l3"><a class="reference internal" href="monty.re.html">monty.re module</a></li>
@@ -258,6 +243,7 @@ follows:</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -266,12 +252,7 @@ follows:</p>
   <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Monty: Python Made Even Easier</a></li>
-<li><a class="reference internal" href="#change-log">Change Log</a><ul>
-<li><a class="reference internal" href="#v3-0-1">v3.0.1</a></li>
-<li><a class="reference internal" href="#v3-0-0">v3.0.0</a></li>
-<li><a class="reference internal" href="#v2-0-7">v2.0.7</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#change-log">Change Log</a></li>
 <li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#usage">Usage</a></li>
 <li><a class="reference internal" href="#api-docs">API docs</a></li>
@@ -301,7 +282,7 @@ follows:</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

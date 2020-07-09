@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.itertools module &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.itertools module &#8212; monty 3.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.json module" href="monty.json.html" />
@@ -39,8 +40,9 @@
         <li class="right" >
           <a href="monty.io.html" title="monty.io module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.itertools module</a></li> 
       </ul>
     </div>  
 
@@ -52,11 +54,11 @@
   <div class="section" id="module-monty.itertools">
 <span id="monty-itertools-module"></span><h1>monty.itertools module<a class="headerlink" href="#module-monty.itertools" title="Permalink to this headline">¶</a></h1>
 <p>Additional tools for iteration.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="monty.itertools.chunks">
-<code class="sig-name descname">chunks</code><span class="sig-paren">(</span><em class="sig-param">items</em>, <em class="sig-param">n</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#chunks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.chunks" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">chunks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em>, <em class="sig-param"><span class="n">n</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#chunks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.chunks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Yield successive n-sized chunks from a list-like object.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">chunks</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="mi">10</span><span class="p">)))</span>
 <span class="go">[(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),</span>
 <span class="go"> (11, 12, 13, 14, 15, 16, 17, 18, 19, 20),</span>
@@ -65,9 +67,9 @@
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.itertools.ilotri">
-<code class="sig-name descname">ilotri</code><span class="sig-paren">(</span><em class="sig-param">items</em>, <em class="sig-param">diago=True</em>, <em class="sig-param">with_inds=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#ilotri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.ilotri" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ilotri</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em>, <em class="sig-param"><span class="n">diago</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">with_inds</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#ilotri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.ilotri" title="Permalink to this definition">¶</a></dt>
 <dd><p>A generator that yields the lower triangle of the matrix (items x items)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -78,7 +80,7 @@
 </ul>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="p">(</span><span class="n">ij</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span> <span class="ow">in</span> <span class="n">ilotri</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">with_inds</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="p">(</span><span class="n">ij</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span> <span class="ow">in</span> <span class="n">ilotri</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">with_inds</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ij:&quot;</span><span class="p">,</span> <span class="n">ij</span><span class="p">,</span> <span class="s2">&quot;mate:&quot;</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span>
 <span class="go">ij: (0, 0) mate: (0, 0)</span>
 <span class="go">ij: (1, 0) mate: (1, 0)</span>
@@ -87,9 +89,9 @@
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.itertools.iterator_from_slice">
-<code class="sig-name descname">iterator_from_slice</code><span class="sig-paren">(</span><em class="sig-param">s</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#iterator_from_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.iterator_from_slice" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">iterator_from_slice</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#iterator_from_slice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.iterator_from_slice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs an iterator given a slice object s.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -97,9 +99,9 @@
 </div>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.itertools.iuptri">
-<code class="sig-name descname">iuptri</code><span class="sig-paren">(</span><em class="sig-param">items</em>, <em class="sig-param">diago=True</em>, <em class="sig-param">with_inds=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#iuptri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.iuptri" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">iuptri</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">items</span></em>, <em class="sig-param"><span class="n">diago</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">with_inds</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/itertools.html#iuptri"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.itertools.iuptri" title="Permalink to this definition">¶</a></dt>
 <dd><p>A generator that yields the upper triangle of the matrix (items x items)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -110,7 +112,7 @@
 </ul>
 </dd>
 </dl>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="p">(</span><span class="n">ij</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span> <span class="ow">in</span> <span class="n">iuptri</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">with_inds</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="p">(</span><span class="n">ij</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span> <span class="ow">in</span> <span class="n">iuptri</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">with_inds</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ij:&quot;</span><span class="p">,</span> <span class="n">ij</span><span class="p">,</span> <span class="s2">&quot;mate:&quot;</span><span class="p">,</span> <span class="n">mate</span><span class="p">)</span>
 <span class="go">ij: (0, 0) mate: (0, 0)</span>
 <span class="go">ij: (0, 1) mate: (0, 1)</span>
@@ -122,6 +124,7 @@
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -151,7 +154,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

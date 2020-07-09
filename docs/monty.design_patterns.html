@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.design_patterns module &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.design_patterns module &#8212; monty 3.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.dev module" href="monty.dev.html" />
@@ -39,8 +40,9 @@
         <li class="right" >
           <a href="monty.collections.html" title="monty.collections module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.design_patterns module</a></li> 
       </ul>
     </div>  
 
@@ -52,7 +54,7 @@
   <div class="section" id="module-monty.design_patterns">
 <span id="monty-design-patterns-module"></span><h1>monty.design_patterns module<a class="headerlink" href="#module-monty.design_patterns" title="Permalink to this headline">¶</a></h1>
 <p>Some common design patterns such as singleton and cached classes.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="monty.design_patterns.NullFile">
 <em class="property">class </em><code class="sig-name descname">NullFile</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -60,12 +62,12 @@
 <p>no-op</p>
 </dd></dl>
 
-<dl class="class">
+<dl class="py class">
 <dt id="monty.design_patterns.NullStream">
 <em class="property">class </em><code class="sig-name descname">NullStream</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A fake stream with a no-op write..</p>
-<dl class="method">
+<dl class="py method">
 <dt id="monty.design_patterns.NullStream.write">
 <code class="sig-name descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Does nothing…
@@ -74,9 +76,9 @@
 
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.design_patterns.cached_class">
-<code class="sig-name descname">cached_class</code><span class="sig-paren">(</span><em class="sig-param">klass</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#cached_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.cached_class" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">cached_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">klass</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#cached_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.cached_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to cache class instances by constructor arguments.
 This results in a class that behaves like a singleton for each
 set of constructor arguments, ensuring efficiency.</p>
@@ -91,15 +93,15 @@ or positional) are non-hashable, that set of arguments
 is not cached.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.design_patterns.singleton">
-<code class="sig-name descname">singleton</code><span class="sig-paren">(</span><em class="sig-param">cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#singleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.singleton" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">singleton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#singleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.singleton" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator can be used to create a singleton out of a class.</p>
 <p>Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@singleton</span>
 <span class="k">class</span> <span class="nc">MySingleton</span><span class="p">():</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">():</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">():</span>
         <span class="k">pass</span>
 </pre></div>
 </div>
@@ -108,6 +110,7 @@ is not cached.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -137,7 +140,7 @@ is not cached.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

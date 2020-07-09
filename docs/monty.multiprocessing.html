@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.logging module &#8212; monty 3.0.3 documentation</title>
+    <title>monty.multiprocessing module &#8212; monty 3.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -15,8 +15,8 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="monty.math module" href="monty.math.html" />
-    <link rel="prev" title="monty.json module" href="monty.json.html" />
+    <link rel="next" title="monty.operator module" href="monty.operator.html" />
+    <link rel="prev" title="monty.msgpack module" href="monty.msgpack.html" />
 
    
   
@@ -35,14 +35,14 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="monty.math.html" title="monty.math module"
+          <a href="monty.operator.html" title="monty.operator module"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="monty.json.html" title="monty.json module"
+          <a href="monty.msgpack.html" title="monty.msgpack module"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">monty.logging module</a></li> 
+        <li class="nav-item nav-item-this"><a href="">monty.multiprocessing module</a></li> 
       </ul>
     </div>  
 
@@ -51,32 +51,26 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-monty.logging">
-<span id="monty-logging-module"></span><h1>monty.logging module<a class="headerlink" href="#module-monty.logging" title="Permalink to this headline">¶</a></h1>
-<p>Logging tools</p>
+  <div class="section" id="module-monty.multiprocessing">
+<span id="monty-multiprocessing-module"></span><h1>monty.multiprocessing module<a class="headerlink" href="#module-monty.multiprocessing" title="Permalink to this headline">¶</a></h1>
+<p>Multiprocessing utilities.</p>
 <dl class="py function">
-<dt id="monty.logging.enable_logging">
-<code class="sig-name descname">enable_logging</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">main</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/logging.html#enable_logging"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.logging.enable_logging" title="Permalink to this definition">¶</a></dt>
-<dd><p>This decorator is used to decorate main functions.
-It adds the initialization of the logger and an argument parser that allows
-one to select the loglevel.
-Useful if we are writing simple main functions that call libraries where
-the logging module is used</p>
+<dt id="monty.multiprocessing.imap_tqdm">
+<code class="sig-name descname">imap_tqdm</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">nprocs</span><span class="p">:</span> <span class="n">int</span></em>, <em class="sig-param"><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span></em>, <em class="sig-param"><span class="n">iterable</span><span class="p">:</span> <span class="n">Iterable</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/multiprocessing.html#imap_tqdm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.multiprocessing.imap_tqdm" title="Permalink to this definition">¶</a></dt>
+<dd><p>A wrapper around Pool.imap. Creates a Pool with nprocs and then runs a f
+unction over an iterable with progress bar.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>main</strong> – main function.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nprocs</strong> – Number of processes</p></li>
+<li><p><strong>func</strong> – Callable</p></li>
+<li><p><strong>iterable</strong> – Iterable of arguments.</p></li>
+<li><p><strong>args</strong> – Passthrough to Pool.imap</p></li>
+<li><p><strong>kwargs</strong> – Passthrough to Pool.imap</p></li>
+</ul>
 </dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="monty.logging.logged">
-<code class="sig-name descname">logged</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">10</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/logging.html#logged"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.logging.logged" title="Permalink to this definition">¶</a></dt>
-<dd><p>Useful logging decorator. If a method is logged, the beginning and end of
-the method call will be logged at a pre-specified level.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>level</strong> – Level to log method at. Defaults to DEBUG.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Results of Pool.imap.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -93,15 +87,15 @@ the method call will be logged at a pre-specified level.</p>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="monty.html">monty package</a><ul>
-      <li>Previous: <a href="monty.json.html" title="previous chapter">monty.json module</a></li>
-      <li>Next: <a href="monty.math.html" title="next chapter">monty.math module</a></li>
+      <li>Previous: <a href="monty.msgpack.html" title="previous chapter">monty.msgpack module</a></li>
+      <li>Next: <a href="monty.operator.html" title="next chapter">monty.operator module</a></li>
   </ul></li>
   </ul></li>
 </ul>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/monty.logging.rst.txt"
+      <li><a href="_sources/monty.multiprocessing.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>

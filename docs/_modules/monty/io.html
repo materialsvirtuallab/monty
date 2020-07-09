@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.io &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.io &#8212; monty 3.0.3 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 
@@ -31,8 +32,9 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.io</a></li> 
       </ul>
     </div>  
 
@@ -56,8 +58,8 @@
 <span class="kn">import</span> <span class="nn">mmap</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">io</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Generator</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">IO</span><span class="p">,</span> <span class="n">Generator</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 
 <div class="viewcode-block" id="zopen"><a class="viewcode-back" href="../../monty.io.html#monty.io.zopen">[docs]</a><span class="k">def</span> <span class="nf">zopen</span><span class="p">(</span><span class="n">filename</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IO</span><span class="p">:</span>
@@ -104,8 +106,8 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">zopen</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="p">(</span><span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">,</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">)):</span>
-                <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()):</span>
-                    <span class="k">yield</span> <span class="n">l</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()):</span>
+                    <span class="k">yield</span> <span class="n">line</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">fm</span> <span class="o">=</span> <span class="n">mmap</span><span class="o">.</span><span class="n">mmap</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">access</span><span class="o">=</span><span class="n">mmap</span><span class="o">.</span><span class="n">ACCESS_READ</span><span class="p">)</span>
                 <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fm</span><span class="p">)</span>
@@ -216,7 +218,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">Error</span> <span class="o">=</span> <span class="n">FileLockException</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=.</span><span class="mi">05</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">delay</span><span class="o">=.</span><span class="mi">05</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Prepare the file locker. Specify the file to lock and optionally</span>
 <span class="sd">        the maximum timeout and the delay between each attempt to lock.</span>
@@ -270,7 +272,7 @@
             <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">lockfile</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">is_locked</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-    <span class="k">def</span> <span class="nf">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Activated when used in the with statement. Should automatically</span>
 <span class="sd">        acquire a lock to be used in the with block.</span>
@@ -279,7 +281,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-    <span class="k">def</span> <span class="nf">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">traceback</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Activated at the end of the with statement. It automatically releases</span>
 <span class="sd">        the lock if it isn&#39;t locked.</span>
@@ -287,7 +289,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_locked</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Make sure that the FileLock instance doesn&#39;t leave a lockfile</span>
 <span class="sd">        lying around.</span>
@@ -309,6 +311,7 @@
                 <span class="k">if</span> <span class="n">s</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()])</span></div>
 </pre></div>
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -329,7 +332,7 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

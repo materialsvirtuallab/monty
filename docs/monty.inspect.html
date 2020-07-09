@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.inspect module &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.inspect module &#8212; monty 3.0.3 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.io module" href="monty.io.html" />
@@ -39,8 +40,9 @@
         <li class="right" >
           <a href="monty.functools.html" title="monty.functools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.3 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.inspect module</a></li> 
       </ul>
     </div>  
 
@@ -52,16 +54,16 @@
   <div class="section" id="module-monty.inspect">
 <span id="monty-inspect-module"></span><h1>monty.inspect module<a class="headerlink" href="#module-monty.inspect" title="Permalink to this headline">¶</a></h1>
 <p>Useful additional functions to help get information about live objects</p>
-<dl class="function">
+<dl class="py function">
 <dt id="monty.inspect.all_subclasses">
-<code class="sig-name descname">all_subclasses</code><span class="sig-paren">(</span><em class="sig-param">cls</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">all_subclasses</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a class <cite>cls</cite>, this recursive function returns a list with
 all subclasses, subclasses of subclasses, and so on.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.inspect.caller_name">
-<code class="sig-name descname">caller_name</code><span class="sig-paren">(</span><em class="sig-param">skip=2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">caller_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">skip</span><span class="o">=</span><span class="default_value">2</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a name of a caller in the format module.class.method</p>
 <p><cite>skip</cite> specifies how many levels of stack to skip while getting caller
 name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
@@ -73,21 +75,21 @@ name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
 <p>Public Domain, i.e. feel free to copy/paste</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.inspect.find_top_pyfile">
 <code class="sig-name descname">find_top_pyfile</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#find_top_pyfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.find_top_pyfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function inspects the Cpython frame to find the path of the script.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.inspect.initializer">
-<code class="sig-name descname">initializer</code><span class="sig-paren">(</span><em class="sig-param">func</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">initializer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically assigns the parameters.
 <a class="reference external" href="http://stackoverflow.com/questions/1389180/python-automatically-initialize">http://stackoverflow.com/questions/1389180/python-automatically-initialize</a>
 -instance-variables</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">process</span><span class="p">:</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">process</span><span class="p">:</span>
 <span class="gp">... </span>    <span class="nd">@initializer</span>
-<span class="gp">... </span>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">reachable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">reachable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="s1">&#39;root&#39;</span><span class="p">):</span>
 <span class="gp">... </span>        <span class="k">pass</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">process</span><span class="p">(</span><span class="s1">&#39;halt&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">cmd</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">reachable</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">user</span>
@@ -99,6 +101,7 @@ name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -128,7 +131,7 @@ name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
