@@ -117,8 +117,7 @@ class MSONable:
 
         try:
             parent_module = self.__class__.__module__.split('.')[0]
-            module_version = import_module(
-                parent_module).__version__  # type: ignore
+            module_version = import_module(parent_module).__version__  # type: ignore
             d["@version"] = u"{}".format(module_version)
         except (AttributeError, ImportError):
             d["@version"] = None  # type: ignore
@@ -256,13 +255,12 @@ class MontyEncoder(json.JSONEncoder):
                         "data": [o.real.tolist(),
                                  o.imag.tolist()]
                     }
-                else:
-                    return {
-                        "@module": "numpy",
-                        "@class": "array",
-                        "dtype": o.dtype.__str__(),
-                        "data": o.tolist()
-                    }
+                return {
+                    "@module": "numpy",
+                    "@class": "array",
+                    "dtype": o.dtype.__str__(),
+                    "data": o.tolist()
+                }
             if isinstance(o, np.generic):
                 return o.item()
         if bson is not None:
@@ -341,17 +339,13 @@ class MontyDecoder(json.JSONDecoder):
                     }
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
-            elif np is not None and modname == "numpy" and classname == \
-                    "array":
+            elif np is not None and modname == "numpy" and classname == "array":
                 if d["dtype"].startswith('complex'):
                     return np.array([
-                        r + i * 1j for r, i in zip(*d["data"])],
-                        dtype=d["dtype"])
-                else:
-                    return np.array(d["data"], dtype=d["dtype"])
+                        r + i * 1j for r, i in zip(*d["data"])], dtype=d["dtype"])
+                return np.array(d["data"], dtype=d["dtype"])
 
-            elif (bson is not None) and modname == "bson.objectid" and \
-                    classname == "ObjectId":
+            elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
                 return bson.objectid.ObjectId(d["oid"])
 
             return {
