@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v3.0.3
+------
+1. Improvements to MSONAble to support Varidac Args (@shyamd).
+
 v3.0.1
 ------
 1. Bug fixes for Windows.
