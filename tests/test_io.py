@@ -47,10 +47,10 @@ class ReverseReadlineTest(unittest.TestCase):
         number
         """
         lines = []
-        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rt") as f:
+        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line.strip())
-        self.assertEqual("HelloWorld.", lines[-1].strip())
+        self.assertIn(lines[-1].strip(), ["HelloWorld.", b"HelloWorld."])
 
     def test_empty_file(self):
         """
