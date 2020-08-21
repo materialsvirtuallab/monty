@@ -26,4 +26,4 @@ jobs:
         pip install -e .
     - name: pytest
       run: |
-        pytest monty --color=yes
+        pytest --cov=monty --cov-report html:coverage_reports monty tests
