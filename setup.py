@@ -21,6 +21,7 @@ setup(
     description="Monty is the missing complement to Python.",
     long_description=long_desc,
     keywords=["monty"],
+    python_requires='>=3.5',
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
