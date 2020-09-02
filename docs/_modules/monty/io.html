@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.io &#8212; monty 3.0.4 documentation</title>
+    <title>monty.io &#8212; monty 4.0.0 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 3.0.4 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 4.0.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.io</a></li> 
       </ul>
@@ -159,7 +159,8 @@
 
     <span class="c1"># If the file size is within our desired RAM use, just reverse it in memory</span>
     <span class="c1"># GZip files must use this method because there is no way to negative seek</span>
-    <span class="k">if</span> <span class="n">file_size</span> <span class="o">&lt;</span> <span class="n">max_mem</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m_file</span><span class="p">,</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">):</span>
+    <span class="c1"># For windows, we also read the whole file.</span>
+    <span class="k">if</span> <span class="n">file_size</span> <span class="o">&lt;</span> <span class="n">max_mem</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m_file</span><span class="p">,</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">)</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;nt&#39;</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">m_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()):</span>
             <span class="k">yield</span> <span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
