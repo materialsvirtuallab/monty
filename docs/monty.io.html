@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.io module &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.io module &#8212; monty 4.0.0 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.itertools module" href="monty.itertools.html" />
@@ -39,8 +40,9 @@
         <li class="right" >
           <a href="monty.inspect.html" title="monty.inspect module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.io module</a></li> 
       </ul>
     </div>  
 
@@ -53,9 +55,9 @@
 <span id="monty-io-module"></span><h1>monty.io module<a class="headerlink" href="#module-monty.io" title="Permalink to this headline">¶</a></h1>
 <p>Augments Python’s suite of IO functions with useful transparent support for
 compressed files.</p>
-<dl class="class">
+<dl class="py class">
 <dt id="monty.io.FileLock">
-<em class="property">class </em><code class="sig-name descname">FileLock</code><span class="sig-paren">(</span><em class="sig-param">file_name</em>, <em class="sig-param">timeout=10</em>, <em class="sig-param">delay=0.05</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">FileLock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">file_name</span></em>, <em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">delay</span><span class="o">=</span><span class="default_value">0.05</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A file locking mechanism that has context-manager support so you can use
 it in a with statement. This should be relatively cross-compatible as it
@@ -73,13 +75,13 @@ the maximum timeout and the delay between each attempt to lock.</p>
 </ul>
 </dd>
 </dl>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="monty.io.FileLock.Error">
 <code class="sig-name descname">Error</code><a class="headerlink" href="#monty.io.FileLock.Error" title="Permalink to this definition">¶</a></dt>
 <dd><p>alias of <a class="reference internal" href="#monty.io.FileLockException" title="monty.io.FileLockException"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileLockException</span></code></a></p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="monty.io.FileLock.acquire">
 <code class="sig-name descname">acquire</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock.acquire"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock.acquire" title="Permalink to this definition">¶</a></dt>
 <dd><p>Acquire the lock, if possible. If the lock is in use, it check again
@@ -88,7 +90,7 @@ exceeds <cite>timeout</cite> number of seconds, in which case it throws
 an exception.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="monty.io.FileLock.release">
 <code class="sig-name descname">release</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#FileLock.release"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLock.release" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get rid of the lock by deleting the lockfile.
@@ -98,22 +100,22 @@ called at the end.</p>
 
 </dd></dl>
 
-<dl class="exception">
+<dl class="py exception">
 <dt id="monty.io.FileLockException">
 <em class="property">exception </em><code class="sig-name descname">FileLockException</code><a class="reference internal" href="_modules/monty/io.html#FileLockException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.FileLockException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Exception raised by FileLock.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.io.get_open_fds">
 <code class="sig-name descname">get_open_fds</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/io.html#get_open_fds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.get_open_fds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of open file descriptors for current process</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.io.reverse_readfile">
-<code class="sig-name descname">reverse_readfile</code><span class="sig-paren">(</span><em class="sig-param">filename: Union[str, pathlib.Path]</em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reverse_readfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>pathlib.Path<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A much faster reverse read of file by using Python’s mmap to generate a
 memory-mapped file. It is slower for very small files than
 reverse_readline, but at least 2x faster for large files (the primary use
@@ -128,9 +130,9 @@ of such a method).</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.io.reverse_readline">
-<code class="sig-name descname">reverse_readline</code><span class="sig-paren">(</span><em class="sig-param">m_file</em>, <em class="sig-param">blk_size=4096</em>, <em class="sig-param">max_mem=4000000</em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reverse_readline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_file</span></em>, <em class="sig-param"><span class="n">blk_size</span><span class="o">=</span><span class="default_value">4096</span></em>, <em class="sig-param"><span class="n">max_mem</span><span class="o">=</span><span class="default_value">4000000</span></em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator method to read a file line-by-line, but backwards. This allows
 one to efficiently get data at the end of a file.</p>
 <p>Based on code by Peter Astrand &lt;<a class="reference external" href="mailto:astrand&#37;&#52;&#48;cendio&#46;se">astrand<span>&#64;</span>cendio<span>&#46;</span>se</a>&gt;, using modifications by
@@ -159,9 +161,9 @@ of the file.</p>
 </dl>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.io.zopen">
-<code class="sig-name descname">zopen</code><span class="sig-paren">(</span><em class="sig-param">filename: Union[str, pathlib.Path], *args, **kwargs</em><span class="sig-paren">)</span> &#x2192; IO<a class="reference internal" href="_modules/monty/io.html#zopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.zopen" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">zopen</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>pathlib.Path<span class="p">]</span></span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; IO<a class="reference internal" href="_modules/monty/io.html#zopen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.zopen" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function wraps around the bz2, gzip and standard python’s open
 function to deal intelligently with bzipped, gzipped or standard text
 files.</p>
@@ -183,6 +185,7 @@ write.</p></li>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -212,7 +215,7 @@ write.</p></li>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

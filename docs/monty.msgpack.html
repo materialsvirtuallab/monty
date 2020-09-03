@@ -1,20 +1,21 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.msgpack module &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.msgpack module &#8212; monty 4.0.0 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="monty.operator module" href="monty.operator.html" />
+    <link rel="next" title="monty.multiprocessing module" href="monty.multiprocessing.html" />
     <link rel="prev" title="monty.math module" href="monty.math.html" />
 
    
@@ -34,13 +35,14 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="monty.operator.html" title="monty.operator module"
+          <a href="monty.multiprocessing.html" title="monty.multiprocessing module"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="monty.math.html" title="monty.math module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.msgpack module</a></li> 
       </ul>
     </div>  
 
@@ -54,16 +56,16 @@
 <p>msgpack serialization and deserialization utilities. Right now, this is a stub
 using monty.json encoder and decoders. The naming is just for clearer usage with
 msgpack’s default and object_hook naming.</p>
-<dl class="function">
+<dl class="py function">
 <dt id="monty.msgpack.default">
-<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param">obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.default" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>For use with msgpack.packb(obj, default=default). Supports Monty’s as_dict
 protocol, numpy arrays and datetime.</p>
 </dd></dl>
 
-<dl class="function">
+<dl class="py function">
 <dt id="monty.msgpack.object_hook">
-<code class="sig-name descname">object_hook</code><span class="sig-paren">(</span><em class="sig-param">d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#object_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.object_hook" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">object_hook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/msgpack.html#object_hook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.msgpack.object_hook" title="Permalink to this definition">¶</a></dt>
 <dd><p>For use with msgpack.unpackb(dict, object_hook=object_hook.).  Supports
 Monty’s as_dict protocol, numpy arrays and datetime.</p>
 </dd></dl>
@@ -71,6 +73,7 @@ Monty’s as_dict protocol, numpy arrays and datetime.</p>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -80,7 +83,7 @@ Monty’s as_dict protocol, numpy arrays and datetime.</p>
   <li><a href="index.html">Documentation overview</a><ul>
   <li><a href="monty.html">monty package</a><ul>
       <li>Previous: <a href="monty.math.html" title="previous chapter">monty.math module</a></li>
-      <li>Next: <a href="monty.operator.html" title="next chapter">monty.operator module</a></li>
+      <li>Next: <a href="monty.multiprocessing.html" title="next chapter">monty.multiprocessing module</a></li>
   </ul></li>
   </ul></li>
 </ul>
@@ -100,7 +103,7 @@ Monty’s as_dict protocol, numpy arrays and datetime.</p>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

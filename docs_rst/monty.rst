@@ -5,6 +5,7 @@ Subpackages
 -----------
 
 .. toctree::
+   :maxdepth: 6
 
    monty.os
 
@@ -12,6 +13,7 @@ Submodules
 ----------
 
 .. toctree::
+   :maxdepth: 6
 
    monty.bisect
    monty.collections
@@ -27,6 +29,7 @@ Submodules
    monty.logging
    monty.math
    monty.msgpack
+   monty.multiprocessing
    monty.operator
    monty.pprint
    monty.re

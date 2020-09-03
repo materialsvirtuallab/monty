@@ -60,8 +60,8 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
     try:
         with zopen(filename, "rb") as f:
             if isinstance(f, (gzip.GzipFile, bz2.BZ2File)):
-                for l in reversed(f.readlines()):
-                    yield l.decode("utf-8").rstrip()
+                for line in reversed(f.readlines()):
+                    yield line.decode("utf-8").rstrip()
             else:
                 fm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
                 n = len(fm)
@@ -113,7 +113,8 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str, s
 
     # If the file size is within our desired RAM use, just reverse it in memory
     # GZip files must use this method because there is no way to negative seek
-    if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
+    # For windows, we also read the whole file.
+    if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == 'nt':
         for line in reversed(m_file.readlines()):
             yield line.rstrip()
     else:

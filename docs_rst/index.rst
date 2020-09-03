@@ -36,18 +36,6 @@ support, in line with most other Python packages.
 Change Log
 ==========
 
-v3.0.1
-------
-1. Bug fixes for Windows.
-
-v3.0.0
-------
-1. Py3 only version.
-
-v2.0.7
-------
-1. MSONable now supports Enum types. (@mkhorton)
-
 :doc:`Older versions </changelog>`
 
 Installation

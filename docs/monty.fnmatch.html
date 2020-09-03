@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>monty.fnmatch module &#8212; monty 3.0.2 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>monty.fnmatch module &#8212; monty 4.0.0 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.fractions module" href="monty.fractions.html" />
@@ -39,8 +40,9 @@
         <li class="right" >
           <a href="monty.dev.html" title="monty.dev module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 3.0.2 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">monty.fnmatch module</a></li> 
       </ul>
     </div>  
 
@@ -52,18 +54,18 @@
   <div class="section" id="module-monty.fnmatch">
 <span id="monty-fnmatch-module"></span><h1>monty.fnmatch module<a class="headerlink" href="#module-monty.fnmatch" title="Permalink to this headline">¶</a></h1>
 <p>This module provides support for Unix shell-style wildcards</p>
-<dl class="class">
+<dl class="py class">
 <dt id="monty.fnmatch.WildCard">
-<em class="property">class </em><code class="sig-name descname">WildCard</code><span class="sig-paren">(</span><em class="sig-param">wildcard</em>, <em class="sig-param">sep='|'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/fnmatch.html#WildCard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.fnmatch.WildCard" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-name descname">WildCard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">wildcard</span></em>, <em class="sig-param"><span class="n">sep</span><span class="o">=</span><span class="default_value">'|'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/fnmatch.html#WildCard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.fnmatch.WildCard" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This object provides an easy-to-use interface for filename matching with
 shell patterns (fnmatch).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">WildCard</span><span class="p">(</span><span class="s2">&quot;*.nc|*.pdf&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span> <span class="o">=</span> <span class="n">WildCard</span><span class="p">(</span><span class="s2">&quot;*.nc|*.pdf&quot;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">filter</span><span class="p">([</span><span class="s2">&quot;foo.nc&quot;</span><span class="p">,</span> <span class="s2">&quot;bar.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;hello.txt&quot;</span><span class="p">])</span>
 <span class="go">[&#39;foo.nc&#39;, &#39;bar.pdf&#39;]</span>
 </pre></div>
 </div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s2">&quot;foo.nc&quot;</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">w</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s2">&quot;foo.nc&quot;</span><span class="p">)</span>
 <span class="go">[&#39;foo.nc&#39;]</span>
 </pre></div>
 </div>
@@ -77,15 +79,15 @@ represents a pattern.</p></li>
 </ul>
 </dd>
 </dl>
-<dl class="method">
+<dl class="py method">
 <dt id="monty.fnmatch.WildCard.filter">
-<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param">names</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/fnmatch.html#WildCard.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.fnmatch.WildCard.filter" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">filter</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">names</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/fnmatch.html#WildCard.filter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.fnmatch.WildCard.filter" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list with the names matching the pattern.</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="monty.fnmatch.WildCard.match">
-<code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param">name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/fnmatch.html#WildCard.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.fnmatch.WildCard.match" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">match</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/fnmatch.html#WildCard.match"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.fnmatch.WildCard.match" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if name matches one of the patterns.</p>
 </dd></dl>
 
@@ -94,6 +96,7 @@ represents a pattern.</p></li>
 </div>
 
 
+            <div class="clearer"></div>
           </div>
         </div>
       </div>
@@ -123,7 +126,7 @@ represents a pattern.</p></li>
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>

@@ -22,7 +22,7 @@ class ReverseReadlineTest(unittest.TestCase):
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
+        with open(os.path.join(test_dir, "3000_lines.txt"), "rt") as f:
             for idx, line in enumerate(reverse_readline(f)):
                 self.assertEqual(int(line), self.NUMLINES - idx,
                                  "read_backwards read {} whereas it should "
@@ -33,7 +33,7 @@ class ReverseReadlineTest(unittest.TestCase):
         """
         Make sure that large textfiles are read properly
         """
-        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
+        with open(os.path.join(test_dir, "3000_lines.txt"), "rt") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 self.assertEqual(int(line), self.NUMLINES - idx,
                                  "read_backwards read {} whereas it should "
@@ -50,7 +50,7 @@ class ReverseReadlineTest(unittest.TestCase):
         with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line.strip())
-        self.assertEqual("HelloWorld.", lines[-1].strip())
+        self.assertIn(lines[-1].strip(), ["HelloWorld.", b"HelloWorld."])
 
     def test_empty_file(self):
         """

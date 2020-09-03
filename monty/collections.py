@@ -88,14 +88,14 @@ class AttrDict(dict):
         :param args: Passthrough arguments for standard dict.
         :param kwargs: Passthrough keyword arguments for standard dict.
         """
-        super(AttrDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.__dict__ = self
 
     def copy(self):
         """
         :return: Copy of AttrDict
         """
-        newd = super(AttrDict, self).copy()
+        newd = super().copy()
         return self.__class__(**newd)
 
 
@@ -112,11 +112,11 @@ class FrozenAttrDict(frozendict):
         :param args: Passthrough arguments for standard dict.
         :param kwargs: Passthrough keyword arguments for standard dict.
         """
-        super(FrozenAttrDict, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
     def __getattribute__(self, name):
         try:
-            return super(FrozenAttrDict, self).__getattribute__(name)
+            return super().__getattribute__(name)
         except AttributeError:
             try:
                 return self[name]
@@ -169,7 +169,7 @@ class MongoDict:
 
     def __getattribute__(self, name):
         try:
-            return super(MongoDict, self).__getattribute__(name)
+            return super().__getattribute__(name)
         except AttributeError:
             # raise
             try:

@@ -10,7 +10,6 @@ import glob
 import requests
 import json
 import os
-import re
 
 from invoke import task
 from monty.os import cd
@@ -133,7 +132,7 @@ def commit(ctx):
 
 @task
 def release(ctx):
-    setver(ctx)
+    # setver(ctx)
     test(ctx)
     update_doc(ctx)
     publish(ctx)

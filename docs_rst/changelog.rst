@@ -1,6 +1,14 @@
 Change log
 ==========
 
+v3.0.4
+------
+1. Add support for complex dtypes in MSONable numpy arrays. (@fracci)
+
+v3.0.3
+------
+1. Improvements to MSONAble to support Varidac Args (@shyamd).
+
 v3.0.1
 ------
 1. Bug fixes for Windows.
