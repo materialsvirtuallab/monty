@@ -4,7 +4,7 @@ numpy==1.19.1
 ruamel.yaml==0.16.10
 msgpack==1.0.0
 tqdm==4.48.2
-coverage==5.2.1
+coverage==5.3
 coveralls==2.1.2
 pymongo==3.11.0
 pycodestyle==2.6.0
