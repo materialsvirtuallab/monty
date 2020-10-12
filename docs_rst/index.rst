@@ -36,7 +36,7 @@ support, in line with most other Python packages.
 Change Log
 ==========
 
-:doc:`Older versions </changelog>`
+:doc:`Change log </changelog>`
 
 Installation
 ============

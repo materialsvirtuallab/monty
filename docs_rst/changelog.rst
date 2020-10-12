@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v4.0.2
+------
+1. Allow specification of warning category in deprecated wrapper.
+
 v4.0.1
 ------
 1. USe FutureWarning in the monty.dev.deprecated wrapper instead.
