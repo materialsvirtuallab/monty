@@ -15,7 +15,7 @@ import functools
 logger = logging.getLogger(__name__)
 
 
-def deprecated(replacement=None, message=None):
+def deprecated(replacement=None, message=None, category=FutureWarning):
     """
     Decorator to mark classes or functions as deprecated,
     with a possible replacement.
@@ -41,7 +41,7 @@ def deprecated(replacement=None, message=None):
                 msg += "; use %s in %s instead." % (r.__name__, r.__module__)
             if message is not None:
                 msg += "\n" + message
-            warnings.warn(msg, FutureWarning, stacklevel=2)
+            warnings.warn(msg, category=category, stacklevel=2)
             return old(*args, **kwargs)
 
         return wrapped
