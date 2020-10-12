@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v4.0.1
+------
+1. USe FutureWarning in the monty.dev.deprecated wrapper instead.
+
 v3.0.4
 ------
 1. Add support for complex dtypes in MSONable numpy arrays. (@fracci)
