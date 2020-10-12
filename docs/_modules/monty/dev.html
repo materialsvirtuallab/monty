@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.dev &#8212; monty 4.0.1 documentation</title>
+    <title>monty.dev &#8212; monty 4.0.2 documentation</title>
     <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 4.0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 4.0.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.dev</a></li> 
       </ul>
@@ -61,7 +61,7 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="deprecated"><a class="viewcode-back" href="../../monty.dev.html#monty.dev.deprecated">[docs]</a><span class="k">def</span> <span class="nf">deprecated</span><span class="p">(</span><span class="n">replacement</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="deprecated"><a class="viewcode-back" href="../../monty.dev.html#monty.dev.deprecated">[docs]</a><span class="k">def</span> <span class="nf">deprecated</span><span class="p">(</span><span class="n">replacement</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">FutureWarning</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorator to mark classes or functions as deprecated,</span>
 <span class="sd">    with a possible replacement.</span>
@@ -69,6 +69,12 @@
 <span class="sd">    Args:</span>
 <span class="sd">        replacement (callable): A replacement class or method.</span>
 <span class="sd">        message (str): A warning message to be displayed.</span>
+<span class="sd">        category (Warning): Choose the category of the warning to issue. Defaults</span>
+<span class="sd">            to FutureWarning. Another choice can be DeprecationWarning. NOte that</span>
+<span class="sd">            FutureWarning is meant for end users and is always shown unless silenced.</span>
+<span class="sd">            DeprecationWarning is meant for developers and is never shown unless</span>
+<span class="sd">            python is run in developmental mode or the filter is changed. Make</span>
+<span class="sd">            the choice accordingly.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Original function, but with a warning to use the updated class.</span>
@@ -87,7 +93,7 @@
                 <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;; use </span><span class="si">%s</span><span class="s2"> in </span><span class="si">%s</span><span class="s2"> instead.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">r</span><span class="o">.</span><span class="vm">__module__</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">message</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">FutureWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">old</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">wrapped</span>
