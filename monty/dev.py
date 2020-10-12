@@ -41,7 +41,6 @@ def deprecated(replacement=None, message=None):
                 msg += "; use %s in %s instead." % (r.__name__, r.__module__)
             if message is not None:
                 msg += "\n" + message
-            warnings.simplefilter('default')
             warnings.warn(msg, DeprecationWarning, stacklevel=2)
             return old(*args, **kwargs)
 
