@@ -33,7 +33,7 @@ class DecoratorTest(unittest.TestCase):
             # Trigger a warning.
             func_b()
             # Verify some things
-            self.assertTrue(issubclass(w[0].category, DeprecationWarning))
+            self.assertTrue(issubclass(w[0].category, FutureWarning))
             self.assertIn('hello', str(w[0].message))
 
     def test_deprecated_property(self):
@@ -61,7 +61,7 @@ class DecoratorTest(unittest.TestCase):
             # Trigger a warning.
             self.assertEqual(a().property_b, 'b')
             # Verify some things
-            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+            self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
@@ -69,7 +69,7 @@ class DecoratorTest(unittest.TestCase):
             # Trigger a warning.
             self.assertEqual(a().func_a(), 'a')
             # Verify some things
-            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+            self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
     def test_deprecated_classmethod(self):
 
@@ -92,7 +92,7 @@ class DecoratorTest(unittest.TestCase):
             # Trigger a warning.
             self.assertEqual(a().classmethod_b(), 'b')
             # Verify some things
-            self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
+            self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
     def test_requires(self):
 

@@ -4,8 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.io module &#8212; monty 4.0.0 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>monty.io module &#8212; monty 4.0.1 documentation</title>
     <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.inspect.html" title="monty.inspect module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.io module</a></li> 
       </ul>
@@ -115,7 +115,7 @@ called at the end.</p>
 
 <dl class="py function">
 <dt id="monty.io.reverse_readfile">
-<code class="sig-name descname">reverse_readfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>pathlib.Path<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reverse_readfile</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span><span class="p">:</span> <span class="n">Union<span class="p">[</span>str<span class="p">, </span>pathlib.Path<span class="p">]</span></span></em><span class="sig-paren">)</span> &#x2192; Generator<span class="p">[</span>str<span class="p">, </span>str<span class="p">, </span>None<span class="p">]</span><a class="reference internal" href="_modules/monty/io.html#reverse_readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A much faster reverse read of file by using Python’s mmap to generate a
 memory-mapped file. It is slower for very small files than
 reverse_readline, but at least 2x faster for large files (the primary use
@@ -132,7 +132,7 @@ of such a method).</p>
 
 <dl class="py function">
 <dt id="monty.io.reverse_readline">
-<code class="sig-name descname">reverse_readline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_file</span></em>, <em class="sig-param"><span class="n">blk_size</span><span class="o">=</span><span class="default_value">4096</span></em>, <em class="sig-param"><span class="n">max_mem</span><span class="o">=</span><span class="default_value">4000000</span></em><span class="sig-paren">)</span> &#x2192; Generator[str, str, None]<a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">reverse_readline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">m_file</span></em>, <em class="sig-param"><span class="n">blk_size</span><span class="o">=</span><span class="default_value">4096</span></em>, <em class="sig-param"><span class="n">max_mem</span><span class="o">=</span><span class="default_value">4000000</span></em><span class="sig-paren">)</span> &#x2192; Generator<span class="p">[</span>str<span class="p">, </span>str<span class="p">, </span>None<span class="p">]</span><a class="reference internal" href="_modules/monty/io.html#reverse_readline"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.io.reverse_readline" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generator method to read a file line-by-line, but backwards. This allows
 one to efficiently get data at the end of a file.</p>
 <p>Based on code by Peter Astrand &lt;<a class="reference external" href="mailto:astrand&#37;&#52;&#48;cendio&#46;se">astrand<span>&#64;</span>cendio<span>&#46;</span>se</a>&gt;, using modifications by
