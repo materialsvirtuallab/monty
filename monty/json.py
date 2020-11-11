@@ -341,7 +341,8 @@ class MontyDecoder(json.JSONDecoder):
             elif np is not None and modname == "numpy" and classname == "array":
                 if d["dtype"].startswith('complex'):
                     return np.array([
-                        r + i * 1j for r, i in zip(*d["data"])], dtype=d["dtype"])
+                        np.array(r) + np.array(i) * 1j
+                        for r, i in zip(*d["data"])], dtype=d["dtype"])
                 return np.array(d["data"], dtype=d["dtype"])
 
             elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
