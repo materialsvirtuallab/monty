@@ -213,6 +213,45 @@ class MSONable:
         ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
+    @classmethod
+    def __get_validators__(cls):
+        """ Return validators for use in pydantic """
+        yield cls.validate_monty
+
+    @classmethod
+    def validate_monty(cls, v):
+        """
+        pydantic Validator for MSONable pattern
+        """
+        if isinstance(v, cls):
+            return v
+        elif isinstance(v, dict):
+            new_obj = MontyDecoder().process_decoded(v)
+            if isinstance(new_obj, cls):
+                return new_obj
+            else:
+                new_obj = cls(**v)
+            return new_obj
+        else:
+            raise ValueError(
+                f"Must provide {cls.__name__}, the as_dict form, or the proper"
+            )
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        """ JSON schema for MSONable pattern """
+        field_schema.update(
+            {
+                "type": "object",
+                "properties": {
+                    "@class": {"const": cls.__name__},
+                    "@module": {"const": cls.__module__},
+                    "@version": {"type": "string"},
+                },
+                "required": ["@class", "@module"],
+            }
+        )
+
 
 class MontyEncoder(json.JSONEncoder):
     """
