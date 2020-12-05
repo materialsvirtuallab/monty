@@ -225,17 +225,17 @@ class MSONable:
         """
         if isinstance(v, cls):
             return v
-        elif isinstance(v, dict):
+        if isinstance(v, dict):
             new_obj = MontyDecoder().process_decoded(v)
             if isinstance(new_obj, cls):
                 return new_obj
             else:
                 new_obj = cls(**v)
             return new_obj
-        else:
-            raise ValueError(
-                f"Must provide {cls.__name__}, the as_dict form, or the proper"
-            )
+        
+        raise ValueError(
+            f"Must provide {cls.__name__}, the as_dict form, or the proper"
+        )
 
     @classmethod
     def __modify_schema__(cls, field_schema):
