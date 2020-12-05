@@ -229,8 +229,8 @@ class MSONable:
             new_obj = MontyDecoder().process_decoded(v)
             if isinstance(new_obj, cls):
                 return new_obj
-            else:
-                new_obj = cls(**v)
+
+            new_obj = cls(**v)
             return new_obj
 
         raise ValueError(
