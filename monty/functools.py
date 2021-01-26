@@ -11,7 +11,7 @@ from collections import namedtuple
 from functools import update_wrapper, wraps, partial
 from threading import RLock
 
-_CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
+_CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
 
 class _HashedSeq(list):  # pylint: disable=C0205
