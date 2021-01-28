@@ -223,3 +223,27 @@ def dict2namedtuple(*args, **kwargs):
     d.update(**kwargs)
     return collections.namedtuple(typename="dict2namedtuple",
                                   field_names=list(d.keys()))(**d)
+
+
+def is_namedtuple(obj):
+    """Test if an object is a class generated from collections.namedtuple."""
+    return (isinstance(obj, tuple) and hasattr(obj, "_fields") and
+            hasattr(obj, "_asdict") and (not hasattr(obj, '_field_types')))
+
+
+def is_NamedTuple(obj):
+    """Test if an object is a class generated from typing.NamedTuple."""
+    return (isinstance(obj, tuple) and hasattr(obj, "_fields") and
+            hasattr(obj, "_asdict") and hasattr(obj, '_field_types') and
+            hasattr(obj, '__annotations__'))
+
+
+def validate_NamedTuple(obj):
+    """Validates whether the items in the NamedTuple have the correct type."""
+    if not is_NamedTuple(obj):
+        raise ValueError('Cannot validate object of type "{}".'.format(obj.__class__.__name__))
+    for field, field_type in obj._field_types.items():
+        value = getattr(obj, field)
+        if not isinstance(value, field_type):
+            return False
+    return True

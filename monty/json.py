@@ -6,10 +6,13 @@ JSON serialization and deserialization utilities.
 import os
 import json
 import datetime
+import sys
 
 from hashlib import sha1
 from collections import OrderedDict, defaultdict
+from collections import namedtuple
 from enum import Enum
+from typing import NamedTuple
 
 from importlib import import_module
 
@@ -32,6 +35,10 @@ except ImportError:
         import yaml  # type: ignore
     except ImportError:
         yaml = None  # type: ignore
+
+from monty.collections import is_namedtuple
+from monty.collections import is_NamedTuple
+
 
 __version__ = "3.0.0"
 
@@ -60,6 +67,108 @@ def _load_redirect(redirect_file):
         }
 
     return dict(redirect_dict)
+
+
+# (Private) helper methods and variables for the serialization of
+#  types for typing.NamedTuple's.
+_typ2name = {typ: typ.__name__ for typ in (bool, int, float, complex,
+                                           list, tuple, range,
+                                           str,
+                                           bytes, bytearray, memoryview,
+                                           set, frozenset,
+                                           dict)}
+_name2typ = {val: key for key, val in _typ2name.items()}
+_name2typ['NoneType'] = type(None)
+
+
+def _serialize_type(typ):
+    """Serialization of types."""
+    # Builtin standard types
+    if typ in _typ2name:
+        return{"@module": "@builtins",
+               "@class": "@types",
+               "type": _typ2name[typ]}
+    # None/NoneType is a special case
+    if typ is type(None) or typ is None:  # noqa - disable pycodestyle check here
+        return {"@module": "@builtins",
+                "@class": "@types",
+                "type": "NoneType"}
+    # Other types ("normal" classes)
+    return {"@module": "@builtins",
+            "@class": "@types",
+            "type": "@class",
+            "type_module": typ.__module__,
+            "type_class": typ.__name__}
+
+
+def _deserialize_type(d):
+    """Deserialization of types."""
+    if d["type"] in _name2typ:
+        return _name2typ[d["type"]]
+    if d["type"] == "@class":
+        modname = d["type_module"]
+        classname = d["type_class"]
+        if classname in MSONable.REDIRECT.get(modname, {}):
+            modname = MSONable.REDIRECT[modname][classname]["@module"]
+            classname = MSONable.REDIRECT[modname][classname]["@class"]
+        mod = __import__(modname, globals(), locals(), [classname], 0)
+        try:
+            return getattr(mod, classname)
+        except AttributeError:
+            raise ValueError('Could not deserialize type.')
+    raise ValueError('Could not deserialize type.')
+
+
+def _recursive_as_dict(obj):
+    """Recursive function to prepare serialization of objects.
+
+    Takes care of tuples, namedtuples, OrderedDict, objects with an as_dict method.
+    """
+    if is_namedtuple(obj):
+        d = {"namedtuple_as_list": [_recursive_as_dict(it) for it in obj],
+             "fields": obj._fields,
+             "typename": obj.__class__.__name__,
+             "@module": "@builtins",
+             "@class": "collections.namedtuple"}
+        if sys.version_info >= (3, 7):  # default values for collections.namedtuple's were introduced in python 3.7.
+            d["fields_defaults"] = obj._fields_defaults
+        return d
+    if is_NamedTuple(obj):
+        d = {"NamedTuple_as_list": [_recursive_as_dict(it) for it in obj],
+             "fields": obj._fields,
+             "fields_types": [_serialize_type(obj._field_types[field]) for field in obj._fields],
+             "typename": obj.__class__.__name__,
+             "doc": obj.__doc__,
+             "@module": "@builtins",
+             "@class": "typing.NamedTuple"}
+        if sys.version_info >= (3, 6):  # default values for typing.NamedTuple's were introduced in python 3.6.
+            try:
+                d["fields_defaults"] = [(field, _recursive_as_dict(field_default))
+                                        for field, field_default in obj._field_defaults.items()]
+            except AttributeError:
+                d["fields_defaults"] = []
+        return d
+    # The order of the ifs matter here as namedtuples and NamedTuples are instances (subclasses) of tuples,
+    # same for OrderedDict which is an instance (subclass) of dict.
+    if isinstance(obj, set):
+        return {"set_as_list": [_recursive_as_dict(it) for it in obj],
+                "@module": "@builtins",
+                "@class": "set"}
+    if isinstance(obj, tuple):
+        return {"tuple_as_list": [_recursive_as_dict(it) for it in obj],
+                "@module": "@builtins",
+                "@class": "tuple"}
+    if isinstance(obj, OrderedDict):
+        return {"ordereddict_as_list": [[key, _recursive_as_dict(val)] for key, val in obj.items()],
+                "@module": "@builtins",
+                "@class": "OrderedDict"}
+    if isinstance(obj, list):
+        return [_recursive_as_dict(it) for it in obj]
+    if isinstance(obj, dict):
+        return {kk: _recursive_as_dict(vv) for kk, vv in obj.items()}
+    if hasattr(obj, "as_dict"):
+        return obj.as_dict()
+    return obj
 
 
 class MSONable:
@@ -125,15 +234,6 @@ class MSONable:
         spec = getfullargspec(self.__class__.__init__)
         args = spec.args
 
-        def recursive_as_dict(obj):
-            if isinstance(obj, (list, tuple)):
-                return [recursive_as_dict(it) for it in obj]
-            if isinstance(obj, dict):
-                return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
-            if hasattr(obj, "as_dict"):
-                return obj.as_dict()
-            return obj
-
         for c in args:
             if c != "self":
                 try:
@@ -150,7 +250,7 @@ class MSONable:
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
                             "you can implement both as_dict and from_dict.")
-                d[c] = recursive_as_dict(a)
+                d[c] = _recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
             d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
@@ -271,6 +371,8 @@ class MontyEncoder(json.JSONEncoder):
                     "oid": str(o)
                 }
 
+        # Is this still useful as we are now calling the _recursive_as_dict
+        #  method (which takes care of as_dict's) before the encoding ?
         try:
             d = o.as_dict()
             if "@module" not in d:
@@ -287,6 +389,17 @@ class MontyEncoder(json.JSONEncoder):
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
+
+    def encode(self, o):
+        """MontyEncoder's encode method.
+
+        First, prepares the object by recursively transforming tuples, namedtuples,
+        object having an as_dict method and others to encodable python objects.
+        """
+        # This cannot go in the default method because default is called as a last resort,
+        # such that tuples and namedtuples have already been transformed to lists by json's encode method.
+        o = _recursive_as_dict(o)
+        return super().encode(o)
 
 
 class MontyDecoder(json.JSONDecoder):
@@ -328,6 +441,34 @@ class MontyDecoder(json.JSONDecoder):
                         dt = datetime.datetime.strptime(
                             d["string"], "%Y-%m-%d %H:%M:%S")
                     return dt
+                if modname == "@builtins":
+                    if classname == "tuple":
+                        return tuple([self.process_decoded(item) for item in d['tuple_as_list']])
+                    if classname == "set":
+                        return {self.process_decoded(item) for item in d['set_as_list']}
+                    if classname == "collections.namedtuple":
+                        # default values for collections.namedtuple have been introduced in python 3.7
+                        # it is probably not essential to deserialize the defaults if the object was serialized with
+                        # python >= 3.7 and deserialized with python < 3.7.
+                        if sys.version_info < (3, 7):
+                            nt = namedtuple(d['typename'], d['fields'])
+                        else:
+                            nt = namedtuple(d['typename'], d['fields'],  # pylint: disable=E1123
+                                            defaults=d['fields_defaults'])  # pylint: disable=E1123
+                        return nt(*[self.process_decoded(item) for item in d['namedtuple_as_list']])
+                    if classname == "typing.NamedTuple":
+                        NT = NamedTuple(d['typename'], [(field, _deserialize_type(field_type))
+                                                        for field, field_type in zip(d['fields'], d['fields_types'])])
+                        NT.__doc__ = d['doc']
+                        # default values for typing.NamedTuple have been introduced in python 3.6
+                        if sys.version_info >= (3, 6):
+                            NT._field_defaults = OrderedDict([(field, self.process_decoded(default))
+                                                              for field, default in d['fields_defaults']])
+                        return NT(*[self.process_decoded(item)  # pylint: disable=E1102
+                                    for item in d['NamedTuple_as_list']])  # pylint: disable=E1102
+                    if classname == "OrderedDict":
+                        return OrderedDict([(key, self.process_decoded(val))
+                                            for key, val in d['ordereddict_as_list']])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
