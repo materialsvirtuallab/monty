@@ -11,11 +11,11 @@ class FuncCase(unittest.TestCase):
         self.assertEqual(results[0], 0)
         self.assertEqual(results[400], 20)
         self.assertEqual(results[9999], 99.99499987499375)
-        results = imap_tqdm(4, sqrt, (i**2 for i in range(10000)))
+        results = imap_tqdm(4, sqrt, (i ** 2 for i in range(10000)))
         self.assertEqual(len(results), 10000)
         self.assertEqual(results[0], 0)
         self.assertEqual(results[400], 400)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

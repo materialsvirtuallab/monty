@@ -5,7 +5,6 @@ from monty.dev import deprecated, requires, get_ncpus, install_excepthook
 
 
 class A:
-
     @property
     def repl_prop(self):
         pass
@@ -17,9 +16,7 @@ class A:
 
 
 class DecoratorTest(unittest.TestCase):
-
     def test_deprecated(self):
-
         def func_a():
             pass
 
@@ -34,10 +31,9 @@ class DecoratorTest(unittest.TestCase):
             func_b()
             # Verify some things
             self.assertTrue(issubclass(w[0].category, FutureWarning))
-            self.assertIn('hello', str(w[0].message))
+            self.assertIn("hello", str(w[0].message))
 
     def test_deprecated_property(self):
-
         class a(object):
             def __init__(self):
                 pass
@@ -49,17 +45,17 @@ class DecoratorTest(unittest.TestCase):
             @property  # type: ignore
             @deprecated(property_a)
             def property_b(self):
-                return 'b'
+                return "b"
 
             @deprecated(property_a)
             def func_a(self):
-                return 'a'
+                return "a"
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(a().property_b, 'b')
+            self.assertEqual(a().property_b, "b")
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
@@ -67,12 +63,11 @@ class DecoratorTest(unittest.TestCase):
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(a().func_a(), 'a')
+            self.assertEqual(a().func_a(), "a")
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
     def test_deprecated_classmethod(self):
-
         class A(object):
             def __init__(self):
                 pass
@@ -84,13 +79,13 @@ class DecoratorTest(unittest.TestCase):
             @classmethod
             @deprecated(classmethod_a)
             def classmethod_b(self):
-                return 'b'
+                return "b"
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(A().classmethod_b(), 'b')
+            self.assertEqual(A().classmethod_b(), "b")
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
@@ -105,13 +100,13 @@ class DecoratorTest(unittest.TestCase):
             @classmethod
             @deprecated(classmethod_a, category=DeprecationWarning)
             def classmethod_b(self):
-                return 'b'
+                return "b"
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(A().classmethod_b(), 'b')
+            self.assertEqual(A().classmethod_b(), "b")
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
 

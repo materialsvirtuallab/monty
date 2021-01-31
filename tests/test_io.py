@@ -7,10 +7,15 @@ try:
 except ImportError:
     Path = None  # type: ignore
 
-from monty.io import reverse_readline, zopen, FileLock, FileLockException, \
-    reverse_readfile
+from monty.io import (
+    reverse_readline,
+    zopen,
+    FileLock,
+    FileLockException,
+    reverse_readfile,
+)
 
-test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
+test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class ReverseReadlineTest(unittest.TestCase):
@@ -24,10 +29,11 @@ class ReverseReadlineTest(unittest.TestCase):
         """
         with open(os.path.join(test_dir, "3000_lines.txt"), "rt") as f:
             for idx, line in enumerate(reverse_readline(f)):
-                self.assertEqual(int(line), self.NUMLINES - idx,
-                                 "read_backwards read {} whereas it should "
-                                 "have read {}".format(
-                                     int(line), self.NUMLINES - idx))
+                self.assertEqual(
+                    int(line),
+                    self.NUMLINES - idx,
+                    "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
+                )
 
     def test_reverse_readline_fake_big(self):
         """
@@ -35,10 +41,11 @@ class ReverseReadlineTest(unittest.TestCase):
         """
         with open(os.path.join(test_dir, "3000_lines.txt"), "rt") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
-                self.assertEqual(int(line), self.NUMLINES - idx,
-                                 "read_backwards read {} whereas it should "
-                                 "have read {}".format(
-                                     int(line), self.NUMLINES - idx))
+                self.assertEqual(
+                    int(line),
+                    self.NUMLINES - idx,
+                    "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
+                )
 
     def test_reverse_readline_bz2(self):
         """
@@ -73,10 +80,11 @@ class ReverseReadfileTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt")
         for idx, line in enumerate(reverse_readfile(fname)):
-            self.assertEqual(int(line), self.NUMLINES - idx,
-                             "read_backwards read {} whereas it should "
-                             "have read {}".format(
-                                 int(line), self.NUMLINES - idx))
+            self.assertEqual(
+                int(line),
+                self.NUMLINES - idx,
+                "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
+            )
 
     def test_reverse_readfile_gz(self):
         """
@@ -86,10 +94,11 @@ class ReverseReadfileTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt.gz")
         for idx, line in enumerate(reverse_readfile(fname)):
-            self.assertEqual(int(line), self.NUMLINES - idx,
-                             "read_backwards read {} whereas it should "
-                             "have read {}".format(
-                                 int(line), self.NUMLINES - idx))
+            self.assertEqual(
+                int(line),
+                self.NUMLINES - idx,
+                "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
+            )
 
     def test_reverse_readfile_bz2(self):
         """
@@ -99,23 +108,22 @@ class ReverseReadfileTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt.bz2")
         for idx, line in enumerate(reverse_readfile(fname)):
-            self.assertEqual(int(line), self.NUMLINES - idx,
-                             "read_backwards read {} whereas it should "
-                             "have read {}".format(
-                                 int(line), self.NUMLINES - idx))
+            self.assertEqual(
+                int(line),
+                self.NUMLINES - idx,
+                "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
+            )
 
     def test_empty_file(self):
         """
         make sure an empty file does not throw an error when reverse_readline
         is called this was a problem with an earlier implementation
         """
-        for idx, line in enumerate(reverse_readfile(
-                os.path.join(test_dir, "empty_file.txt"))):
+        for idx, line in enumerate(reverse_readfile(os.path.join(test_dir, "empty_file.txt"))):
             raise ValueError("an empty file is being read!")
 
 
 class ZopenTest(unittest.TestCase):
-
     def test_zopen(self):
         with zopen(os.path.join(test_dir, "myfile_gz.gz"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
@@ -135,7 +143,6 @@ class ZopenTest(unittest.TestCase):
 
 
 class FileLockTest(unittest.TestCase):
-
     def setUp(self):
         self.file_name = "__lock__"
         self.lock = FileLock(self.file_name, timeout=1)
