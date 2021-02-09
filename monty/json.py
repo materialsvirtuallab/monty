@@ -220,9 +220,7 @@ class MSONable:
             new_obj = cls(**v)
             return new_obj
 
-        raise ValueError(
-            f"Must provide {cls.__name__}, the as_dict form, or the proper"
-        )
+        raise ValueError(f"Must provide {cls.__name__}, the as_dict form, or the proper")
 
     @classmethod
     def __modify_schema__(cls, field_schema):
