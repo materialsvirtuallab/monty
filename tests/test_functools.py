@@ -3,8 +3,15 @@ import sys
 import platform
 from io import open
 import time
-from monty.functools import lru_cache, lazy_property, return_if_raise, \
-    return_none_if_raise, timeout, TimeoutError, prof_main
+from monty.functools import (
+    lru_cache,
+    lazy_property,
+    return_if_raise,
+    return_none_if_raise,
+    timeout,
+    TimeoutError,
+    prof_main,
+)
 
 
 class TestLRUCache(unittest.TestCase):
@@ -27,7 +34,7 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(cached_func.cache_info().misses, 5)
 
     def test_class_method(self):
-        class TestClass():
+        class TestClass:
             @lru_cache(10)
             def cached_func(self, x):
                 return x
@@ -44,7 +51,7 @@ class TestLRUCache(unittest.TestCase):
         self.assertEqual(a.cached_func.cache_info().hits, 1)
         self.assertEqual(a.cached_func.cache_info().misses, 4)
 
-        class TestClass2():
+        class TestClass2:
             @lru_cache(None)
             def cached_func(self, x):
                 return x
@@ -63,7 +70,6 @@ class TestLRUCache(unittest.TestCase):
 
 
 class TestCase(unittest.TestCase):
-
     def assertException(self, exc_cls, pattern, func, *args, **kw):
         """Assert an exception of type 'exc_cls' is raised and
         'pattern' is contained in the exception message.
@@ -73,14 +79,13 @@ class TestCase(unittest.TestCase):
         except exc_cls as e:
             exc_str = str(e)
         else:
-            self.fail('%s not raised' % (exc_cls.__name__,))
+            self.fail("%s not raised" % (exc_cls.__name__,))
 
         if pattern not in exc_str:
-            self.fail('%r not in %r' % (pattern, exc_str))
+            self.fail("%r not in %r" % (pattern, exc_str))
 
 
 class LazyTests(TestCase):
-
     def test_evaluate(self):
         # Lazy attributes should be evaluated when accessed.
         called = []
@@ -88,7 +93,7 @@ class LazyTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
@@ -102,7 +107,7 @@ class LazyTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
@@ -119,7 +124,7 @@ class LazyTests(TestCase):
         class Foo(object):
             @lazy_property
             def __foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
             def get_foo(self):
@@ -138,7 +143,7 @@ class LazyTests(TestCase):
         class Foo(object):
             @lazy_property
             def __foo__(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
@@ -155,20 +160,20 @@ class LazyTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
         self.assertTrue(isinstance(Foo.foo, lazy_property))
         self.assertTrue(f.foo is f.foo)
-        self.assertTrue(f.foo is f.__dict__['foo'])  # !
+        self.assertTrue(f.foo is f.__dict__["foo"])  # !
         self.assertEqual(len(called), 1)
 
         self.assertEqual(f.foo, 1)
         self.assertEqual(f.foo, 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(f, 'foo')
+        lazy_property.invalidate(f, "foo")
 
         self.assertEqual(f.foo, 1)
         self.assertEqual(len(called), 2)
@@ -187,15 +192,19 @@ class LazyTests(TestCase):
 
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
         self.assertEqual(len(called), 0)
 
-        self.assertException(AttributeError,
-                             "'Foo' object has no attribute '__dict__'",
-                             getattr, f, 'foo')
+        self.assertException(
+            AttributeError,
+            "'Foo' object has no attribute '__dict__'",
+            getattr,
+            f,
+            "foo",
+        )
 
         # The function was not called
         self.assertEqual(len(called), 0)
@@ -221,7 +230,6 @@ class LazyTests(TestCase):
 
 
 class InvalidateTests(TestCase):
-
     def test_invalidate_attribute(self):
         # It should be possible to invalidate a lazy_property attribute.
         called = []
@@ -229,14 +237,14 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
         self.assertEqual(f.foo, 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(f, 'foo')
+        lazy_property.invalidate(f, "foo")
 
         self.assertEqual(f.foo, 1)
         self.assertEqual(len(called), 2)
@@ -249,15 +257,15 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
         self.assertEqual(f.foo, 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(f, 'foo')
-        lazy_property.invalidate(f, 'foo')  # Nothing happens
+        lazy_property.invalidate(f, "foo")
+        lazy_property.invalidate(f, "foo")  # Nothing happens
 
         self.assertEqual(f.foo, 1)
         self.assertEqual(len(called), 2)
@@ -270,12 +278,12 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
         self.assertEqual(len(called), 0)
-        lazy_property.invalidate(f, 'foo')  # Nothing happens
+        lazy_property.invalidate(f, "foo")  # Nothing happens
 
     def test_invalidate_private_attribute(self):
         # It should be possible to invalidate a private lazy_property attribute.
@@ -284,7 +292,7 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def __foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
             def get_foo(self):
@@ -294,7 +302,7 @@ class InvalidateTests(TestCase):
         self.assertEqual(f.get_foo(), 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(f, '__foo')
+        lazy_property.invalidate(f, "__foo")
 
         self.assertEqual(f.get_foo(), 1)
         self.assertEqual(len(called), 2)
@@ -307,7 +315,7 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def __foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
             def get_foo(self):
@@ -317,7 +325,7 @@ class InvalidateTests(TestCase):
         self.assertEqual(f.get_foo(), 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(f, '_Foo__foo')
+        lazy_property.invalidate(f, "_Foo__foo")
 
         self.assertEqual(f.get_foo(), 1)
         self.assertEqual(len(called), 2)
@@ -329,14 +337,14 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def __foo__(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
         self.assertEqual(f.__foo__, 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(f, '__foo__')
+        lazy_property.invalidate(f, "__foo__")
 
         self.assertEqual(f.__foo__, 1)
         self.assertEqual(len(called), 2)
@@ -348,13 +356,17 @@ class InvalidateTests(TestCase):
 
         class Foo(object):
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
-        self.assertException(AttributeError,
-                             "'Foo.foo' is not a lazy_property attribute",
-                             lazy_property.invalidate, f, 'foo')
+        self.assertException(
+            AttributeError,
+            "'Foo.foo' is not a lazy_property attribute",
+            lazy_property.invalidate,
+            f,
+            "foo",
+        )
 
     def test_invalidate_nonlazy_private_attribute(self):
         # Invalidating a private attribute that is not lazy_property should
@@ -363,13 +375,17 @@ class InvalidateTests(TestCase):
 
         class Foo(object):
             def __foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
-        self.assertException(AttributeError,
-                             "'Foo._Foo__foo' is not a lazy_property attribute",
-                             lazy_property.invalidate, f, '__foo')
+        self.assertException(
+            AttributeError,
+            "'Foo._Foo__foo' is not a lazy_property attribute",
+            lazy_property.invalidate,
+            f,
+            "__foo",
+        )
 
     def test_invalidate_unknown_attribute(self):
         # Invalidating an unknown attribute should
@@ -379,13 +395,17 @@ class InvalidateTests(TestCase):
         class Foo(object):
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
-        self.assertException(AttributeError,
-                             "type object 'Foo' has no attribute 'bar'",
-                             lazy_property.invalidate, f, 'bar')
+        self.assertException(
+            AttributeError,
+            "type object 'Foo' has no attribute 'bar'",
+            lazy_property.invalidate,
+            f,
+            "bar",
+        )
 
     def test_invalidate_readonly_object(self):
         # Calling invalidate on a read-only object should
@@ -397,13 +417,17 @@ class InvalidateTests(TestCase):
 
             @lazy_property
             def foo(self):
-                called.append('foo')
+                called.append("foo")
                 return 1
 
         f = Foo()
-        self.assertException(AttributeError,
-                             "'Foo' object has no attribute '__dict__'",
-                             lazy_property.invalidate, f, 'foo')
+        self.assertException(
+            AttributeError,
+            "'Foo' object has no attribute '__dict__'",
+            lazy_property.invalidate,
+            f,
+            "foo",
+        )
 
 
 # A lazy_property subclass
@@ -412,7 +436,6 @@ class cached(lazy_property):
 
 
 class InvalidateSubclassTests(TestCase):
-
     def test_invalidate_attribute(self):
         # It should be possible to invalidate a cached attribute.
         called = []
@@ -420,14 +443,14 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
         self.assertEqual(b.bar, 1)
         self.assertEqual(len(called), 1)
 
-        cached.invalidate(b, 'bar')
+        cached.invalidate(b, "bar")
 
         self.assertEqual(b.bar, 1)
         self.assertEqual(len(called), 2)
@@ -440,15 +463,15 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
         self.assertEqual(b.bar, 1)
         self.assertEqual(len(called), 1)
 
-        cached.invalidate(b, 'bar')
-        cached.invalidate(b, 'bar')  # Nothing happens
+        cached.invalidate(b, "bar")
+        cached.invalidate(b, "bar")  # Nothing happens
 
         self.assertEqual(b.bar, 1)
         self.assertEqual(len(called), 2)
@@ -461,12 +484,12 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
         self.assertEqual(len(called), 0)
-        cached.invalidate(b, 'bar')  # Nothing happens
+        cached.invalidate(b, "bar")  # Nothing happens
 
     def test_invalidate_private_attribute(self):
         # It should be possible to invalidate a private cached attribute.
@@ -475,7 +498,7 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def __bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
             def get_bar(self):
@@ -485,7 +508,7 @@ class InvalidateSubclassTests(TestCase):
         self.assertEqual(b.get_bar(), 1)
         self.assertEqual(len(called), 1)
 
-        cached.invalidate(b, '__bar')
+        cached.invalidate(b, "__bar")
 
         self.assertEqual(b.get_bar(), 1)
         self.assertEqual(len(called), 2)
@@ -498,7 +521,7 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def __bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
             def get_bar(self):
@@ -508,7 +531,7 @@ class InvalidateSubclassTests(TestCase):
         self.assertEqual(b.get_bar(), 1)
         self.assertEqual(len(called), 1)
 
-        cached.invalidate(b, '_Bar__bar')
+        cached.invalidate(b, "_Bar__bar")
 
         self.assertEqual(b.get_bar(), 1)
         self.assertEqual(len(called), 2)
@@ -520,14 +543,14 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def __bar__(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
         self.assertEqual(b.__bar__, 1)
         self.assertEqual(len(called), 1)
 
-        cached.invalidate(b, '__bar__')
+        cached.invalidate(b, "__bar__")
 
         self.assertEqual(b.__bar__, 1)
         self.assertEqual(len(called), 2)
@@ -539,13 +562,17 @@ class InvalidateSubclassTests(TestCase):
 
         class Bar(object):
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
-        self.assertException(AttributeError,
-                             "'Bar.bar' is not a cached attribute",
-                             cached.invalidate, b, 'bar')
+        self.assertException(
+            AttributeError,
+            "'Bar.bar' is not a cached attribute",
+            cached.invalidate,
+            b,
+            "bar",
+        )
 
     def test_invalidate_uncached_private_attribute(self):
         # Invalidating a private attribute that is not cached should
@@ -554,13 +581,17 @@ class InvalidateSubclassTests(TestCase):
 
         class Bar(object):
             def __bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
-        self.assertException(AttributeError,
-                             "'Bar._Bar__bar' is not a cached attribute",
-                             cached.invalidate, b, '__bar')
+        self.assertException(
+            AttributeError,
+            "'Bar._Bar__bar' is not a cached attribute",
+            cached.invalidate,
+            b,
+            "__bar",
+        )
 
     def test_invalidate_unknown_attribute(self):
         # Invalidating an unknown attribute should
@@ -570,13 +601,17 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
-        self.assertException(AttributeError,
-                             "type object 'Bar' has no attribute 'baz'",
-                             lazy_property.invalidate, b, 'baz')
+        self.assertException(
+            AttributeError,
+            "type object 'Bar' has no attribute 'baz'",
+            lazy_property.invalidate,
+            b,
+            "baz",
+        )
 
     def test_invalidate_readonly_object(self):
         # Calling invalidate on a read-only object should
@@ -588,13 +623,17 @@ class InvalidateSubclassTests(TestCase):
 
             @cached
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
-        self.assertException(AttributeError,
-                             "'Bar' object has no attribute '__dict__'",
-                             cached.invalidate, b, 'bar')
+        self.assertException(
+            AttributeError,
+            "'Bar' object has no attribute '__dict__'",
+            cached.invalidate,
+            b,
+            "bar",
+        )
 
     def test_invalidate_superclass_attribute(self):
         # cached.invalidate CANNOT invalidate a superclass (lazy_property) attribute.
@@ -603,13 +642,17 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @lazy_property
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
-        self.assertException(AttributeError,
-                             "'Bar.bar' is not a cached attribute",
-                             cached.invalidate, b, 'bar')
+        self.assertException(
+            AttributeError,
+            "'Bar.bar' is not a cached attribute",
+            cached.invalidate,
+            b,
+            "bar",
+        )
 
     def test_invalidate_subclass_attribute(self):
         # Whereas lazy_property.invalidate CAN invalidate a subclass (cached) attribute.
@@ -618,47 +661,56 @@ class InvalidateSubclassTests(TestCase):
         class Bar(object):
             @cached
             def bar(self):
-                called.append('bar')
+                called.append("bar")
                 return 1
 
         b = Bar()
         self.assertEqual(b.bar, 1)
         self.assertEqual(len(called), 1)
 
-        lazy_property.invalidate(b, 'bar')
+        lazy_property.invalidate(b, "bar")
 
         self.assertEqual(b.bar, 1)
         self.assertEqual(len(called), 2)
 
 
 class AssertExceptionTests(TestCase):
-
     def test_assert_AttributeError(self):
-        self.assertException(AttributeError,
-                             "'AssertExceptionTests' object has no attribute 'foobar'",
-                             getattr, self, 'foobar')
+        self.assertException(
+            AttributeError,
+            "'AssertExceptionTests' object has no attribute 'foobar'",
+            getattr,
+            self,
+            "foobar",
+        )
 
     def test_assert_IOError(self):
-        self.assertException(IOError,
-                             "No such file or directory",
-                             open, './foo/bar/baz/peng/quux', 'rb')
+        self.assertException(IOError, "No such file or directory", open, "./foo/bar/baz/peng/quux", "rb")
 
     def test_assert_SystemExit(self):
-        self.assertException(SystemExit,
-                             "",
-                             sys.exit)
+        self.assertException(SystemExit, "", sys.exit)
 
     def test_assert_exception_not_raised(self):
-        self.assertRaises(AssertionError,
-                          self.assertException, AttributeError,
-                          "'AssertExceptionTests' object has no attribute 'run'",
-                          getattr, self, 'run')
+        self.assertRaises(
+            AssertionError,
+            self.assertException,
+            AttributeError,
+            "'AssertExceptionTests' object has no attribute 'run'",
+            getattr,
+            self,
+            "run",
+        )
 
     def test_assert_pattern_mismatch(self):
-        self.assertRaises(AssertionError,
-                          self.assertException, AttributeError,
-                          "baz",
-                          getattr, self, 'foobar')
+        self.assertRaises(
+            AssertionError,
+            self.assertException,
+            AttributeError,
+            "baz",
+            getattr,
+            self,
+            "foobar",
+        )
 
 
 class TryOrReturnTest(unittest.TestCase):
@@ -679,6 +731,7 @@ class TryOrReturnTest(unittest.TestCase):
             @return_if_raise([KeyError, ValueError], "hello")
             def catch_exc_list(self):
                 import random
+
                 if random.randint(0, 1) == 0:
                     raise ValueError()
                 else:
@@ -699,7 +752,6 @@ class TryOrReturnTest(unittest.TestCase):
 
 
 class TimeoutTest(unittest.TestCase):
-
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_with(self):
         try:
@@ -711,10 +763,10 @@ class TimeoutTest(unittest.TestCase):
 
 
 class ProfMainTest(unittest.TestCase):
-
     def test_prof_decorator(self):
         """Testing prof_main decorator."""
         import sys
+
         @prof_main
         def main():
             return sys.exit(1)
@@ -728,5 +780,5 @@ class ProfMainTest(unittest.TestCase):
             sys.argv[1] = "prof"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

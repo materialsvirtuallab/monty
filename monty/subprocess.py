@@ -11,12 +11,12 @@ from subprocess import Popen, PIPE
 from .string import is_string
 
 
-__author__ = 'Matteo Giantomass'
+__author__ = "Matteo Giantomass"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = '0.1'
-__maintainer__ = 'Matteo Giantomassi'
-__email__ = 'gmatteo@gmail.com'
-__date__ = '10/26/14'
+__version__ = "0.1"
+__maintainer__ = "Matteo Giantomassi"
+__email__ = "gmatteo@gmail.com"
+__date__ = "10/26/14"
 
 
 class Command:
@@ -59,7 +59,7 @@ class Command:
         self.command = command
         self.process = None
         self.retcode = None
-        self.output, self.error = '', ''
+        self.output, self.error = "", ""
         self.killed = False
 
     def __str__(self):
@@ -85,11 +85,11 @@ class Command:
                 self.retcode = -1
 
         # default stdout and stderr
-        if 'stdout' not in kwargs:
-            kwargs['stdout'] = PIPE
+        if "stdout" not in kwargs:
+            kwargs["stdout"] = PIPE
 
-        if 'stderr' not in kwargs:
-            kwargs['stderr'] = PIPE
+        if "stderr" not in kwargs:
+            kwargs["stderr"] = PIPE
 
         # thread
         thread = threading.Thread(target=target, kwargs=kwargs)

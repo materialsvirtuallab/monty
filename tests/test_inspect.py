@@ -21,7 +21,6 @@ class LittleCatD(LittleCatB):
 
 
 class InspectTest(unittest.TestCase):
-
     def test_func(self):
         # Not a real test. Need something better.
         self.assertTrue(find_top_pyfile())

@@ -125,17 +125,13 @@ class MSONableTest(unittest.TestCase):
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(
-            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
-        )
+        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
 
         self.assertEqual(
             a_list[0].unsafe_hash().hexdigest(),
             "ea44de0e2ef627be582282c02c48e94de0d58ec6",
         )
-        self.assertEqual(
-            obj.unsafe_hash().hexdigest(), "44204c8da394e878f7562c9aa2e37c2177f28b81"
-        )
+        self.assertEqual(obj.unsafe_hash().hexdigest(), "44204c8da394e878f7562c9aa2e37c2177f28b81")
 
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
@@ -166,9 +162,8 @@ class MSONableTest(unittest.TestCase):
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(
-            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
-        )
+        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
+
         obj_dict = obj.as_dict()
         obj2 = GoodNestedMSONClass.from_dict(obj_dict)
         self.assertTrue([obj2.a_list[ii] == aa for ii, aa in enumerate(obj.a_list)])
@@ -262,9 +257,7 @@ class JsonTest(unittest.TestCase):
         d = json.loads(djson)
         self.assertEqual(d["@class"], "array")
         self.assertEqual(d["@module"], "numpy")
-        self.assertEqual(
-            d["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]]
-        )
+        self.assertEqual(d["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]])
         self.assertEqual(d["dtype"], "complex64")
         x = json.loads(djson, cls=MontyDecoder)
         self.assertEqual(type(x), np.ndarray)
@@ -313,9 +306,7 @@ class JsonTest(unittest.TestCase):
         self.assertIsInstance(clean["a"], bytes)
 
     def test_redirect(self):
-        MSONable.REDIRECT["tests.test_json"] = {
-            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
-        }
+        MSONable.REDIRECT["tests.test_json"] = {"test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}}
 
         d = {
             "@class": "test_class",
@@ -370,6 +361,7 @@ class JsonTest(unittest.TestCase):
             },
             "required": ["a"],
         }
+
 
 
 if __name__ == "__main__":

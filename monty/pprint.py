@@ -17,6 +17,7 @@ def pprint_table(table, out=sys.stdout, rstrip=False):
         out: Output stream (file-like object)
         rstrip: if True, trailing withespaces are removed from the entries.
     """
+
     def max_width_col(table, col_idx):
         """
         Get the maximum width of the given column index
@@ -56,7 +57,7 @@ def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
 
     Based on https://pypi.python.org/pypi/asciitree/
     """
-    return _draw_tree(node, '', child_iter, text_str)
+    return _draw_tree(node, "", child_iter, text_str)
 
 
 def _draw_tree(node, prefix, child_iter, text_str):
@@ -67,15 +68,15 @@ def _draw_tree(node, prefix, child_iter, text_str):
     # check if root node
     if prefix:
         buf.write(prefix[:-3])
-        buf.write('  +--')
+        buf.write("  +--")
     buf.write(text_str(node))
-    buf.write('\n')
+    buf.write("\n")
 
     for index, child in enumerate(children):
-        if index+1 == len(children):
-            sub_prefix = prefix + '   '
+        if index + 1 == len(children):
+            sub_prefix = prefix + "   "
         else:
-            sub_prefix = prefix + '  |'
+            sub_prefix = prefix + "  |"
 
         buf.write(_draw_tree(child, sub_prefix, child_iter, text_str))
 

@@ -5,10 +5,9 @@ from monty.design_patterns import singleton, cached_class
 
 
 class SingletonTest(unittest.TestCase):
-
     def test_singleton(self):
         @singleton
-        class A():
+        class A:
             pass
 
         a1 = A()
@@ -26,14 +25,13 @@ class A(object):
         return self.val == other.val
 
     def __getinitargs__(self):
-        return self.val,
+        return (self.val,)
 
     def __getnewargs__(self):
-        return self.val,
+        return (self.val,)
 
 
 class CachedClassTest(unittest.TestCase):
-
     def test_cached_class(self):
         a1a = A(1)
         a1b = A(1)

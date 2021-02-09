@@ -35,18 +35,11 @@ try:
 except Exception:
     pass
 
-__all__ = ['colored', 'cprint']
+__all__ = ["colored", "cprint"]
 
 VERSION = (1, 1, 0)
 
-ATTRIBUTES = dict(
-    bold=1,
-    dark=2,
-    underline=4,
-    blink=5,
-    reverse=7,
-    concealed=8
-)
+ATTRIBUTES = dict(bold=1, dark=2, underline=4, blink=5, reverse=7, concealed=8)
 
 HIGHLIGHTS = dict(
     on_grey=40,
@@ -56,21 +49,12 @@ HIGHLIGHTS = dict(
     on_blue=44,
     on_magenta=45,
     on_cyan=46,
-    on_white=47
+    on_white=47,
 )
 
-COLORS = dict(
-    grey=30,
-    red=31,
-    green=32,
-    yellow=33,
-    blue=34,
-    magenta=35,
-    cyan=36,
-    white=37
-)
+COLORS = dict(grey=30, red=31, green=32, yellow=33, blue=34, magenta=35, cyan=36, white=37)
 
-RESET = '\033[0m'
+RESET = "\033[0m"
 
 __ISON = True
 
@@ -119,8 +103,8 @@ def colored(text, color=None, on_color=None, attrs=None):
         colored('Hello, World!', 'green')
     """
 
-    if __ISON and os.getenv('ANSI_COLORS_DISABLED') is None:
-        fmt_str = '\033[%dm%s'
+    if __ISON and os.getenv("ANSI_COLORS_DISABLED") is None:
+        fmt_str = "\033[%dm%s"
         if color is not None:
             text = fmt_str % (COLORS[color], text)
 
@@ -194,7 +178,7 @@ def get_terminal_size():
         width-in-python
     """
     try:
-        rc = os.popen('stty size', 'r').read().split()
+        rc = os.popen("stty size", "r").read().split()
         return int(rc[0]), int(rc[1])
     except Exception:
         pass
@@ -204,8 +188,7 @@ def get_terminal_size():
     def ioctl_GWINSZ(fd):
         try:
 
-            rc = struct.unpack('hh',
-                               fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
+            rc = struct.unpack("hh", fcntl.ioctl(fd, termios.TIOCGWINSZ, "1234"))
             return rc
         except Exception:
             return None
@@ -221,6 +204,6 @@ def get_terminal_size():
             pass
 
     if not rc:
-        rc = (env.get('LINES', 25), env.get('COLUMNS', 80))
+        rc = (env.get("LINES", 25), env.get("COLUMNS", 80))
 
     return int(rc[0]), int(rc[1])

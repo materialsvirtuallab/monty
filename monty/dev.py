@@ -89,6 +89,7 @@ class requires:
         """
         :param _callable: Callable function.
         """
+
         @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
@@ -122,7 +123,7 @@ def get_ncpus():
 
     # POSIX
     try:
-        res = int(os.sysconf('SC_NPROCESSORS_ONLN'))
+        res = int(os.sysconf("SC_NPROCESSORS_ONLN"))
         if res > 0:
             return res
     except (AttributeError, ValueError):
@@ -130,7 +131,7 @@ def get_ncpus():
 
     # Windows
     try:
-        res = int(os.environ['NUMBER_OF_PROCESSORS'])
+        res = int(os.environ["NUMBER_OF_PROCESSORS"])
         if res > 0:
             return res
     except (KeyError, ValueError):
@@ -139,6 +140,7 @@ def get_ncpus():
     # jython
     try:
         from java.lang import Runtime  # pylint: disable=import-outside-toplevel
+
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
         if res > 0:
@@ -148,8 +150,7 @@ def get_ncpus():
 
     # BSD
     try:
-        sysctl = subprocess.Popen(['sysctl', '-n', 'hw.ncpu'],
-                                  stdout=subprocess.PIPE)
+        sysctl = subprocess.Popen(["sysctl", "-n", "hw.ncpu"], stdout=subprocess.PIPE)
         scstdout = sysctl.communicate()[0]
         res = int(scstdout)
         if res > 0:
@@ -159,7 +160,7 @@ def get_ncpus():
 
     # Linux
     try:
-        res = open('/proc/cpuinfo').read().count('processor\t:')
+        res = open("/proc/cpuinfo").read().count("processor\t:")
         if res > 0:
             return res
     except IOError:
@@ -167,8 +168,8 @@ def get_ncpus():
 
     # Solaris
     try:
-        pseudo_devices = os.listdir('/devices/pseudo/')
-        expr = re.compile('^cpuid@[0-9]+$')
+        pseudo_devices = os.listdir("/devices/pseudo/")
+        expr = re.compile("^cpuid@[0-9]+$")
         res = 0
         for pd in pseudo_devices:
             if expr.match(pd) is not None:
@@ -181,13 +182,13 @@ def get_ncpus():
     # Other UNIXes (heuristic)
     try:
         try:
-            dmesg = open('/var/run/dmesg.boot').read()
+            dmesg = open("/var/run/dmesg.boot").read()
         except IOError:
-            dmesg_process = subprocess.Popen(['dmesg'], stdout=subprocess.PIPE)
+            dmesg_process = subprocess.Popen(["dmesg"], stdout=subprocess.PIPE)
             dmesg = dmesg_process.communicate()[0]
 
         res = 0
-        while '\ncpu' + str(res) + ':' in dmesg:
+        while "\ncpu" + str(res) + ":" in dmesg:
             res += 1
 
         if res > 0:
@@ -195,7 +196,7 @@ def get_ncpus():
     except OSError:
         pass
 
-    logger.warning('Cannot determine number of CPUs on this system!')
+    logger.warning("Cannot determine number of CPUs on this system!")
     return -1
 
 
@@ -213,8 +214,7 @@ def install_excepthook(hook_type="color", **kwargs):
     try:
         from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
     except ImportError:
-        warnings.warn(
-            "Cannot install excepthook, IPyhon.core.ultratb not available")
+        warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
         return 1
 
     # Select the hook.

@@ -4,7 +4,6 @@ from monty.fractions import gcd, lcm, gcd_float
 
 
 class FuncTestCase(unittest.TestCase):
-
     def test_gcd(self):
         self.assertEqual(gcd(7, 14, 63), 7)
 
@@ -16,5 +15,5 @@ class FuncTestCase(unittest.TestCase):
         self.assertAlmostEqual(gcd_float(vs, 1e-8), 3.1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

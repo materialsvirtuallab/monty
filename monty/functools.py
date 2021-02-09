@@ -11,7 +11,7 @@ from collections import namedtuple
 from functools import update_wrapper, wraps, partial
 from threading import RLock
 
-_CacheInfo = namedtuple("CacheInfo", ["hits", "misses", "maxsize", "currsize"])
+_CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
 
 class _HashedSeq(list):  # pylint: disable=C0205
@@ -21,7 +21,7 @@ class _HashedSeq(list):  # pylint: disable=C0205
     the key multiple times on a cache miss.
     """
 
-    __slots__ = 'hashvalue'
+    __slots__ = "hashvalue"
 
     def __init__(self, tup, hashfunc=hash):
         """
@@ -35,9 +35,7 @@ class _HashedSeq(list):  # pylint: disable=C0205
         return self.hashvalue
 
 
-def _make_key(args, kwds, typed,
-              kwd_mark=(object(),),
-              fasttypes={int, str, frozenset, type(None)}):
+def _make_key(args, kwds, typed, kwd_mark=(object(),), fasttypes={int, str, frozenset, type(None)}):
     """
     Make a cache key from optionally typed positional and keyword arguments
 
@@ -94,7 +92,7 @@ def lru_cache(maxsize=128, typed=False):
     # resulting in the inner function being passed to maxsize instead of an
     # integer or None.
     if maxsize is not None and not isinstance(maxsize, int):
-        raise TypeError('Expected maxsize to be an integer or None')
+        raise TypeError("Expected maxsize to be an integer or None")
 
     # Constants shared by all lru cache instances:
     sentinel = object()  # unique object used to signal cache misses
@@ -135,6 +133,7 @@ def lru_cache(maxsize=128, typed=False):
                 return result
 
         else:
+
             def wrapper(*args, **kwds):
                 # Size limited caching that tracks accesses by recency
                 key = make_key(args, kwds, typed)
@@ -184,7 +183,7 @@ def lru_cache(maxsize=128, typed=False):
                         last = r[0][PREV]
                         link = [last, r[0], key, result]
                         last[NEXT] = r[0][PREV] = cache[key] = link
-                        full[0] = (len(cache) >= maxsize)
+                        full[0] = len(cache) >= maxsize
                     misses[0] += 1
                 return result
 
@@ -229,13 +228,12 @@ class lazy_property:
         if inst is None:
             return self
 
-        if not hasattr(inst, '__dict__'):
-            raise AttributeError("'%s' object has no attribute '__dict__'"
-                                 % (inst_cls.__name__,))
+        if not hasattr(inst, "__dict__"):
+            raise AttributeError("'%s' object has no attribute '__dict__'" % (inst_cls.__name__,))
 
         name = self.__name__  # pylint: disable=E1101
-        if name.startswith('__') and not name.endswith('__'):
-            name = '_%s%s' % (inst_cls.__name__, name)
+        if name.startswith("__") and not name.endswith("__"):
+            name = "_%s%s" % (inst_cls.__name__, name)
 
         value = self.__func(inst)
         inst.__dict__[name] = value
@@ -250,16 +248,14 @@ class lazy_property:
         """
         inst_cls = inst.__class__
 
-        if not hasattr(inst, '__dict__'):
-            raise AttributeError("'%s' object has no attribute '__dict__'"
-                                 % (inst_cls.__name__,))
+        if not hasattr(inst, "__dict__"):
+            raise AttributeError("'%s' object has no attribute '__dict__'" % (inst_cls.__name__,))
 
-        if name.startswith('__') and not name.endswith('__'):
-            name = '_%s%s' % (inst_cls.__name__, name)
+        if name.startswith("__") and not name.endswith("__"):
+            name = "_%s%s" % (inst_cls.__name__, name)
 
         if not isinstance(getattr(inst_cls, name), cls):
-            raise AttributeError("'%s.%s' is not a %s attribute"
-                                 % (inst_cls.__name__, name, cls.__name__))
+            raise AttributeError("'%s.%s' is not a %s attribute" % (inst_cls.__name__, name, cls.__name__))
 
         if name in inst.__dict__:
             del inst.__dict__[name]
@@ -337,7 +333,7 @@ class timeout:
         do_something_else()
     """
 
-    def __init__(self, seconds=1, error_message='Timeout'):
+    def __init__(self, seconds=1, error_message="Timeout"):
         """
         Args:
             seconds (int): Allowed time for function in seconds.

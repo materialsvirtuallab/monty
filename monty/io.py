@@ -67,7 +67,7 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
                 n = len(fm)
                 while n > 0:
                     i = fm.rfind(b"\n", 0, n)
-                    yield fm[i + 1:n].decode("utf-8").strip("\n")
+                    yield fm[i + 1 : n].decode("utf-8").strip("\n")
                     n = i
     except ValueError:
         return
@@ -114,7 +114,7 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str, s
     # If the file size is within our desired RAM use, just reverse it in memory
     # GZip files must use this method because there is no way to negative seek
     # For windows, we also read the whole file.
-    if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == 'nt':
+    if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == "nt":
         for line in reversed(m_file.readlines()):
             yield line.rstrip()
     else:
@@ -131,14 +131,14 @@ def reverse_readline(m_file, blk_size=4096, max_mem=4000000) -> Generator[str, s
         else:
             lastchar = m_file.read(1).decode("utf-8")
 
-        trailing_newline = (lastchar == "\n")
+        trailing_newline = lastchar == "\n"
 
         while 1:
             newline_pos = buf.rfind("\n")
             pos = m_file.tell()
             if newline_pos != -1:
                 # Found a newline
-                line = buf[newline_pos + 1:]
+                line = buf[newline_pos + 1 :]
                 buf = buf[:newline_pos]
                 if pos or newline_pos or trailing_newline:
                     line += "\n"
@@ -171,9 +171,10 @@ class FileLock:
     Taken from http://www.evanfosmark.com/2009/01/cross-platform-file-locking
     -support-in-python/
     """
+
     Error = FileLockException
 
-    def __init__(self, file_name, timeout=10, delay=.05):
+    def __init__(self, file_name, timeout=10, delay=0.05):
         """
         Prepare the file locker. Specify the file to lock and optionally
         the maximum timeout and the delay between each attempt to lock.
@@ -190,8 +191,7 @@ class FileLock:
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
-            raise ValueError("delay and timeout must be positive with delay "
-                             "<= timeout")
+            raise ValueError("delay and timeout must be positive with delay " "<= timeout")
 
     def acquire(self):
         """
@@ -203,15 +203,13 @@ class FileLock:
         start_time = time.time()
         while True:
             try:
-                self.fd = os.open(self.lockfile,
-                                  os.O_CREAT | os.O_EXCL | os.O_RDWR)
+                self.fd = os.open(self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
                 break
             except (OSError,) as e:
                 if e.errno != errno.EEXIST:
                     raise
                 if (time.time() - start_time) >= self.timeout:
-                    raise FileLockException("%s: Timeout occured." %
-                                            self.lockfile)
+                    raise FileLockException("%s: Timeout occured." % self.lockfile)
                 time.sleep(self.delay)
 
         self.is_locked = True
@@ -259,8 +257,7 @@ def get_open_fds():
     .. warning: will only work on UNIX-like OS-es.
     """
     pid = os.getpid()
-    procs = subprocess.check_output(["lsof", '-w', '-Ff', "-p", str(pid)])
+    procs = subprocess.check_output(["lsof", "-w", "-Ff", "-p", str(pid)])
     procs = procs.decode("utf-8")
 
-    return len([s for s in procs.split('\n')
-                if s and s[0] == 'f' and s[1:].isdigit()])
+    return len([s for s in procs.split("\n") if s and s[0] == "f" and s[1:].isdigit()])

@@ -10,7 +10,6 @@ from monty.string import remove_non_ascii, unicode2str
 
 
 class FuncTest(unittest.TestCase):
-
     def test_remove_non_ascii(self):
         s = "".join(chr(random.randint(0, 127)) for i in range(10))
         s += "".join(chr(random.randint(128, 150)) for i in range(10))
@@ -24,5 +23,5 @@ class FuncTest(unittest.TestCase):
             self.assertEqual(type(unicode2str("a")), str)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

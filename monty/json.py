@@ -103,22 +103,18 @@ class MSONable:
     old_module.old_class: new_module.new_class
     """
 
-    REDIRECT = _load_redirect(
-        os.path.join(os.path.expanduser("~"), ".monty.yaml"))
+    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"), ".monty.yaml"))
 
     def as_dict(self) -> dict:
         """
         A JSON serializable dict representation of an object.
         """
-        d = {
-            "@module": self.__class__.__module__,
-            "@class": self.__class__.__name__
-        }
+        d = {"@module": self.__class__.__module__, "@class": self.__class__.__name__}
 
         try:
-            parent_module = self.__class__.__module__.split('.')[0]
+            parent_module = self.__class__.__module__.split(".")[0]
             module_version = import_module(parent_module).__version__  # type: ignore
-            d["@version"] = u"{}".format(module_version)
+            d["@version"] = "{}".format(module_version)
         except (AttributeError, ImportError):
             d["@version"] = None  # type: ignore
 
@@ -149,7 +145,8 @@ class MSONable:
                             "self._argname, and kwargs to be present under"
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
-                            "you can implement both as_dict and from_dict.")
+                            "you can implement both as_dict and from_dict."
+                        )
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
@@ -168,10 +165,7 @@ class MSONable:
         :param d: Dict representation.
         :return: MSONable class.
         """
-        decoded = {
-            k: MontyDecoder().process_decoded(v)
-            for k, v in d.items() if not k.startswith("@")
-        }
+        decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items() if not k.startswith("@")}
         return cls(**decoded)
 
     def to_json(self) -> str:
@@ -193,23 +187,16 @@ class MSONable:
             flat_dict = {}
             for key, value in obj.items():
                 if isinstance(value, dict):
-                    flat_dict.update({
-                        seperator.join([key, _key]): _value
-                        for _key, _value in flatten(value).items()
-                    })
+                    flat_dict.update({seperator.join([key, _key]): _value for _key, _value in flatten(value).items()})
                 elif isinstance(value, list):
-                    list_dict = {
-                        "{}{}{}".format(key, seperator, num): item
-                        for num, item in enumerate(value)
-                    }
+                    list_dict = {"{}{}{}".format(key, seperator, num): item for num, item in enumerate(value)}
                     flat_dict.update(flatten(list_dict))
                 else:
                     flat_dict[key] = value
 
             return flat_dict
 
-        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(),
-                              key=lambda x: x[0])
+        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0])
         ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
@@ -279,48 +266,39 @@ class MontyEncoder(json.JSONEncoder):
             Python dict representation.
         """
         if isinstance(o, datetime.datetime):
-            return {
-                "@module": "datetime",
-                "@class": "datetime",
-                "string": o.__str__()
-            }
+            return {"@module": "datetime", "@class": "datetime", "string": o.__str__()}
         if np is not None:
             if isinstance(o, np.ndarray):
-                if str(o.dtype).startswith('complex'):
+                if str(o.dtype).startswith("complex"):
                     return {
                         "@module": "numpy",
                         "@class": "array",
                         "dtype": o.dtype.__str__(),
-                        "data": [o.real.tolist(),
-                                 o.imag.tolist()]
+                        "data": [o.real.tolist(), o.imag.tolist()],
                     }
                 return {
                     "@module": "numpy",
                     "@class": "array",
                     "dtype": o.dtype.__str__(),
-                    "data": o.tolist()
+                    "data": o.tolist(),
                 }
             if isinstance(o, np.generic):
                 return o.item()
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
-                return {
-                    "@module": "bson.objectid",
-                    "@class": "ObjectId",
-                    "oid": str(o)
-                }
+                return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
         try:
             d = o.as_dict()
             if "@module" not in d:
-                d["@module"] = u"{}".format(o.__class__.__module__)
+                d["@module"] = "{}".format(o.__class__.__module__)
             if "@class" not in d:
-                d["@class"] = u"{}".format(o.__class__.__name__)
+                d["@class"] = "{}".format(o.__class__.__name__)
             if "@version" not in d:
                 try:
-                    parent_module = o.__class__.__module__.split('.')[0]
+                    parent_module = o.__class__.__module__.split(".")[0]
                     module_version = import_module(parent_module).__version__  # type: ignore
-                    d["@version"] = u"{}".format(module_version)
+                    d["@version"] = "{}".format(module_version)
                 except (AttributeError, ImportError):
                     d["@version"] = None
             return d
@@ -361,36 +339,29 @@ class MontyDecoder(json.JSONDecoder):
             if modname and modname not in ["bson.objectid", "numpy"]:
                 if modname == "datetime" and classname == "datetime":
                     try:
-                        dt = datetime.datetime.strptime(
-                            d["string"], "%Y-%m-%d %H:%M:%S.%f")
+                        dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
                     except ValueError:
-                        dt = datetime.datetime.strptime(
-                            d["string"], "%Y-%m-%d %H:%M:%S")
+                        dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S")
                     return dt
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
-                    data = {
-                        k: v
-                        for k, v in d.items() if not k.startswith("@")
-                    }
+                    data = {k: v for k, v in d.items() if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
             elif np is not None and modname == "numpy" and classname == "array":
-                if d["dtype"].startswith('complex'):
-                    return np.array([
-                        np.array(r) + np.array(i) * 1j
-                        for r, i in zip(*d["data"])], dtype=d["dtype"])
+                if d["dtype"].startswith("complex"):
+                    return np.array(
+                        [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                        dtype=d["dtype"],
+                    )
                 return np.array(d["data"], dtype=d["dtype"])
 
             elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
                 return bson.objectid.ObjectId(d["oid"])
 
-            return {
-                self.process_decoded(k): self.process_decoded(v)
-                for k, v in d.items()
-            }
+            return {self.process_decoded(k): self.process_decoded(v) for k, v in d.items()}
 
         if isinstance(d, list):
             return [self.process_decoded(x) for x in d]
@@ -437,24 +408,16 @@ def jsanitize(obj, strict=False, allow_bson=False):
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or
-                       (bson is not None
-                        and isinstance(obj, bson.objectid.ObjectId))):
+    if allow_bson and (
+        isinstance(obj, (datetime.datetime, bytes)) or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
+    ):
         return obj
     if isinstance(obj, (list, tuple)):
-        return [
-            jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj
-        ]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
     if np is not None and isinstance(obj, np.ndarray):
-        return [
-            jsanitize(i, strict=strict, allow_bson=allow_bson)
-            for i in obj.tolist()
-        ]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj.tolist()]
     if isinstance(obj, dict):
-        return {
-            k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
-            for k, v in obj.items()
-        }
+        return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson) for k, v in obj.items()}
     if isinstance(obj, (int, float)):
         return obj
     if obj is None:

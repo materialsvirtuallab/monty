@@ -7,5 +7,5 @@ class OperatorTestCase(unittest.TestCase):
         assert operator_from_str("==")(1, 1) and operator_from_str("+")(1, 1) == 2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

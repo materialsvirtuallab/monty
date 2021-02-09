@@ -103,7 +103,7 @@ class NullFile:
         """
         Pass through
         """
-        return open(os.devnull, 'w')
+        return open(os.devnull, "w")
 
     def __init__(self):
         """no-op"""

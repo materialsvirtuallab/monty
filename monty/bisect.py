@@ -11,12 +11,12 @@ lists.
 
 import bisect as bs
 
-__author__ = 'Matteo Giantomassi'
-__copyright__ = 'Copyright 2013, The Materials Virtual Lab'
-__version__ = '0.1'
-__maintainer__ = 'Matteo Giantomass'
-__email__ = 'gmatteo@gmail.com'
-__date__ = '11/09/14'
+__author__ = "Matteo Giantomassi"
+__copyright__ = "Copyright 2013, The Materials Virtual Lab"
+__version__ = "0.1"
+__maintainer__ = "Matteo Giantomass"
+__email__ = "gmatteo@gmail.com"
+__date__ = "11/09/14"
 
 
 def index(a, x, atol=None):
