@@ -163,6 +163,7 @@ class MSONableTest(unittest.TestCase):
             },
         ]
         obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
+
         obj_dict = obj.as_dict()
         obj2 = GoodNestedMSONClass.from_dict(obj_dict)
         self.assertTrue([obj2.a_list[ii] == aa for ii, aa in enumerate(obj.a_list)])
@@ -326,8 +327,41 @@ class JsonTest(unittest.TestCase):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
         self.assertEqual(
             data,
-            {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}},
+            {
+                "old_module": {
+                    "old_class": {"@class": "new_class", "@module": "new_module"}
+                }
+            },
         )
+
+    def test_pydantic_integrations(self):
+        from pydantic import BaseModel
+
+        class ModelWithMSONable(BaseModel):
+            a: GoodMSONClass
+
+        test_object = ModelWithMSONable(a=GoodMSONClass(1, 1, 1))
+        test_dict_object = ModelWithMSONable(a=test_object.a.as_dict())
+        assert test_dict_object.a.a == test_object.a.a
+
+        assert test_object.schema() == {
+            "title": "ModelWithMSONable",
+            "type": "object",
+            "properties": {
+                "a": {
+                    "title": "A",
+                    "type": "object",
+                    "properties": {
+                        "@class": {"const": "GoodMSONClass"},
+                        "@module": {"const": "tests.test_json"},
+                        "@version": {"type": "string"},
+                    },
+                    "required": ["@class", "@module"],
+                }
+            },
+            "required": ["a"],
+        }
+
 
 
 if __name__ == "__main__":
