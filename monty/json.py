@@ -14,6 +14,7 @@ from enum import Enum
 from importlib import import_module
 
 from inspect import getfullargspec
+from uuid import UUID
 
 try:
     import numpy as np
@@ -265,6 +266,8 @@ class MontyEncoder(json.JSONEncoder):
         """
         if isinstance(o, datetime.datetime):
             return {"@module": "datetime", "@class": "datetime", "string": o.__str__()}
+        if isinstance(o, UUID):
+            return {"@module": "uuid", "@class": "UUID", "string": o.__str__()}
         if np is not None:
             if isinstance(o, np.ndarray):
                 if str(o.dtype).startswith("complex"):
@@ -341,6 +344,9 @@ class MontyDecoder(json.JSONDecoder):
                     except ValueError:
                         dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S")
                     return dt
+
+                if modname == "uuid" and classname == "UUID":
+                    return UUID(d["string"])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
