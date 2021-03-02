@@ -225,6 +225,19 @@ class JsonTest(unittest.TestCase):
         d = json.loads(jsonstr, cls=MontyDecoder)
         self.assertEqual(type(d["dt"]), datetime.datetime)
 
+    def test_uuid(self):
+        from uuid import uuid4, UUID
+        uuid = uuid4()
+        jsonstr = json.dumps(uuid, cls=MontyEncoder)
+        d = json.loads(jsonstr, cls=MontyDecoder)
+        self.assertEqual(type(d), UUID)
+        self.assertEqual(uuid, d)
+        # Test a nested UUID.
+        a = {"uuid": uuid, "a": 1}
+        jsonstr = json.dumps(a, cls=MontyEncoder)
+        d = json.loads(jsonstr, cls=MontyDecoder)
+        self.assertEqual(type(d["uuid"]), UUID)
+
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         self.assertRaises(TypeError, json.dumps, x)
