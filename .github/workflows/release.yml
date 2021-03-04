@@ -49,7 +49,7 @@ jobs:
         black --check --diff --color monty
     - name: pytest
       run: |
-        pytest monty --color=yes
+        pytest tests --color=yes
     - name: release
       env:
         TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
