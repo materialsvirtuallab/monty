@@ -29,9 +29,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements-ci.txt
         pip install -e .
-    - name: pycodestyle
-      run: |
-        pycodestyle monty
     - name: mypy
       run: |
         mypy monty
@@ -46,6 +43,10 @@ jobs:
     - name: Lint with pylint
       run: |
         pylint monty
+    - name: black
+      run: |
+        black --version
+        black --check --diff --color monty
     - name: pytest
       run: |
         pytest monty --color=yes
