@@ -40,7 +40,7 @@ def regrep(filename, patterns, reverse=False, terminate_on_match=False, postproc
             m = p.search(l)
             if m:
                 matches[k].append([[postprocess(g) for g in m.groups()], -i if reverse else i])
-        if terminate_on_match and all([len(matches.get(k, [])) for k in compiled.keys()]):
+        if terminate_on_match and all(len(matches.get(k, [])) for k in compiled.keys()):
             break
     try:
         # Try to close open file handle. Pass if it is a generator.

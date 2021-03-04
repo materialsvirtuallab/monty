@@ -4,7 +4,6 @@
 Deployment file to facilitate releases of monty.
 """
 
-from __future__ import division
 
 import glob
 import requests
