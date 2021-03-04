@@ -91,16 +91,12 @@ def setver(ctx):
 
 @task
 def release_github(ctx):
-    desc = []
-    read = False
-    with open("docs_rst/index.rst") as f:
-        for l in f:
-            if l.strip() == "v" + ver:
-                read = True
-            elif l.strip() == "":
-                read = False
-            elif read:
-                desc.append(l.rstrip())
+    with open("docs_rst/changelog.rst") as f:
+        contents = f.read()
+    toks = re.split(r"\-+", contents)
+    desc = toks[1].strip()
+    toks = desc.split("\n")
+    desc = "\n".join(toks[:-1]).strip()
 
     payload = {
         "tag_name": "v" + ver,
