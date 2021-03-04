@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.string &#8212; monty 4.0.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <title>monty.string &#8212; monty 2021.3.3 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 
@@ -32,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 4.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2021.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.string</a></li> 
       </ul>
@@ -76,7 +75,7 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        str in Python 2. Unchanged otherwise.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">s</span></div>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">version_info</span><span class="o">.</span><span class="n">major</span> <span class="o">&lt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">s</span></div>
 
 
 <div class="viewcode-block" id="is_string"><a class="viewcode-back" href="../../monty.string.html#monty.string.is_string">[docs]</a><span class="k">def</span> <span class="nf">is_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
@@ -111,7 +110,7 @@
     <span class="k">return</span> <span class="n">arg</span></div>
 
 
-<div class="viewcode-block" id="marquee"><a class="viewcode-back" href="../../monty.string.html#monty.string.marquee">[docs]</a><span class="k">def</span> <span class="nf">marquee</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">78</span><span class="p">,</span> <span class="n">mark</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="marquee"><a class="viewcode-back" href="../../monty.string.html#monty.string.marquee">[docs]</a><span class="k">def</span> <span class="nf">marquee</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">78</span><span class="p">,</span> <span class="n">mark</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the input string centered in a &#39;marquee&#39;.</span>
 
@@ -139,7 +138,7 @@
         <span class="n">nmark</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">marks</span> <span class="o">=</span> <span class="n">mark</span> <span class="o">*</span> <span class="n">nmark</span>
-    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">marks</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">marks</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">marks</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">marks</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="boxed"><a class="viewcode-back" href="../../monty.string.html#monty.string.boxed">[docs]</a><span class="k">def</span> <span class="nf">boxed</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
@@ -159,10 +158,13 @@
     <span class="k">if</span> <span class="n">pad</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="n">pad</span> <span class="o">*</span> <span class="n">ch</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">msg</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">pad</span> <span class="o">*</span> <span class="n">ch</span>
 
-    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
-                      <span class="n">msg</span><span class="p">,</span>
-                      <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
-                      <span class="p">])</span></div>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
+            <span class="n">msg</span><span class="p">,</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="o">*</span> <span class="n">ch</span><span class="p">,</span>
+        <span class="p">]</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="make_banner"><a class="viewcode-back" href="../../monty.string.html#monty.string.make_banner">[docs]</a><span class="k">def</span> <span class="nf">make_banner</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">78</span><span class="p">,</span> <span class="n">mark</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">):</span>
@@ -176,13 +178,13 @@
     <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">*</span> <span class="n">mark</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">banner</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">banner</span><span class="p">)</span> <span class="o">*</span> <span class="n">mark</span></div>
 
 
-<div class="viewcode-block" id="indent"><a class="viewcode-back" href="../../monty.string.html#monty.string.indent">[docs]</a><span class="k">def</span> <span class="nf">indent</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">):</span>
+<div class="viewcode-block" id="indent"><a class="viewcode-back" href="../../monty.string.html#monty.string.indent">[docs]</a><span class="k">def</span> <span class="nf">indent</span><span class="p">(</span><span class="n">lines</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Indent the lines in a string by padding each one with proper number of pad</span>
 <span class="sd">    characters</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">padding</span> <span class="o">=</span> <span class="n">amount</span> <span class="o">*</span> <span class="n">ch</span>
-    <span class="k">return</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">))</span></div>
+    <span class="k">return</span> <span class="n">padding</span> <span class="o">+</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">padding</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">))</span></div>
 </pre></div>
 
             <div class="clearer"></div>

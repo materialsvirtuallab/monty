@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.subprocess module &#8212; monty 4.0.2 documentation</title>
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <title>monty.subprocess module &#8212; monty 2021.3.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.tempfile module" href="monty.tempfile.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="monty.string.html" title="monty.string module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.subprocess module</a></li> 
       </ul>
@@ -56,7 +55,7 @@
 <p>Calling shell processes.</p>
 <dl class="py class">
 <dt id="monty.subprocess.Command">
-<em class="property">class </em><code class="sig-name descname">Command</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">command</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/subprocess.html#Command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.subprocess.Command" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">Command</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/subprocess.html#Command"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.subprocess.Command" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Enables to run subprocess commands in a different thread with TIMEOUT
 option.</p>
@@ -68,25 +67,25 @@ option.</p>
 </dl>
 <dl class="py attribute">
 <dt id="monty.subprocess.Command.retcode">
-<code class="sig-name descname">retcode</code><a class="headerlink" href="#monty.subprocess.Command.retcode" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">retcode</span></code><a class="headerlink" href="#monty.subprocess.Command.retcode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return code of the subprocess</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="monty.subprocess.Command.killed">
-<code class="sig-name descname">killed</code><a class="headerlink" href="#monty.subprocess.Command.killed" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">killed</span></code><a class="headerlink" href="#monty.subprocess.Command.killed" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if subprocess has been killed due to the timeout</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="monty.subprocess.Command.output">
-<code class="sig-name descname">output</code><a class="headerlink" href="#monty.subprocess.Command.output" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">output</span></code><a class="headerlink" href="#monty.subprocess.Command.output" title="Permalink to this definition">¶</a></dt>
 <dd><p>stdout of the subprocess</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt id="monty.subprocess.Command.error">
-<code class="sig-name descname">error</code><a class="headerlink" href="#monty.subprocess.Command.error" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">error</span></code><a class="headerlink" href="#monty.subprocess.Command.error" title="Permalink to this definition">¶</a></dt>
 <dd><p>stderr of the subprocess</p>
 </dd></dl>
 
@@ -100,7 +99,7 @@ print(com.retcode, com.killed, com.output, com.output)</p>
 </dl>
 <dl class="py method">
 <dt id="monty.subprocess.Command.run">
-<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeout</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/subprocess.html#Command.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.subprocess.Command.run" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">run</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/subprocess.html#Command.run"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.subprocess.Command.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run a command in a separated thread and wait timeout seconds.
 kwargs are keyword arguments passed to Popen.</p>
 <p>Return: self</p>

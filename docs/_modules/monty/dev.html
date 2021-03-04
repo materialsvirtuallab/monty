@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.dev &#8212; monty 4.0.2 documentation</title>
-    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
+    <title>monty.dev &#8212; monty 2021.3.3 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 
@@ -32,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 4.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2021.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.dev</a></li> 
       </ul>
@@ -135,6 +134,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        :param _callable: Callable function.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">_callable</span><span class="p">)</span>
         <span class="k">def</span> <span class="nf">decorated</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
@@ -168,7 +168,7 @@
 
     <span class="c1"># POSIX</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sysconf</span><span class="p">(</span><span class="s1">&#39;SC_NPROCESSORS_ONLN&#39;</span><span class="p">))</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">sysconf</span><span class="p">(</span><span class="s2">&quot;SC_NPROCESSORS_ONLN&quot;</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">res</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
@@ -176,7 +176,7 @@
 
     <span class="c1"># Windows</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;NUMBER_OF_PROCESSORS&#39;</span><span class="p">])</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;NUMBER_OF_PROCESSORS&quot;</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">res</span>
     <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
@@ -185,6 +185,7 @@
     <span class="c1"># jython</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">java.lang</span> <span class="kn">import</span> <span class="n">Runtime</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
+
         <span class="n">runtime</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="n">getRuntime</span><span class="p">()</span>
         <span class="n">res</span> <span class="o">=</span> <span class="n">runtime</span><span class="o">.</span><span class="n">availableProcessors</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -194,8 +195,7 @@
 
     <span class="c1"># BSD</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">sysctl</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;sysctl&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="s1">&#39;hw.ncpu&#39;</span><span class="p">],</span>
-                                  <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+        <span class="n">sysctl</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;sysctl&quot;</span><span class="p">,</span> <span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;hw.ncpu&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
         <span class="n">scstdout</span> <span class="o">=</span> <span class="n">sysctl</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">res</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">scstdout</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -205,7 +205,7 @@
 
     <span class="c1"># Linux</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">res</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/proc/cpuinfo&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s1">&#39;processor</span><span class="se">\t</span><span class="s1">:&#39;</span><span class="p">)</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/proc/cpuinfo&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;processor</span><span class="se">\t</span><span class="s2">:&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">res</span>
     <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
@@ -213,8 +213,8 @@
 
     <span class="c1"># Solaris</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">pseudo_devices</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;/devices/pseudo/&#39;</span><span class="p">)</span>
-        <span class="n">expr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;^cpuid@[0-9]+$&#39;</span><span class="p">)</span>
+        <span class="n">pseudo_devices</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s2">&quot;/devices/pseudo/&quot;</span><span class="p">)</span>
+        <span class="n">expr</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s2">&quot;^cpuid@[0-9]+$&quot;</span><span class="p">)</span>
         <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">pd</span> <span class="ow">in</span> <span class="n">pseudo_devices</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">expr</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -227,13 +227,13 @@
     <span class="c1"># Other UNIXes (heuristic)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">dmesg</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/var/run/dmesg.boot&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">dmesg</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;/var/run/dmesg.boot&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-            <span class="n">dmesg_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s1">&#39;dmesg&#39;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+            <span class="n">dmesg_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="s2">&quot;dmesg&quot;</span><span class="p">],</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
             <span class="n">dmesg</span> <span class="o">=</span> <span class="n">dmesg_process</span><span class="o">.</span><span class="n">communicate</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="n">res</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">while</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">cpu&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="ow">in</span> <span class="n">dmesg</span><span class="p">:</span>
+        <span class="k">while</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">cpu&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span> <span class="ow">in</span> <span class="n">dmesg</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">+=</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">res</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -241,7 +241,7 @@
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
         <span class="k">pass</span>
 
-    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Cannot determine number of CPUs on this system!&#39;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Cannot determine number of CPUs on this system!&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span></div>
 
 
@@ -259,8 +259,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">IPython.core</span> <span class="kn">import</span> <span class="n">ultratb</span>  <span class="c1"># pylint: disable=import-outside-toplevel</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Cannot install excepthook, IPyhon.core.ultratb not available&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Cannot install excepthook, IPyhon.core.ultratb not available&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span>
 
     <span class="c1"># Select the hook.</span>
