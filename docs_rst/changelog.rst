@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2021.3.3
+---------
+* pydantic support (@shyamd)
+* UUID serialization support (@utf)
+
 v4.0.2
 ------
 1. Allow specification of warning category in deprecated wrapper.
