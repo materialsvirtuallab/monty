@@ -79,13 +79,6 @@ def update_doc(ctx):
 
 
 @task
-def publish(ctx):
-    ctx.run("rm dist/*.*", warn=True)
-    ctx.run("python setup.py sdist bdist_wheel")
-    ctx.run("twine upload dist/*")
-
-
-@task
 def test(ctx):
     ctx.run("pytest")
 
@@ -154,6 +147,5 @@ def release(ctx):
     set_ver(ctx)
     test(ctx)
     update_doc(ctx)
-    publish(ctx)
     commit(ctx)
     release_github(ctx)
