@@ -230,8 +230,8 @@ class MSONable:
             {
                 "type": "object",
                 "properties": {
-                    "@class": {"const": cls.__name__},
-                    "@module": {"const": cls.__module__},
+                    "@class": {"enum": [cls.__name__], "type": "string"},
+                    "@module": {"enum": [cls.__module__], "type": "string"},
                     "@version": {"type": "string"},
                 },
                 "required": ["@class", "@module"],

@@ -365,8 +365,8 @@ class JsonTest(unittest.TestCase):
                     "title": "A",
                     "type": "object",
                     "properties": {
-                        "@class": {"const": "GoodMSONClass"},
-                        "@module": {"const": "tests.test_json"},
+                        "@class": {"enum": ["GoodMSONClass"], "type": "string"},
+                        "@module": {"enum": ["tests.test_json"], "type": "string"},
                         "@version": {"type": "string"},
                     },
                     "required": ["@class", "@module"],
