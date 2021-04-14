@@ -25,6 +25,10 @@ jobs:
     - name: mypy
       run: |
         mypy monty
+    - name: black
+      run: |
+        black --version
+        black --check --diff --color monty
     - name: flake8
       run: |
         flake8 --count --show-source --statistics monty

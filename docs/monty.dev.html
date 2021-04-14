@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.dev module &#8212; monty 4.0.2 documentation</title>
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
+    <title>monty.dev module &#8212; monty 2021.3.3 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.fnmatch module" href="monty.fnmatch.html" />
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="monty.design_patterns.html" title="monty.design_patterns module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.3.3 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.dev module</a></li> 
       </ul>
@@ -57,7 +56,7 @@
 particularly useful for developers. E.g., deprecating methods / classes, etc.</p>
 <dl class="py function">
 <dt id="monty.dev.deprecated">
-<code class="sig-name descname">deprecated</code><span class="sig-paren">(</span><em class="sig-param">replacement=None</em>, <em class="sig-param">message=None</em>, <em class="sig-param">category=&lt;class 'FutureWarning'&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#deprecated"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.deprecated" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">deprecated</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="pre">replacement=None</span></em>, <em class="sig-param"><span class="pre">message=None</span></em>, <em class="sig-param"><span class="pre">category=&lt;class</span> <span class="pre">'FutureWarning'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#deprecated"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.dev.deprecated" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to mark classes or functions as deprecated,
 with a possible replacement.</p>
 <dl class="field-list simple">
@@ -81,7 +80,7 @@ the choice accordingly.</p></li>
 
 <dl class="py function">
 <dt id="monty.dev.get_ncpus">
-<code class="sig-name descname">get_ncpus</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#get_ncpus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.get_ncpus" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">get_ncpus</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#get_ncpus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.dev.get_ncpus" title="Permalink to this definition">¶</a></dt>
 <dd><div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If you are using Python &gt;= 2.7, multiprocessing.cpu_count() already
@@ -98,7 +97,7 @@ cpus-in-python</p>
 
 <dl class="py function">
 <dt id="monty.dev.install_excepthook">
-<code class="sig-name descname">install_excepthook</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hook_type</span><span class="o">=</span><span class="default_value">'color'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#install_excepthook"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.install_excepthook" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">install_excepthook</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hook_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'color'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#install_excepthook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.dev.install_excepthook" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function replaces the original python traceback with an improved
 version from Ipython. Use <cite>color</cite> for colourful traceback formatting,
 <cite>verbose</cite> for Ka-Ping Yee’s “cgitb.py” version kwargs are the keyword
@@ -113,7 +112,7 @@ info.</p>
 
 <dl class="py class">
 <dt id="monty.dev.requires">
-<em class="property">class </em><code class="sig-name descname">requires</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">condition</span></em>, <em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#requires"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.dev.requires" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-name descname"><span class="pre">requires</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">condition</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/dev.html#requires"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.dev.requires" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Decorator to mark classes or functions as requiring a specified condition
 to be true. This can be used to present useful error messages for
