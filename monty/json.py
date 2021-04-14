@@ -13,7 +13,7 @@ from enum import Enum
 
 from importlib import import_module
 
-from inspect import getfullargspec, isclass
+from inspect import getfullargspec
 from uuid import UUID
 
 try:
