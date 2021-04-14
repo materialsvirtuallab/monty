@@ -470,8 +470,8 @@ def jsanitize(obj, strict=False, allow_bson=False):
 
 
 def _serialize_callable(o):
-    # bound methods (i.e., instance methods) have an im_self attribute
-    # that points to the class instance
+    # bound methods (i.e., instance methods) have a __self__ attribute
+    # that points to the class/module/instance
     bound = getattr(o, "__self__", None)
 
     # we are only able to serialize bound methods if the object the method is
