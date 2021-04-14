@@ -479,9 +479,7 @@ def _serialize_callable(o):
     try:
         bound = MontyEncoder().default(bound) if bound is not None else None
     except TypeError:
-        raise TypeError(
-            "Only bound methods of classes or MSONable instances are supported."
-        )
+        raise TypeError("Only bound methods of classes or MSONable instances are supported.")
 
     return {
         "@module": o.__module__,
