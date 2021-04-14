@@ -13,7 +13,7 @@ from enum import Enum
 
 from importlib import import_module
 
-from inspect import getfullargspec
+from inspect import getfullargspec, isclass
 from uuid import UUID
 
 try:
@@ -289,6 +289,9 @@ class MontyEncoder(json.JSONEncoder):
             if isinstance(o, bson.objectid.ObjectId):
                 return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
+        if callable(o) and not isinstance(o, MSONable):
+            return _serialize_callable(o)
+
         try:
             d = o.as_dict()
             if "@module" not in d:
@@ -334,6 +337,30 @@ class MontyDecoder(json.JSONDecoder):
                 if classname in MSONable.REDIRECT.get(modname, {}):
                     modname = MSONable.REDIRECT[modname][classname]["@module"]
                     classname = MSONable.REDIRECT[modname][classname]["@class"]
+            elif "@module" in d and "@callable" in d:
+                modname = d["@module"]
+                objname = d["@callable"]
+                if d.get("@bound", None) is not None:
+                    # if the function is bound to an instance or class, first
+                    # deserialize the bound object and then remove the object name
+                    # from the function name.
+                    obj = self.process_decoded(d["@bound"])
+                    objname = objname.split(".")[1:]
+                else:
+                    # if the function is not bound to an object, import the
+                    # function from the module name
+                    obj = __import__(modname, globals(), locals(), [objname], 0)
+                    objname = objname.split(".")
+                try:
+                    # the function could be nested. e.g., MyClass.NestedClass.function
+                    # so iteratively access the nesting
+                    for attr in objname:
+                        obj = getattr(obj, attr)
+
+                    return obj
+
+                except AttributeError:
+                    pass
             else:
                 modname = None
                 classname = None
@@ -427,6 +454,12 @@ def jsanitize(obj, strict=False, allow_bson=False):
     if obj is None:
         return None
 
+    if callable(obj) and not isinstance(obj, MSONable):
+        try:
+            return _serialize_callable(obj)
+        except TypeError:
+            pass
+
     if not strict:
         return obj.__str__()
 
@@ -434,3 +467,24 @@ def jsanitize(obj, strict=False, allow_bson=False):
         return obj.__str__()
 
     return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson)
+
+
+def _serialize_callable(o):
+    # bound methods (i.e., instance methods) have an im_self attribute
+    # that points to the class instance
+    bound = getattr(o, "__self__", None)
+
+    # we are only able to serialize bound methods if the object the method is
+    # bound to is itself serializable
+    try:
+        bound = MontyEncoder().default(bound) if bound is not None else None
+    except TypeError:
+        raise TypeError(
+            "Only bound methods of classes or MSONable instances are supported."
+        )
+
+    return {
+        "@module": o.__module__,
+        "@callable": getattr(o, "__qualname__", o.__name__),
+        "@bound": bound,
+    }
