@@ -13,4 +13,4 @@ pydocstyle==6.0.0
 pydantic==1.8.1
 flake8==3.9.1
 black==20.8b1
-pylint==2.7.4
+pylint==2.8.1
