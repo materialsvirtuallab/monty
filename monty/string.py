@@ -89,8 +89,7 @@ def marquee(text="", width=78, mark="*"):
         return (mark * width)[:width]
 
     nmark = (width - len(text) - 2) // len(mark) // 2
-    if nmark < 0:
-        nmark = 0
+    nmark = max(nmark, 0)
 
     marks = mark * nmark
     return "%s %s %s" % (marks, text, marks)

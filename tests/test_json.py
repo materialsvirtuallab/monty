@@ -227,6 +227,7 @@ class JsonTest(unittest.TestCase):
 
     def test_uuid(self):
         from uuid import uuid4, UUID
+
         uuid = uuid4()
         jsonstr = json.dumps(uuid, cls=MontyEncoder)
         d = json.loads(jsonstr, cls=MontyDecoder)
@@ -340,11 +341,7 @@ class JsonTest(unittest.TestCase):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
         self.assertEqual(
             data,
-            {
-                "old_module": {
-                    "old_class": {"@class": "new_class", "@module": "new_module"}
-                }
-            },
+            {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}},
         )
 
     def test_pydantic_integrations(self):
@@ -365,8 +362,8 @@ class JsonTest(unittest.TestCase):
                     "title": "A",
                     "type": "object",
                     "properties": {
-                        "@class": {"const": "GoodMSONClass"},
-                        "@module": {"const": "tests.test_json"},
+                        "@class": {"enum": ["GoodMSONClass"], "type": "string"},
+                        "@module": {"enum": ["tests.test_json"], "type": "string"},
                         "@version": {"type": "string"},
                     },
                     "required": ["@class", "@module"],
@@ -374,7 +371,6 @@ class JsonTest(unittest.TestCase):
             },
             "required": ["a"],
         }
-
 
 
 if __name__ == "__main__":

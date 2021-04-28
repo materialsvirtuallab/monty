@@ -203,7 +203,7 @@ class MSONable:
 
     @classmethod
     def __get_validators__(cls):
-        """ Return validators for use in pydantic """
+        """Return validators for use in pydantic"""
         yield cls.validate_monty
 
     @classmethod
@@ -225,13 +225,13 @@ class MSONable:
 
     @classmethod
     def __modify_schema__(cls, field_schema):
-        """ JSON schema for MSONable pattern """
+        """JSON schema for MSONable pattern"""
         field_schema.update(
             {
                 "type": "object",
                 "properties": {
-                    "@class": {"const": cls.__name__},
-                    "@module": {"const": cls.__module__},
+                    "@class": {"enum": [cls.__name__], "type": "string"},
+                    "@module": {"enum": [cls.__module__], "type": "string"},
                     "@version": {"type": "string"},
                 },
                 "required": ["@class", "@module"],

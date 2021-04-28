@@ -76,9 +76,9 @@ class Command:
         def target(**kw):
             try:
                 # print('Thread started')
-                self.process = Popen(self.command, **kw)
-                self.output, self.error = self.process.communicate()
-                self.retcode = self.process.returncode
+                with Popen(self.command, **kw) as self.process:
+                    self.output, self.error = self.process.communicate()
+                    self.retcode = self.process.returncode
                 # print('Thread stopped')
             except Exception:
                 self.error = traceback.format_exc()
