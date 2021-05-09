@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2021.5.9
+---------
+* Drop py3.5 support.
+
 v2021.3.3
 ---------
 * pydantic support (@shyamd)

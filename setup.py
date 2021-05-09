@@ -10,7 +10,7 @@ with io.open(os.path.join(current_dir, "README.rst"), "rt") as f:
 setup(
     name="monty",
     packages=find_packages(),
-    version="2021.3.3",
+    version="2021.3.4",
     extras_require={
         "yaml": ["ruamel.yaml"],
     },
@@ -26,7 +26,6 @@ setup(
     python_requires=">=3.5",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
