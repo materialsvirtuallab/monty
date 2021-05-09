@@ -98,9 +98,9 @@ def release_github(ctx):
     toks = desc.split("\n")
     desc = "\n".join(toks[:-1]).strip()
     payload = {
-        "tag_name": "v" + ver,
+        "tag_name": "v" + NEW_VER,
         "target_commitish": "master",
-        "name": "v" + ver,
+        "name": "v" + NEW_VER,
         "body": desc,
         "draft": False,
         "prerelease": False,
@@ -116,7 +116,7 @@ def release_github(ctx):
 
 @task
 def commit(ctx):
-    ctx.run('git commit -a -m "v%s release"' % ver, warn=True)
+    ctx.run('git commit -a -m "v%s release"' % NEW_VER, warn=True)
     ctx.run("git push", warn=True)
 
 
