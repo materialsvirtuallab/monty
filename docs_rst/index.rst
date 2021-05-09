@@ -29,10 +29,6 @@ Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.
 
-Monty currently supports Python 2.7-3.x, but please note that with effect from
-v3.x, which will be released in Jan 2020, we will completely abandon Py2.7
-support, in line with most other Python packages.
-
 Change Log
 ==========
 
