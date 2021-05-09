@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.os.path module &#8212; monty 2021.3.3 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <title>monty.os.path module &#8212; monty 2021.5.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.os.html" title="monty.os package"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.5.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" >monty package</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="monty.os.html" accesskey="U">monty.os package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.os.path module</a></li> 
@@ -55,8 +55,8 @@
 <span id="monty-os-path-module"></span><h1>monty.os.path module<a class="headerlink" href="#module-monty.os.path" title="Permalink to this headline">¶</a></h1>
 <p>Path based methods, e.g., which, zpath, etc.</p>
 <dl class="py function">
-<dt id="monty.os.path.find_exts">
-<code class="sig-name descname"><span class="pre">find_exts</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'basename'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#find_exts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.os.path.find_exts" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.os.path.find_exts">
+<span class="sig-name descname"><span class="pre">find_exts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exts</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_dirs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">match_mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'basename'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#find_exts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.os.path.find_exts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find all files with the extension listed in <cite>exts</cite> that are located within
 the directory tree rooted at <cite>top</cite> (including top itself, but excluding
 ‘.’ and ‘..’)</p>
@@ -96,8 +96,8 @@ Can be concatenated via <cite>|</cite></p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.os.path.which">
-<code class="sig-name descname"><span class="pre">which</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#which"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.os.path.which" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.os.path.which">
+<span class="sig-name descname"><span class="pre">which</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#which"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.os.path.which" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns full path to a executable.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -114,8 +114,8 @@ Can be concatenated via <cite>|</cite></p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.os.path.zpath">
-<code class="sig-name descname"><span class="pre">zpath</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#zpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.os.path.zpath" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.os.path.zpath">
+<span class="sig-name descname"><span class="pre">zpath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/os/path.html#zpath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.os.path.zpath" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an existing (zipped or unzipped) file path given the unzipped
 version. If no path exists, returns the filename unmodified.</p>
 <dl class="field-list simple">

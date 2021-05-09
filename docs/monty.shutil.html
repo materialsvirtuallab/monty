@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.shutil module &#8212; monty 2021.3.3 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <title>monty.shutil module &#8212; monty 2021.5.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.serialization.html" title="monty.serialization module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.5.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.shutil module</a></li> 
       </ul>
@@ -54,8 +54,8 @@
 <span id="monty-shutil-module"></span><h1>monty.shutil module<a class="headerlink" href="#module-monty.shutil" title="Permalink to this headline">¶</a></h1>
 <p>Copying and zipping utilities. Works on directories mostly.</p>
 <dl class="py function">
-<dt id="monty.shutil.compress_dir">
-<code class="sig-name descname"><span class="pre">compress_dir</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gz'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#compress_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.compress_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.compress_dir">
+<span class="sig-name descname"><span class="pre">compress_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gz'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#compress_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.compress_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively compresses all files in a directory. Note that this
 compresses all files singly, i.e., it does not create a tar archive. For
 that, just use Python tarfile class.</p>
@@ -71,8 +71,8 @@ that, just use Python tarfile class.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.shutil.compress_file">
-<code class="sig-name descname"><span class="pre">compress_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gz'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#compress_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.compress_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.compress_file">
+<span class="sig-name descname"><span class="pre">compress_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'gz'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#compress_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.compress_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compresses a file with the correct extension. Functions like standard
 Unix command line gzip and bzip2 in the sense that the original
 uncompressed files are not retained.</p>
@@ -88,8 +88,8 @@ uncompressed files are not retained.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.shutil.copy_r">
-<code class="sig-name descname"><span class="pre">copy_r</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#copy_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.copy_r" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.copy_r">
+<span class="sig-name descname"><span class="pre">copy_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#copy_r"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.copy_r" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements a recursive copy function similar to Unix’s “cp -r” command.
 Surprisingly, python does not have a real equivalent. shutil.copytree
 only works if the destination directory is not present.</p>
@@ -104,8 +104,8 @@ only works if the destination directory is not present.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.shutil.decompress_dir">
-<code class="sig-name descname"><span class="pre">decompress_dir</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#decompress_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.decompress_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.decompress_dir">
+<span class="sig-name descname"><span class="pre">decompress_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#decompress_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.decompress_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursively decompresses all files in a directory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -115,8 +115,8 @@ only works if the destination directory is not present.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.shutil.decompress_file">
-<code class="sig-name descname"><span class="pre">decompress_file</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#decompress_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.decompress_file" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.decompress_file">
+<span class="sig-name descname"><span class="pre">decompress_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#decompress_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.decompress_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decompresses a file with the correct extension. Automatically detects
 gz, bz2 or z extension.</p>
 <dl class="field-list simple">
@@ -131,8 +131,8 @@ gz, bz2 or z extension.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.shutil.gzip_dir">
-<code class="sig-name descname"><span class="pre">gzip_dir</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compresslevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#gzip_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.gzip_dir" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.gzip_dir">
+<span class="sig-name descname"><span class="pre">gzip_dir</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compresslevel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#gzip_dir"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.gzip_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Gzips all files in a directory. Note that this is different from
 shutil.make_archive, which creates a tar archive. The aim of this method
 is to create gzipped files that can still be read using common Unix-style
@@ -149,8 +149,8 @@ GzipFile, 6 is default for gzip.</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.shutil.remove">
-<code class="sig-name descname"><span class="pre">remove</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_symlink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.remove" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.shutil.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">follow_symlink</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/shutil.html#remove"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.shutil.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements an remove function that will delete files, folder trees and
 symlink trees</p>
 <p>1.) Remove a file

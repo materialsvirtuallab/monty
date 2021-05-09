@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.inspect module &#8212; monty 2021.3.3 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <title>monty.inspect module &#8212; monty 2021.5.9 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
@@ -39,7 +39,7 @@
         <li class="right" >
           <a href="monty.functools.html" title="monty.functools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.3.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.5.9 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.inspect module</a></li> 
       </ul>
@@ -54,15 +54,15 @@
 <span id="monty-inspect-module"></span><h1>monty.inspect module<a class="headerlink" href="#module-monty.inspect" title="Permalink to this headline">¶</a></h1>
 <p>Useful additional functions to help get information about live objects</p>
 <dl class="py function">
-<dt id="monty.inspect.all_subclasses">
-<code class="sig-name descname"><span class="pre">all_subclasses</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.inspect.all_subclasses">
+<span class="sig-name descname"><span class="pre">all_subclasses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#all_subclasses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.all_subclasses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a class <cite>cls</cite>, this recursive function returns a list with
 all subclasses, subclasses of subclasses, and so on.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.inspect.caller_name">
-<code class="sig-name descname"><span class="pre">caller_name</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.inspect.caller_name">
+<span class="sig-name descname"><span class="pre">caller_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">skip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#caller_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.caller_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a name of a caller in the format module.class.method</p>
 <p><cite>skip</cite> specifies how many levels of stack to skip while getting caller
 name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
@@ -75,14 +75,14 @@ name. skip=1 means “who calls me”, skip=2 “who calls my caller” etc.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.inspect.find_top_pyfile">
-<code class="sig-name descname"><span class="pre">find_top_pyfile</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#find_top_pyfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.find_top_pyfile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.inspect.find_top_pyfile">
+<span class="sig-name descname"><span class="pre">find_top_pyfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#find_top_pyfile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.find_top_pyfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function inspects the Cpython frame to find the path of the script.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.inspect.initializer">
-<code class="sig-name descname"><span class="pre">initializer</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.inspect.initializer">
+<span class="sig-name descname"><span class="pre">initializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/inspect.html#initializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.inspect.initializer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Automatically assigns the parameters.
 <a class="reference external" href="http://stackoverflow.com/questions/1389180/python-automatically-initialize">http://stackoverflow.com/questions/1389180/python-automatically-initialize</a>
 -instance-variables</p>
