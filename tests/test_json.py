@@ -50,7 +50,6 @@ class GoodNestedMSONClass(MSONable):
 
 
 class MethodSerializationClass(MSONable):
-
     def __init__(self, a):
         self.a = a
 
@@ -75,7 +74,6 @@ class MethodSerializationClass(MSONable):
 
 
 class MethodNonSerializationClass:
-
     def __init__(self, a):
         self.a = a
 
@@ -333,7 +331,7 @@ class JsonTest(unittest.TestCase):
             instance.classmethod,
             # classes
             MethodSerializationClass,
-            Enum
+            Enum,
         ]:
             self.assertRaises(TypeError, json.dumps, function)
             djson = json.dumps(function, cls=MontyEncoder)
@@ -427,7 +425,7 @@ class JsonTest(unittest.TestCase):
             instance.classmethod,
             # classes
             MethodSerializationClass,
-            Enum
+            Enum,
         ]:
             d = {"f": function}
             clean = jsanitize(d)
