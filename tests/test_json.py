@@ -319,6 +319,8 @@ class JsonTest(unittest.TestCase):
             # builtins
             str,
             list,
+            sum,
+            open,
             # functions
             os.path.join,
             my_callable,
@@ -357,7 +359,7 @@ class JsonTest(unittest.TestCase):
             self.assertEqual(x.__self__.as_dict(), function.__self__.as_dict())
 
         # test method bound to object that is not serializable
-        for function in [open, MethodNonSerializationClass(1).method]:
+        for function in [MethodNonSerializationClass(1).method]:
             self.assertRaises(TypeError, json.dumps, function, cls=MontyEncoder)
 
         # test that callable MSONable objects still get serialized as the objects
@@ -413,6 +415,8 @@ class JsonTest(unittest.TestCase):
             # builtins
             str,
             list,
+            sum,
+            open,
             # functions
             os.path.join,
             my_callable,
@@ -442,7 +446,7 @@ class JsonTest(unittest.TestCase):
             self.assertTrue("@class" in clean["f"]["@bound"])
 
         # test method bound to object that is not serializable
-        for function in [open, MethodNonSerializationClass(1).method]:
+        for function in [MethodNonSerializationClass(1).method]:
             d = {"f": function}
             clean = jsanitize(d)
             self.assertTrue(isinstance(clean["f"], str))
