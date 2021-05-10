@@ -268,6 +268,7 @@ class MontyEncoder(json.JSONEncoder):
             return {"@module": "datetime", "@class": "datetime", "string": o.__str__()}
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": o.__str__()}
+
         if np is not None:
             if isinstance(o, np.ndarray):
                 if str(o.dtype).startswith("complex"):
@@ -470,16 +471,23 @@ def jsanitize(obj, strict=False, allow_bson=False):
 
 
 def _serialize_callable(o):
+    import builtins
+
     # bound methods (i.e., instance methods) have a __self__ attribute
     # that points to the class/module/instance
     bound = getattr(o, "__self__", None)
 
+    # don't care about what builtin functions (sum, open, etc) are bound to
+    if bound == builtins:
+        bound = None
+
     # we are only able to serialize bound methods if the object the method is
     # bound to is itself serializable
-    try:
-        bound = MontyEncoder().default(bound) if bound is not None else None
-    except TypeError:
-        raise TypeError("Only bound methods of classes or MSONable instances are supported.")
+    if bound is not None:
+        try:
+            bound = MontyEncoder().default(bound)
+        except TypeError:
+            raise TypeError("Only bound methods of classes or MSONable instances are supported.")
 
     return {
         "@module": o.__module__,
