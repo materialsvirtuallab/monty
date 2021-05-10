@@ -5,6 +5,7 @@ JSON serialization and deserialization utilities.
 
 import os
 import json
+import types
 import datetime
 
 from hashlib import sha1
@@ -471,8 +472,6 @@ def jsanitize(obj, strict=False, allow_bson=False):
 
 
 def _serialize_callable(o):
-    import types
-
     if isinstance(o, types.BuiltinFunctionType):
         # don't care about what builtin functions (sum, open, etc) are bound to
         bound = None
