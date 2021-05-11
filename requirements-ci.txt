@@ -12,5 +12,5 @@ mypy==0.812
 pydocstyle==6.0.0
 pydantic==1.8.1
 flake8==3.9.2
-black==21.5b0
+black==21.5b1
 pylint==2.8.2
