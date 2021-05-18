@@ -9,7 +9,7 @@ coveralls==3.0.1
 pymongo==3.11.4
 pycodestyle==2.7.0
 mypy==0.812
-pydocstyle==6.0.0
+pydocstyle==6.1.1
 pydantic==1.8.1
 flake8==3.9.2
 black==21.5b0
