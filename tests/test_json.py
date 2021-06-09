@@ -8,7 +8,6 @@ import datetime
 from bson.objectid import ObjectId
 from enum import Enum
 
-from pydantic import BaseModel
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 from monty.json import _load_redirect
@@ -90,9 +89,6 @@ class EnumTest(MSONable, Enum):
     a = 1
     b = 2
 
-
-class ModelWithMSONable(BaseModel):
-    a: GoodMSONClass
 
 
 class MSONableTest(unittest.TestCase):
@@ -487,6 +483,12 @@ class JsonTest(unittest.TestCase):
         )
 
     def test_pydantic_integrations(self):
+        from pydantic import BaseModel
+
+        global ModelWithMSONable  # allow model to be deserialized in test
+
+        class ModelWithMSONable(BaseModel):
+            a: GoodMSONClass
 
         test_object = ModelWithMSONable(a=GoodMSONClass(1, 1, 1))
         test_dict_object = ModelWithMSONable(a=test_object.a.as_dict())
