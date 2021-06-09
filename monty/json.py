@@ -22,6 +22,11 @@ except ImportError:
     np = None  # type: ignore
 
 try:
+    import pydantic
+except ImportError:
+    pydantic = None  # type: ignore
+
+try:
     import bson
 except ImportError:
     bson = None
@@ -268,6 +273,7 @@ class MontyEncoder(json.JSONEncoder):
             return {"@module": "datetime", "@class": "datetime", "string": o.__str__()}
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": o.__str__()}
+
         if np is not None:
             if isinstance(o, np.ndarray):
                 if str(o.dtype).startswith("complex"):
@@ -293,7 +299,11 @@ class MontyEncoder(json.JSONEncoder):
             return _serialize_callable(o)
 
         try:
-            d = o.as_dict()
+            if pydantic is not None and isinstance(o, pydantic.BaseModel):
+                d = o.dict()
+            else:
+                d = o.as_dict()
+
             if "@module" not in d:
                 d["@module"] = "{}".format(o.__class__.__module__)
             if "@class" not in d:
@@ -381,6 +391,8 @@ class MontyDecoder(json.JSONDecoder):
                     data = {k: v for k, v in d.items() if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
+                    if pydantic is not None and issubclass(cls_, pydantic.BaseModel):
+                        return cls_(**data)
             elif np is not None and modname == "numpy" and classname == "array":
                 if d["dtype"].startswith("complex"):
                     return np.array(
@@ -465,6 +477,9 @@ def jsanitize(obj, strict=False, allow_bson=False):
 
     if isinstance(obj, str):
         return obj.__str__()
+
+    if pydantic is not None and isinstance(obj, pydantic.BaseModel):
+        return jsanitize(MontyEncoder().default(obj), strict=strict, allow_bson=allow_bson)
 
     return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson)
 

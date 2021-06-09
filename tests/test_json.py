@@ -90,6 +90,7 @@ class EnumTest(MSONable, Enum):
     b = 2
 
 
+
 class MSONableTest(unittest.TestCase):
     def setUp(self):
         self.good_cls = GoodMSONClass
@@ -484,6 +485,8 @@ class JsonTest(unittest.TestCase):
     def test_pydantic_integrations(self):
         from pydantic import BaseModel
 
+        global ModelWithMSONable  # allow model to be deserialized in test
+
         class ModelWithMSONable(BaseModel):
             a: GoodMSONClass
 
@@ -508,6 +511,27 @@ class JsonTest(unittest.TestCase):
             },
             "required": ["a"],
         }
+
+        d = jsanitize(test_object, strict=True)
+        assert d == {
+            'a': {
+                '@module': 'tests.test_json',
+                '@class': 'GoodMSONClass',
+                '@version': '0.1',
+                'a': 1,
+                'b': 1,
+                'c': 1,
+                'd': 1,
+                'values': []
+            },
+            '@module': 'tests.test_json',
+            '@class': 'ModelWithMSONable',
+            '@version': '0.1'
+        }
+        obj = MontyDecoder().process_decoded(d)
+        assert isinstance(obj, BaseModel)
+        assert isinstance(obj.a, GoodMSONClass)
+        assert obj.a.b == 1
 
 
 if __name__ == "__main__":
