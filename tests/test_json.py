@@ -509,6 +509,23 @@ class JsonTest(unittest.TestCase):
             "required": ["a"],
         }
 
+        d = jsanitize(test_object, strict=True)
+        assert d == {
+            'a': {
+                '@module': 'tests.test_json',
+                '@class': 'GoodMSONClass',
+                '@version': '0.1',
+                'a': 1,
+                'b': 1,
+                'c': 1,
+                'd': 1,
+                'values': []
+            },
+            '@module': 'tests.test_json',
+            '@class': 'ModelWithMSONable',
+            '@version': '0.1'
+        }
+
 
 if __name__ == "__main__":
     unittest.main()
