@@ -10,7 +10,7 @@ pymongo==3.11.4
 pycodestyle==2.7.0
 mypy==0.901
 pydocstyle==6.1.1
-pydantic==1.8.1
+pydantic==1.8.2
 flake8==3.9.2
 black==21.5b2
 pylint==2.8.3
