@@ -391,6 +391,8 @@ class MontyDecoder(json.JSONDecoder):
                     data = {k: v for k, v in d.items() if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
+                    elif pydantic is not None and issubclass(cls_, pydantic.BaseModel):
+                        return cls_(**data)
             elif np is not None and modname == "numpy" and classname == "array":
                 if d["dtype"].startswith("complex"):
                     return np.array(

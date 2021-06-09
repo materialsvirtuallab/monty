@@ -8,6 +8,7 @@ import datetime
 from bson.objectid import ObjectId
 from enum import Enum
 
+from pydantic import BaseModel
 from . import __version__ as tests_version
 from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
 from monty.json import _load_redirect
@@ -88,6 +89,10 @@ def my_callable(a, b):
 class EnumTest(MSONable, Enum):
     a = 1
     b = 2
+
+
+class ModelWithMSONable(BaseModel):
+    a: GoodMSONClass
 
 
 class MSONableTest(unittest.TestCase):
@@ -482,10 +487,6 @@ class JsonTest(unittest.TestCase):
         )
 
     def test_pydantic_integrations(self):
-        from pydantic import BaseModel
-
-        class ModelWithMSONable(BaseModel):
-            a: GoodMSONClass
 
         test_object = ModelWithMSONable(a=GoodMSONClass(1, 1, 1))
         test_dict_object = ModelWithMSONable(a=test_object.a.as_dict())
@@ -525,6 +526,10 @@ class JsonTest(unittest.TestCase):
             '@class': 'ModelWithMSONable',
             '@version': '0.1'
         }
+        obj = MontyDecoder().process_decoded(d)
+        assert isinstance(obj, BaseModel)
+        assert isinstance(obj.a, GoodMSONClass)
+        assert obj.a.b == 1
 
 
 if __name__ == "__main__":
