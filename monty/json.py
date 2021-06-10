@@ -5,6 +5,7 @@ JSON serialization and deserialization utilities.
 
 import os
 import json
+import types
 import datetime
 
 from hashlib import sha1
@@ -487,16 +488,21 @@ def jsanitize(obj, strict=False, allow_bson=False):
 
 
 def _serialize_callable(o):
-    # bound methods (i.e., instance methods) have a __self__ attribute
-    # that points to the class/module/instance
-    bound = getattr(o, "__self__", None)
+    if isinstance(o, types.BuiltinFunctionType):
+        # don't care about what builtin functions (sum, open, etc) are bound to
+        bound = None
+    else:
+        # bound methods (i.e., instance methods) have a __self__ attribute
+        # that points to the class/module/instance
+        bound = getattr(o, "__self__", None)
 
     # we are only able to serialize bound methods if the object the method is
     # bound to is itself serializable
-    try:
-        bound = MontyEncoder().default(bound) if bound is not None else None
-    except TypeError:
-        raise TypeError("Only bound methods of classes or MSONable instances are supported.")
+    if bound is not None:
+        try:
+            bound = MontyEncoder().default(bound)
+        except TypeError:
+            raise TypeError("Only bound methods of classes or MSONable instances are supported.")
 
     return {
         "@module": o.__module__,
