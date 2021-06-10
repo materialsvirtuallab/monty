@@ -3,7 +3,7 @@ Change log
 
 v2021.6.10
 ----------
-* Expanded support for built-in funcitons, numpy types, etc. in MSON serialization (@utf).
+* Expanded support for built-in functions, numpy types, etc. in MSON serialization (@utf).
 
 v2021.5.9
 ---------
