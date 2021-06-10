@@ -314,6 +314,10 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(type(x), np.ndarray)
         self.assertEqual(x.dtype, "complex64")
 
+        x = {"energies": [np.float64(1234.5)]}
+        d = jsanitize(x, strict=True)
+        assert type(d["energies"][0]) == float
+
     def test_callable(self):
         instance = MethodSerializationClass(a=1)
         for function in [

@@ -459,7 +459,7 @@ def jsanitize(obj, strict=False, allow_bson=False):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
     if np is not None and isinstance(obj, np.ndarray):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj.tolist()]
-    if isinstance(obj, np.generic):
+    if np is not None and isinstance(obj, np.generic):
         return obj.item()
     if isinstance(obj, dict):
         return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson) for k, v in obj.items()}
