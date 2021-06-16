@@ -466,7 +466,10 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
     if isinstance(obj, dict):
-        return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for k, v in obj.items()}
+        return {
+            k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            for k, v in obj.items()
+        }
     if isinstance(obj, (int, float)):
         return obj
     if obj is None:
