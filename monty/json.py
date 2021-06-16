@@ -428,7 +428,7 @@ class MSONError(Exception):
     """
 
 
-def jsanitize(obj, strict=False, allow_bson=False):
+def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
@@ -451,18 +451,21 @@ def jsanitize(obj, strict=False, allow_bson=False):
     Returns:
         Sanitized dict that can be json serialized.
     """
+    if isinstance(obj, Enum) and enum_values:
+        return obj.value
+
     if allow_bson and (
         isinstance(obj, (datetime.datetime, bytes)) or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
     ):
         return obj
     if isinstance(obj, (list, tuple)):
-        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj]
     if np is not None and isinstance(obj, np.ndarray):
-        return [jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj.tolist()]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj.tolist()]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
     if isinstance(obj, dict):
-        return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson) for k, v in obj.items()}
+        return {k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for k, v in obj.items()}
     if isinstance(obj, (int, float)):
         return obj
     if obj is None:
@@ -481,9 +484,9 @@ def jsanitize(obj, strict=False, allow_bson=False):
         return obj.__str__()
 
     if pydantic is not None and isinstance(obj, pydantic.BaseModel):
-        return jsanitize(MontyEncoder().default(obj), strict=strict, allow_bson=allow_bson)
+        return jsanitize(MontyEncoder().default(obj), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
 
-    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson)
+    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
 
 
 def _serialize_callable(o):
