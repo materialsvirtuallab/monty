@@ -448,6 +448,7 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
             encounters an bson supported type such as objectid and datetime. If
             True, such bson types will be ignored, allowing for proper
             insertion into MongoDb databases.
+        enum_values (bool): Convert Enums to their values.
 
     Returns:
         Sanitized dict that can be json serialized.
