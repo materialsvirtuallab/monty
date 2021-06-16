@@ -227,6 +227,20 @@ class MSONableTest(unittest.TestCase):
         self.assertEqual(e_new.name, e.name)
         self.assertEqual(e_new.value, e.value)
 
+        d = {"123": EnumTest.a}
+        f = jsanitize(d)
+        self.assertEqual(f["123"], "EnumTest.a")
+
+        f = jsanitize(d, strict=True)
+        self.assertEqual(f["123"]["@module"], "tests.test_json")
+        self.assertEqual(f["123"]["@class"], "EnumTest")
+        self.assertEqual(f["123"]["value"], 1)
+
+        f = jsanitize(d, strict=True, enum_values=True)
+        self.assertEqual(f["123"], 1)
+
+        f = jsanitize(d, enum_values=True)
+        self.assertEqual(f["123"], 1)
 
 class JsonTest(unittest.TestCase):
     def test_as_from_dict(self):
