@@ -3,14 +3,14 @@ pytest-cov==2.12.1
 numpy==1.20.3
 ruamel.yaml==0.17.9
 msgpack==1.0.2
-tqdm==4.61.0
+tqdm==4.61.1
 coverage==5.5
 coveralls==3.1.0
 pymongo==3.11.4
 pycodestyle==2.7.0
-mypy==0.901
+mypy==0.910
 pydocstyle==6.1.1
 pydantic==1.8.2
 flake8==3.9.2
-black==21.5b2
+black==21.6b0
 pylint==2.8.3
