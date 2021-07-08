@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.serialization &#8212; monty 2021.6.10 documentation</title>
+    <title>monty.serialization &#8212; monty 2021.7.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2021.6.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2021.7.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.serialization</a></li> 
       </ul>
@@ -81,7 +81,7 @@
     <span class="n">msgpack</span> <span class="o">=</span> <span class="kc">None</span>
 
 
-<div class="viewcode-block" id="loadfn"><a class="viewcode-back" href="../../monty.serialization.html#monty.serialization.loadfn">[docs]</a><span class="k">def</span> <span class="nf">loadfn</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="loadfn"><a class="viewcode-back" href="../../monty.serialization.html#monty.serialization.loadfn">[docs]</a><span class="k">def</span> <span class="nf">loadfn</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Loads json/yaml/msgpack directly from a filename instead of a</span>
 <span class="sd">    File-like object. File may also be a BZ2 (&quot;.BZ2&quot;) or GZIP (&quot;.GZ&quot;, &quot;.Z&quot;)</span>
@@ -95,19 +95,23 @@
 <span class="sd">    Args:</span>
 <span class="sd">        fn (str/Path): filename or pathlib.Path.</span>
 <span class="sd">        *args: Any of the args supported by json/yaml.load.</span>
+<span class="sd">        fmt (string): If specified, the fmt specified would be used instead</span>
+<span class="sd">            of autodetection from filename. Supported formats right now are</span>
+<span class="sd">            &quot;json&quot;, &quot;yaml&quot; or &quot;mpk&quot;.</span>
 <span class="sd">        **kwargs: Any of the kwargs supported by json/yaml.load.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        (object) Result of json/yaml/msgpack.load.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="s2">&quot;.mpk&quot;</span> <span class="ow">in</span> <span class="n">basename</span><span class="p">:</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;mpk&quot;</span>
-    <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">ext</span> <span class="ow">in</span> <span class="n">basename</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">)):</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;yaml&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+    <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;.mpk&quot;</span> <span class="ow">in</span> <span class="n">basename</span><span class="p">:</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;mpk&quot;</span>
+        <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">ext</span> <span class="ow">in</span> <span class="n">basename</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">)):</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;yaml&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
 
     <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">&quot;mpk&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">msgpack</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -132,7 +136,7 @@
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Invalid format: </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">fmt</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="dumpfn"><a class="viewcode-back" href="../../monty.serialization.html#monty.serialization.dumpfn">[docs]</a><span class="k">def</span> <span class="nf">dumpfn</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="dumpfn"><a class="viewcode-back" href="../../monty.serialization.html#monty.serialization.dumpfn">[docs]</a><span class="k">def</span> <span class="nf">dumpfn</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">fn</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sa">r</span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dump to a json/yaml directly by filename instead of a</span>
 <span class="sd">    File-like object. File may also be a BZ2 (&quot;.BZ2&quot;) or GZIP (&quot;.GZ&quot;, &quot;.Z&quot;)</span>
@@ -152,13 +156,14 @@
 <span class="sd">    Returns:</span>
 <span class="sd">        (object) Result of json.load.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="k">if</span> <span class="s2">&quot;.mpk&quot;</span> <span class="ow">in</span> <span class="n">basename</span><span class="p">:</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;mpk&quot;</span>
-    <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">ext</span> <span class="ow">in</span> <span class="n">basename</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">)):</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;yaml&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
+    <span class="k">if</span> <span class="n">fmt</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">&quot;.mpk&quot;</span> <span class="ow">in</span> <span class="n">basename</span><span class="p">:</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;mpk&quot;</span>
+        <span class="k">elif</span> <span class="nb">any</span><span class="p">(</span><span class="n">ext</span> <span class="ow">in</span> <span class="n">basename</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;.yaml&quot;</span><span class="p">,</span> <span class="s2">&quot;.yml&quot;</span><span class="p">)):</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;yaml&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;json&quot;</span>
 
     <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">&quot;mpk&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">msgpack</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

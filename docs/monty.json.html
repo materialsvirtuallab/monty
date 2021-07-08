@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.json module &#8212; monty 2021.6.10 documentation</title>
+    <title>monty.json module &#8212; monty 2021.7.8 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.itertools.html" title="monty.itertools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.6.10 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.7.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.json module</a></li> 
       </ul>
@@ -272,7 +272,7 @@ property, the default Python json encoder default method is called.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="monty.json.jsanitize">
-<span class="sig-name descname"><span class="pre">jsanitize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_bson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#jsanitize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.jsanitize" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">jsanitize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_bson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enum_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#jsanitize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.jsanitize" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method cleans an input json-like object, either a list or a dict or
 some sequence, nested or otherwise, by converting all non-string
 dictionary keys (such as int and float) to strings, and also recursively
@@ -291,6 +291,7 @@ the object to a string representation.</p></li>
 encounters an bson supported type such as objectid and datetime. If
 True, such bson types will be ignored, allowing for proper
 insertion into MongoDb databases.</p></li>
+<li><p><strong>enum_values</strong> (<em>bool</em>) – Convert Enums to their values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
