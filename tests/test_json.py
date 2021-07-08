@@ -5,6 +5,7 @@ import unittest
 import numpy as np
 import json
 import datetime
+import pandas as pd
 from bson.objectid import ObjectId
 from enum import Enum
 
@@ -89,6 +90,10 @@ class EnumTest(MSONable, Enum):
     a = 1
     b = 2
 
+
+class ClassContainingDataFrame(MSONable):
+    def __init__(self, df):
+        self.df = df
 
 
 class MSONableTest(unittest.TestCase):
@@ -331,6 +336,21 @@ class JsonTest(unittest.TestCase):
         x = {"energies": [np.float64(1234.5)]}
         d = jsanitize(x, strict=True)
         assert type(d["energies"][0]) == float
+
+    def test_pandas(self):
+
+        cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
+
+        d = json.loads(MontyEncoder().encode(cls))
+
+        self.assertEqual(d["df"]["@module"], "pandas")
+        self.assertEqual(d["df"]["@class"], "DataFrame")
+
+        obj = ClassContainingDataFrame.from_dict(d)
+        self.assertIsInstance(obj, ClassContainingDataFrame)
+        self.assertIsInstance(obj.df, pd.DataFrame)
+        self.assertEqual(list(obj.df.a), [1, 1])
+
 
     def test_callable(self):
         instance = MethodSerializationClass(a=1)

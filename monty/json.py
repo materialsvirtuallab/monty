@@ -23,6 +23,11 @@ except ImportError:
     np = None  # type: ignore
 
 try:
+    import pandas as pd
+except ImportError:
+    pd = None  # type: ignore
+
+try:
     import pydantic
 except ImportError:
     pydantic = None  # type: ignore
@@ -292,6 +297,15 @@ class MontyEncoder(json.JSONEncoder):
                 }
             if isinstance(o, np.generic):
                 return o.item()
+
+        if pd is not None:
+            if isinstance(o, pd.DataFrame):
+                return {
+                    "@module": "pandas",
+                    "@class": "DataFrame",
+                    "data": o.to_json(default_handler=MontyEncoder().encode)
+                }
+
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
                 return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
@@ -375,7 +389,7 @@ class MontyDecoder(json.JSONDecoder):
             else:
                 modname = None
                 classname = None
-            if modname and modname not in ["bson.objectid", "numpy"]:
+            if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
                 if modname == "datetime" and classname == "datetime":
                     try:
                         dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
@@ -401,7 +415,9 @@ class MontyDecoder(json.JSONDecoder):
                         dtype=d["dtype"],
                     )
                 return np.array(d["data"], dtype=d["dtype"])
-
+            elif pd is not None and modname == "pandas" and classname == "DataFrame":
+                decoded_data = MontyDecoder().decode(d["data"])
+                return pd.DataFrame(decoded_data)
             elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
                 return bson.objectid.ObjectId(d["oid"])
 
