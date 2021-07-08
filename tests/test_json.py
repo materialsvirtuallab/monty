@@ -149,20 +149,11 @@ class MSONableTest(unittest.TestCase):
         b_dict = {"first": GMC(3, 3.0, "three"), "second": GMC(4, 4.0, "four")}
         c_list_dict_list = [
             {
-                "list1": [
-                    GMC(5, 5.0, "five"),
-                    GMC(6, 6.0, "six"),
-                    GMC(7, 7.0, "seven"),
-                ],
+                "list1": [GMC(5, 5.0, "five"), GMC(6, 6.0, "six"), GMC(7, 7.0, "seven"),],
                 "list2": [GMC(8, 8.0, "eight")],
             },
             {
-                "list3": [
-                    GMC(9, 9.0, "nine"),
-                    GMC(10, 10.0, "ten"),
-                    GMC(11, 11.0, "eleven"),
-                    GMC(12, 12.0, "twelve"),
-                ],
+                "list3": [GMC(9, 9.0, "nine"), GMC(10, 10.0, "ten"), GMC(11, 11.0, "eleven"), GMC(12, 12.0, "twelve"),],
                 "list4": [GMC(13, 13.0, "thirteen"), GMC(14, 14.0, "fourteen")],
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
@@ -170,8 +161,7 @@ class MSONableTest(unittest.TestCase):
         obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
 
         self.assertEqual(
-            a_list[0].unsafe_hash().hexdigest(),
-            "ea44de0e2ef627be582282c02c48e94de0d58ec6",
+            a_list[0].unsafe_hash().hexdigest(), "ea44de0e2ef627be582282c02c48e94de0d58ec6",
         )
         self.assertEqual(obj.unsafe_hash().hexdigest(), "44204c8da394e878f7562c9aa2e37c2177f28b81")
 
@@ -186,20 +176,11 @@ class MSONableTest(unittest.TestCase):
         b_dict = {"first": GMC(3, 3.0, "three"), "second": GMC(4, 4.0, "four")}
         c_list_dict_list = [
             {
-                "list1": [
-                    GMC(5, 5.0, "five"),
-                    GMC(6, 6.0, "six"),
-                    GMC(7, 7.0, "seven"),
-                ],
+                "list1": [GMC(5, 5.0, "five"), GMC(6, 6.0, "six"), GMC(7, 7.0, "seven"),],
                 "list2": [GMC(8, 8.0, "eight")],
             },
             {
-                "list3": [
-                    GMC(9, 9.0, "nine"),
-                    GMC(10, 10.0, "ten"),
-                    GMC(11, 11.0, "eleven"),
-                    GMC(12, 12.0, "twelve"),
-                ],
+                "list3": [GMC(9, 9.0, "nine"), GMC(10, 10.0, "ten"), GMC(11, 11.0, "eleven"), GMC(12, 12.0, "twelve"),],
                 "list4": [GMC(13, 13.0, "thirteen"), GMC(14, 14.0, "fourteen")],
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
@@ -246,6 +227,7 @@ class MSONableTest(unittest.TestCase):
 
         f = jsanitize(d, enum_values=True)
         self.assertEqual(f["123"], 1)
+
 
 class JsonTest(unittest.TestCase):
     def test_as_from_dict(self):
@@ -350,7 +332,6 @@ class JsonTest(unittest.TestCase):
         self.assertIsInstance(obj, ClassContainingDataFrame)
         self.assertIsInstance(obj.df, pd.DataFrame)
         self.assertEqual(list(obj.df.a), [1, 1])
-
 
     def test_callable(self):
         instance = MethodSerializationClass(a=1)
@@ -520,8 +501,7 @@ class JsonTest(unittest.TestCase):
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
         self.assertEqual(
-            data,
-            {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}},
+            data, {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}},
         )
 
     def test_pydantic_integrations(self):
@@ -556,19 +536,19 @@ class JsonTest(unittest.TestCase):
 
         d = jsanitize(test_object, strict=True)
         assert d == {
-            'a': {
-                '@module': 'tests.test_json',
-                '@class': 'GoodMSONClass',
-                '@version': '0.1',
-                'a': 1,
-                'b': 1,
-                'c': 1,
-                'd': 1,
-                'values': []
+            "a": {
+                "@module": "tests.test_json",
+                "@class": "GoodMSONClass",
+                "@version": "0.1",
+                "a": 1,
+                "b": 1,
+                "c": 1,
+                "d": 1,
+                "values": [],
             },
-            '@module': 'tests.test_json',
-            '@class': 'ModelWithMSONable',
-            '@version': '0.1'
+            "@module": "tests.test_json",
+            "@class": "ModelWithMSONable",
+            "@version": "0.1",
         }
         obj = MontyDecoder().process_decoded(d)
         assert isinstance(obj, BaseModel)

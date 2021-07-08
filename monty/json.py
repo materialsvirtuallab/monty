@@ -303,7 +303,7 @@ class MontyEncoder(json.JSONEncoder):
                 return {
                     "@module": "pandas",
                     "@class": "DataFrame",
-                    "data": o.to_json(default_handler=MontyEncoder().encode)
+                    "data": o.to_json(default_handler=MontyEncoder().encode),
                 }
 
         if bson is not None:
@@ -410,10 +410,7 @@ class MontyDecoder(json.JSONDecoder):
                         return cls_(**data)
             elif np is not None and modname == "numpy" and classname == "array":
                 if d["dtype"].startswith("complex"):
-                    return np.array(
-                        [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
-                        dtype=d["dtype"],
-                    )
+                    return np.array([np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])], dtype=d["dtype"],)
                 return np.array(d["data"], dtype=d["dtype"])
             elif pd is not None and modname == "pandas" and classname == "DataFrame":
                 decoded_data = MontyDecoder().decode(d["data"])
