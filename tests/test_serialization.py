@@ -53,10 +53,20 @@ class SerialTest(unittest.TestCase):
         self.assertEqual(d, d2)
         os.remove("monte_test.yaml")
 
+        # Check if fmt override works.
+        dumpfn(d, "monte_test.json", fmt="yaml")
+        with self.assertRaises(json.decoder.JSONDecodeError):
+            d2 = loadfn("monte_test.json")
+        d2 = loadfn("monte_test.json", fmt="yaml")
+        self.assertEqual(d, d2)
+        os.remove("monte_test.json")
+
         with self.assertRaises(TypeError):
             dumpfn(d, "monte_test.txt", fmt="garbage")
         with self.assertRaises(TypeError):
             loadfn("monte_test.txt", fmt="garbage")
+
+
 
     @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
     def test_mpk(self):
