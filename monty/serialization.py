@@ -9,7 +9,7 @@ from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
 
 try:
-    import ruamel.yaml as yaml
+    from ruamel import yaml
 
     try:  # Default to using CLoader and CDumper for speed.
         from ruamel.yaml import CLoader as Loader

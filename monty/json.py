@@ -33,7 +33,7 @@ except ImportError:
     bson = None
 
 try:
-    import ruamel.yaml as yaml
+    from ruamel import yaml
 except ImportError:
     try:
         import yaml  # type: ignore
@@ -119,7 +119,7 @@ class MSONable:
         d = {"@module": self.__class__.__module__, "@class": self.__class__.__name__}
 
         try:
-            parent_module = self.__class__.__module__.split(".")[0]
+            parent_module = self.__class__.__module__.split(".", maxsplit=1)[0]
             module_version = import_module(parent_module).__version__  # type: ignore
             d["@version"] = "{}".format(module_version)
         except (AttributeError, ImportError):

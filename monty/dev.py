@@ -160,7 +160,7 @@ def get_ncpus():
 
     # Linux
     try:
-        res = open("/proc/cpuinfo").read().count("processor\t:")
+        res = open("/proc/cpuinfo").read().count("processor\t:")  # pylint: disable=R1732
         if res > 0:
             return res
     except IOError:
@@ -182,7 +182,8 @@ def get_ncpus():
     # Other UNIXes (heuristic)
     try:
         try:
-            dmesg = open("/var/run/dmesg.boot").read()
+            with open("/var/run/dmesg.boot") as f:
+                dmesg = f.read()
         except IOError:
             with subprocess.Popen(["dmesg"], stdout=subprocess.PIPE) as dmesg_process:
                 dmesg = dmesg_process.communicate()[0]
