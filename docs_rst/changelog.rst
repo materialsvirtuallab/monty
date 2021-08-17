@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2021.8.17
+----------
+* Support serialization for Pandas DataFrames (@mkhorton).
+
 v2021.7.8
 ---------
 * Support the specification of `fmt` keyword arg in monty.serialization
