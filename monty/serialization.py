@@ -9,7 +9,7 @@ from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
 
 try:
-    import ruamel.yaml as yaml
+    from ruamel import yaml
 
     try:  # Default to using CLoader and CDumper for speed.
         from ruamel.yaml import CLoader as Loader
@@ -36,7 +36,7 @@ except ImportError:
     msgpack = None
 
 
-def loadfn(fn, *args, **kwargs):
+def loadfn(fn, *args, fmt=None, **kwargs):
     r"""
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -50,19 +50,23 @@ def loadfn(fn, *args, **kwargs):
     Args:
         fn (str/Path): filename or pathlib.Path.
         *args: Any of the args supported by json/yaml.load.
+        fmt (string): If specified, the fmt specified would be used instead
+            of autodetection from filename. Supported formats right now are
+            "json", "yaml" or "mpk".
         **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
         (object) Result of json/yaml/msgpack.load.
     """
 
-    basename = os.path.basename(fn).lower()
-    if ".mpk" in basename:
-        fmt = "mpk"
-    elif any(ext in basename for ext in (".yaml", ".yml")):
-        fmt = "yaml"
-    else:
-        fmt = "json"
+    if fmt is None:
+        basename = os.path.basename(fn).lower()
+        if ".mpk" in basename:
+            fmt = "mpk"
+        elif any(ext in basename for ext in (".yaml", ".yml")):
+            fmt = "yaml"
+        else:
+            fmt = "json"
 
     if fmt == "mpk":
         if msgpack is None:
@@ -87,7 +91,7 @@ def loadfn(fn, *args, **kwargs):
             raise TypeError("Invalid format: {}".format(fmt))
 
 
-def dumpfn(obj, fn, *args, **kwargs):
+def dumpfn(obj, fn, *args, fmt=None, **kwargs):
     r"""
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -107,13 +111,14 @@ def dumpfn(obj, fn, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    basename = os.path.basename(fn).lower()
-    if ".mpk" in basename:
-        fmt = "mpk"
-    elif any(ext in basename for ext in (".yaml", ".yml")):
-        fmt = "yaml"
-    else:
-        fmt = "json"
+    if fmt is None:
+        basename = os.path.basename(fn).lower()
+        if ".mpk" in basename:
+            fmt = "mpk"
+        elif any(ext in basename for ext in (".yaml", ".yml")):
+            fmt = "yaml"
+        else:
+            fmt = "json"
 
     if fmt == "mpk":
         if msgpack is None:
