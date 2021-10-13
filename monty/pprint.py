@@ -85,6 +85,10 @@ def _draw_tree(node, prefix, child_iter, text_str):
 
 
 class DisplayEcoder(JSONEncoder):
+    """
+    Help convert dicts and objects to a format that can be displayed in notebooks
+    """
+
     def default(self, o):
         """
         Try diffent ways of converting the present object for displaying
