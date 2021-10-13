@@ -33,11 +33,16 @@ class ScratchDir:
     6. Change back to original directory.
     7. Delete temp dir.
     """
+
     SCR_LINK = "scratch_link"
 
-    def __init__(self, rootpath, create_symbolic_link=False,
-                 copy_from_current_on_enter=False,
-                 copy_to_current_on_exit=False):
+    def __init__(
+        self,
+        rootpath,
+        create_symbolic_link=False,
+        copy_from_current_on_enter=False,
+        copy_to_current_on_exit=False,
+    ):
         """
         Initializes scratch directory given a **root** path. There is no need
         to try to create unique directory names. The code will generate a
@@ -69,8 +74,7 @@ class ScratchDir:
         if Path is not None and isinstance(rootpath, Path):
             rootpath = str(rootpath)
 
-        self.rootpath = os.path.abspath(rootpath) if rootpath is not None \
-            else None
+        self.rootpath = os.path.abspath(rootpath) if rootpath is not None else None
         self.cwd = os.getcwd()
         self.create_symbolic_link = create_symbolic_link
         self.start_copy = copy_from_current_on_enter

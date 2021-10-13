@@ -6,43 +6,40 @@ import tempfile
 from gzip import GzipFile
 from io import open
 
-from monty.shutil import copy_r, compress_file, decompress_file, \
-    compress_dir, decompress_dir, gzip_dir, remove
+from monty.shutil import (
+    copy_r,
+    compress_file,
+    decompress_file,
+    compress_dir,
+    decompress_dir,
+    gzip_dir,
+    remove,
+)
 
-test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
+test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class CopyRTest(unittest.TestCase):
-
     def setUp(self):
         os.mkdir(os.path.join(test_dir, "cpr_src"))
         with open(os.path.join(test_dir, "cpr_src", "test"), "w") as f:
-            f.write(u"what")
+            f.write("what")
         os.mkdir(os.path.join(test_dir, "cpr_src", "sub"))
         with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
-            f.write(u"what2")
+            f.write("what2")
 
     def test_recursive_copy_and_compress(self):
-        copy_r(os.path.join(test_dir, "cpr_src"),
-               os.path.join(test_dir, "cpr_dst"))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir, "cpr_dst", "test")))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir, "cpr_dst", "sub", "testr")))
+        copy_r(os.path.join(test_dir, "cpr_src"), os.path.join(test_dir, "cpr_dst"))
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_dst", "test")))
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_dst", "sub", "testr")))
 
         compress_dir(os.path.join(test_dir, "cpr_src"))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir, "cpr_src", "test.gz")))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir, "cpr_src", "sub",
-                                        "testr.gz")))
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "test.gz")))
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr.gz")))
 
         decompress_dir(os.path.join(test_dir, "cpr_src"))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir, "cpr_src", "test")))
-        self.assertTrue(
-            os.path.exists(os.path.join(test_dir, "cpr_src", "sub",
-                                        "testr")))
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "test")))
+        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr")))
         with open(os.path.join(test_dir, "cpr_src", "test")) as f:
             txt = f.read()
             self.assertEqual(txt, "what")
@@ -53,10 +50,9 @@ class CopyRTest(unittest.TestCase):
 
 
 class CompressFileDirTest(unittest.TestCase):
-
     def setUp(self):
         with open(os.path.join(test_dir, "tempfile"), "w") as f:
-            f.write(u"hello world")
+            f.write("hello world")
 
     def test_compress_and_decompress_file(self):
         fname = os.path.join(test_dir, "tempfile")
@@ -77,14 +73,12 @@ class CompressFileDirTest(unittest.TestCase):
 
 
 class GzipDirTest(unittest.TestCase):
-
     def setUp(self):
         os.mkdir(os.path.join(test_dir, "gzip_dir"))
         with open(os.path.join(test_dir, "gzip_dir", "tempfile"), "w") as f:
-            f.write(u"what")
+            f.write("what")
 
-        self.mtime = os.path.getmtime(os.path.join(test_dir, "gzip_dir",
-                                                   "tempfile"))
+        self.mtime = os.path.getmtime(os.path.join(test_dir, "gzip_dir", "tempfile"))
 
     def test_gzip(self):
         full_f = os.path.join(test_dir, "gzip_dir", "tempfile")
@@ -96,15 +90,14 @@ class GzipDirTest(unittest.TestCase):
         with GzipFile("{}.gz".format(full_f)) as g:
             self.assertEqual(g.readline().decode("utf-8"), "what")
 
-        self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)),
-                               self.mtime, 4)
+        self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)), self.mtime, 4)
 
     def test_handle_sub_dirs(self):
         sub_dir = os.path.join(test_dir, "gzip_dir", "sub_dir")
         sub_file = os.path.join(sub_dir, "new_tempfile")
         os.mkdir(sub_dir)
         with open(sub_file, "w") as f:
-            f.write(u"anotherwhat")
+            f.write("anotherwhat")
 
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
@@ -119,7 +112,6 @@ class GzipDirTest(unittest.TestCase):
 
 
 class RemoveTest(unittest.TestCase):
-
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_file(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)

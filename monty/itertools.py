@@ -7,7 +7,7 @@ import itertools
 try:
     import numpy as np
 except ImportError:
-    np = None
+    np = None  # type: ignore
 
 
 def chunks(items, n):

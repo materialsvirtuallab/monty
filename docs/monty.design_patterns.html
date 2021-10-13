@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.design_patterns module &#8212; monty 4.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>monty.design_patterns module &#8212; monty 2021.8.17 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.dev module" href="monty.dev.html" />
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.collections.html" title="monty.collections module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.8.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.design_patterns module</a></li> 
       </ul>
@@ -51,25 +51,25 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-monty.design_patterns">
+  <section id="module-monty.design_patterns">
 <span id="monty-design-patterns-module"></span><h1>monty.design_patterns module<a class="headerlink" href="#module-monty.design_patterns" title="Permalink to this headline">¶</a></h1>
 <p>Some common design patterns such as singleton and cached classes.</p>
 <dl class="py class">
-<dt id="monty.design_patterns.NullFile">
-<em class="property">class </em><code class="sig-name descname">NullFile</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullFile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullFile" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.design_patterns.NullFile">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">NullFile</span></span><a class="reference internal" href="_modules/monty/design_patterns.html#NullFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.design_patterns.NullFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A file object that is associated to /dev/null.</p>
 <p>no-op</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="monty.design_patterns.NullStream">
-<em class="property">class </em><code class="sig-name descname">NullStream</code><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.design_patterns.NullStream">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">NullStream</span></span><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.design_patterns.NullStream" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A fake stream with a no-op write..</p>
 <dl class="py method">
-<dt id="monty.design_patterns.NullStream.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.NullStream.write" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.design_patterns.NullStream.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#NullStream.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.design_patterns.NullStream.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Does nothing…
 :param args:</p>
 </dd></dl>
@@ -77,8 +77,8 @@
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.design_patterns.cached_class">
-<code class="sig-name descname">cached_class</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">klass</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#cached_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.cached_class" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.design_patterns.cached_class">
+<span class="sig-name descname"><span class="pre">cached_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">klass</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#cached_class"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.design_patterns.cached_class" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator to cache class instances by constructor arguments.
 This results in a class that behaves like a singleton for each
 set of constructor arguments, ensuring efficiency.</p>
@@ -94,8 +94,8 @@ is not cached.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.design_patterns.singleton">
-<code class="sig-name descname">singleton</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">cls</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#singleton"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.design_patterns.singleton" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.design_patterns.singleton">
+<span class="sig-name descname"><span class="pre">singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/design_patterns.html#singleton"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.design_patterns.singleton" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator can be used to create a singleton out of a class.</p>
 <p>Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@singleton</span>
@@ -107,7 +107,7 @@ is not cached.</p>
 </div>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -135,7 +135,7 @@ is not cached.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>

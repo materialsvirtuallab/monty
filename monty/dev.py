@@ -15,7 +15,7 @@ import functools
 logger = logging.getLogger(__name__)
 
 
-def deprecated(replacement=None, message=None):
+def deprecated(replacement=None, message=None, category=FutureWarning):
     """
     Decorator to mark classes or functions as deprecated,
     with a possible replacement.
@@ -23,6 +23,12 @@ def deprecated(replacement=None, message=None):
     Args:
         replacement (callable): A replacement class or method.
         message (str): A warning message to be displayed.
+        category (Warning): Choose the category of the warning to issue. Defaults
+            to FutureWarning. Another choice can be DeprecationWarning. NOte that
+            FutureWarning is meant for end users and is always shown unless silenced.
+            DeprecationWarning is meant for developers and is never shown unless
+            python is run in developmental mode or the filter is changed. Make
+            the choice accordingly.
 
     Returns:
         Original function, but with a warning to use the updated class.
@@ -41,8 +47,7 @@ def deprecated(replacement=None, message=None):
                 msg += "; use %s in %s instead." % (r.__name__, r.__module__)
             if message is not None:
                 msg += "\n" + message
-            warnings.simplefilter('default')
-            warnings.warn(msg, DeprecationWarning, stacklevel=2)
+            warnings.warn(msg, category=category, stacklevel=2)
             return old(*args, **kwargs)
 
         return wrapped
@@ -84,6 +89,7 @@ class requires:
         """
         :param _callable: Callable function.
         """
+
         @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
@@ -117,7 +123,7 @@ def get_ncpus():
 
     # POSIX
     try:
-        res = int(os.sysconf('SC_NPROCESSORS_ONLN'))
+        res = int(os.sysconf("SC_NPROCESSORS_ONLN"))
         if res > 0:
             return res
     except (AttributeError, ValueError):
@@ -125,7 +131,7 @@ def get_ncpus():
 
     # Windows
     try:
-        res = int(os.environ['NUMBER_OF_PROCESSORS'])
+        res = int(os.environ["NUMBER_OF_PROCESSORS"])
         if res > 0:
             return res
     except (KeyError, ValueError):
@@ -134,6 +140,7 @@ def get_ncpus():
     # jython
     try:
         from java.lang import Runtime  # pylint: disable=import-outside-toplevel
+
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
         if res > 0:
@@ -143,18 +150,17 @@ def get_ncpus():
 
     # BSD
     try:
-        sysctl = subprocess.Popen(['sysctl', '-n', 'hw.ncpu'],
-                                  stdout=subprocess.PIPE)
-        scstdout = sysctl.communicate()[0]
-        res = int(scstdout)
-        if res > 0:
-            return res
+        with subprocess.Popen(["sysctl", "-n", "hw.ncpu"], stdout=subprocess.PIPE) as sysctl:
+            scstdout = sysctl.communicate()[0]
+            res = int(scstdout)
+            if res > 0:
+                return res
     except (OSError, ValueError):
         pass
 
     # Linux
     try:
-        res = open('/proc/cpuinfo').read().count('processor\t:')
+        res = open("/proc/cpuinfo").read().count("processor\t:")  # pylint: disable=R1732
         if res > 0:
             return res
     except IOError:
@@ -162,8 +168,8 @@ def get_ncpus():
 
     # Solaris
     try:
-        pseudo_devices = os.listdir('/devices/pseudo/')
-        expr = re.compile('^cpuid@[0-9]+$')
+        pseudo_devices = os.listdir("/devices/pseudo/")
+        expr = re.compile("^cpuid@[0-9]+$")
         res = 0
         for pd in pseudo_devices:
             if expr.match(pd) is not None:
@@ -176,13 +182,14 @@ def get_ncpus():
     # Other UNIXes (heuristic)
     try:
         try:
-            dmesg = open('/var/run/dmesg.boot').read()
+            with open("/var/run/dmesg.boot") as f:
+                dmesg = f.read()
         except IOError:
-            dmesg_process = subprocess.Popen(['dmesg'], stdout=subprocess.PIPE)
-            dmesg = dmesg_process.communicate()[0]
+            with subprocess.Popen(["dmesg"], stdout=subprocess.PIPE) as dmesg_process:
+                dmesg = dmesg_process.communicate()[0]
 
         res = 0
-        while '\ncpu' + str(res) + ':' in dmesg:
+        while "\ncpu" + str(res) + ":" in dmesg:
             res += 1
 
         if res > 0:
@@ -190,7 +197,7 @@ def get_ncpus():
     except OSError:
         pass
 
-    logger.warning('Cannot determine number of CPUs on this system!')
+    logger.warning("Cannot determine number of CPUs on this system!")
     return -1
 
 
@@ -208,8 +215,7 @@ def install_excepthook(hook_type="color", **kwargs):
     try:
         from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
     except ImportError:
-        warnings.warn(
-            "Cannot install excepthook, IPyhon.core.ultratb not available")
+        warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
         return 1
 
     # Select the hook.

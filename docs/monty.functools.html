@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.functools module &#8212; monty 4.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>monty.functools module &#8212; monty 2021.8.17 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.inspect module" href="monty.inspect.html" />
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.fractions.html" title="monty.fractions module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.8.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.functools module</a></li> 
       </ul>
@@ -51,12 +51,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-monty.functools">
+  <section id="module-monty.functools">
 <span id="monty-functools-module"></span><h1>monty.functools module<a class="headerlink" href="#module-monty.functools" title="Permalink to this headline">¶</a></h1>
 <p>functools, especially backported from Python 3.</p>
 <dl class="py exception">
-<dt id="monty.functools.TimeoutError">
-<em class="property">exception </em><code class="sig-name descname">TimeoutError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#TimeoutError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.TimeoutError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.TimeoutError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">TimeoutError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#TimeoutError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.TimeoutError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Exception class for timeouts.</p>
 <dl class="field-list simple">
@@ -67,8 +67,8 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="monty.functools.lazy_property">
-<em class="property">class </em><code class="sig-name descname">lazy_property</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">func</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.lazy_property" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.lazy_property">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">lazy_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lazy_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>lazy_property descriptor</p>
 <p>Used as a decorator to create lazy attributes. Lazy attributes
@@ -79,8 +79,8 @@ are evaluated on first use.</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="monty.functools.lazy_property.invalidate">
-<em class="property">classmethod </em><code class="sig-name descname">invalidate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">inst</span></em>, <em class="sig-param"><span class="n">name</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property.invalidate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.lazy_property.invalidate" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.lazy_property.invalidate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">invalidate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property.invalidate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lazy_property.invalidate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invalidate a lazy attribute.</p>
 <p>This obviously violates the lazy contract. A subclass of lazy
 may however have a contract where invalidation is appropriate.</p>
@@ -89,8 +89,8 @@ may however have a contract where invalidation is appropriate.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.functools.lru_cache">
-<code class="sig-name descname">lru_cache</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">maxsize</span><span class="o">=</span><span class="default_value">128</span></em>, <em class="sig-param"><span class="n">typed</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lru_cache"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.lru_cache" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.lru_cache">
+<span class="sig-name descname"><span class="pre">lru_cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">128</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">typed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lru_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lru_cache" title="Permalink to this definition">¶</a></dt>
 <dd><p>Least-recently-used cache decorator, which is a backport of the same
 function in Python &gt;= 3.2.</p>
 <p>If <em>maxsize</em> is set to None, the LRU features are disabled and the cache
@@ -106,8 +106,8 @@ Access the underlying function with f.__wrapped__.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.functools.prof_main">
-<code class="sig-name descname">prof_main</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">main</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#prof_main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.prof_main" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.prof_main">
+<span class="sig-name descname"><span class="pre">prof_main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">main</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#prof_main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.prof_main" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for profiling main programs.</p>
 <p>Profiling is activated by prepending the command line options
 supported by the original main program with the keyword <cite>prof</cite>.
@@ -129,8 +129,8 @@ supported by the original main program with the keyword <cite>prof</cite>.
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.functools.return_if_raise">
-<code class="sig-name descname">return_if_raise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">exception_tuple</span></em>, <em class="sig-param"><span class="n">retval_if_exc</span></em>, <em class="sig-param"><span class="n">disabled</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#return_if_raise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.return_if_raise" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.return_if_raise">
+<span class="sig-name descname"><span class="pre">return_if_raise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception_tuple</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retval_if_exc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#return_if_raise"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.return_if_raise" title="Permalink to this definition">¶</a></dt>
 <dd><p>Decorator for functions, methods or properties. Execute the callable in a
 try block, and return retval_if_exc if one of the exceptions listed in
 exception_tuple is raised (se also <code class="docutils literal notranslate"><span class="pre">return_node_if_raise</span></code>).</p>
@@ -155,8 +155,8 @@ debugging purposes). One can use this decorator to define properties.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.functools.return_none_if_raise">
-<code class="sig-name descname">return_none_if_raise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">exception_tuple</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">retval_if_exc</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">disabled</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#monty.functools.return_none_if_raise" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.return_none_if_raise">
+<span class="sig-name descname"><span class="pre">return_none_if_raise</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception_tuple</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retval_if_exc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">disabled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#monty.functools.return_none_if_raise" title="Permalink to this definition">¶</a></dt>
 <dd><p>This decorator returns None if one of the exceptions is raised.</p>
 <blockquote>
 <div><p>&#64;return_none_if_raise(ValueError)
@@ -165,8 +165,8 @@ def method(self):</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="monty.functools.timeout">
-<em class="property">class </em><code class="sig-name descname">timeout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">seconds</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">error_message</span><span class="o">=</span><span class="default_value">'Timeout'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.timeout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.timeout">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Timeout'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.timeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Timeout function. Use to limit matching to a certain time limit. Note that
 this works only on Unix-based systems as it uses signal. Usage:</p>
@@ -188,8 +188,8 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="monty.functools.timeout.handle_timeout">
-<code class="sig-name descname">handle_timeout</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">signum</span></em>, <em class="sig-param"><span class="n">frame</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout.handle_timeout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.functools.timeout.handle_timeout" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.functools.timeout.handle_timeout">
+<span class="sig-name descname"><span class="pre">handle_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout.handle_timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.timeout.handle_timeout" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -202,7 +202,7 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -230,7 +230,7 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>

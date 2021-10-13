@@ -6,7 +6,6 @@ from monty.math import nCr, nPr
 
 
 class FuncTest(unittest.TestCase):
-
     def test_nCr(self):
         self.assertEqual(nCr(4, 2), 6)
 

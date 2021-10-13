@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.os.path &#8212; monty 4.0.0 documentation</title>
-    <link rel="stylesheet" href="../../../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>monty.os.path &#8212; monty 2021.8.17 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/flasky.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
     <script src="../../../_static/jquery.js"></script>
     <script src="../../../_static/underscore.js"></script>
     <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
 
@@ -32,7 +31,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">monty 4.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">monty 2021.8.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li>
           <li class="nav-item nav-item-2"><a href="../os.html" accesskey="U">monty.os</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.os.path</a></li> 
@@ -98,15 +97,14 @@
 <span class="sd">        exists). If filename is not found, the same filename is returned</span>
 <span class="sd">        unchanged.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;.gz&#39;</span><span class="p">,</span> <span class="s1">&#39;.GZ&#39;</span><span class="p">,</span> <span class="s1">&#39;.bz2&#39;</span><span class="p">,</span> <span class="s1">&#39;.BZ2&#39;</span><span class="p">,</span> <span class="s1">&#39;.z&#39;</span><span class="p">,</span> <span class="s1">&#39;.Z&#39;</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;.gz&quot;</span><span class="p">,</span> <span class="s2">&quot;.GZ&quot;</span><span class="p">,</span> <span class="s2">&quot;.bz2&quot;</span><span class="p">,</span> <span class="s2">&quot;.BZ2&quot;</span><span class="p">,</span> <span class="s2">&quot;.z&quot;</span><span class="p">,</span> <span class="s2">&quot;.Z&quot;</span><span class="p">]:</span>
         <span class="n">zfilename</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{}{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">zfilename</span><span class="p">):</span>
             <span class="k">return</span> <span class="n">zfilename</span>
     <span class="k">return</span> <span class="n">filename</span></div>
 
 
-<div class="viewcode-block" id="find_exts"><a class="viewcode-back" href="../../../monty.os.path.html#monty.os.path.find_exts">[docs]</a><span class="k">def</span> <span class="nf">find_exts</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">exts</span><span class="p">,</span> <span class="n">exclude_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">match_mode</span><span class="o">=</span><span class="s2">&quot;basename&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="find_exts"><a class="viewcode-back" href="../../../monty.os.path.html#monty.os.path.find_exts">[docs]</a><span class="k">def</span> <span class="nf">find_exts</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">exts</span><span class="p">,</span> <span class="n">exclude_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">include_dirs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">match_mode</span><span class="o">=</span><span class="s2">&quot;basename&quot;</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find all files with the extension listed in `exts` that are located within</span>
 <span class="sd">    the directory tree rooted at `top` (including top itself, but excluding</span>
@@ -142,8 +140,7 @@
 
     <span class="c1"># Handle file!</span>
     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">top</span><span class="p">):</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">top</span><span class="p">)]</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">top</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span>
-                                             <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">exts</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">top</span><span class="p">)]</span> <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">top</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">ext</span><span class="p">)</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">exts</span><span class="p">)</span> <span class="k">else</span> <span class="p">[]</span>
 
     <span class="c1"># Build shell-style wildcards.</span>
     <span class="k">if</span> <span class="n">exclude_dirs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -152,9 +149,7 @@
     <span class="k">if</span> <span class="n">include_dirs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">include_dirs</span> <span class="o">=</span> <span class="n">WildCard</span><span class="p">(</span><span class="n">include_dirs</span><span class="p">)</span>
 
-    <span class="n">mangle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-        <span class="n">basename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">,</span>
-        <span class="n">abspath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">)[</span><span class="n">match_mode</span><span class="p">]</span>
+    <span class="n">mangle</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">basename</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">,</span> <span class="n">abspath</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">)[</span><span class="n">match_mode</span><span class="p">]</span>
 
     <span class="c1"># Assume directory</span>
     <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
@@ -191,7 +186,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>

@@ -1,6 +1,36 @@
 Change log
 ==========
 
+v2021.8.17
+----------
+* Support serialization for Pandas DataFrames (@mkhorton).
+
+v2021.7.8
+---------
+* Support the specification of `fmt` keyword arg in monty.serialization
+  loadfn and dumpfn.
+
+v2021.6.10
+----------
+* Expanded support for built-in functions, numpy types, etc. in MSON serialization (@utf).
+
+v2021.5.9
+---------
+* Drop py3.5 support.
+
+v2021.3.3
+---------
+* pydantic support (@shyamd)
+* UUID serialization support (@utf)
+
+v4.0.2
+------
+1. Allow specification of warning category in deprecated wrapper.
+
+v4.0.1
+------
+1. USe FutureWarning in the monty.dev.deprecated wrapper instead.
+
 v3.0.4
 ------
 1. Add support for complex dtypes in MSONable numpy arrays. (@fracci)

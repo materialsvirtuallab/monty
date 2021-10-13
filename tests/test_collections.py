@@ -1,14 +1,12 @@
 import unittest
 import os
 
-from monty.collections import frozendict, Namespace, AttrDict, \
-    FrozenAttrDict, tree
+from monty.collections import frozendict, Namespace, AttrDict, FrozenAttrDict, tree
 
-test_dir = os.path.join(os.path.dirname(__file__), 'test_files')
+test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class FrozenDictTest(unittest.TestCase):
-
     def test_frozen_dict(self):
         d = frozendict({"hello": "world"})
         self.assertRaises(KeyError, d.__setitem__, "k", "v")
@@ -33,20 +31,22 @@ class FrozenDictTest(unittest.TestCase):
         self.assertEqual(d["hello"], "world")
         self.assertEqual(d.hello, "world")
         self.assertRaises(KeyError, d.update, {"updating": 2})
-        with self.assertRaises(KeyError):  d["foo"] = "bar"
-        with self.assertRaises(KeyError):  d.foo = "bar"
-        with self.assertRaises(KeyError): d.hello = "new"
+        with self.assertRaises(KeyError):
+            d["foo"] = "bar"
+        with self.assertRaises(KeyError):
+            d.foo = "bar"
+        with self.assertRaises(KeyError):
+            d.hello = "new"
 
 
 class TreeTest(unittest.TestCase):
-
     def test_tree(self):
         x = tree()
-        x['a']['b']['c']['d'] = 1
-        self.assertIn('b', x['a'])
-        self.assertNotIn('c', x['a'])
-        self.assertIn('c', x['a']['b'])
-        self.assertEqual(x['a']['b']['c']['d'], 1)
+        x["a"]["b"]["c"]["d"] = 1
+        self.assertIn("b", x["a"])
+        self.assertNotIn("c", x["a"])
+        self.assertIn("c", x["a"]["b"])
+        self.assertEqual(x["a"]["b"]["c"]["d"], 1)
 
 
 if __name__ == "__main__":

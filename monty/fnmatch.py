@@ -20,6 +20,7 @@ class WildCard:
     >>> w.filter("foo.nc")
     ['foo.nc']
     """
+
     def __init__(self, wildcard, sep="|"):
         """
         Initializes a WildCard.

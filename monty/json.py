@@ -5,6 +5,7 @@ JSON serialization and deserialization utilities.
 
 import os
 import json
+import types
 import datetime
 
 from hashlib import sha1
@@ -14,6 +15,7 @@ from enum import Enum
 from importlib import import_module
 
 from inspect import getfullargspec
+from uuid import UUID
 
 try:
     import numpy as np
@@ -21,12 +23,22 @@ except ImportError:
     np = None  # type: ignore
 
 try:
+    import pandas as pd
+except ImportError:
+    pd = None  # type: ignore
+
+try:
+    import pydantic
+except ImportError:
+    pydantic = None  # type: ignore
+
+try:
     import bson
 except ImportError:
     bson = None
 
 try:
-    import ruamel.yaml as yaml
+    from ruamel import yaml
 except ImportError:
     try:
         import yaml  # type: ignore
@@ -103,22 +115,18 @@ class MSONable:
     old_module.old_class: new_module.new_class
     """
 
-    REDIRECT = _load_redirect(
-        os.path.join(os.path.expanduser("~"), ".monty.yaml"))
+    REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"), ".monty.yaml"))
 
     def as_dict(self) -> dict:
         """
         A JSON serializable dict representation of an object.
         """
-        d = {
-            "@module": self.__class__.__module__,
-            "@class": self.__class__.__name__
-        }
+        d = {"@module": self.__class__.__module__, "@class": self.__class__.__name__}
 
         try:
-            parent_module = self.__class__.__module__.split('.')[0]
+            parent_module = self.__class__.__module__.split(".", maxsplit=1)[0]
             module_version = import_module(parent_module).__version__  # type: ignore
-            d["@version"] = u"{}".format(module_version)
+            d["@version"] = "{}".format(module_version)
         except (AttributeError, ImportError):
             d["@version"] = None  # type: ignore
 
@@ -149,7 +157,8 @@ class MSONable:
                             "self._argname, and kwargs to be present under"
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
-                            "you can implement both as_dict and from_dict.")
+                            "you can implement both as_dict and from_dict."
+                        )
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
@@ -168,10 +177,7 @@ class MSONable:
         :param d: Dict representation.
         :return: MSONable class.
         """
-        decoded = {
-            k: MontyDecoder().process_decoded(v)
-            for k, v in d.items() if not k.startswith("@")
-        }
+        decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items() if not k.startswith("@")}
         return cls(**decoded)
 
     def to_json(self) -> str:
@@ -193,25 +199,55 @@ class MSONable:
             flat_dict = {}
             for key, value in obj.items():
                 if isinstance(value, dict):
-                    flat_dict.update({
-                        seperator.join([key, _key]): _value
-                        for _key, _value in flatten(value).items()
-                    })
+                    flat_dict.update({seperator.join([key, _key]): _value for _key, _value in flatten(value).items()})
                 elif isinstance(value, list):
-                    list_dict = {
-                        "{}{}{}".format(key, seperator, num): item
-                        for num, item in enumerate(value)
-                    }
+                    list_dict = {"{}{}{}".format(key, seperator, num): item for num, item in enumerate(value)}
                     flat_dict.update(flatten(list_dict))
                 else:
                     flat_dict[key] = value
 
             return flat_dict
 
-        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(),
-                              key=lambda x: x[0])
+        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0])
         ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
+
+    @classmethod
+    def __get_validators__(cls):
+        """Return validators for use in pydantic"""
+        yield cls.validate_monty
+
+    @classmethod
+    def validate_monty(cls, v):
+        """
+        pydantic Validator for MSONable pattern
+        """
+        if isinstance(v, cls):
+            return v
+        if isinstance(v, dict):
+            new_obj = MontyDecoder().process_decoded(v)
+            if isinstance(new_obj, cls):
+                return new_obj
+
+            new_obj = cls(**v)
+            return new_obj
+
+        raise ValueError(f"Must provide {cls.__name__}, the as_dict form, or the proper")
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        """JSON schema for MSONable pattern"""
+        field_schema.update(
+            {
+                "type": "object",
+                "properties": {
+                    "@class": {"enum": [cls.__name__], "type": "string"},
+                    "@module": {"enum": [cls.__module__], "type": "string"},
+                    "@version": {"type": "string"},
+                },
+                "required": ["@class", "@module"],
+            }
+        )
 
 
 class MontyEncoder(json.JSONEncoder):
@@ -240,48 +276,58 @@ class MontyEncoder(json.JSONEncoder):
             Python dict representation.
         """
         if isinstance(o, datetime.datetime):
-            return {
-                "@module": "datetime",
-                "@class": "datetime",
-                "string": o.__str__()
-            }
+            return {"@module": "datetime", "@class": "datetime", "string": o.__str__()}
+        if isinstance(o, UUID):
+            return {"@module": "uuid", "@class": "UUID", "string": o.__str__()}
+
         if np is not None:
             if isinstance(o, np.ndarray):
-                if str(o.dtype).startswith('complex'):
+                if str(o.dtype).startswith("complex"):
                     return {
                         "@module": "numpy",
                         "@class": "array",
                         "dtype": o.dtype.__str__(),
-                        "data": [o.real.tolist(),
-                                 o.imag.tolist()]
+                        "data": [o.real.tolist(), o.imag.tolist()],
                     }
                 return {
                     "@module": "numpy",
                     "@class": "array",
                     "dtype": o.dtype.__str__(),
-                    "data": o.tolist()
+                    "data": o.tolist(),
                 }
             if isinstance(o, np.generic):
                 return o.item()
-        if bson is not None:
-            if isinstance(o, bson.objectid.ObjectId):
+
+        if pd is not None:
+            if isinstance(o, pd.DataFrame):
                 return {
-                    "@module": "bson.objectid",
-                    "@class": "ObjectId",
-                    "oid": str(o)
+                    "@module": "pandas",
+                    "@class": "DataFrame",
+                    "data": o.to_json(default_handler=MontyEncoder().encode),
                 }
 
+        if bson is not None:
+            if isinstance(o, bson.objectid.ObjectId):
+                return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
+
+        if callable(o) and not isinstance(o, MSONable):
+            return _serialize_callable(o)
+
         try:
-            d = o.as_dict()
+            if pydantic is not None and isinstance(o, pydantic.BaseModel):
+                d = o.dict()
+            else:
+                d = o.as_dict()
+
             if "@module" not in d:
-                d["@module"] = u"{}".format(o.__class__.__module__)
+                d["@module"] = "{}".format(o.__class__.__module__)
             if "@class" not in d:
-                d["@class"] = u"{}".format(o.__class__.__name__)
+                d["@class"] = "{}".format(o.__class__.__name__)
             if "@version" not in d:
                 try:
-                    parent_module = o.__class__.__module__.split('.')[0]
+                    parent_module = o.__class__.__module__.split(".")[0]
                     module_version = import_module(parent_module).__version__  # type: ignore
-                    d["@version"] = u"{}".format(module_version)
+                    d["@version"] = "{}".format(module_version)
                 except (AttributeError, ImportError):
                     d["@version"] = None
             return d
@@ -316,41 +362,66 @@ class MontyDecoder(json.JSONDecoder):
                 if classname in MSONable.REDIRECT.get(modname, {}):
                     modname = MSONable.REDIRECT[modname][classname]["@module"]
                     classname = MSONable.REDIRECT[modname][classname]["@class"]
+            elif "@module" in d and "@callable" in d:
+                modname = d["@module"]
+                objname = d["@callable"]
+                if d.get("@bound", None) is not None:
+                    # if the function is bound to an instance or class, first
+                    # deserialize the bound object and then remove the object name
+                    # from the function name.
+                    obj = self.process_decoded(d["@bound"])
+                    objname = objname.split(".")[1:]
+                else:
+                    # if the function is not bound to an object, import the
+                    # function from the module name
+                    obj = __import__(modname, globals(), locals(), [objname], 0)
+                    objname = objname.split(".")
+                try:
+                    # the function could be nested. e.g., MyClass.NestedClass.function
+                    # so iteratively access the nesting
+                    for attr in objname:
+                        obj = getattr(obj, attr)
+
+                    return obj
+
+                except AttributeError:
+                    pass
             else:
                 modname = None
                 classname = None
-            if modname and modname not in ["bson.objectid", "numpy"]:
+            if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
                 if modname == "datetime" and classname == "datetime":
                     try:
-                        dt = datetime.datetime.strptime(
-                            d["string"], "%Y-%m-%d %H:%M:%S.%f")
+                        dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
                     except ValueError:
-                        dt = datetime.datetime.strptime(
-                            d["string"], "%Y-%m-%d %H:%M:%S")
+                        dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S")
                     return dt
+
+                if modname == "uuid" and classname == "UUID":
+                    return UUID(d["string"])
 
                 mod = __import__(modname, globals(), locals(), [classname], 0)
                 if hasattr(mod, classname):
                     cls_ = getattr(mod, classname)
-                    data = {
-                        k: v
-                        for k, v in d.items() if not k.startswith("@")
-                    }
+                    data = {k: v for k, v in d.items() if not k.startswith("@")}
                     if hasattr(cls_, "from_dict"):
                         return cls_.from_dict(data)
+                    if pydantic is not None and issubclass(cls_, pydantic.BaseModel):
+                        return cls_(**data)
             elif np is not None and modname == "numpy" and classname == "array":
-                if d["dtype"].startswith('complex'):
-                    return np.array([
-                        r + i * 1j for r, i in zip(*d["data"])], dtype=d["dtype"])
+                if d["dtype"].startswith("complex"):
+                    return np.array(
+                        [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                        dtype=d["dtype"],
+                    )
                 return np.array(d["data"], dtype=d["dtype"])
-
+            elif pd is not None and modname == "pandas" and classname == "DataFrame":
+                decoded_data = MontyDecoder().decode(d["data"])
+                return pd.DataFrame(decoded_data)
             elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
                 return bson.objectid.ObjectId(d["oid"])
 
-            return {
-                self.process_decoded(k): self.process_decoded(v)
-                for k, v in d.items()
-            }
+            return {self.process_decoded(k): self.process_decoded(v) for k, v in d.items()}
 
         if isinstance(d, list):
             return [self.process_decoded(x) for x in d]
@@ -374,7 +445,7 @@ class MSONError(Exception):
     """
 
 
-def jsanitize(obj, strict=False, allow_bson=False):
+def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
@@ -393,26 +464,27 @@ def jsanitize(obj, strict=False, allow_bson=False):
             encounters an bson supported type such as objectid and datetime. If
             True, such bson types will be ignored, allowing for proper
             insertion into MongoDb databases.
+        enum_values (bool): Convert Enums to their values.
 
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if allow_bson and (isinstance(obj, (datetime.datetime, bytes)) or
-                       (bson is not None
-                        and isinstance(obj, bson.objectid.ObjectId))):
+    if isinstance(obj, Enum) and enum_values:
+        return obj.value
+
+    if allow_bson and (
+        isinstance(obj, (datetime.datetime, bytes)) or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
+    ):
         return obj
     if isinstance(obj, (list, tuple)):
-        return [
-            jsanitize(i, strict=strict, allow_bson=allow_bson) for i in obj
-        ]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj]
     if np is not None and isinstance(obj, np.ndarray):
-        return [
-            jsanitize(i, strict=strict, allow_bson=allow_bson)
-            for i in obj.tolist()
-        ]
+        return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj.tolist()]
+    if np is not None and isinstance(obj, np.generic):
+        return obj.item()
     if isinstance(obj, dict):
         return {
-            k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson)
+            k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
             for k, v in obj.items()
         }
     if isinstance(obj, (int, float)):
@@ -420,10 +492,43 @@ def jsanitize(obj, strict=False, allow_bson=False):
     if obj is None:
         return None
 
+    if callable(obj) and not isinstance(obj, MSONable):
+        try:
+            return _serialize_callable(obj)
+        except TypeError:
+            pass
+
     if not strict:
         return obj.__str__()
 
     if isinstance(obj, str):
         return obj.__str__()
 
-    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson)
+    if pydantic is not None and isinstance(obj, pydantic.BaseModel):
+        return jsanitize(MontyEncoder().default(obj), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+
+    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+
+
+def _serialize_callable(o):
+    if isinstance(o, types.BuiltinFunctionType):
+        # don't care about what builtin functions (sum, open, etc) are bound to
+        bound = None
+    else:
+        # bound methods (i.e., instance methods) have a __self__ attribute
+        # that points to the class/module/instance
+        bound = getattr(o, "__self__", None)
+
+    # we are only able to serialize bound methods if the object the method is
+    # bound to is itself serializable
+    if bound is not None:
+        try:
+            bound = MontyEncoder().default(bound)
+        except TypeError:
+            raise TypeError("Only bound methods of classes or MSONable instances are supported.")
+
+    return {
+        "@module": o.__module__,
+        "@callable": getattr(o, "__qualname__", o.__name__),
+        "@bound": bound,
+    }

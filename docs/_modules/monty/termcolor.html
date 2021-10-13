@@ -4,15 +4,14 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.termcolor &#8212; monty 4.0.0 documentation</title>
-    <link rel="stylesheet" href="../../_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>monty.termcolor &#8212; monty 2021.8.17 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
     <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/language_data.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 
@@ -32,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 4.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2021.8.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.termcolor</a></li> 
       </ul>
@@ -81,18 +80,11 @@
 <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
     <span class="k">pass</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;colored&#39;</span><span class="p">,</span> <span class="s1">&#39;cprint&#39;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;colored&quot;</span><span class="p">,</span> <span class="s2">&quot;cprint&quot;</span><span class="p">]</span>
 
 <span class="n">VERSION</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
-<span class="n">ATTRIBUTES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">bold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">dark</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">underline</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-    <span class="n">blink</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">reverse</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
-    <span class="n">concealed</span><span class="o">=</span><span class="mi">8</span>
-<span class="p">)</span>
+<span class="n">ATTRIBUTES</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">bold</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">dark</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">underline</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">blink</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">concealed</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
 
 <span class="n">HIGHLIGHTS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
     <span class="n">on_grey</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
@@ -102,21 +94,12 @@
     <span class="n">on_blue</span><span class="o">=</span><span class="mi">44</span><span class="p">,</span>
     <span class="n">on_magenta</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
     <span class="n">on_cyan</span><span class="o">=</span><span class="mi">46</span><span class="p">,</span>
-    <span class="n">on_white</span><span class="o">=</span><span class="mi">47</span>
+    <span class="n">on_white</span><span class="o">=</span><span class="mi">47</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="n">COLORS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
-    <span class="n">grey</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
-    <span class="n">red</span><span class="o">=</span><span class="mi">31</span><span class="p">,</span>
-    <span class="n">green</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>
-    <span class="n">yellow</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span>
-    <span class="n">blue</span><span class="o">=</span><span class="mi">34</span><span class="p">,</span>
-    <span class="n">magenta</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span>
-    <span class="n">cyan</span><span class="o">=</span><span class="mi">36</span><span class="p">,</span>
-    <span class="n">white</span><span class="o">=</span><span class="mi">37</span>
-<span class="p">)</span>
+<span class="n">COLORS</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">grey</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">red</span><span class="o">=</span><span class="mi">31</span><span class="p">,</span> <span class="n">green</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">yellow</span><span class="o">=</span><span class="mi">33</span><span class="p">,</span> <span class="n">blue</span><span class="o">=</span><span class="mi">34</span><span class="p">,</span> <span class="n">magenta</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">cyan</span><span class="o">=</span><span class="mi">36</span><span class="p">,</span> <span class="n">white</span><span class="o">=</span><span class="mi">37</span><span class="p">)</span>
 
-<span class="n">RESET</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+<span class="n">RESET</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
 
 <span class="n">__ISON</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -165,8 +148,8 @@
 <span class="sd">        colored(&#39;Hello, World!&#39;, &#39;green&#39;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">if</span> <span class="n">__ISON</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;ANSI_COLORS_DISABLED&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fmt_str</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[</span><span class="si">%d</span><span class="s1">m</span><span class="si">%s</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">__ISON</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;ANSI_COLORS_DISABLED&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">fmt_str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[</span><span class="si">%d</span><span class="s2">m</span><span class="si">%s</span><span class="s2">&quot;</span>
         <span class="k">if</span> <span class="n">color</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">text</span> <span class="o">=</span> <span class="n">fmt_str</span> <span class="o">%</span> <span class="p">(</span><span class="n">COLORS</span><span class="p">[</span><span class="n">color</span><span class="p">],</span> <span class="n">text</span><span class="p">)</span>
 
@@ -240,7 +223,7 @@
 <span class="sd">        width-in-python</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s1">&#39;stty size&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="s2">&quot;stty size&quot;</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">rc</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">rc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
     <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
         <span class="k">pass</span>
@@ -250,8 +233,7 @@
     <span class="k">def</span> <span class="nf">ioctl_GWINSZ</span><span class="p">(</span><span class="n">fd</span><span class="p">):</span>
         <span class="k">try</span><span class="p">:</span>
 
-            <span class="n">rc</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;hh&#39;</span><span class="p">,</span>
-                               <span class="n">fcntl</span><span class="o">.</span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TIOCGWINSZ</span><span class="p">,</span> <span class="s1">&#39;1234&#39;</span><span class="p">))</span>
+            <span class="n">rc</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;hh&quot;</span><span class="p">,</span> <span class="n">fcntl</span><span class="o">.</span><span class="n">ioctl</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">termios</span><span class="o">.</span><span class="n">TIOCGWINSZ</span><span class="p">,</span> <span class="s2">&quot;1234&quot;</span><span class="p">))</span>
             <span class="k">return</span> <span class="n">rc</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
@@ -267,7 +249,7 @@
             <span class="k">pass</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">rc</span><span class="p">:</span>
-        <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;LINES&#39;</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;COLUMNS&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="p">(</span><span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LINES&quot;</span><span class="p">,</span> <span class="mi">25</span><span class="p">),</span> <span class="n">env</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;COLUMNS&quot;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">rc</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">int</span><span class="p">(</span><span class="n">rc</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
@@ -288,7 +270,7 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>

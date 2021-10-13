@@ -20,18 +20,24 @@ def logged(level=logging.DEBUG):
     Args:
         level: Level to log method at. Defaults to DEBUG.
     """
+
     def wrap(f):
         _logger = logging.getLogger("{}.{}".format(f.__module__, f.__name__))
 
         def wrapped_f(*args, **kwargs):
-            _logger.log(level, "Called at {} with args = {} and kwargs = {}"
-                        .format(datetime.datetime.now(), args, kwargs))
+            _logger.log(
+                level,
+                "Called at {} with args = {} and kwargs = {}".format(datetime.datetime.now(), args, kwargs),
+            )
             data = f(*args, **kwargs)
-            _logger.log(level, "Done at {} with args = {} and kwargs = {}"
-                        .format(datetime.datetime.now(), args, kwargs))
+            _logger.log(
+                level,
+                "Done at {} with args = {} and kwargs = {}".format(datetime.datetime.now(), args, kwargs),
+            )
             return data
 
         return wrapped_f
+
     return wrap
 
 
@@ -47,14 +53,17 @@ def enable_logging(main):
         main:
             main function.
     """
+
     @functools.wraps(main)
     def wrapper(*args, **kwargs):
         parser = argparse.ArgumentParser()
 
         parser.add_argument(
-            '--loglevel', default="ERROR", type=str,
-            help="Set the loglevel. Possible values: CRITICAL, ERROR (default),"
-                 "WARNING, INFO, DEBUG")
+            "--loglevel",
+            default="ERROR",
+            type=str,
+            help="Set the loglevel. Possible values: CRITICAL, ERROR (default)," "WARNING, INFO, DEBUG",
+        )
 
         options = parser.parse_args()
 
@@ -64,7 +73,7 @@ def enable_logging(main):
         # or --loglevel=debug
         numeric_level = getattr(logging, options.loglevel.upper(), None)
         if not isinstance(numeric_level, int):
-            raise ValueError('Invalid log level: %s' % options.loglevel)
+            raise ValueError("Invalid log level: %s" % options.loglevel)
         logging.basicConfig(level=numeric_level)
 
         retcode = main(*args, **kwargs)

@@ -30,7 +30,7 @@ def unicode2str(s):
     Returns:
         str in Python 2. Unchanged otherwise.
     """
-    return s.encode('utf-8') if sys.version_info.major < 3 else s
+    return s.encode("utf-8") if sys.version_info.major < 3 else s
 
 
 def is_string(s):
@@ -65,7 +65,7 @@ def list_strings(arg):
     return arg
 
 
-def marquee(text="", width=78, mark='*'):
+def marquee(text="", width=78, mark="*"):
     """
     Return the input string centered in a 'marquee'.
 
@@ -89,11 +89,10 @@ def marquee(text="", width=78, mark='*'):
         return (mark * width)[:width]
 
     nmark = (width - len(text) - 2) // len(mark) // 2
-    if nmark < 0:
-        nmark = 0
+    nmark = max(nmark, 0)
 
     marks = mark * nmark
-    return '%s %s %s' % (marks, text, marks)
+    return "%s %s %s" % (marks, text, marks)
 
 
 def boxed(msg, ch="=", pad=5):
@@ -113,10 +112,13 @@ def boxed(msg, ch="=", pad=5):
     if pad > 0:
         msg = pad * ch + " " + msg.strip() + " " + pad * ch
 
-    return "\n".join([len(msg) * ch,
-                      msg,
-                      len(msg) * ch,
-                      ])
+    return "\n".join(
+        [
+            len(msg) * ch,
+            msg,
+            len(msg) * ch,
+        ]
+    )
 
 
 def make_banner(s, width=78, mark="*"):
@@ -130,10 +132,10 @@ def make_banner(s, width=78, mark="*"):
     return "\n" + len(banner) * mark + "\n" + banner + "\n" + len(banner) * mark
 
 
-def indent(lines, amount, ch=' '):
+def indent(lines, amount, ch=" "):
     """
     Indent the lines in a string by padding each one with proper number of pad
     characters
     """
     padding = amount * ch
-    return padding + ('\n' + padding).join(lines.split('\n'))
+    return padding + ("\n" + padding).join(lines.split("\n"))

@@ -4,15 +4,15 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>monty.json module &#8212; monty 4.0.0 documentation</title>
-    <link rel="stylesheet" href="_static/flasky.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>monty.json module &#8212; monty 2021.8.17 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="monty.logging module" href="monty.logging.html" />
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.itertools.html" title="monty.itertools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 4.0.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.8.17 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.json module</a></li> 
       </ul>
@@ -51,19 +51,19 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-monty.json">
+  <section id="module-monty.json">
 <span id="monty-json-module"></span><h1>monty.json module<a class="headerlink" href="#module-monty.json" title="Permalink to this headline">¶</a></h1>
 <p>JSON serialization and deserialization utilities.</p>
 <dl class="py exception">
-<dt id="monty.json.MSONError">
-<em class="property">exception </em><code class="sig-name descname">MSONError</code><a class="reference internal" href="_modules/monty/json.html#MSONError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONError" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONError">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">MSONError</span></span><a class="reference internal" href="_modules/monty/json.html#MSONError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Exception class for serialization errors.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="monty.json.MSONable">
-<em class="property">class </em><code class="sig-name descname">MSONable</code><a class="reference internal" href="_modules/monty/json.html#MSONable"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONable">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MSONable</span></span><a class="reference internal" href="_modules/monty/json.html#MSONable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>This is a mix-in base class specifying an API for msonable objects. MSON
 is Monty JSON. Essentially, MSONable objects must implement an as_dict
@@ -101,19 +101,19 @@ home folder</p>
 <p>Example:
 old_module.old_class: new_module.new_class</p>
 <dl class="py attribute">
-<dt id="monty.json.MSONable.REDIRECT">
-<code class="sig-name descname">REDIRECT</code><em class="property"> = {}</em><a class="headerlink" href="#monty.json.MSONable.REDIRECT" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONable.REDIRECT">
+<span class="sig-name descname"><span class="pre">REDIRECT</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{}</span></em><a class="headerlink" href="#monty.json.MSONable.REDIRECT" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt id="monty.json.MSONable.as_dict">
-<code class="sig-name descname">as_dict</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/monty/json.html#MSONable.as_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.as_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONable.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/monty/json.html#MSONable.as_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONable.as_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>A JSON serializable dict representation of an object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="monty.json.MSONable.from_dict">
-<em class="property">classmethod </em><code class="sig-name descname">from_dict</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.from_dict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.from_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONable.from_dict">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONable.from_dict" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>d</strong> – Dict representation.</p>
@@ -125,24 +125,30 @@ old_module.old_class: new_module.new_class</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="monty.json.MSONable.to_json">
-<code class="sig-name descname">to_json</code><span class="sig-paren">(</span><span class="sig-paren">)</span> &#x2192; str<a class="reference internal" href="_modules/monty/json.html#MSONable.to_json"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.to_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONable.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/monty/json.html#MSONable.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONable.to_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a json string representation of the MSONable object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="monty.json.MSONable.unsafe_hash">
-<code class="sig-name descname">unsafe_hash</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.unsafe_hash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MSONable.unsafe_hash" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MSONable.unsafe_hash">
+<span class="sig-name descname"><span class="pre">unsafe_hash</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.unsafe_hash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONable.unsafe_hash" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an hash of the current object. This uses a generic but low
 performance method of converting the object to a dictionary, flattening
 any nested keys, and then performing a hash on the resulting object</p>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="monty.json.MSONable.validate_monty">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">validate_monty</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MSONable.validate_monty"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MSONable.validate_monty" title="Permalink to this definition">¶</a></dt>
+<dd><p>pydantic Validator for MSONable pattern</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
-<dt id="monty.json.MontyDecoder">
-<em class="property">class </em><code class="sig-name descname">MontyDecoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">object_hook</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parse_float</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parse_int</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">parse_constant</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">object_pairs_hook</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyDecoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyDecoder" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MontyDecoder">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MontyDecoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse_float</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse_int</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parse_constant</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">object_pairs_hook</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyDecoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MontyDecoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.decoder.JSONDecoder</span></code></p>
 <p>A Json Decoder which supports the MSONable API. By default, the
 decoder attempts to find a module and name associated with a dict. If
@@ -182,8 +188,8 @@ characters will be allowed inside strings.  Control characters in
 this context are those with character codes in the 0-31 range,
 including <code class="docutils literal notranslate"><span class="pre">'\t'</span></code> (tab), <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>, <code class="docutils literal notranslate"><span class="pre">'\r'</span></code> and <code class="docutils literal notranslate"><span class="pre">'\0'</span></code>.</p>
 <dl class="py method">
-<dt id="monty.json.MontyDecoder.decode">
-<code class="sig-name descname">decode</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">s</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyDecoder.decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyDecoder.decode" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MontyDecoder.decode">
+<span class="sig-name descname"><span class="pre">decode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyDecoder.decode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MontyDecoder.decode" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overrides decode from JSONDecoder.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -196,8 +202,8 @@ including <code class="docutils literal notranslate"><span class="pre">'\t'</spa
 </dd></dl>
 
 <dl class="py method">
-<dt id="monty.json.MontyDecoder.process_decoded">
-<code class="sig-name descname">process_decoded</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyDecoder.process_decoded"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyDecoder.process_decoded" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MontyDecoder.process_decoded">
+<span class="sig-name descname"><span class="pre">process_decoded</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">d</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyDecoder.process_decoded"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MontyDecoder.process_decoded" title="Permalink to this definition">¶</a></dt>
 <dd><p>Recursive method to support decoding dicts and lists containing
 pymatgen objects.</p>
 </dd></dl>
@@ -205,8 +211,8 @@ pymatgen objects.</p>
 </dd></dl>
 
 <dl class="py class">
-<dt id="monty.json.MontyEncoder">
-<em class="property">class </em><code class="sig-name descname">MontyEncoder</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">skipkeys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">ensure_ascii</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">check_circular</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">allow_nan</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">sort_keys</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">indent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">separators</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">default</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyEncoder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyEncoder" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MontyEncoder">
+<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">MontyEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MontyEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
 <p>A Json Encoder which supports the MSONable API, plus adds support for
 numpy arrays, datetime objects, bson ObjectIds (requires bson).</p>
@@ -238,15 +244,15 @@ elements and object members will be pretty-printed with that
 indent level.  An indent level of 0 will only insert newlines.
 None is the most compact representation.</p>
 <p>If specified, separators should be an (item_separator, key_separator)
-tuple.  The default is (‘, ‘, ‘: ‘) if <em>indent</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code> and
+tuple.  The default is (’, ‘, ‘: ‘) if <em>indent</em> is <code class="docutils literal notranslate"><span class="pre">None</span></code> and
 (‘,’, ‘: ‘) otherwise.  To get the most compact JSON representation,
 you should specify (‘,’, ‘:’) to eliminate whitespace.</p>
 <p>If specified, default is a function that gets called for objects
 that can’t otherwise be serialized.  It should return a JSON encodable
 version of the object or raise a <code class="docutils literal notranslate"><span class="pre">TypeError</span></code>.</p>
 <dl class="py method">
-<dt id="monty.json.MontyEncoder.default">
-<code class="sig-name descname">default</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">o</span></em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/monty/json.html#MontyEncoder.default"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.MontyEncoder.default" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.MontyEncoder.default">
+<span class="sig-name descname"><span class="pre">default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="reference internal" href="_modules/monty/json.html#MontyEncoder.default"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MontyEncoder.default" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overriding default method for JSON encoding. This method does two
 things: (a) If an object has a to_dict property, return the to_dict
 output. (b) If the &#64;module and &#64;class keys are not in the to_dict,
@@ -265,8 +271,8 @@ property, the default Python json encoder default method is called.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="monty.json.jsanitize">
-<code class="sig-name descname">jsanitize</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">strict</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">allow_bson</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#jsanitize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#monty.json.jsanitize" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="monty.json.jsanitize">
+<span class="sig-name descname"><span class="pre">jsanitize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_bson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enum_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#jsanitize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.jsanitize" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method cleans an input json-like object, either a list or a dict or
 some sequence, nested or otherwise, by converting all non-string
 dictionary keys (such as int and float) to strings, and also recursively
@@ -285,6 +291,7 @@ the object to a string representation.</p></li>
 encounters an bson supported type such as objectid and datetime. If
 True, such bson types will be ignored, allowing for proper
 insertion into MongoDb databases.</p></li>
+<li><p><strong>enum_values</strong> (<em>bool</em>) – Convert Enums to their values.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -293,7 +300,7 @@ insertion into MongoDb databases.</p></li>
 </dl>
 </dd></dl>
 
-</div>
+</section>
 
 
             <div class="clearer"></div>
@@ -321,7 +328,7 @@ insertion into MongoDb databases.</p></li>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>

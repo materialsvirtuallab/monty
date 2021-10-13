@@ -9,7 +9,7 @@ from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
 
 try:
-    import ruamel.yaml as yaml
+    from ruamel import yaml
 
     try:  # Default to using CLoader and CDumper for speed.
         from ruamel.yaml import CLoader as Loader
@@ -36,7 +36,7 @@ except ImportError:
     msgpack = None
 
 
-def loadfn(fn, *args, **kwargs):
+def loadfn(fn, *args, fmt=None, **kwargs):
     r"""
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -50,39 +50,40 @@ def loadfn(fn, *args, **kwargs):
     Args:
         fn (str/Path): filename or pathlib.Path.
         *args: Any of the args supported by json/yaml.load.
+        fmt (string): If specified, the fmt specified would be used instead
+            of autodetection from filename. Supported formats right now are
+            "json", "yaml" or "mpk".
         **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
         (object) Result of json/yaml/msgpack.load.
     """
 
-    basename = os.path.basename(fn).lower()
-    if ".mpk" in basename:
-        fmt = 'mpk'
-    elif any(ext in basename for ext in (".yaml", ".yml")):
-        fmt = 'yaml'
-    else:
-        fmt = 'json'
+    if fmt is None:
+        basename = os.path.basename(fn).lower()
+        if ".mpk" in basename:
+            fmt = "mpk"
+        elif any(ext in basename for ext in (".yaml", ".yml")):
+            fmt = "yaml"
+        else:
+            fmt = "json"
 
-    if fmt == 'mpk':
+    if fmt == "mpk":
         if msgpack is None:
-            raise RuntimeError(
-                "Loading of message pack files is not "
-                "possible as msgpack-python is not installed.")
+            raise RuntimeError("Loading of message pack files is not " "possible as msgpack-python is not installed.")
         if "object_hook" not in kwargs:
             kwargs["object_hook"] = object_hook
         with zopen(fn, "rb") as fp:
             return msgpack.load(fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, 'rt') as fp:
-            if fmt == 'yaml':
+        with zopen(fn, "rt") as fp:
+            if fmt == "yaml":
                 if yaml is None:
-                    raise RuntimeError("Loading of YAML files requires "
-                                       "ruamel.yaml.")
+                    raise RuntimeError("Loading of YAML files requires " "ruamel.yaml.")
                 if "Loader" not in kwargs:
                     kwargs["Loader"] = Loader
                 return yaml.load(fp, *args, **kwargs)
-            if fmt == 'json':
+            if fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyDecoder
                 return json.load(fp, *args, **kwargs)
@@ -90,7 +91,7 @@ def loadfn(fn, *args, **kwargs):
             raise TypeError("Invalid format: {}".format(fmt))
 
 
-def dumpfn(obj, fn, *args, **kwargs):
+def dumpfn(obj, fn, *args, fmt=None, **kwargs):
     r"""
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -110,33 +111,31 @@ def dumpfn(obj, fn, *args, **kwargs):
     Returns:
         (object) Result of json.load.
     """
-    basename = os.path.basename(fn).lower()
-    if ".mpk" in basename:
-        fmt = 'mpk'
-    elif any(ext in basename for ext in (".yaml", ".yml")):
-        fmt = 'yaml'
-    else:
-        fmt = 'json'
+    if fmt is None:
+        basename = os.path.basename(fn).lower()
+        if ".mpk" in basename:
+            fmt = "mpk"
+        elif any(ext in basename for ext in (".yaml", ".yml")):
+            fmt = "yaml"
+        else:
+            fmt = "json"
 
-    if fmt == 'mpk':
+    if fmt == "mpk":
         if msgpack is None:
-            raise RuntimeError(
-                "Loading of message pack files is not "
-                "possible as msgpack-python is not installed.")
+            raise RuntimeError("Loading of message pack files is not " "possible as msgpack-python is not installed.")
         if "default" not in kwargs:
             kwargs["default"] = default
         with zopen(fn, "wb") as fp:
             msgpack.dump(obj, fp, *args, **kwargs)  # pylint: disable=E1101
     else:
         with zopen(fn, "wt") as fp:
-            if fmt == 'yaml':
+            if fmt == "yaml":
                 if yaml is None:
-                    raise RuntimeError("Loading of YAML files requires "
-                                       "ruamel.yaml.")
+                    raise RuntimeError("Loading of YAML files requires " "ruamel.yaml.")
                 if "Dumper" not in kwargs:
                     kwargs["Dumper"] = Dumper
                 yaml.dump(obj, fp, *args, **kwargs)
-            elif fmt == 'json':
+            elif fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyEncoder
                 fp.write("%s" % json.dumps(obj, *args, **kwargs))

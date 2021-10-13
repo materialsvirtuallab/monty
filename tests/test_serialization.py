@@ -16,7 +16,7 @@ class SerialTest(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         # Cleans up test files if a test fails
-        files_to_clean_up = glob.glob('monte_test.*')
+        files_to_clean_up = glob.glob("monte_test.*")
         for fn in files_to_clean_up:
             os.remove(fn)
 
@@ -24,12 +24,23 @@ class SerialTest(unittest.TestCase):
         d = {"hello": "world"}
 
         # Test standard configuration
-        for ext in ("json", "yaml", "yml", "json.gz", "yaml.gz", "json.bz2", "yaml.bz2"):
+        for ext in (
+            "json",
+            "yaml",
+            "yml",
+            "json.gz",
+            "yaml.gz",
+            "json.bz2",
+            "yaml.bz2",
+        ):
             fn = "monte_test.{}".format(ext)
             dumpfn(d, fn)
             d2 = loadfn(fn)
-            self.assertEqual(d, d2,
-                             msg="Test file with extension {} did not parse correctly".format(ext))
+            self.assertEqual(
+                d,
+                d2,
+                msg="Test file with extension {} did not parse correctly".format(ext),
+            )
             os.remove(fn)
 
         # Test custom kwarg configuration
@@ -42,10 +53,20 @@ class SerialTest(unittest.TestCase):
         self.assertEqual(d, d2)
         os.remove("monte_test.yaml")
 
+        # Check if fmt override works.
+        dumpfn(d, "monte_test.json", fmt="yaml")
+        with self.assertRaises(json.decoder.JSONDecodeError):
+            d2 = loadfn("monte_test.json")
+        d2 = loadfn("monte_test.json", fmt="yaml")
+        self.assertEqual(d, d2)
+        os.remove("monte_test.json")
+
         with self.assertRaises(TypeError):
-            dumpfn(d, 'monte_test.txt', fmt='garbage')
+            dumpfn(d, "monte_test.txt", fmt="garbage")
         with self.assertRaises(TypeError):
-            loadfn('monte_test.txt', fmt='garbage')
+            loadfn("monte_test.txt", fmt="garbage")
+
+
 
     @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
     def test_mpk(self):
@@ -58,14 +79,14 @@ class SerialTest(unittest.TestCase):
         os.remove("monte_test.mpk")
 
         # Test to ensure basename is respected, and not directory
-        with ScratchDir('.'):
+        with ScratchDir("."):
             os.mkdir("mpk_test")
             os.chdir("mpk_test")
             fname = os.path.abspath("test_file.json")
             dumpfn({"test": 1}, fname)
             with open("test_file.json", "r") as f:
                 reloaded = json.loads(f.read())
-            self.assertEqual(reloaded['test'], 1)
+            self.assertEqual(reloaded["test"], 1)
 
 
 if __name__ == "__main__":

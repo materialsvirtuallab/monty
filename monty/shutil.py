@@ -55,8 +55,8 @@ def gzip_dir(path, compresslevel=6):
             full_f = os.path.abspath(os.path.join(root, f))
             if not f.lower().endswith("gz") and not os.path.isdir(full_f):
                 with open(full_f, "rb") as f_in, GzipFile(
-                        "{}.gz".format(full_f),
-                        "wb", compresslevel=compresslevel) as f_out:
+                    "{}.gz".format(full_f), "wb", compresslevel=compresslevel
+                ) as f_out:
                     shutil.copyfileobj(f_in, f_out)
                 shutil.copystat(full_f, "{}.gz".format(full_f))
                 os.remove(full_f)
@@ -76,8 +76,7 @@ def compress_file(filepath, compression="gz"):
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
     if not filepath.lower().endswith(".%s" % compression):
-        with open(filepath, 'rb') as f_in, \
-                zopen('%s.%s' % (filepath, compression), 'wb') as f_out:
+        with open(filepath, "rb") as f_in, zopen("%s.%s" % (filepath, compression), "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
 
@@ -111,8 +110,7 @@ def decompress_file(filepath):
     toks = filepath.split(".")
     file_ext = toks[-1].upper()
     if file_ext in ["BZ2", "GZ", "Z"]:
-        with open(".".join(toks[0:-1]), 'wb') as f_out, \
-                zopen(filepath, 'rb') as f_in:
+        with open(".".join(toks[0:-1]), "wb") as f_out, zopen(filepath, "rb") as f_in:
             f_out.writelines(f_in)
         os.remove(filepath)
 

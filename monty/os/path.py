@@ -51,15 +51,14 @@ def zpath(filename):
         exists). If filename is not found, the same filename is returned
         unchanged.
     """
-    for ext in ["", '.gz', '.GZ', '.bz2', '.BZ2', '.z', '.Z']:
+    for ext in ["", ".gz", ".GZ", ".bz2", ".BZ2", ".z", ".Z"]:
         zfilename = "{}{}".format(filename, ext)
         if os.path.exists(zfilename):
             return zfilename
     return filename
 
 
-def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
-              match_mode="basename"):
+def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basename"):
     """
     Find all files with the extension listed in `exts` that are located within
     the directory tree rooted at `top` (including top itself, but excluding
@@ -95,8 +94,7 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
 
     # Handle file!
     if os.path.isfile(top):
-        return [os.path.abspath(top)] if any(top.endswith(ext)
-                                             for ext in exts) else []
+        return [os.path.abspath(top)] if any(top.endswith(ext) for ext in exts) else []
 
     # Build shell-style wildcards.
     if exclude_dirs is not None:
@@ -105,9 +103,7 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None,
     if include_dirs is not None:
         include_dirs = WildCard(include_dirs)
 
-    mangle = dict(
-        basename=os.path.basename,
-        abspath=os.path.abspath)[match_mode]
+    mangle = dict(basename=os.path.basename, abspath=os.path.abspath)[match_mode]
 
     # Assume directory
     paths = []

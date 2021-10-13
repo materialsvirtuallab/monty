@@ -16,5 +16,5 @@ class FuncTest(unittest.TestCase):
         self.assertEqual(list(iterator_from_slice(slice(0, 6, 2))), [0, 2, 4])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
