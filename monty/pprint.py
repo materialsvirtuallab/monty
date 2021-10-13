@@ -5,7 +5,8 @@ Pretty printing functions.
 
 from io import StringIO
 import sys
-
+from json import JSONEncoder, loads
+from IPython.display import JSON, display
 
 def pprint_table(table, out=sys.stdout, rstrip=False):
     """
@@ -81,3 +82,27 @@ def _draw_tree(node, prefix, child_iter, text_str):
         buf.write(_draw_tree(child, sub_prefix, child_iter, text_str))
 
     return buf.getvalue()
+
+class DisplayEcoder(JSONEncoder):
+        def default(self, o):
+            try:
+                return o.as_dict()
+            except Exception:
+                try:
+                    return o.__dict__
+                except Exception:
+                    return str(o)
+
+def pprint_json(data):
+    """
+    Display a tree-like object in a jupyter notebook.
+    Allows for collapsable interactive interaction with data.
+
+    Args:
+        data: a dictionary or object
+
+    Based on:
+    https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22
+
+    """
+    display(JSON(loads(DisplayEcoder().encode(data))))
