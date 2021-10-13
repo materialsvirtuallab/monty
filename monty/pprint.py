@@ -7,6 +7,7 @@ from io import StringIO
 import sys
 from json import JSONEncoder, loads
 
+
 def pprint_table(table, out=sys.stdout, rstrip=False):
     """
     Prints out a table of data, padded for alignment
@@ -82,15 +83,17 @@ def _draw_tree(node, prefix, child_iter, text_str):
 
     return buf.getvalue()
 
+
 class DisplayEcoder(JSONEncoder):
-        def default(self, o):
+    def default(self, o):
+        try:
+            return o.as_dict()
+        except Exception:
             try:
-                return o.as_dict()
+                return o.__dict__
             except Exception:
-                try:
-                    return o.__dict__
-                except Exception:
-                    return str(o)
+                return str(o)
+
 
 def pprint_json(data):
     """
@@ -105,4 +108,5 @@ def pprint_json(data):
 
     """
     from IPython.display import JSON, display
+
     display(JSON(loads(DisplayEcoder().encode(data))))
