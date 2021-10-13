@@ -86,13 +86,24 @@ def _draw_tree(node, prefix, child_iter, text_str):
 
 class DisplayEcoder(JSONEncoder):
     def default(self, o):
+        """
+        Try diffent ways of converting the present object for displaying
+        """
         try:
             return o.as_dict()
         except Exception:
-            try:
-                return o.__dict__
-            except Exception:
-                return str(o)
+            pass
+
+        try:
+            return o.__dict__
+        except Exception:
+            pass
+        
+        try:
+            return str(o)
+        except Exception:
+            pass
+        
 
 
 def pprint_json(data):
