@@ -6,7 +6,6 @@ Pretty printing functions.
 from io import StringIO
 import sys
 from json import JSONEncoder, loads
-from IPython.display import JSON, display
 
 def pprint_table(table, out=sys.stdout, rstrip=False):
     """
@@ -105,4 +104,5 @@ def pprint_json(data):
     https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22
 
     """
+    from IPython.display import JSON, display
     display(JSON(loads(DisplayEcoder().encode(data))))
