@@ -98,12 +98,11 @@ class DisplayEcoder(JSONEncoder):
             return o.__dict__
         except Exception:
             pass
-        
+
         try:
             return str(o)
         except Exception:
             pass
-        
 
 
 def pprint_json(data):
