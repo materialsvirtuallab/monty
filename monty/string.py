@@ -92,7 +92,7 @@ def marquee(text="", width=78, mark="*"):
     nmark = max(nmark, 0)
 
     marks = mark * nmark
-    return "%s %s %s" % (marks, text, marks)
+    return f"{marks} {text} {marks}"
 
 
 def boxed(msg, ch="=", pad=5):

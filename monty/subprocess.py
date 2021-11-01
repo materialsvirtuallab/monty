@@ -63,7 +63,7 @@ class Command:
         self.killed = False
 
     def __str__(self):
-        return "command: %s, retcode: %s" % (self.command, self.retcode)
+        return f"command: {self.command}, retcode: {self.retcode}"
 
     def run(self, timeout=None, **kwargs):
         """

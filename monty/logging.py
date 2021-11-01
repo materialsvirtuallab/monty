@@ -22,17 +22,17 @@ def logged(level=logging.DEBUG):
     """
 
     def wrap(f):
-        _logger = logging.getLogger("{}.{}".format(f.__module__, f.__name__))
+        _logger = logging.getLogger(f"{f.__module__}.{f.__name__}")
 
         def wrapped_f(*args, **kwargs):
             _logger.log(
                 level,
-                "Called at {} with args = {} and kwargs = {}".format(datetime.datetime.now(), args, kwargs),
+                f"Called at {datetime.datetime.now()} with args = {args} and kwargs = {kwargs}",
             )
             data = f(*args, **kwargs)
             _logger.log(
                 level,
-                "Done at {} with args = {} and kwargs = {}".format(datetime.datetime.now(), args, kwargs),
+                f"Done at {datetime.datetime.now()} with args = {args} and kwargs = {kwargs}",
             )
             return data
 
@@ -73,7 +73,7 @@ def enable_logging(main):
         # or --loglevel=debug
         numeric_level = getattr(logging, options.loglevel.upper(), None)
         if not isinstance(numeric_level, int):
-            raise ValueError("Invalid log level: %s" % options.loglevel)
+            raise ValueError(f"Invalid log level: {options.loglevel}")
         logging.basicConfig(level=numeric_level)
 
         retcode = main(*args, **kwargs)

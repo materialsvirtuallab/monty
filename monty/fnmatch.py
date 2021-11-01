@@ -35,7 +35,7 @@ class WildCard:
             self.pats = wildcard.split(sep)
 
     def __str__(self):
-        return "<%s, patterns = %s>" % (self.__class__.__name__, self.pats)
+        return f"<{self.__class__.__name__}, patterns = {self.pats}>"
 
     def filter(self, names):
         """

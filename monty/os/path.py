@@ -52,7 +52,7 @@ def zpath(filename):
         unchanged.
     """
     for ext in ["", ".gz", ".GZ", ".bz2", ".BZ2", ".z", ".Z"]:
-        zfilename = "{}{}".format(filename, ext)
+        zfilename = f"{filename}{ext}"
         if os.path.exists(zfilename):
             return zfilename
     return filename

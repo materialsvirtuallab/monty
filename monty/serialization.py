@@ -88,7 +88,7 @@ def loadfn(fn, *args, fmt=None, **kwargs):
                     kwargs["cls"] = MontyDecoder
                 return json.load(fp, *args, **kwargs)
 
-            raise TypeError("Invalid format: {}".format(fmt))
+            raise TypeError(f"Invalid format: {fmt}")
 
 
 def dumpfn(obj, fn, *args, fmt=None, **kwargs):
@@ -138,6 +138,6 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
             elif fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyEncoder
-                fp.write("%s" % json.dumps(obj, *args, **kwargs))
+                fp.write(json.dumps(obj, *args, **kwargs))
             else:
-                raise TypeError("Invalid format: {}".format(fmt))
+                raise TypeError(f"Invalid format: {fmt}")

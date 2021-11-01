@@ -35,7 +35,7 @@ def copy_r(src, dst):
         elif not absdst.startswith(fpath):
             copy_r(fpath, os.path.join(absdst, f))
         else:
-            warnings.warn("Cannot copy %s to itself" % fpath)
+            warnings.warn(f"Cannot copy {fpath} to itself")
 
 
 def gzip_dir(path, compresslevel=6):
@@ -55,10 +55,10 @@ def gzip_dir(path, compresslevel=6):
             full_f = os.path.abspath(os.path.join(root, f))
             if not f.lower().endswith("gz") and not os.path.isdir(full_f):
                 with open(full_f, "rb") as f_in, GzipFile(
-                    "{}.gz".format(full_f), "wb", compresslevel=compresslevel
+                    f"{full_f}.gz", "wb", compresslevel=compresslevel
                 ) as f_out:
                     shutil.copyfileobj(f_in, f_out)
-                shutil.copystat(full_f, "{}.gz".format(full_f))
+                shutil.copystat(full_f, f"{full_f}.gz")
                 os.remove(full_f)
 
 
@@ -75,8 +75,8 @@ def compress_file(filepath, compression="gz"):
     """
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
-    if not filepath.lower().endswith(".%s" % compression):
-        with open(filepath, "rb") as f_in, zopen("%s.%s" % (filepath, compression), "wb") as f_out:
+    if not filepath.lower().endswith(f".{compression}"):
+        with open(filepath, "rb") as f_in, zopen(f"{filepath}.{compression}", "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
 

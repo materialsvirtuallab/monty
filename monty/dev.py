@@ -36,7 +36,7 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
 
     def wrap(old):
         def wrapped(*args, **kwargs):
-            msg = "%s is deprecated" % old.__name__
+            msg = f"{old.__name__} is deprecated"
             if replacement is not None:
                 if isinstance(replacement, property):
                     r = replacement.fget
@@ -44,7 +44,7 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
                     r = replacement.__func__
                 else:
                     r = replacement
-                msg += "; use %s in %s instead." % (r.__name__, r.__module__)
+                msg += f"; use {r.__name__} in {r.__module__} instead."
             if message is not None:
                 msg += "\n" + message
             warnings.warn(msg, category=category, stacklevel=2)

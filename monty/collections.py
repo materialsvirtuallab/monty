@@ -36,14 +36,14 @@ class frozendict(dict):
         dict.__init__(self, *args, **kwargs)
 
     def __setitem__(self, key, val):
-        raise KeyError("Cannot overwrite existing key: %s" % str(key))
+        raise KeyError(f"Cannot overwrite existing key: {str(key)}")
 
     def update(self, *args, **kwargs):
         """
         :param args: Passthrough arguments for standard dict.
         :param kwargs: Passthrough keyword arguments for standard dict.
         """
-        raise KeyError("Cannot update a %s" % self.__class__.__name__)
+        raise KeyError(f"Cannot update a {self.__class__.__name__}")
 
 
 class Namespace(dict):
@@ -58,7 +58,7 @@ class Namespace(dict):
 
     def __setitem__(self, key, val):
         if key in self:
-            raise KeyError("Cannot overwrite existent key: %s" % str(key))
+            raise KeyError(f"Cannot overwrite existent key: {str(key)}")
 
         dict.__setitem__(self, key, val)
 
@@ -124,7 +124,7 @@ class FrozenAttrDict(frozendict):
                 raise AttributeError(str(exc))
 
     def __setattr__(self, name, value):
-        raise KeyError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
+        raise KeyError(f"You cannot modify attribute {name} of {self.__class__.__name__}")
 
 
 class MongoDict:
@@ -163,7 +163,7 @@ class MongoDict:
         return str(self._mongo_dict_)
 
     def __setattr__(self, name, value):
-        raise NotImplementedError("You cannot modify attribute %s of %s" % (name, self.__class__.__name__))
+        raise NotImplementedError(f"You cannot modify attribute {name} of {self.__class__.__name__}")
 
     def __getattribute__(self, name):
         try:

@@ -126,7 +126,7 @@ class MSONable:
         try:
             parent_module = self.__class__.__module__.split(".", maxsplit=1)[0]
             module_version = import_module(parent_module).__version__  # type: ignore
-            d["@version"] = "{}".format(module_version)
+            d["@version"] = str(module_version)
         except (AttributeError, ImportError):
             d["@version"] = None  # type: ignore
 
@@ -201,7 +201,7 @@ class MSONable:
                 if isinstance(value, dict):
                     flat_dict.update({seperator.join([key, _key]): _value for _key, _value in flatten(value).items()})
                 elif isinstance(value, list):
-                    list_dict = {"{}{}{}".format(key, seperator, num): item for num, item in enumerate(value)}
+                    list_dict = {f"{key}{seperator}{num}": item for num, item in enumerate(value)}
                     flat_dict.update(flatten(list_dict))
                 else:
                     flat_dict[key] = value
@@ -320,14 +320,14 @@ class MontyEncoder(json.JSONEncoder):
                 d = o.as_dict()
 
             if "@module" not in d:
-                d["@module"] = "{}".format(o.__class__.__module__)
+                d["@module"] = str(o.__class__.__module__)
             if "@class" not in d:
-                d["@class"] = "{}".format(o.__class__.__name__)
+                d["@class"] = str(o.__class__.__name__)
             if "@version" not in d:
                 try:
                     parent_module = o.__class__.__module__.split(".")[0]
                     module_version = import_module(parent_module).__version__  # type: ignore
-                    d["@version"] = "{}".format(module_version)
+                    d["@version"] = str(module_version)
                 except (AttributeError, ImportError):
                     d["@version"] = None
             return d

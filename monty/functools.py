@@ -229,11 +229,11 @@ class lazy_property:
             return self
 
         if not hasattr(inst, "__dict__"):
-            raise AttributeError("'%s' object has no attribute '__dict__'" % (inst_cls.__name__,))
+            raise AttributeError(f"'{inst_cls.__name__}' object has no attribute '__dict__'")
 
         name = self.__name__  # pylint: disable=E1101
         if name.startswith("__") and not name.endswith("__"):
-            name = "_%s%s" % (inst_cls.__name__, name)
+            name = f"_{inst_cls.__name__}{name}"
 
         value = self.__func(inst)
         inst.__dict__[name] = value
@@ -249,13 +249,13 @@ class lazy_property:
         inst_cls = inst.__class__
 
         if not hasattr(inst, "__dict__"):
-            raise AttributeError("'%s' object has no attribute '__dict__'" % (inst_cls.__name__,))
+            raise AttributeError(f"'{inst_cls.__name__}' object has no attribute '__dict__'")
 
         if name.startswith("__") and not name.endswith("__"):
-            name = "_%s%s" % (inst_cls.__name__, name)
+            name = f"_{inst_cls.__name__}{name}"
 
         if not isinstance(getattr(inst_cls, name), cls):
-            raise AttributeError("'%s.%s' is not a %s attribute" % (inst_cls.__name__, name, cls.__name__))
+            raise AttributeError(f"'{inst_cls.__name__}.{name}' is not a {cls.__name__} attribute")
 
         if name in inst.__dict__:
             del inst.__dict__[name]
@@ -293,7 +293,7 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
     elif not isinstance(exception_tuple, tuple):
         exception_tuple = (exception_tuple,)
     else:
-        raise TypeError("Wrong exception_tuple %s" % type(exception_tuple))
+        raise TypeError(f"Wrong exception_tuple {type(exception_tuple)}")
 
     def decorator(func):
         @wraps(func)
@@ -408,7 +408,7 @@ def prof_main(main):
             prof_file = kwargs.get("prof_file", None)
             if prof_file is None:
                 _, prof_file = tempfile.mkstemp()
-                print("Profiling data stored in %s" % prof_file)
+                print(f"Profiling data stored in {prof_file}")
 
             sortby = kwargs.get("sortby", "time")
             cProfile.runctx("main()", globals(), locals(), prof_file)
