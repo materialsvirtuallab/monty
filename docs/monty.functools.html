@@ -4,9 +4,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-    <title>monty.functools module &#8212; monty 2021.8.17 documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>monty.functools module &#8212; monty 2021.12.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,7 +39,7 @@
         <li class="right" >
           <a href="monty.fractions.html" title="monty.fractions module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.8.17 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2021.12.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.functools module</a></li> 
       </ul>
@@ -51,12 +50,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <section id="module-monty.functools">
+  <div class="section" id="module-monty.functools">
 <span id="monty-functools-module"></span><h1>monty.functools module<a class="headerlink" href="#module-monty.functools" title="Permalink to this headline">¶</a></h1>
 <p>functools, especially backported from Python 3.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="monty.functools.TimeoutError">
-<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">TimeoutError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#TimeoutError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.TimeoutError" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">TimeoutError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#TimeoutError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.TimeoutError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Exception class for timeouts.</p>
 <dl class="field-list simple">
@@ -68,7 +67,7 @@
 
 <dl class="py class">
 <dt class="sig sig-object py" id="monty.functools.lazy_property">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">lazy_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lazy_property" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">lazy_property</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lazy_property" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>lazy_property descriptor</p>
 <p>Used as a decorator to create lazy attributes. Lazy attributes
@@ -80,7 +79,7 @@ are evaluated on first use.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="monty.functools.lazy_property.invalidate">
-<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">invalidate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property.invalidate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lazy_property.invalidate" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">invalidate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inst</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#lazy_property.invalidate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.lazy_property.invalidate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Invalidate a lazy attribute.</p>
 <p>This obviously violates the lazy contract. A subclass of lazy
 may however have a contract where invalidation is appropriate.</p>
@@ -166,7 +165,7 @@ def method(self):</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="monty.functools.timeout">
-<em class="property"><span class="pre">class</span> </em><span class="sig-name descname"><span class="pre">timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Timeout'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.timeout" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Timeout'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.timeout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Timeout function. Use to limit matching to a certain time limit. Note that
 this works only on Unix-based systems as it uses signal. Usage:</p>
@@ -202,7 +201,7 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
 
 </dd></dl>
 
-</section>
+</div>
 
 
             <div class="clearer"></div>
