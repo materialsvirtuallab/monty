@@ -66,8 +66,6 @@ class SerialTest(unittest.TestCase):
         with self.assertRaises(TypeError):
             loadfn("monte_test.txt", fmt="garbage")
 
-
-
     @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
     def test_mpk(self):
         d = {"hello": "world"}
