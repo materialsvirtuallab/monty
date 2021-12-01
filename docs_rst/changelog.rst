@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2021.12.1
+----------
+* Adds support for lzma/xz format in zopen (@zhubonan).
+
 v2021.8.17
 ----------
 * Support serialization for Pandas DataFrames (@mkhorton).
