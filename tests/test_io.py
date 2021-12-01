@@ -131,6 +131,10 @@ class ZopenTest(unittest.TestCase):
             self.assertEqual(f.read(), "HelloWorld.\n\n")
         with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
+        with zopen(os.path.join(test_dir, "myfile_xz.xz"), "rt") as f:
+            self.assertEqual(f.read(), "HelloWorld.\n\n")
+        with zopen(os.path.join(test_dir, "myfile_lzma.lzma"), "rt") as f:
+            self.assertEqual(f.read(), "HelloWorld.\n\n")
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             self.assertEqual(f.read(), "HelloWorld.\n\n")
 
