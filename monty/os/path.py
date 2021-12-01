@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Path based methods, e.g., which, zpath, etc.
 """

@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 Useful collection classes, e.g., tree, frozendict, etc.
 """

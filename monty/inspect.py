@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Useful additional functions to help get information about live objects
 """

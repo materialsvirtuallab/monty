@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 Calling shell processes.
 """

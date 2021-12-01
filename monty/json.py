@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 JSON serialization and deserialization utilities.
 """
@@ -50,9 +49,9 @@ __version__ = "3.0.0"
 
 def _load_redirect(redirect_file):
     try:
-        with open(redirect_file, "rt") as f:
+        with open(redirect_file) as f:
             d = yaml.safe_load(f)
-    except IOError:
+    except OSError:
         # If we can't find the file
         # Just use an empty redirect dict
         return {}

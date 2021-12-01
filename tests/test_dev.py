@@ -34,7 +34,7 @@ class DecoratorTest(unittest.TestCase):
             self.assertIn("hello", str(w[0].message))
 
     def test_deprecated_property(self):
-        class a(object):
+        class a:
             def __init__(self):
                 pass
 
@@ -68,7 +68,7 @@ class DecoratorTest(unittest.TestCase):
             self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
     def test_deprecated_classmethod(self):
-        class A(object):
+        class A:
             def __init__(self):
                 pass
 
@@ -89,7 +89,7 @@ class DecoratorTest(unittest.TestCase):
             # Verify some things
             self.assertTrue(issubclass(w[-1].category, FutureWarning))
 
-        class A(object):
+        class A:
             def __init__(self):
                 pass
 

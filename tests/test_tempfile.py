@@ -1,7 +1,6 @@
 import unittest
 import shutil
 import os
-from io import open
 
 from monty.tempfile import ScratchDir
 

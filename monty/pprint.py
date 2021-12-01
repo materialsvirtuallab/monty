@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Pretty printing functions.
 """
@@ -22,7 +21,7 @@ def pprint_table(table, out=sys.stdout, rstrip=False):
         """
         Get the maximum width of the given column index
         """
-        return max([len(row[col_idx]) for row in table])
+        return max(len(row[col_idx]) for row in table)
 
     if rstrip:
         for row_idx, row in enumerate(table):

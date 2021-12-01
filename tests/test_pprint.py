@@ -1,4 +1,3 @@
-# coding: utf-8
 from monty.pprint import pprint_table, draw_tree
 
 import unittest
@@ -12,7 +11,7 @@ class PprintTableTest(unittest.TestCase):
 
 class DrawTreeTest(unittest.TestCase):
     def test_draw_tree(self):
-        class Node(object):
+        class Node:
             def __init__(self, name, children):
                 self.name = name
                 self.children = children

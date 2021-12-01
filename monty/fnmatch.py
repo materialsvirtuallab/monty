@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 This module provides support for Unix shell-style wildcards
 """

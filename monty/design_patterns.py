@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Some common design patterns such as singleton and cached classes.
 """

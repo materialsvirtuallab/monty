@@ -17,7 +17,7 @@ class SingletonTest(unittest.TestCase):
 
 
 @cached_class
-class A(object):
+class A:
     def __init__(self, val):
         self.val = val
 

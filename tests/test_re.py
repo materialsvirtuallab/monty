@@ -1,5 +1,3 @@
-# coding: utf-8
-
 import unittest
 import os
 from monty.re import regrep

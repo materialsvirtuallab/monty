@@ -1,10 +1,9 @@
-# coding: utf-8
 import unittest
 
 from monty.inspect import *
 
 
-class LittleCatA(object):
+class LittleCatA:
     pass
 
 
@@ -12,7 +11,7 @@ class LittleCatB(LittleCatA):
     pass
 
 
-class LittleCatC(object):
+class LittleCatC:
     pass
 
 

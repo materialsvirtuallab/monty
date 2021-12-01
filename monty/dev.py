@@ -163,7 +163,7 @@ def get_ncpus():
         res = open("/proc/cpuinfo").read().count("processor\t:")  # pylint: disable=R1732
         if res > 0:
             return res
-    except IOError:
+    except OSError:
         pass
 
     # Solaris
@@ -184,7 +184,7 @@ def get_ncpus():
         try:
             with open("/var/run/dmesg.boot") as f:
                 dmesg = f.read()
-        except IOError:
+        except OSError:
             with subprocess.Popen(["dmesg"], stdout=subprocess.PIPE) as dmesg_process:
                 dmesg = dmesg_process.communicate()[0]
 

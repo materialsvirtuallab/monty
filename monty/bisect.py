@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """
 Additional bisect functions. Taken from
 https://docs.python.org/2/library/bisect.html

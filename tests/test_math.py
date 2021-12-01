@@ -1,5 +1,3 @@
-# coding: utf-8
-
 import unittest
 
 from monty.math import nCr, nPr

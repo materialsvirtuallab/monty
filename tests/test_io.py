@@ -1,6 +1,5 @@
 import unittest
 import os
-from io import open
 
 try:
     from pathlib import Path
@@ -27,7 +26,7 @@ class ReverseReadlineTest(unittest.TestCase):
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(test_dir, "3000_lines.txt"), "rt") as f:
+        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f)):
                 self.assertEqual(
                     int(line),
@@ -39,7 +38,7 @@ class ReverseReadlineTest(unittest.TestCase):
         """
         Make sure that large textfiles are read properly
         """
-        with open(os.path.join(test_dir, "3000_lines.txt"), "rt") as f:
+        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 self.assertEqual(
                     int(line),

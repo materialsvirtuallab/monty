@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Augments Python's suite of IO functions with useful transparent support for
 compressed files.
@@ -43,7 +42,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
         return gzip.open(filename, *args, **kwargs)
     if ext in (".XZ", ".LZMA"):
         return lzma.open(filename, *args, **kwargs)
-    return io.open(filename, *args, **kwargs)  # pylint: disable=R1732
+    return open(filename, *args, **kwargs)  # pylint: disable=R1732
 
 
 def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:

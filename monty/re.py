@@ -1,4 +1,3 @@
-# coding: utf-8
 """
 Helpful regex based functions. E.g., grepping.
 """

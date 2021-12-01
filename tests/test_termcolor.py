@@ -28,7 +28,7 @@ class FuncTest(unittest.TestCase):
         cprint("Magenta color", "magenta")
         cprint("Cyan color", "cyan")
         cprint("White color", "white")
-        print(("-" * 78))
+        print("-" * 78)
 
         print("Test highlights:")
         cprint("On grey color", on_color="on_grey")
@@ -58,7 +58,7 @@ class FuncTest(unittest.TestCase):
             "white",
             attrs=["dark", "blink", "concealed"],
         )
-        print(("-" * 78))
+        print("-" * 78)
 
         print("Test mixing:")
         cprint("Underline red on grey color", "red", "on_grey", ["underline"])

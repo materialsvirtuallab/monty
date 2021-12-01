@@ -4,7 +4,6 @@ import shutil
 import platform
 import tempfile
 from gzip import GzipFile
-from io import open
 
 from monty.shutil import (
     copy_r,
@@ -84,13 +83,13 @@ class GzipDirTest(unittest.TestCase):
         full_f = os.path.join(test_dir, "gzip_dir", "tempfile")
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
-        self.assertTrue(os.path.exists("{}.gz".format(full_f)))
-        self.assertFalse((os.path.exists(full_f)))
+        self.assertTrue(os.path.exists(f"{full_f}.gz"))
+        self.assertFalse(os.path.exists(full_f))
 
-        with GzipFile("{}.gz".format(full_f)) as g:
+        with GzipFile(f"{full_f}.gz") as g:
             self.assertEqual(g.readline().decode("utf-8"), "what")
 
-        self.assertAlmostEqual(os.path.getmtime("{}.gz".format(full_f)), self.mtime, 4)
+        self.assertAlmostEqual(os.path.getmtime(f"{full_f}.gz"), self.mtime, 4)
 
     def test_handle_sub_dirs(self):
         sub_dir = os.path.join(test_dir, "gzip_dir", "sub_dir")
@@ -101,10 +100,10 @@ class GzipDirTest(unittest.TestCase):
 
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
-        self.assertTrue(os.path.exists("{}.gz".format(sub_file)))
-        self.assertFalse((os.path.exists(sub_file)))
+        self.assertTrue(os.path.exists(f"{sub_file}.gz"))
+        self.assertFalse(os.path.exists(sub_file))
 
-        with GzipFile("{}.gz".format(sub_file)) as g:
+        with GzipFile(f"{sub_file}.gz") as g:
             self.assertEqual(g.readline().decode("utf-8"), "anotherwhat")
 
     def tearDown(self):

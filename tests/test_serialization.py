@@ -33,13 +33,13 @@ class SerialTest(unittest.TestCase):
             "json.bz2",
             "yaml.bz2",
         ):
-            fn = "monte_test.{}".format(ext)
+            fn = f"monte_test.{ext}"
             dumpfn(d, fn)
             d2 = loadfn(fn)
             self.assertEqual(
                 d,
                 d2,
-                msg="Test file with extension {} did not parse correctly".format(ext),
+                msg=f"Test file with extension {ext} did not parse correctly",
             )
             os.remove(fn)
 
@@ -84,7 +84,7 @@ class SerialTest(unittest.TestCase):
             os.chdir("mpk_test")
             fname = os.path.abspath("test_file.json")
             dumpfn({"test": 1}, fname)
-            with open("test_file.json", "r") as f:
+            with open("test_file.json") as f:
                 reloaded = json.loads(f.read())
             self.assertEqual(reloaded["test"], 1)
 
