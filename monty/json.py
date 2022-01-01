@@ -390,7 +390,7 @@ class MontyDecoder(json.JSONDecoder):
                 modname = None
                 classname = None
             
-            if classname is not None:
+            if classname:
 
                 if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
                     if modname == "datetime" and classname == "datetime":
