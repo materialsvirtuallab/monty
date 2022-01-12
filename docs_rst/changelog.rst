@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2022.1.12
+----------
+* Fix decoding of dictionaries (@arosen93).
+* Formal support for py3.10
+
 v2021.12.1
 ----------
 * Adds support for lzma/xz format in zopen (@zhubonan).
