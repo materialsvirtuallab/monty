@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.pprint &#8212; monty 2021.12.1 documentation</title>
+    <title>monty.pprint &#8212; monty 2022.1.12 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -31,7 +31,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2021.12.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.1.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.pprint</a></li> 
       </ul>
@@ -49,6 +49,7 @@
 
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">json</span> <span class="kn">import</span> <span class="n">JSONEncoder</span><span class="p">,</span> <span class="n">loads</span>
 
 
 <div class="viewcode-block" id="pprint_table"><a class="viewcode-back" href="../../monty.pprint.html#monty.pprint.pprint_table">[docs]</a><span class="k">def</span> <span class="nf">pprint_table</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">rstrip</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -125,6 +126,50 @@
         <span class="n">buf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">_draw_tree</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">sub_prefix</span><span class="p">,</span> <span class="n">child_iter</span><span class="p">,</span> <span class="n">text_str</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">buf</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="DisplayEcoder"><a class="viewcode-back" href="../../monty.pprint.html#monty.pprint.DisplayEcoder">[docs]</a><span class="k">class</span> <span class="nc">DisplayEcoder</span><span class="p">(</span><span class="n">JSONEncoder</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Help convert dicts and objects to a format that can be displayed in notebooks</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DisplayEcoder.default"><a class="viewcode-back" href="../../monty.pprint.html#monty.pprint.DisplayEcoder.default">[docs]</a>    <span class="k">def</span> <span class="nf">default</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">o</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try diffent ways of converting the present object for displaying</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">o</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">o</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">o</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div></div>
+
+
+<div class="viewcode-block" id="pprint_json"><a class="viewcode-back" href="../../monty.pprint.html#monty.pprint.pprint_json">[docs]</a><span class="k">def</span> <span class="nf">pprint_json</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Display a tree-like object in a jupyter notebook.</span>
+<span class="sd">    Allows for collapsable interactive interaction with data.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: a dictionary or object</span>
+
+<span class="sd">    Based on:</span>
+<span class="sd">    https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">JSON</span><span class="p">,</span> <span class="n">display</span>  <span class="c1"># pylint: disable=C0415</span>
+
+    <span class="n">display</span><span class="p">(</span><span class="n">JSON</span><span class="p">(</span><span class="n">loads</span><span class="p">(</span><span class="n">DisplayEcoder</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">data</span><span class="p">))))</span></div>
 </pre></div>
 
             <div class="clearer"></div>
