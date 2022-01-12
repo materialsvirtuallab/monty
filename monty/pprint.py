@@ -107,6 +107,8 @@ class DisplayEcoder(JSONEncoder):
         except Exception:
             pass
 
+        return None
+
 
 def pprint_json(data):
     """
@@ -120,6 +122,6 @@ def pprint_json(data):
     https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22
 
     """
-    from IPython.display import JSON, display
+    from IPython.display import JSON, display  # pylint: disable=C0415
 
     display(JSON(loads(DisplayEcoder().encode(data))))
