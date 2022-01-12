@@ -170,7 +170,7 @@ class MongoDict:
             # raise
             try:
                 a = self._mongo_dict_[name]
-                if isinstance(a, collections.Mapping):
+                if isinstance(a, collections.abc.Mapping):
                     a = self.__class__(a)
                 return a
             except Exception as exc:
