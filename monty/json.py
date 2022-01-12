@@ -364,6 +364,7 @@ class MontyDecoder(json.JSONDecoder):
             elif "@module" in d and "@callable" in d:
                 modname = d["@module"]
                 objname = d["@callable"]
+                classname = None
                 if d.get("@bound", None) is not None:
                     # if the function is bound to an instance or class, first
                     # deserialize the bound object and then remove the object name
@@ -388,37 +389,40 @@ class MontyDecoder(json.JSONDecoder):
             else:
                 modname = None
                 classname = None
-            if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
-                if modname == "datetime" and classname == "datetime":
-                    try:
-                        dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
-                    except ValueError:
-                        dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S")
-                    return dt
+            
+            if classname:
 
-                if modname == "uuid" and classname == "UUID":
-                    return UUID(d["string"])
+                if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
+                    if modname == "datetime" and classname == "datetime":
+                        try:
+                            dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
+                        except ValueError:
+                            dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S")
+                        return dt
 
-                mod = __import__(modname, globals(), locals(), [classname], 0)
-                if hasattr(mod, classname):
-                    cls_ = getattr(mod, classname)
-                    data = {k: v for k, v in d.items() if not k.startswith("@")}
-                    if hasattr(cls_, "from_dict"):
-                        return cls_.from_dict(data)
-                    if pydantic is not None and issubclass(cls_, pydantic.BaseModel):
-                        return cls_(**data)
-            elif np is not None and modname == "numpy" and classname == "array":
-                if d["dtype"].startswith("complex"):
-                    return np.array(
-                        [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
-                        dtype=d["dtype"],
-                    )
-                return np.array(d["data"], dtype=d["dtype"])
-            elif pd is not None and modname == "pandas" and classname == "DataFrame":
-                decoded_data = MontyDecoder().decode(d["data"])
-                return pd.DataFrame(decoded_data)
-            elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
-                return bson.objectid.ObjectId(d["oid"])
+                    if modname == "uuid" and classname == "UUID":
+                        return UUID(d["string"])
+
+                    mod = __import__(modname, globals(), locals(), [classname], 0)
+                    if hasattr(mod, classname):
+                        cls_ = getattr(mod, classname)
+                        data = {k: v for k, v in d.items() if not k.startswith("@")}
+                        if hasattr(cls_, "from_dict"):
+                            return cls_.from_dict(data)
+                        if pydantic is not None and issubclass(cls_, pydantic.BaseModel):
+                            return cls_(**data)
+                elif np is not None and modname == "numpy" and classname == "array":
+                    if d["dtype"].startswith("complex"):
+                        return np.array(
+                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                            dtype=d["dtype"],
+                        )
+                    return np.array(d["data"], dtype=d["dtype"])
+                elif pd is not None and modname == "pandas" and classname == "DataFrame":
+                    decoded_data = MontyDecoder().decode(d["data"])
+                    return pd.DataFrame(decoded_data)
+                elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
+                    return bson.objectid.ObjectId(d["oid"])
 
             return {self.process_decoded(k): self.process_decoded(v) for k, v in d.items()}
 
