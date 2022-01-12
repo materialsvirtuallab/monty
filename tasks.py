@@ -24,7 +24,7 @@ __maintainer__ = "Shyue Ping Ong"
 __email__ = "shyue@mit.edu"
 __date__ = "Apr 29, 2012"
 
-NEW_VER = datetime.datetime.today().strftime("%Y.%-m.%-d")
+NEW_VER = "2022.1.12.1" # datetime.datetime.today().strftime("%Y.%-m.%-d":wq)
 
 
 @task
