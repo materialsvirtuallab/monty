@@ -4,31 +4,15 @@ and yaml.
 """
 import json
 import os
+
+try:
+    from ruamel.yaml import YAML
+except ImportError:
+    YAML = None
+
 from monty.io import zopen
 from monty.json import MontyEncoder, MontyDecoder
 from monty.msgpack import default, object_hook
-
-try:
-    from ruamel import yaml
-
-    try:  # Default to using CLoader and CDumper for speed.
-        from ruamel.yaml import CLoader as Loader
-        from ruamel.yaml import CDumper as Dumper
-    except ImportError:
-        from ruamel.yaml import Loader  # type: ignore
-        from ruamel.yaml import Dumper  # type: ignore
-except ImportError:
-    try:
-        import yaml  # type: ignore
-
-        try:  # Default to using CLoader and CDumper for speed.
-            from yaml import CLoader as Loader  # type: ignore
-            from yaml import CDumper as Dumper  # type: ignore
-        except ImportError:
-            from yaml import Loader  # type: ignore
-            from yaml import Dumper  # type: ignore
-    except ImportError:
-        yaml = None  # type: ignore
 
 try:
     import msgpack
@@ -78,10 +62,9 @@ def loadfn(fn, *args, fmt=None, **kwargs):
     else:
         with zopen(fn, "rt") as fp:
             if fmt == "yaml":
-                if yaml is None:
+                if YAML is None:
                     raise RuntimeError("Loading of YAML files requires " "ruamel.yaml.")
-                if "Loader" not in kwargs:
-                    kwargs["Loader"] = Loader
+                yaml = YAML()
                 return yaml.load(fp, *args, **kwargs)
             if fmt == "json":
                 if "cls" not in kwargs:
@@ -130,10 +113,9 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
     else:
         with zopen(fn, "wt") as fp:
             if fmt == "yaml":
-                if yaml is None:
+                if YAML is None:
                     raise RuntimeError("Loading of YAML files requires " "ruamel.yaml.")
-                if "Dumper" not in kwargs:
-                    kwargs["Dumper"] = Dumper
+                yaml = YAML()
                 yaml.dump(obj, fp, *args, **kwargs)
             elif fmt == "json":
                 if "cls" not in kwargs:

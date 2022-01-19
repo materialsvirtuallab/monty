@@ -37,12 +37,9 @@ except ImportError:
     bson = None
 
 try:
-    from ruamel import yaml
+    from ruamel.yaml import YAML
 except ImportError:
-    try:
-        import yaml  # type: ignore
-    except ImportError:
-        yaml = None  # type: ignore
+    YAML = None  # type: ignore
 
 __version__ = "3.0.0"
 
@@ -50,7 +47,8 @@ __version__ = "3.0.0"
 def _load_redirect(redirect_file):
     try:
         with open(redirect_file) as f:
-            d = yaml.safe_load(f)
+            yaml = YAML()
+            d = yaml.load(f)
     except OSError:
         # If we can't find the file
         # Just use an empty redirect dict
