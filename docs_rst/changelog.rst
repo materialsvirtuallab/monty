@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2022.1.19
+----------
+* Fix ruamel.yaml backwards compatibility.
+
 v2022.1.12
 ----------
 * Fix decoding of dictionaries (@arosen93).
