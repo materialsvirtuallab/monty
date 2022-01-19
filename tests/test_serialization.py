@@ -48,7 +48,7 @@ class SerialTest(unittest.TestCase):
         d2 = loadfn("monte_test.json")
         self.assertEqual(d, d2)
         os.remove("monte_test.json")
-        dumpfn(d, "monte_test.yaml", default_flow_style=False)
+        dumpfn(d, "monte_test.yaml")
         d2 = loadfn("monte_test.yaml")
         self.assertEqual(d, d2)
         os.remove("monte_test.yaml")

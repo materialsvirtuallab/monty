@@ -54,7 +54,7 @@ def loadfn(fn, *args, fmt=None, **kwargs):
 
     if fmt == "mpk":
         if msgpack is None:
-            raise RuntimeError("Loading of message pack files is not " "possible as msgpack-python is not installed.")
+            raise RuntimeError("Loading of message pack files is not possible as msgpack-python is not installed.")
         if "object_hook" not in kwargs:
             kwargs["object_hook"] = object_hook
         with zopen(fn, "rb") as fp:
@@ -63,7 +63,7 @@ def loadfn(fn, *args, fmt=None, **kwargs):
         with zopen(fn, "rt") as fp:
             if fmt == "yaml":
                 if YAML is None:
-                    raise RuntimeError("Loading of YAML files requires " "ruamel.yaml.")
+                    raise RuntimeError("Loading of YAML files requires ruamel.yaml.")
                 yaml = YAML()
                 return yaml.load(fp, *args, **kwargs)
             if fmt == "json":
@@ -105,7 +105,7 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
 
     if fmt == "mpk":
         if msgpack is None:
-            raise RuntimeError("Loading of message pack files is not " "possible as msgpack-python is not installed.")
+            raise RuntimeError("Loading of message pack files is not possible as msgpack-python is not installed.")
         if "default" not in kwargs:
             kwargs["default"] = default
         with zopen(fn, "wb") as fp:
@@ -114,7 +114,7 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
         with zopen(fn, "wt") as fp:
             if fmt == "yaml":
                 if YAML is None:
-                    raise RuntimeError("Loading of YAML files requires " "ruamel.yaml.")
+                    raise RuntimeError("Loading of YAML files requires ruamel.yaml.")
                 yaml = YAML()
                 yaml.dump(obj, fp, *args, **kwargs)
             elif fmt == "json":
