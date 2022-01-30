@@ -426,7 +426,7 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "DataFrame":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.DataFrame(decoded_data)
-                    elif classname == "Series":
+                    if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
                 elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
