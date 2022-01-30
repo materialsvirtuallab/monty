@@ -302,6 +302,12 @@ class MontyEncoder(json.JSONEncoder):
                     "@class": "DataFrame",
                     "data": o.to_json(default_handler=MontyEncoder().encode),
                 }
+            if isinstance(o, pd.Series):
+                return {
+                    "@module": "pandas",
+                    "@class": "Series",
+                    "data": o.to_json(default_handler=MontyEncoder().encode),
+                }
 
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
@@ -416,9 +422,13 @@ class MontyDecoder(json.JSONDecoder):
                             dtype=d["dtype"],
                         )
                     return np.array(d["data"], dtype=d["dtype"])
-                elif pd is not None and modname == "pandas" and classname == "DataFrame":
-                    decoded_data = MontyDecoder().decode(d["data"])
-                    return pd.DataFrame(decoded_data)
+                elif pd is not None and modname == "pandas":
+                    if classname == "DataFrame":
+                        decoded_data = MontyDecoder().decode(d["data"])
+                        return pd.DataFrame(decoded_data)
+                    elif classname == "Series":
+                        decoded_data = MontyDecoder().decode(d["data"])
+                        return pd.Series(decoded_data)
                 elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
                     return bson.objectid.ObjectId(d["oid"])
 
@@ -483,6 +493,8 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
         return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj.tolist()]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
+    if pd is not None and isinstance(obj, pd.DataFrame) or isinstance(obj, pd.Series):
+        return obj.to_dict()
     if isinstance(obj, dict):
         return {
             k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
