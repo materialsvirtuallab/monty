@@ -4,7 +4,7 @@ import io
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-with io.open(os.path.join(current_dir, "README.rst"), "rt") as f:
+with open(os.path.join(current_dir, "README.rst")) as f:
     long_desc = f.read()
 
 setup(
