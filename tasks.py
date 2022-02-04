@@ -36,7 +36,7 @@ def make_doc(ctx):
                 newoutput = []
                 suboutput = []
                 subpackage = False
-                with open(f, "r") as fid:
+                with open(f) as fid:
                     for line in fid:
                         clean = line.strip()
                         if clean == "Subpackages":
@@ -85,7 +85,7 @@ def test(ctx):
 
 @task
 def setver(ctx):
-    ctx.run('sed s/version=.*,/version=\\"{}\\",/ setup.py > newsetup'.format(ver))
+    ctx.run(f'sed s/version=.*,/version=\\"{ver}\\",/ setup.py > newsetup')
     ctx.run("mv newsetup setup.py")
 
 
@@ -122,14 +122,14 @@ def commit(ctx):
 
 @task
 def set_ver(ctx):
-    with open("monty/__init__.py", "rt") as f:
+    with open("monty/__init__.py") as f:
         contents = f.read()
         contents = re.sub(r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents)
 
     with open("monty/__init__.py", "wt") as f:
         f.write(contents)
 
-    with open("setup.py", "rt") as f:
+    with open("setup.py") as f:
         contents = f.read()
         contents = re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, contents)
 

@@ -1,4 +1,4 @@
-When reporting bugs/issues, please supply the following information. If this 
+When reporting bugs/issues, please supply the following information. If this
 is a feature request, please simply state the requested feature.
 
 ## System
