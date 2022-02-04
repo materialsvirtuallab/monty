@@ -96,6 +96,11 @@ class ClassContainingDataFrame(MSONable):
         self.df = df
 
 
+class ClassContainingSeries(MSONable):
+    def __init__(self, s):
+        self.s = s
+
+
 class MSONableTest(unittest.TestCase):
     def setUp(self):
         self.good_cls = GoodMSONClass
@@ -352,6 +357,18 @@ class JsonTest(unittest.TestCase):
         self.assertIsInstance(obj.df, pd.DataFrame)
         self.assertEqual(list(obj.df.a), [1, 1])
 
+        cls = ClassContainingSeries(s=pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]}))
+
+        d = json.loads(MontyEncoder().encode(cls))
+
+        self.assertEqual(d["s"]["@module"], "pandas")
+        self.assertEqual(d["s"]["@class"], "Series")
+
+        obj = ClassContainingSeries.from_dict(d)
+        self.assertIsInstance(obj, ClassContainingSeries)
+        self.assertIsInstance(obj.s, pd.Series)
+        self.assertEqual(list(obj.s.a), [1, 2, 3])
+
     def test_callable(self):
         instance = MethodSerializationClass(a=1)
         for function in [
@@ -498,6 +515,15 @@ class JsonTest(unittest.TestCase):
         d = {"c": instance}
         clean = jsanitize(d, strict=True)
         self.assertTrue("@class" in clean["c"])
+
+        # test on pandas
+        df = pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
+        clean = jsanitize(df)
+        self.assertEqual(clean, df.to_dict())
+
+        s = pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})
+        clean = jsanitize(s)
+        self.assertEqual(clean, s.to_dict())
 
     def test_redirect(self):
         MSONable.REDIRECT["tests.test_json"] = {"test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}}
