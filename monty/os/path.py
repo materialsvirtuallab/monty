@@ -2,11 +2,14 @@
 Path based methods, e.g., which, zpath, etc.
 """
 import os
+import shutil
 
+from monty.dev import deprecated
 from monty.fnmatch import WildCard
 from monty.string import list_strings
 
 
+@deprecated(shutil.which, message="shutil.which has been available since Python 3.3. This will be removed in v2023.")
 def which(cmd):
     """
     Returns full path to a executable.

@@ -9,16 +9,6 @@ test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class PathTest(unittest.TestCase):
-    @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
-    def test_which(self):
-        try:
-            py = which("python3")
-            self.assertEqual(os.path.basename(py), "python3")
-        except:
-            py = which("python")
-            self.assertEqual(os.path.basename(py), "python")
-        self.assertEqual("/usr/bin/find", which("/usr/bin/find"))
-        self.assertIs(which("non_existent_exe"), None)
 
     def test_zpath(self):
         fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
