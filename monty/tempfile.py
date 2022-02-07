@@ -4,7 +4,6 @@ Temporary directory and file creation utilities.
 
 import os
 import tempfile
-
 from pathlib import Path
 
 from monty.shutil import copy_r, remove

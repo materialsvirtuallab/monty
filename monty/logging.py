@@ -4,10 +4,10 @@
 Logging tools
 """
 
-import logging
+import argparse
 import datetime
 import functools
-import argparse
+import logging
 
 logger = logging.getLogger(__name__)
 

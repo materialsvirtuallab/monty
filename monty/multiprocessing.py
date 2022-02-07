@@ -3,7 +3,7 @@ Multiprocessing utilities.
 """
 
 from multiprocessing import Pool
-from typing import Iterable, Callable
+from typing import Callable, Iterable
 
 try:
     from tqdm.autonotebook import tqdm

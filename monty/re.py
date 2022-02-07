@@ -2,10 +2,10 @@
 Helpful regex based functions. E.g., grepping.
 """
 
-import re
 import collections
+import re
 
-from monty.io import zopen, reverse_readfile
+from monty.io import reverse_readfile, zopen
 
 
 def regrep(filename, patterns, reverse=False, terminate_on_match=False, postprocess=str):

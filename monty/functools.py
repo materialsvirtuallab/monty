@@ -2,13 +2,13 @@
 functools, especially backported from Python 3.
 """
 
-import signal
-import sys
 import cProfile
 import pstats
+import signal
+import sys
 import tempfile
 from collections import namedtuple
-from functools import update_wrapper, wraps, partial
+from functools import partial, update_wrapper, wraps
 from threading import RLock
 
 _CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])

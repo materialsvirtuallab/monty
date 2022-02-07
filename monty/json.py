@@ -2,17 +2,14 @@
 JSON serialization and deserialization utilities.
 """
 
-import os
-import json
-import types
 import datetime
-
-from hashlib import sha1
+import json
+import os
+import types
 from collections import OrderedDict, defaultdict
 from enum import Enum
-
+from hashlib import sha1
 from importlib import import_module
-
 from inspect import getfullargspec
 from uuid import UUID
 

@@ -11,7 +11,7 @@ except ImportError:
     YAML = None  # type: ignore
 
 from monty.io import zopen
-from monty.json import MontyEncoder, MontyDecoder
+from monty.json import MontyDecoder, MontyEncoder
 from monty.msgpack import default, object_hook
 
 try:
