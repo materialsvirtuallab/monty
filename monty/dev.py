@@ -3,14 +3,14 @@ This module implements several useful functions and decorators that can be
 particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
-import re
-import sys
-import logging
-import warnings
-import os
-import subprocess
-import multiprocessing
 import functools
+import logging
+import multiprocessing
+import os
+import re
+import subprocess
+import sys
+import warnings
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +139,8 @@ def get_ncpus():
 
     # jython
     try:
-        from java.lang import Runtime  # pylint: disable=import-outside-toplevel
+        from java.lang import \
+            Runtime  # pylint: disable=import-outside-toplevel
 
         runtime = Runtime.getRuntime()
         res = runtime.availableProcessors()
@@ -213,7 +214,8 @@ def install_excepthook(hook_type="color", **kwargs):
         0 if hook is installed successfully.
     """
     try:
-        from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
+        from IPython.core import \
+            ultratb  # pylint: disable=import-outside-toplevel
     except ImportError:
         warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
         return 1

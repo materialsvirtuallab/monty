@@ -2,10 +2,10 @@
 Useful additional functions to help get information about live objects
 """
 
-import os
 import inspect
-from inspect import currentframe, getframeinfo, getfullargspec
+import os
 from functools import wraps
+from inspect import currentframe, getframeinfo, getfullargspec
 
 
 def all_subclasses(cls):

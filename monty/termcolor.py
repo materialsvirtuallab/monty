@@ -26,10 +26,10 @@ ANSII Color formatting for output in terminal.
 import os
 
 try:
-    import fcntl
-    import termios
-    import struct
     import curses
+    import fcntl
+    import struct
+    import termios
 except Exception:
     pass
 

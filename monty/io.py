@@ -3,17 +3,17 @@ Augments Python's suite of IO functions with useful transparent support for
 compressed files.
 """
 
-import os
 import bz2
-import gzip
-import lzma
-import time
 import errno
-import mmap
-import subprocess
+import gzip
 import io
-from typing import Union, IO, Generator
+import lzma
+import mmap
+import os
+import subprocess
+import time
 from pathlib import Path
+from typing import IO, Generator, Union
 
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:

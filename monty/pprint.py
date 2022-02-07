@@ -2,8 +2,8 @@
 Pretty printing functions.
 """
 
-from io import StringIO
 import sys
+from io import StringIO
 from json import JSONEncoder, loads
 
 

@@ -2,9 +2,8 @@
 Os functions, e.g., cd, makedirs_p.
 """
 
-import os
 import errno
-
+import os
 from contextlib import contextmanager
 
 __author__ = "Shyue Ping Ong"

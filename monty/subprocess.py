@@ -4,10 +4,9 @@ Calling shell processes.
 import shlex
 import threading
 import traceback
-from subprocess import Popen, PIPE
+from subprocess import PIPE, Popen
 
 from .string import is_string
-
 
 __author__ = "Matteo Giantomass"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
