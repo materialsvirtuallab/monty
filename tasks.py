@@ -5,17 +5,17 @@ Deployment file to facilitate releases of monty.
 """
 
 
+import datetime
 import glob
-import requests
 import json
 import os
-import datetime
 import re
 
+import requests
 from invoke import task
-from monty.os import cd
-from monty import __version__ as ver
 
+from monty import __version__ as ver
+from monty.os import cd
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2012, The Materials Project"
