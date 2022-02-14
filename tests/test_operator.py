@@ -1,4 +1,5 @@
 import unittest
+
 from monty.operator import operator_from_str
 
 

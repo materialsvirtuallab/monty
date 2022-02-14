@@ -1,6 +1,6 @@
 import unittest
 
-from monty.bisect import index, find_lt, find_le, find_gt, find_ge
+from monty.bisect import find_ge, find_gt, find_le, find_lt, index
 
 
 class FuncTestCase(unittest.TestCase):
