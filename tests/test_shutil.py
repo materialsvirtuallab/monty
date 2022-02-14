@@ -1,19 +1,12 @@
-import unittest
 import os
-import shutil
 import platform
+import shutil
 import tempfile
+import unittest
 from gzip import GzipFile
 
-from monty.shutil import (
-    copy_r,
-    compress_file,
-    decompress_file,
-    compress_dir,
-    decompress_dir,
-    gzip_dir,
-    remove,
-)
+from monty.shutil import (compress_dir, compress_file, copy_r, decompress_dir,
+                          decompress_file, gzip_dir, remove)
 
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 

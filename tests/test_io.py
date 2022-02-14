@@ -1,18 +1,13 @@
-import unittest
 import os
+import unittest
 
 try:
     from pathlib import Path
 except ImportError:
     Path = None  # type: ignore
 
-from monty.io import (
-    reverse_readline,
-    zopen,
-    FileLock,
-    FileLockException,
-    reverse_readfile,
-)
+from monty.io import (FileLock, FileLockException, reverse_readfile,
+                      reverse_readline, zopen)
 
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
