@@ -1,7 +1,7 @@
 import unittest
+from math import sqrt
 
 from monty.multiprocessing import imap_tqdm
-from math import sqrt
 
 
 class FuncCase(unittest.TestCase):

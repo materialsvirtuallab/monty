@@ -1,7 +1,8 @@
-import unittest
 import os
+import unittest
 
-from monty.collections import frozendict, Namespace, AttrDict, FrozenAttrDict, tree
+from monty.collections import (AttrDict, FrozenAttrDict, Namespace, frozendict,
+                               tree)
 
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
