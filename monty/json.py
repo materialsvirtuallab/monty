@@ -12,6 +12,7 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from uuid import UUID
+import orjson
 
 try:
     import numpy as np
@@ -171,7 +172,11 @@ class MSONable:
         :param d: Dict representation.
         :return: MSONable class.
         """
-        decoded = {k: MontyDecoder().process_decoded(v) for k, v in d.items() if not k.startswith("@")}
+        decoded = {
+            k: MontyDecoder().process_decoded(v)
+            for k, v in d.items()
+            if not k.startswith("@")
+        }
         return cls(**decoded)
 
     def to_json(self) -> str:
@@ -193,16 +198,25 @@ class MSONable:
             flat_dict = {}
             for key, value in obj.items():
                 if isinstance(value, dict):
-                    flat_dict.update({seperator.join([key, _key]): _value for _key, _value in flatten(value).items()})
+                    flat_dict.update(
+                        {
+                            seperator.join([key, _key]): _value
+                            for _key, _value in flatten(value).items()
+                        }
+                    )
                 elif isinstance(value, list):
-                    list_dict = {f"{key}{seperator}{num}": item for num, item in enumerate(value)}
+                    list_dict = {
+                        f"{key}{seperator}{num}": item for num, item in enumerate(value)
+                    }
                     flat_dict.update(flatten(list_dict))
                 else:
                     flat_dict[key] = value
 
             return flat_dict
 
-        ordered_keys = sorted(flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0])
+        ordered_keys = sorted(
+            flatten(jsanitize(self.as_dict())).items(), key=lambda x: x[0]
+        )
         ordered_keys = [item for item in ordered_keys if "@" not in item[0]]
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
@@ -226,7 +240,9 @@ class MSONable:
             new_obj = cls(**v)
             return new_obj
 
-        raise ValueError(f"Must provide {cls.__name__}, the as_dict form, or the proper")
+        raise ValueError(
+            f"Must provide {cls.__name__}, the as_dict form, or the proper"
+        )
 
     @classmethod
     def __modify_schema__(cls, field_schema):
@@ -335,7 +351,7 @@ class MontyEncoder(json.JSONEncoder):
             return json.JSONEncoder.default(self, o)
 
 
-class MontyDecoder(json.JSONDecoder):
+class MontyDecoder:
     """
     A Json Decoder which supports the MSONable API. By default, the
     decoder attempts to find a module and name associated with a dict. If
@@ -396,9 +412,13 @@ class MontyDecoder(json.JSONDecoder):
                 if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
                     if modname == "datetime" and classname == "datetime":
                         try:
-                            dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
+                            dt = datetime.datetime.strptime(
+                                d["string"], "%Y-%m-%d %H:%M:%S.%f"
+                            )
                         except ValueError:
-                            dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S")
+                            dt = datetime.datetime.strptime(
+                                d["string"], "%Y-%m-%d %H:%M:%S"
+                            )
                         return dt
 
                     if modname == "uuid" and classname == "UUID":
@@ -410,12 +430,17 @@ class MontyDecoder(json.JSONDecoder):
                         data = {k: v for k, v in d.items() if not k.startswith("@")}
                         if hasattr(cls_, "from_dict"):
                             return cls_.from_dict(data)
-                        if pydantic is not None and issubclass(cls_, pydantic.BaseModel):
+                        if pydantic is not None and issubclass(
+                            cls_, pydantic.BaseModel
+                        ):
                             return cls_(**data)
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
-                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                            [
+                                np.array(r) + np.array(i) * 1j
+                                for r, i in zip(*d["data"])
+                            ],
                             dtype=d["dtype"],
                         )
                     return np.array(d["data"], dtype=d["dtype"])
@@ -426,10 +451,16 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
-                elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
+                elif (
+                    (bson is not None)
+                    and modname == "bson.objectid"
+                    and classname == "ObjectId"
+                ):
                     return bson.objectid.ObjectId(d["oid"])
 
-            return {self.process_decoded(k): self.process_decoded(v) for k, v in d.items()}
+            return {
+                self.process_decoded(k): self.process_decoded(v) for k, v in d.items()
+            }
 
         if isinstance(d, list):
             return [self.process_decoded(x) for x in d]
@@ -443,7 +474,7 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        d = json.JSONDecoder.decode(self, s)
+        d = orjson.loads(s)
         return self.process_decoded(d)
 
 
@@ -481,20 +512,29 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
         return obj.value
 
     if allow_bson and (
-        isinstance(obj, (datetime.datetime, bytes)) or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
+        isinstance(obj, (datetime.datetime, bytes))
+        or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
     ):
         return obj
     if isinstance(obj, (list, tuple)):
-        return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj]
+        return [
+            jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            for i in obj
+        ]
     if np is not None and isinstance(obj, np.ndarray):
-        return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj.tolist()]
+        return [
+            jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            for i in obj.tolist()
+        ]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
     if pd is not None and isinstance(obj, pd.DataFrame) or isinstance(obj, pd.Series):
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
-            k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            k.__str__(): jsanitize(
+                v, strict=strict, allow_bson=allow_bson, enum_values=enum_values
+            )
             for k, v in obj.items()
         }
     if isinstance(obj, (int, float)):
@@ -515,9 +555,16 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
         return obj.__str__()
 
     if pydantic is not None and isinstance(obj, pydantic.BaseModel):
-        return jsanitize(MontyEncoder().default(obj), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+        return jsanitize(
+            MontyEncoder().default(obj),
+            strict=strict,
+            allow_bson=allow_bson,
+            enum_values=enum_values,
+        )
 
-    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+    return jsanitize(
+        obj.as_dict(), strict=strict, allow_bson=allow_bson, enum_values=enum_values
+    )
 
 
 def _serialize_callable(o):
@@ -535,7 +582,9 @@ def _serialize_callable(o):
         try:
             bound = MontyEncoder().default(bound)
         except TypeError:
-            raise TypeError("Only bound methods of classes or MSONable instances are supported.")
+            raise TypeError(
+                "Only bound methods of classes or MSONable instances are supported."
+            )
 
     return {
         "@module": o.__module__,
