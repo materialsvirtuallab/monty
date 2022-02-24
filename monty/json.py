@@ -351,7 +351,7 @@ class MontyEncoder(json.JSONEncoder):
             return json.JSONEncoder.default(self, o)
 
 
-class MontyDecoder:
+class MontyDecoder(json.JSONDecoder):
     """
     A Json Decoder which supports the MSONable API. By default, the
     decoder attempts to find a module and name associated with a dict. If
