@@ -1,17 +1,19 @@
 __version__ = "0.1"
 
+import datetime
+import json
 import os
 import unittest
-import numpy as np
-import json
-import datetime
-import pandas as pd
-from bson.objectid import ObjectId
 from enum import Enum
 
+import numpy as np
+import pandas as pd
+from bson.objectid import ObjectId
+
+from monty.json import (MontyDecoder, MontyEncoder, MSONable, _load_redirect,
+                        jsanitize)
+
 from . import __version__ as tests_version
-from monty.json import MSONable, MontyEncoder, MontyDecoder, jsanitize
-from monty.json import _load_redirect
 
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -288,7 +290,7 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(type(d["dt"]), datetime.datetime)
 
     def test_uuid(self):
-        from uuid import uuid4, UUID
+        from uuid import UUID, uuid4
 
         uuid = uuid4()
         jsonstr = json.dumps(uuid, cls=MontyEncoder)

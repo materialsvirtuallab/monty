@@ -1,7 +1,7 @@
-import unittest
-import os
-import json
 import glob
+import json
+import os
+import unittest
 
 try:
     import msgpack
