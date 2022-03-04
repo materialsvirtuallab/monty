@@ -1,7 +1,7 @@
+import logging
 import unittest
 from io import StringIO
 
-import logging
 from monty.logging import logged
 
 
