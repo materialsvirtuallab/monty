@@ -1,4 +1,3 @@
-import pickle
 import unittest
 
 from monty.design_patterns import cached_class, singleton

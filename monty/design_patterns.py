@@ -116,4 +116,3 @@ class NullStream:
         Does nothing...
         :param args:
         """
-        pass

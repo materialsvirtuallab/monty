@@ -148,7 +148,7 @@ class MSONableTest(unittest.TestCase):
         self.assertRaises(NotImplementedError, obj.as_dict)
         obj = self.auto_mson(2, 3)
         d = obj.as_dict()
-        objd = self.auto_mson.from_dict(d)
+        self.auto_mson.from_dict(d)
 
     def test_unsafe_hash(self):
         GMC = GoodMSONClass

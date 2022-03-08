@@ -1,9 +1,8 @@
 import os
-import platform
 import unittest
 
 from monty.os import cd, makedirs_p
-from monty.os.path import find_exts, which, zpath
+from monty.os.path import find_exts, zpath
 
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
