@@ -272,6 +272,15 @@ class MontyEncoder(json.JSONEncoder):
     """
 
     def encode(self, o):
+        """
+        Overrides encode method on default JSONEncoder.
+
+        Args:
+            o: Python object.
+
+        Return:
+            JSON string representation.
+        """
         if isinstance(o, (list, tuple, dict)):
             d = self.handle_iters(o)
         else:
@@ -281,6 +290,15 @@ class MontyEncoder(json.JSONEncoder):
         return e
 
     def handle_iters(self, o):
+        """
+        Recursive function for handling encoding of iterables
+
+        Args:
+            o: Iterable Python object.
+
+        Return:
+            list of Python dict representations.
+        """
         d_list = {} if isinstance(o, dict) else []
 
         for item in o:
@@ -299,7 +317,7 @@ class MontyEncoder(json.JSONEncoder):
 
     def process(self, o) -> dict:  # pylint: disable=E0202
         """
-        Overriding default method for JSON encoding. This method does two
+        Processing for sanitization before encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
         output. (b) If the @module and @class keys are not in the to_dict,
         add them to the output automatically. If the object has no to_dict
@@ -378,7 +396,6 @@ class MontyEncoder(json.JSONEncoder):
             return d_p
         except AttributeError:
             return o
-            # return json.JSONEncoder.default(self, o)
 
 
 class MontyDecoder(json.JSONDecoder):
@@ -609,12 +626,14 @@ def _serialize_callable(o):
     # we are only able to serialize bound methods if the object the method is
     # bound to is itself serializable
     if bound is not None:
-        try:
-            bound = MontyEncoder().process(bound)
-        except TypeError:
+
+        new_bound = MontyEncoder().process(bound)
+        if new_bound == bound:
             raise TypeError(
                 "Only bound methods of classes or MSONable instances are supported."
             )
+        else:
+            bound = new_bound
 
     return {
         "@module": o.__module__,
