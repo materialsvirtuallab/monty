@@ -277,10 +277,10 @@ class MontyEncoder(json.JSONEncoder):
 
     def handle_iters(self, o):
         """
-        Recursive function for handling encoding of iterables
+        Recursive function for handling encoding of certain iterables
 
         Args:
-            o: Iterable Python object.
+            o: List, Dict, or Tuple object.
 
         Return:
             list of Python dict representations.
