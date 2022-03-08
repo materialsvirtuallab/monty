@@ -2,9 +2,9 @@
 TODO: Modify unittest doc.
 """
 
-import unittest
 import random
 import sys
+import unittest
 
 from monty.string import remove_non_ascii, unicode2str
 
