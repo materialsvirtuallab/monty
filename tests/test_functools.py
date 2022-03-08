@@ -1,16 +1,10 @@
-import unittest
-import sys
 import platform
+import sys
 import time
-from monty.functools import (
-    lru_cache,
-    lazy_property,
-    return_if_raise,
-    return_none_if_raise,
-    timeout,
-    TimeoutError,
-    prof_main,
-)
+import unittest
+
+from monty.functools import (TimeoutError, lazy_property, lru_cache, prof_main,
+                             return_if_raise, return_none_if_raise, timeout)
 
 
 class TestLRUCache(unittest.TestCase):
