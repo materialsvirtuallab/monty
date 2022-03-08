@@ -272,22 +272,27 @@ class MontyEncoder(json.JSONEncoder):
     """
 
     def encode(self, o):
-        if not isinstance(o, (list, tuple)):
-            d = self.process(o)
-        else:
+        if isinstance(o, (list, tuple, dict)):
             d = self.handle_iters(o)
+        else:
+            d = self.process(o)
 
         e = orjson.dumps(d).decode("utf-8")
         return e
 
     def handle_iters(self, o):
-        d_list = []
+        d_list = {} if isinstance(o, dict) else []
+
         for item in o:
+            val = o[item] if isinstance(d_list, dict) else item
             try:
-                d = self.process(item)
-                d_list.append(d)
+                d = self.process(val)
             except TypeError:
-                d = self.handle_iters(item)
+                d = self.handle_iters(val)
+
+            if isinstance(d_list, dict):
+                d_list[item] = d
+            else:
                 d_list.append(d)
 
         return d_list
@@ -367,9 +372,13 @@ class MontyEncoder(json.JSONEncoder):
                     d["@version"] = str(module_version)
                 except (AttributeError, ImportError):
                     d["@version"] = None
-            return d
+
+            d_p = self.handle_iters(d)
+
+            return d_p
         except AttributeError:
-            return json.JSONEncoder.default(self, o)
+            return o
+            # return json.JSONEncoder.default(self, o)
 
 
 class MontyDecoder(json.JSONDecoder):
@@ -577,7 +586,7 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
 
     if pydantic is not None and isinstance(obj, pydantic.BaseModel):
         return jsanitize(
-            MontyEncoder().default(obj),
+            MontyEncoder().process(obj),
             strict=strict,
             allow_bson=allow_bson,
             enum_values=enum_values,
@@ -601,7 +610,7 @@ def _serialize_callable(o):
     # bound to is itself serializable
     if bound is not None:
         try:
-            bound = MontyEncoder().default(bound)
+            bound = MontyEncoder().process(bound)
         except TypeError:
             raise TypeError(
                 "Only bound methods of classes or MSONable instances are supported."
