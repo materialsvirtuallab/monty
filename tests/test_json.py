@@ -10,8 +10,7 @@ import numpy as np
 import pandas as pd
 from bson.objectid import ObjectId
 
-from monty.json import (MontyDecoder, MontyEncoder, MSONable, _load_redirect,
-                        jsanitize)
+from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
 
 from . import __version__ as tests_version
 
