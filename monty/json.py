@@ -40,6 +40,11 @@ try:
 except ImportError:
     YAML = None  # type: ignore
 
+try:
+    import orjson
+except ImportError:
+    orjson = None  # type: ignore
+
 __version__ = "3.0.0"
 
 
@@ -272,7 +277,11 @@ class MontyEncoder(json.JSONEncoder):
         else:
             d = self.process(o)
 
-        e = orjson.dumps(d).decode("utf-8")  # pylint: disable=E1101
+        if orjson is not None:
+            e = orjson.dumps(d).decode("utf-8")  # pylint: disable=E1101
+        else:
+            e = json.dumps(d)
+
         return e
 
     def handle_iters(self, o):
@@ -492,7 +501,10 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        d = orjson.loads(s)  # pylint: disable=E1101
+        if orjson is not None:
+            d = orjson.loads(s)  # pylint: disable=E1101
+        else:
+            d = json.loads(s)
         return self.process_decoded(d)
 
 
