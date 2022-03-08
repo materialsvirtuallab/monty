@@ -271,7 +271,28 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def default(self, o) -> dict:  # pylint: disable=E0202
+    def encode(self, o):
+        if not isinstance(o, (list, tuple)):
+            d = self.process(o)
+        else:
+            d = self.handle_iters(o)
+
+        e = orjson.dumps(d).decode("utf-8")
+        return e
+
+    def handle_iters(self, o):
+        d_list = []
+        for item in o:
+            try:
+                d = self.process(item)
+                d_list.append(d)
+            except TypeError:
+                d = self.handle_iters(item)
+                d_list.append(d)
+
+        return d_list
+
+    def process(self, o) -> dict:  # pylint: disable=E0202
         """
         Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
