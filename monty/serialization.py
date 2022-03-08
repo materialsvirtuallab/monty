@@ -2,7 +2,7 @@
 This module implements serialization support for common formats such as json
 and yaml.
 """
-import orjson
+import json
 import os
 
 try:
@@ -33,11 +33,11 @@ def loadfn(fn, *args, fmt=None, **kwargs):
 
     Args:
         fn (str/Path): filename or pathlib.Path.
-        *args: Any of the args supported by msgpack/yaml.load.
+        *args: Any of the args supported by json/yaml.load.
         fmt (string): If specified, the fmt specified would be used instead
             of autodetection from filename. Supported formats right now are
             "json", "yaml" or "mpk".
-        **kwargs: Any of the kwargs supported by msgpack/yaml.load.
+        **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
         (object) Result of json/yaml/msgpack.load.
@@ -54,7 +54,9 @@ def loadfn(fn, *args, fmt=None, **kwargs):
 
     if fmt == "mpk":
         if msgpack is None:
-            raise RuntimeError("Loading of message pack files is not possible as msgpack-python is not installed.")
+            raise RuntimeError(
+                "Loading of message pack files is not possible as msgpack-python is not installed."
+            )
         if "object_hook" not in kwargs:
             kwargs["object_hook"] = object_hook
         with zopen(fn, "rb") as fp:
@@ -69,10 +71,8 @@ def loadfn(fn, *args, fmt=None, **kwargs):
             if fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyDecoder
+                return json.load(fp, *args, **kwargs)
 
-                file_content = fp.read()
-                bo = orjson.loads(file_content)
-                return bo
             raise TypeError(f"Invalid format: {fmt}")
 
 
@@ -90,8 +90,8 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
     Args:
         obj (object): Object to dump.
         fn (str/Path): filename or pathlib.Path.
-        *args: Any of the args supported by msgpack/yaml.dump.
-        **kwargs: Any of the kwargs supported by msgpack/yaml.dump.
+        *args: Any of the args supported by json/yaml.dump.
+        **kwargs: Any of the kwargs supported by json/yaml.dump.
 
     Returns:
         (object) Result of json.load.
@@ -107,7 +107,9 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
 
     if fmt == "mpk":
         if msgpack is None:
-            raise RuntimeError("Loading of message pack files is not possible as msgpack-python is not installed.")
+            raise RuntimeError(
+                "Loading of message pack files is not possible as msgpack-python is not installed."
+            )
         if "default" not in kwargs:
             kwargs["default"] = default
         with zopen(fn, "wb") as fp:
@@ -122,7 +124,6 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
             elif fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyEncoder
-                so = orjson.dumps(obj)
-                fp.write(so.decode("utf-8"))
+                fp.write(json.dumps(obj, *args, **kwargs))
             else:
                 raise TypeError(f"Invalid format: {fmt}")
