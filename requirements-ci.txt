@@ -17,3 +17,4 @@ black==22.1.0
 pylint==2.12.2
 orjson==3.6.7
 types-orjson==3.6.2
+types-requests==2.27.11
