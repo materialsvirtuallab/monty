@@ -2,7 +2,7 @@
 This module implements serialization support for common formats such as json
 and yaml.
 """
-import json
+import orjson
 import os
 
 try:
@@ -33,11 +33,11 @@ def loadfn(fn, *args, fmt=None, **kwargs):
 
     Args:
         fn (str/Path): filename or pathlib.Path.
-        *args: Any of the args supported by json/yaml.load.
+        *args: Any of the args supported by msgpack/yaml.load.
         fmt (string): If specified, the fmt specified would be used instead
             of autodetection from filename. Supported formats right now are
             "json", "yaml" or "mpk".
-        **kwargs: Any of the kwargs supported by json/yaml.load.
+        **kwargs: Any of the kwargs supported by msgpack/yaml.load.
 
     Returns:
         (object) Result of json/yaml/msgpack.load.
@@ -69,8 +69,10 @@ def loadfn(fn, *args, fmt=None, **kwargs):
             if fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyDecoder
-                return json.load(fp, *args, **kwargs)
 
+                file_content = fp.read()
+                bo = orjson.loads(file_content)
+                return bo
             raise TypeError(f"Invalid format: {fmt}")
 
 
@@ -88,8 +90,8 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
     Args:
         obj (object): Object to dump.
         fn (str/Path): filename or pathlib.Path.
-        *args: Any of the args supported by json/yaml.dump.
-        **kwargs: Any of the kwargs supported by json/yaml.dump.
+        *args: Any of the args supported by msgpack/yaml.dump.
+        **kwargs: Any of the kwargs supported by msgpack/yaml.dump.
 
     Returns:
         (object) Result of json.load.
@@ -120,6 +122,7 @@ def dumpfn(obj, fn, *args, fmt=None, **kwargs):
             elif fmt == "json":
                 if "cls" not in kwargs:
                     kwargs["cls"] = MontyEncoder
-                fp.write(json.dumps(obj, *args, **kwargs))
+                so = orjson.dumps(obj)
+                fp.write(so.decode("utf-8"))
             else:
                 raise TypeError(f"Invalid format: {fmt}")
