@@ -272,7 +272,7 @@ class MontyEncoder(json.JSONEncoder):
         else:
             d = self.process(o)
 
-        e = orjson.dumps(d).decode("utf-8")
+        e = orjson.dumps(d).decode("utf-8")  # pylint: disable=E1101
         return e
 
     def handle_iters(self, o):
@@ -492,7 +492,7 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        d = orjson.loads(s)
+        d = orjson.loads(s)  # pylint: disable=E1101
         return self.process_decoded(d)
 
 
@@ -590,8 +590,8 @@ def _serialize_callable(o):
         new_bound = MontyEncoder().process(bound)
         if new_bound == bound:
             raise TypeError("Only bound methods of classes or MSONable instances are supported.")
-        else:
-            bound = new_bound
+
+        bound = new_bound
 
     return {
         "@module": o.__module__,
