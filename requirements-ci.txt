@@ -1,9 +1,9 @@
-pytest==7.0.0
+pytest==7.0.1
 pytest-cov==3.0.0
 numpy==1.22.2
 ruamel.yaml==0.17.20
 msgpack==1.0.3
-tqdm==4.62.3
+tqdm==4.63.0
 coverage==6.3.1
 coveralls==3.3.1
 pymongo==4.0.1
@@ -12,8 +12,9 @@ mypy==0.931
 pydocstyle==6.1.1
 pydantic==1.9.0
 flake8==4.0.1
-pandas==1.4.0
+pandas==1.4.1
 black==22.1.0
 pylint==2.12.2
 orjson==3.6.7
 types-orjson==3.6.2
+
