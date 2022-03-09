@@ -102,6 +102,11 @@ class ClassContainingSeries(MSONable):
         self.s = s
 
 
+class ClassContainingNumpyArray(MSONable):
+    def __init__(self, np_a):
+        self.np_a = np_a
+
+
 class MSONableTest(unittest.TestCase):
     def setUp(self):
         self.good_cls = GoodMSONClass
@@ -344,6 +349,22 @@ class JsonTest(unittest.TestCase):
         d = jsanitize(x, strict=True)
         assert type(d["energies"][0]) == float
 
+        # Test data nested in a class
+        x = np.array([[1 + 1j, 2 + 1j], [3 + 1j, 4 + 1j]], dtype="complex64")
+        cls = ClassContainingNumpyArray(np_a={"a": [{"b": x}]})
+
+        d = json.loads(json.dumps(cls, cls=MontyEncoder))
+
+        self.assertEqual(d["np_a"]["a"][0]["b"]["@module"], "numpy")
+        self.assertEqual(d["np_a"]["a"][0]["b"]["@class"], "array")
+        self.assertEqual(d["np_a"]["a"][0]["b"]["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]])
+        self.assertEqual(d["np_a"]["a"][0]["b"]["dtype"], "complex64")
+
+        obj = ClassContainingNumpyArray.from_dict(d)
+        self.assertIsInstance(obj, ClassContainingNumpyArray)
+        self.assertIsInstance(obj.np_a["a"][0]["b"], np.ndarray)
+        self.assertEqual(obj.np_a["a"][0]["b"][0][1], 2 + 1j)
+
     def test_pandas(self):
 
         cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
@@ -369,6 +390,18 @@ class JsonTest(unittest.TestCase):
         self.assertIsInstance(obj, ClassContainingSeries)
         self.assertIsInstance(obj.s, pd.Series)
         self.assertEqual(list(obj.s.a), [1, 2, 3])
+
+        cls = ClassContainingSeries(s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]})
+
+        d = json.loads(MontyEncoder().encode(cls))
+
+        self.assertEqual(d["s"]["df"][0]["@module"], "pandas")
+        self.assertEqual(d["s"]["df"][0]["@class"], "Series")
+
+        obj = ClassContainingSeries.from_dict(d)
+        self.assertIsInstance(obj, ClassContainingSeries)
+        self.assertIsInstance(obj.s["df"][0], pd.Series)
+        self.assertEqual(list(obj.s["df"][0].a), [1, 2, 3])
 
     def test_callable(self):
         instance = MethodSerializationClass(a=1)

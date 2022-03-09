@@ -298,6 +298,7 @@ class MontyEncoder(json.JSONEncoder):
             val = o[item] if isinstance(o, dict) else item
 
             d = self.process(val)
+
             if isinstance(d, (list, tuple, dict)):
                 self.handle_iters(d)
 
