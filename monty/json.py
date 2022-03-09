@@ -385,7 +385,7 @@ class MontyEncoder(json.JSONEncoder):
 
             return d
         except AttributeError:
-            return copy.deepcopy(o)
+            return o
 
 
 class MontyDecoder(json.JSONDecoder):
