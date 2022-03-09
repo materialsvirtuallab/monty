@@ -2,6 +2,7 @@
 JSON serialization and deserialization utilities.
 """
 
+import copy
 import datetime
 import json
 import os
@@ -12,7 +13,6 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from uuid import UUID
-import copy
 
 try:
     import numpy as np
@@ -271,9 +271,9 @@ class MontyEncoder(json.JSONEncoder):
         Return:
             JSON string representation.
         """
-        
+
         d = self.process(o)
-        
+
         if isinstance(d, (list, tuple, dict)):
             self.handle_iters(d)
 
@@ -297,7 +297,7 @@ class MontyEncoder(json.JSONEncoder):
 
         for ind, item in enumerate(o):
             val = o[item] if isinstance(o, dict) else item
-            
+
             d = self.process(val)
             if isinstance(d, (list, tuple, dict)):
                 self.handle_iters(d)
