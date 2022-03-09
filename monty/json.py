@@ -2,7 +2,6 @@
 JSON serialization and deserialization utilities.
 """
 
-import copy
 import datetime
 import json
 import os
