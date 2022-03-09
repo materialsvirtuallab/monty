@@ -12,6 +12,7 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from uuid import UUID
+import copy
 
 try:
     import numpy as np
@@ -270,10 +271,11 @@ class MontyEncoder(json.JSONEncoder):
         Return:
             JSON string representation.
         """
-        if isinstance(o, (list, tuple, dict)):
-            d = self.handle_iters(o)
-        else:
-            d = self.process(o)
+        
+        d = self.process(o)
+        
+        if isinstance(d, (list, tuple, dict)):
+            self.handle_iters(d)
 
         if orjson is not None:
             e = orjson.dumps(d).decode("utf-8")  # pylint: disable=E1101
@@ -292,21 +294,18 @@ class MontyEncoder(json.JSONEncoder):
         Return:
             list of Python dict representations.
         """
-        d_list = {} if isinstance(o, dict) else []
 
-        for item in o:
-            val = o[item] if isinstance(d_list, dict) else item
-            try:
-                d = self.process(val)
-            except TypeError:
-                d = self.handle_iters(val)
+        for ind, item in enumerate(o):
+            val = o[item] if isinstance(o, dict) else item
+            
+            d = self.process(val)
+            if isinstance(d, (list, tuple, dict)):
+                self.handle_iters(d)
 
-            if isinstance(d_list, dict):
-                d_list[item] = d
+            if isinstance(o, dict):
+                o[item] = d
             else:
-                d_list.append(d)
-
-        return d_list
+                o[ind] = d
 
     def process(self, o) -> dict:  # pylint: disable=E0202
         """
@@ -384,11 +383,9 @@ class MontyEncoder(json.JSONEncoder):
                 except (AttributeError, ImportError):
                     d["@version"] = None
 
-            d_p = self.handle_iters(d)
-
-            return d_p
+            return d
         except AttributeError:
-            return o
+            return copy.deepcopy(o)
 
 
 class MontyDecoder(json.JSONDecoder):
