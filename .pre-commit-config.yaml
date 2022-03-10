@@ -8,13 +8,6 @@ ci:
   skip: [flake8, mypy]
 
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
-    hooks:
-      - id: check-yaml
-        exclude: pymatgen/analysis/vesta_cutoffs.yaml
-      - id: end-of-file-fixer
-      - id: trailing-whitespace
 
   - repo: https://github.com/myint/autoflake
     rev: v1.4
@@ -32,6 +25,14 @@ repos:
     hooks:
       - id: pyupgrade
         args: [--py38-plus]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-yaml
+        exclude: pymatgen/analysis/vesta_cutoffs.yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.10.1
