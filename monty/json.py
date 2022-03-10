@@ -253,71 +253,20 @@ class MontyEncoder(json.JSONEncoder):
     """
     A Json Encoder which supports the MSONable API, plus adds support for
     numpy arrays, datetime objects, bson ObjectIds (requires bson).
-
     Usage::
-
         # Add it as a *cls* keyword when using json.dump
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def encode(self, o):
+    def default(self, o) -> dict:  # pylint: disable=E0202
         """
-        Overrides encode method on default JSONEncoder.
-
-        Args:
-            o: Python object.
-
-        Return:
-            JSON string representation.
-        """
-
-        d = self.process(o)
-
-        if isinstance(d, (list, tuple, dict)):
-            self.handle_iters(d)
-
-        if orjson is not None:
-            e = orjson.dumps(d).decode("utf-8")  # pylint: disable=E1101
-        else:
-            e = json.dumps(d)
-
-        return e
-
-    def handle_iters(self, o):
-        """
-        Recursive function for handling encoding of certain iterables
-
-        Args:
-            o: List, Dict, or Tuple object.
-
-        Return:
-            list of Python dict representations.
-        """
-
-        for ind, item in enumerate(o):
-            val = o[item] if isinstance(o, dict) else item
-
-            d = self.process(val)
-
-            if isinstance(d, (list, tuple, dict)):
-                self.handle_iters(d)
-
-            if isinstance(o, dict):
-                o[item] = d
-            else:
-                o[ind] = d
-
-    def process(self, o) -> dict:  # pylint: disable=E0202
-        """
-        Processing for sanitization before encoding. This method does two
+        Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
         output. (b) If the @module and @class keys are not in the to_dict,
         add them to the output automatically. If the object has no to_dict
         property, the default Python json encoder default method is called.
-
         Args:
             o: Python object.
-
         Return:
             Python dict representation.
         """
@@ -382,10 +331,9 @@ class MontyEncoder(json.JSONEncoder):
                     d["@version"] = str(module_version)
                 except (AttributeError, ImportError):
                     d["@version"] = None
-
             return d
         except AttributeError:
-            return o
+            return json.JSONEncoder.default(self, o)
 
 
 class MontyDecoder(json.JSONDecoder):
