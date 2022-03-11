@@ -6,7 +6,13 @@ import os
 import sys
 import unittest
 
-from monty.termcolor import cprint, cprint_map, enable, get_terminal_size, stream_has_colours
+from monty.termcolor import (
+    cprint,
+    cprint_map,
+    enable,
+    get_terminal_size,
+    stream_has_colours,
+)
 
 
 class FuncTest(unittest.TestCase):
