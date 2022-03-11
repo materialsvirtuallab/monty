@@ -555,12 +555,10 @@ def _serialize_callable(o):
     # we are only able to serialize bound methods if the object the method is
     # bound to is itself serializable
     if bound is not None:
-
-        new_bound = MontyEncoder().process(bound)
-        if new_bound == bound:
+        try:
+            bound = MontyEncoder().default(bound)
+        except TypeError:
             raise TypeError("Only bound methods of classes or MSONable instances are supported.")
-
-        bound = new_bound
 
     return {
         "@module": o.__module__,
