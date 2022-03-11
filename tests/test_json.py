@@ -478,6 +478,9 @@ class JsonTest(unittest.TestCase):
         clean_strict = jsanitize(d, strict=True)
         self.assertEqual(clean_strict["hello"]["a"], 1)
         self.assertEqual(clean_strict["hello"]["b"], 2)
+        clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
+        self.assertEqual(clean_recursive_msonable["hello"]["a"], 1)
+        self.assertEqual(clean_recursive_msonable["hello"]["b"], 2)
 
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
