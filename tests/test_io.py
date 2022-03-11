@@ -6,13 +6,7 @@ try:
 except ImportError:
     Path = None  # type: ignore
 
-from monty.io import (
-    FileLock,
-    FileLockException,
-    reverse_readfile,
-    reverse_readline,
-    zopen,
-)
+from monty.io import FileLock, FileLockException, reverse_readfile, reverse_readline, zopen
 
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
