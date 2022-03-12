@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.json module &#8212; monty 2022.1.19 documentation</title>
+    <title>monty.json module &#8212; monty 2022.3.12 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.itertools.html" title="monty.itertools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.1.19 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.3.12 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.json module</a></li> 
       </ul>
@@ -215,8 +215,8 @@ pymatgen objects.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MontyEncoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#MontyEncoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.MontyEncoder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
 <p>A Json Encoder which supports the MSONable API, plus adds support for
-numpy arrays, datetime objects, bson ObjectIds (requires bson).</p>
-<p>Usage:</p>
+numpy arrays, datetime objects, bson ObjectIds (requires bson).
+Usage:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add it as a *cls* keyword when using json.dump</span>
 <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="nb">object</span><span class="p">,</span> <span class="bp">cls</span><span class="o">=</span><span class="n">MontyEncoder</span><span class="p">)</span>
 </pre></div>
@@ -257,13 +257,11 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 things: (a) If an object has a to_dict property, return the to_dict
 output. (b) If the &#64;module and &#64;class keys are not in the to_dict,
 add them to the output automatically. If the object has no to_dict
-property, the default Python json encoder default method is called.</p>
+property, the default Python json encoder default method is called.
+:param o: Python object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>o</strong> – Python object.</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>Python dict representation.</p>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Python dict representation.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -272,7 +270,7 @@ property, the default Python json encoder default method is called.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="monty.json.jsanitize">
-<span class="sig-name descname"><span class="pre">jsanitize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_bson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enum_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#jsanitize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.jsanitize" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">jsanitize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_bson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">enum_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive_msonable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/json.html#jsanitize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.json.jsanitize" title="Permalink to this definition">¶</a></dt>
 <dd><p>This method cleans an input json-like object, either a list or a dict or
 some sequence, nested or otherwise, by converting all non-string
 dictionary keys (such as int and float) to strings, and also recursively
@@ -288,10 +286,12 @@ no such attribute is found, an attribute error will be thrown. If
 strict is False, jsanitize will simply call str(object) to convert
 the object to a string representation.</p></li>
 <li><p><strong>allow_bson</strong> (<em>bool</em>) – This parameters sets the behavior when jsanitize
-encounters an bson supported type such as objectid and datetime. If
+encounters a bson supported type such as objectid and datetime. If
 True, such bson types will be ignored, allowing for proper
-insertion into MongoDb databases.</p></li>
+insertion into MongoDB databases.</p></li>
 <li><p><strong>enum_values</strong> (<em>bool</em>) – Convert Enums to their values.</p></li>
+<li><p><strong>recursive_msonable</strong> (<em>bool</em>) – If True, uses .as_dict() for MSONables regardless
+of the value of strict.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
