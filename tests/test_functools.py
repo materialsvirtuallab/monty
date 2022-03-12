@@ -1,15 +1,16 @@
-import unittest
-import sys
 import platform
+import sys
 import time
+import unittest
+
 from monty.functools import (
-    lru_cache,
+    TimeoutError,
     lazy_property,
+    lru_cache,
+    prof_main,
     return_if_raise,
     return_none_if_raise,
     timeout,
-    TimeoutError,
-    prof_main,
 )
 
 

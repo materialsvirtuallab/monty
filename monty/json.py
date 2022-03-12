@@ -38,6 +38,11 @@ try:
 except ImportError:
     YAML = None  # type: ignore
 
+try:
+    import orjson
+except ImportError:
+    orjson = None  # type: ignore
+
 __version__ = "3.0.0"
 
 
@@ -248,9 +253,7 @@ class MontyEncoder(json.JSONEncoder):
     """
     A Json Encoder which supports the MSONable API, plus adds support for
     numpy arrays, datetime objects, bson ObjectIds (requires bson).
-
     Usage::
-
         # Add it as a *cls* keyword when using json.dump
         json.dumps(object, cls=MontyEncoder)
     """
@@ -262,10 +265,8 @@ class MontyEncoder(json.JSONEncoder):
         output. (b) If the @module and @class keys are not in the to_dict,
         add them to the output automatically. If the object has no to_dict
         property, the default Python json encoder default method is called.
-
         Args:
             o: Python object.
-
         Return:
             Python dict representation.
         """
@@ -443,7 +444,10 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        d = json.JSONDecoder.decode(self, s)
+        if orjson is not None:
+            d = orjson.loads(s)  # pylint: disable=E1101
+        else:
+            d = json.loads(s)
         return self.process_decoded(d)
 
 

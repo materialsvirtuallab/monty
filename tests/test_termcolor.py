@@ -2,9 +2,9 @@
 TODO: Modify unittest doc.
 """
 
-import unittest
 import os
 import sys
+import unittest
 
 from monty.termcolor import (
     cprint,

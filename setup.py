@@ -1,6 +1,6 @@
 import os
-from setuptools import setup, find_packages
-import io
+
+from setuptools import find_packages, setup
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 

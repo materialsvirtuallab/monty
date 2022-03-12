@@ -1,15 +1,13 @@
-import unittest
 import os
-import platform
+import unittest
 
-from monty.os.path import which, zpath, find_exts
 from monty.os import cd, makedirs_p
+from monty.os.path import find_exts, zpath
 
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class PathTest(unittest.TestCase):
-
     def test_zpath(self):
         fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
         self.assertEqual(os.path.join(test_dir, "myfile_gz.gz"), fullzpath)
