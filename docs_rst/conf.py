@@ -11,8 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.dirname('..'))
 sys.path.insert(0, os.path.dirname('../monty'))
 sys.path.insert(0, os.path.dirname('../..'))
 
-from monty import __version__, __author__
+from monty import __author__, __version__
 
 # -- General configuration -----------------------------------------------------
 
@@ -181,7 +181,7 @@ htmlhelp_basename = 'montydoc'
 
 # -- Options for LaTeX output ------------------------------------------------
 
-latex_elements = {
+latex_elements = { # type: ignore
 # The paper size ('letterpaper' or 'a4paper').
 #'papersize': 'letterpaper',
 

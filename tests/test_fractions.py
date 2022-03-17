@@ -1,6 +1,6 @@
 import unittest
 
-from monty.fractions import gcd, lcm, gcd_float
+from monty.fractions import gcd, gcd_float, lcm
 
 
 class FuncTestCase(unittest.TestCase):

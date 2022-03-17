@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2022.3.12
+----------
+* Allow recursive MSON in jsanitize (@arosen93)
+* Option to use orjson for faster decoding. (@munrojm)
+
 v2022.1.19
 ----------
 * Fix ruamel.yaml backwards compatibility.

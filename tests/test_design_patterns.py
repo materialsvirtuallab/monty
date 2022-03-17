@@ -1,7 +1,6 @@
 import unittest
-import pickle
 
-from monty.design_patterns import singleton, cached_class
+from monty.design_patterns import cached_class, singleton
 
 
 class SingletonTest(unittest.TestCase):

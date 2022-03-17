@@ -1,6 +1,6 @@
-from monty.pprint import pprint_table, draw_tree
-
 import unittest
+
+from monty.pprint import draw_tree, pprint_table
 
 
 class PprintTableTest(unittest.TestCase):

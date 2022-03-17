@@ -1,7 +1,8 @@
+import multiprocessing
 import unittest
 import warnings
-import multiprocessing
-from monty.dev import deprecated, requires, get_ncpus, install_excepthook
+
+from monty.dev import deprecated, get_ncpus, install_excepthook, requires
 
 
 class A:

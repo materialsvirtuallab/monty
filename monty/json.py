@@ -38,6 +38,11 @@ try:
 except ImportError:
     YAML = None  # type: ignore
 
+try:
+    import orjson
+except ImportError:
+    orjson = None  # type: ignore
+
 __version__ = "3.0.0"
 
 
@@ -248,9 +253,7 @@ class MontyEncoder(json.JSONEncoder):
     """
     A Json Encoder which supports the MSONable API, plus adds support for
     numpy arrays, datetime objects, bson ObjectIds (requires bson).
-
     Usage::
-
         # Add it as a *cls* keyword when using json.dump
         json.dumps(object, cls=MontyEncoder)
     """
@@ -262,10 +265,8 @@ class MontyEncoder(json.JSONEncoder):
         output. (b) If the @module and @class keys are not in the to_dict,
         add them to the output automatically. If the object has no to_dict
         property, the default Python json encoder default method is called.
-
         Args:
             o: Python object.
-
         Return:
             Python dict representation.
         """
@@ -443,7 +444,10 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        d = json.JSONDecoder.decode(self, s)
+        if orjson is not None:
+            d = orjson.loads(s)  # pylint: disable=E1101
+        else:
+            d = json.loads(s)
         return self.process_decoded(d)
 
 
@@ -453,7 +457,7 @@ class MSONError(Exception):
     """
 
 
-def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
+def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_msonable=False):
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
@@ -469,10 +473,12 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
             strict is False, jsanitize will simply call str(object) to convert
             the object to a string representation.
         allow_bson (bool): This parameters sets the behavior when jsanitize
-            encounters an bson supported type such as objectid and datetime. If
+            encounters a bson supported type such as objectid and datetime. If
             True, such bson types will be ignored, allowing for proper
-            insertion into MongoDb databases.
+            insertion into MongoDB databases.
         enum_values (bool): Convert Enums to their values.
+        recursive_msonable (bool): If True, uses .as_dict() for MSONables regardless
+            of the value of strict.
 
     Returns:
         Sanitized dict that can be json serialized.
@@ -494,7 +500,9 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
-            k.__str__(): jsanitize(v, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            k.__str__(): jsanitize(
+                v, strict=strict, allow_bson=allow_bson, enum_values=enum_values, recursive_msonable=recursive_msonable
+            )
             for k, v in obj.items()
         }
     if isinstance(obj, (int, float)):
@@ -508,6 +516,9 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
         except TypeError:
             pass
 
+    if recursive_msonable and isinstance(obj, MSONable):
+        return obj.as_dict()
+
     if not strict:
         return obj.__str__()
 
@@ -515,9 +526,21 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False):
         return obj.__str__()
 
     if pydantic is not None and isinstance(obj, pydantic.BaseModel):
-        return jsanitize(MontyEncoder().default(obj), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+        return jsanitize(
+            MontyEncoder().default(obj),
+            strict=strict,
+            allow_bson=allow_bson,
+            enum_values=enum_values,
+            recursive_msonable=recursive_msonable,
+        )
 
-    return jsanitize(obj.as_dict(), strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+    return jsanitize(
+        obj.as_dict(),
+        strict=strict,
+        allow_bson=allow_bson,
+        enum_values=enum_values,
+        recursive_msonable=recursive_msonable,
+    )
 
 
 def _serialize_callable(o):
