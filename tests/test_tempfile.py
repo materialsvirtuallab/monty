@@ -96,6 +96,7 @@ class ScratchDirTest(unittest.TestCase):
         # We check that the pre-scratch file DOES still exists
         self.assertIn("pre_scratch_text", files)
         os.remove("scratch_text")
+        os.remove("pre_scratch_text")
 
     def test_no_copy(self):
 
