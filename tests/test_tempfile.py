@@ -45,6 +45,7 @@ class ScratchDirTest(unittest.TestCase):
         os.remove("scratch_text")
 
     def test_with_copy_gzip(self):
+
         # We write a pre-scratch file.
         with open("pre_scratch_text", "w") as f:
             f.write("write")
@@ -53,23 +54,18 @@ class ScratchDirTest(unittest.TestCase):
             self.scratch_root,
             copy_from_current_on_enter=True,
             copy_to_current_on_exit=True,
+            gzip_on_exit=True,
         ) as d:
             with open("scratch_text", "w") as f:
                 f.write("write")
-            files = os.listdir(d)
-            self.assertIn("scratch_text", files)
-            self.assertIn("empty_file.txt", files)
-            self.assertIn("pre_scratch_text", files)
+        files = os.listdir(os.getcwd())
 
-        # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
-        files = os.listdir(".")
+        # Make sure the stratch_text.gz exists
         self.assertIn("scratch_text.gz", files)
-
-        # We check that the pre-scratch file no longer exists (because it is
-        # gzipped in the scratch)
-        self.assertNotIn("pre_scratch_text", files)
-        os.remove("scratch_text")
+        for f in files:
+            if f.endswith(".gz"):
+                os.remove(f)
+        os.remove("pre_scratch_text")
 
     def test_with_copy_nodelete(self):
         # We write a pre-scratch file.
@@ -120,26 +116,26 @@ class ScratchDirTest(unittest.TestCase):
         self.assertNotIn("scratch_text", files)
 
     def test_symlink(self):
+        if os.name != "nt":
+            with ScratchDir(
+                self.scratch_root,
+                copy_from_current_on_enter=False,
+                copy_to_current_on_exit=False,
+                create_symbolic_link=True,
+            ) as d:
+                with open("scratch_text", "w") as f:
+                    f.write("write")
+                files = os.listdir(d)
+                self.assertIn("scratch_text", files)
+                self.assertNotIn("empty_file.txt", files)
 
-        with ScratchDir(
-            self.scratch_root,
-            copy_from_current_on_enter=False,
-            copy_to_current_on_exit=False,
-            create_symbolic_link=True,
-        ) as d:
-            with open("scratch_text", "w") as f:
-                f.write("write")
-            files = os.listdir(d)
-            self.assertIn("scratch_text", files)
-            self.assertNotIn("empty_file.txt", files)
+            # Make sure the tempdir is deleted.
+            self.assertFalse(os.path.exists(d))
+            files = os.listdir(".")
+            self.assertNotIn("scratch_text", files)
 
-        # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
-        files = os.listdir(".")
-        self.assertNotIn("scratch_text", files)
-
-        # Make sure the symlink is removed
-        assert not os.path.islink('scratch_link')
+            # Make sure the symlink is removed
+            assert not os.path.islink("scratch_link")
 
     def test_bad_root(self):
         with ScratchDir("bad_groot") as d:
