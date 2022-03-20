@@ -42,7 +42,6 @@ class ScratchDir:
         copy_from_current_on_enter=False,
         copy_to_current_on_exit=False,
         gzip_on_exit=False,
-        storedir=None,
         delete_removed_files=True,
     ):
         """
@@ -75,8 +74,6 @@ class ScratchDir:
             gzip_on_exit (bool): Whether to gzip the files generated in the
                 ScratchDir before copying them back.
                 Defaults to False.
-            storedir (str/Path): Path to directory to copy files from/to.
-                Defaults to os.getcwd().
             delete_removed_files (bool): Whether to delete files in the cwd
                 that are removed from the tmp dir.
                 Defaults to True
@@ -90,7 +87,6 @@ class ScratchDir:
         self.start_copy = copy_from_current_on_enter
         self.end_copy = copy_to_current_on_exit
         self.gzip_on_exit = gzip_on_exit
-        self.storedir = storedir or os.getcwd()
         self.delete_removed_files = delete_removed_files
 
     def __enter__(self):
@@ -99,7 +95,7 @@ class ScratchDir:
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
             if self.start_copy:
-                copy_r(self.storedir, tempdir)
+                copy_r(self.cwd, tempdir)
             if self.create_symbolic_link:
                 os.symlink(tempdir, ScratchDir.SCR_LINK)
             os.chdir(tempdir)
