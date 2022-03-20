@@ -90,6 +90,7 @@ class ScratchDir:
         self.start_copy = copy_from_current_on_enter
         self.end_copy = copy_to_current_on_exit
         self.gzip_on_exit = gzip_on_exit
+        self.remove_symlink_on_exit = remove_symlink_on_exit
         self.delete_removed_files = delete_removed_files
 
     def __enter__(self):
