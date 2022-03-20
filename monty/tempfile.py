@@ -43,6 +43,7 @@ class ScratchDir:
         copy_to_current_on_exit=False,
         gzip_on_exit=False,
         storedir=None,
+        delete_removed_files=True,
     ):
         """
         Initializes scratch directory given a **root** path. There is no need
@@ -71,10 +72,14 @@ class ScratchDir:
                 scratch to the current directory (recursively) at the end. E
                 .g., if output files are generated during the operation.
                 Defaults to False.
-            gzip_on_exist (bool): Whether to gzip the files generated in the
+            gzip_on_exit (bool): Whether to gzip the files generated in the
                 ScratchDir before copying them back.
+                Defaults to False.
             storedir (str/Path): Path to directory to copy files from/to.
                 Defaults to os.getcwd().
+            delete_removed_files (bool): Whether to delete files in the cwd
+                that are removed from the tmp dir.
+                Defaults to True
         """
         if Path is not None and isinstance(rootpath, Path):
             rootpath = str(rootpath)
@@ -84,8 +89,9 @@ class ScratchDir:
         self.create_symbolic_link = create_symbolic_link
         self.start_copy = copy_from_current_on_enter
         self.end_copy = copy_to_current_on_exit
-        self.gzip_on_exist = gzip_on_exit
+        self.gzip_on_exit = gzip_on_exit
         self.storedir = storedir or os.getcwd()
+        self.delete_removed_files = delete_removed_files
 
     def __enter__(self):
         tempdir = self.cwd
@@ -102,13 +108,21 @@ class ScratchDir:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
+                files = set(os.listdir(self.tempdir))
+                orig_files = set(os.listdir(self.cwd))
 
                 # gzip files
-                if self.gzip_on_exist:
+                if self.gzip_on_exit:
                     gzip_dir(self.tempdir)
 
-                # First copy files over
-                copy_r(self.tempdir, self.storedir)
+                # copy files over
+                copy_r(self.tempdir, self.cwd)
+
+                # Delete any files that are now gone
+                if self.delete_removed_files:
+                    for f in orig_files - files:
+                        fpath = os.path.join(self.cwd, f)
+                        remove(fpath)
 
             os.chdir(self.cwd)
             remove(self.tempdir)
