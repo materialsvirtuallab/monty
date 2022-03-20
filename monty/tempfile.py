@@ -42,6 +42,7 @@ class ScratchDir:
         copy_from_current_on_enter=False,
         copy_to_current_on_exit=False,
         gzip_on_exit=False,
+        remove_symlink_on_exit=False,
         delete_removed_files=True,
     ):
         """
@@ -74,6 +75,8 @@ class ScratchDir:
             gzip_on_exit (bool): Whether to gzip the files generated in the
                 ScratchDir before copying them back.
                 Defaults to False.
+            remove_symlink_on_exit (bool): Whether to remove the symbolic link
+                created in the current working directory at the end.
             delete_removed_files (bool): Whether to delete files in the cwd
                 that are removed from the tmp dir.
                 Defaults to True
@@ -122,3 +125,5 @@ class ScratchDir:
 
             os.chdir(self.cwd)
             remove(self.tempdir)
+            if self.remove_symlink_on_exit:
+                os.remove(ScratchDir.SCR_LINK)
