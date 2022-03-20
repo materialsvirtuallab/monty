@@ -126,5 +126,5 @@ class ScratchDir:
 
             os.chdir(self.cwd)
             remove(self.tempdir)
-            if self.remove_symlink_on_exit and os.path.islink(ScratchDir.SCR_LINK):
+            if self.create_symbolic_link and os.path.islink(ScratchDir.SCR_LINK):
                 os.remove(ScratchDir.SCR_LINK)
