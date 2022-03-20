@@ -6,7 +6,7 @@ import os
 import tempfile
 from pathlib import Path
 
-from monty.shutil import copy_r, remove
+from monty.shutil import copy_r, gzip_dir, remove
 
 
 class ScratchDir:
@@ -41,6 +41,8 @@ class ScratchDir:
         create_symbolic_link=False,
         copy_from_current_on_enter=False,
         copy_to_current_on_exit=False,
+        gzip_on_exit=False,
+        storedir=None,
     ):
         """
         Initializes scratch directory given a **root** path. There is no need
@@ -69,6 +71,10 @@ class ScratchDir:
                 scratch to the current directory (recursively) at the end. E
                 .g., if output files are generated during the operation.
                 Defaults to False.
+            gzip_on_exist (bool): Whether to gzip the files generated in the
+                ScratchDir before copying them back.
+            storedir (str/Path): Path to directory to copy files from/to.
+                Defaults to os.getcwd().
         """
         if Path is not None and isinstance(rootpath, Path):
             rootpath = str(rootpath)
@@ -78,6 +84,8 @@ class ScratchDir:
         self.create_symbolic_link = create_symbolic_link
         self.start_copy = copy_from_current_on_enter
         self.end_copy = copy_to_current_on_exit
+        self.gzip_on_exist = gzip_on_exit
+        self.storedir = storedir or os.getcwd()
 
     def __enter__(self):
         tempdir = self.cwd
@@ -85,7 +93,7 @@ class ScratchDir:
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
             if self.start_copy:
-                copy_r(".", tempdir)
+                copy_r(self.storedir, tempdir)
             if self.create_symbolic_link:
                 os.symlink(tempdir, ScratchDir.SCR_LINK)
             os.chdir(tempdir)
@@ -94,16 +102,13 @@ class ScratchDir:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
-                files = set(os.listdir(self.tempdir))
-                orig_files = set(os.listdir(self.cwd))
+
+                # gzip files
+                if self.gzip_on_exist:
+                    gzip_dir(self.tempdir)
 
                 # First copy files over
-                copy_r(self.tempdir, self.cwd)
-
-                # Delete any files that are now gone
-                for f in orig_files - files:
-                    fpath = os.path.join(self.cwd, f)
-                    remove(fpath)
+                copy_r(self.tempdir, self.storedir)
 
             os.chdir(self.cwd)
             remove(self.tempdir)
