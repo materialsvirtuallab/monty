@@ -53,6 +53,7 @@ class ScratchDirTest(unittest.TestCase):
             self.scratch_root,
             copy_from_current_on_enter=True,
             copy_to_current_on_exit=True,
+            delete_removed_files=False,
         ) as d:
             with open("scratch_text", "w") as f:
                 f.write("write")
@@ -69,9 +70,8 @@ class ScratchDirTest(unittest.TestCase):
         files = os.listdir(".")
         self.assertIn("scratch_text", files)
 
-        # We check that the pre-scratch file no longer exists (because it is
-        # deleted in the scratch)
-        self.assertNotIn("pre_scratch_text", files)
+        # We check that the pre-scratch file DOES still exists
+        self.assertIn("pre_scratch_text", files)
         os.remove("scratch_text")
 
     def test_no_copy(self):
