@@ -496,7 +496,7 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return [jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values) for i in obj.tolist()]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
-    if pd is not None and isinstance(obj, pd.DataFrame) or isinstance(obj, pd.Series):
+    if pd is not None and isinstance(obj, (pd.Series, pd.DataFrame)):
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
