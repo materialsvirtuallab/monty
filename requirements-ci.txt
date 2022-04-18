@@ -13,7 +13,7 @@ pydocstyle
 pydantic==1.9.0
 flake8
 pandas==1.4.1
-black
+black>=22.3.0
 pylint
 orjson==3.6.7
 types-orjson==3.6.2
