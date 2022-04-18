@@ -178,17 +178,13 @@ class MSONableTest(unittest.TestCase):
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(
-            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
-        )
+        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
 
         self.assertEqual(
             a_list[0].unsafe_hash().hexdigest(),
             "ea44de0e2ef627be582282c02c48e94de0d58ec6",
         )
-        self.assertEqual(
-            obj.unsafe_hash().hexdigest(), "44204c8da394e878f7562c9aa2e37c2177f28b81"
-        )
+        self.assertEqual(obj.unsafe_hash().hexdigest(), "44204c8da394e878f7562c9aa2e37c2177f28b81")
 
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
@@ -219,9 +215,7 @@ class MSONableTest(unittest.TestCase):
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(
-            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
-        )
+        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
 
         obj_dict = obj.as_dict()
         obj2 = GoodNestedMSONClass.from_dict(obj_dict)
@@ -351,9 +345,7 @@ class JsonTest(unittest.TestCase):
         d = json.loads(djson)
         self.assertEqual(d["@class"], "array")
         self.assertEqual(d["@module"], "numpy")
-        self.assertEqual(
-            d["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]]
-        )
+        self.assertEqual(d["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]])
         self.assertEqual(d["dtype"], "complex64")
         x = json.loads(djson, cls=MontyDecoder)
         self.assertEqual(type(x), np.ndarray)
@@ -384,9 +376,7 @@ class JsonTest(unittest.TestCase):
 
     def test_pandas(self):
 
-        cls = ClassContainingDataFrame(
-            df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
-        )
+        cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -410,9 +400,7 @@ class JsonTest(unittest.TestCase):
         self.assertIsInstance(obj.s, pd.Series)
         self.assertEqual(list(obj.s.a), [1, 2, 3])
 
-        cls = ClassContainingSeries(
-            s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]}
-        )
+        cls = ClassContainingSeries(s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]})
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -584,9 +572,7 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(clean, s.to_dict())
 
     def test_redirect(self):
-        MSONable.REDIRECT["tests.test_json"] = {
-            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
-        }
+        MSONable.REDIRECT["tests.test_json"] = {"test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}}
 
         d = {
             "@class": "test_class",
@@ -607,11 +593,7 @@ class JsonTest(unittest.TestCase):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
         self.assertEqual(
             data,
-            {
-                "old_module": {
-                    "old_class": {"@class": "new_class", "@module": "new_module"}
-                }
-            },
+            {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}},
         )
 
     def test_pydantic_integrations(self):
