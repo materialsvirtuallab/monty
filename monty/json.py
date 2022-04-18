@@ -477,7 +477,7 @@ class MontyDecoder(json.JSONDecoder):
         if orjson is not None:
             try:
                 d = orjson.loads(s)  # pylint: disable=E1101
-            except orjson.JSONDecodeError:
+            except orjson.JSONDecodeError:  # pylint: disable=E1101
                 d = json.loads(s)
         else:
             d = json.loads(s)
