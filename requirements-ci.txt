@@ -12,7 +12,7 @@ mypy
 pydocstyle
 pydantic==1.9.0
 flake8
-pandas==1.4.1
+pandas==1.4.2
 black
 pylint
 orjson==3.6.8
