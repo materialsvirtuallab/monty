@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2022.4.26
+----------
+* Fall back on json if orjson is not present. (@munrojm)
+
 v2022.3.12
 ----------
 * Allow recursive MSON in jsanitize (@arosen93)
