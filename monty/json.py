@@ -31,7 +31,7 @@ except ImportError:
 try:
     import bson
 except ImportError:
-    bson = None
+    bson = None  # type: ignore
 
 try:
     from ruamel.yaml import YAML
