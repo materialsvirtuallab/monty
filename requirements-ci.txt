@@ -4,9 +4,9 @@ numpy==1.22.3
 ruamel.yaml==0.17.21
 msgpack==1.0.3
 tqdm==4.64.0
-coverage==6.3.1
+coverage==6.3.2
 coveralls==3.3.1
-pymongo==4.0.1
+pymongo==4.1.1
 pycodestyle
 mypy
 pydocstyle
@@ -17,4 +17,4 @@ black
 pylint
 orjson==3.6.8
 types-orjson==3.6.2
-types-requests==2.27.14
+types-requests==2.27.20

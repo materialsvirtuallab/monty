@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.json module &#8212; monty 2022.3.12 documentation</title>
+    <title>monty.json module &#8212; monty 2022.4.26 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="monty.itertools.html" title="monty.itertools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.3.12 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.4.26 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.json module</a></li> 
       </ul>
@@ -230,7 +230,7 @@ objects with all incoming non-ASCII characters escaped.  If
 ensure_ascii is false, the output can contain non-ASCII characters.</p>
 <p>If check_circular is true, then lists, dicts, and custom encoded
 objects will be checked for circular references during encoding to
-prevent an infinite recursion (which would cause an OverflowError).
+prevent an infinite recursion (which would cause an RecursionError).
 Otherwise, no such check takes place.</p>
 <p>If allow_nan is true, then NaN, Infinity, and -Infinity will be
 encoded as such.  This behavior is not JSON specification compliant,

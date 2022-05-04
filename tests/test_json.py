@@ -307,6 +307,12 @@ class JsonTest(unittest.TestCase):
         d = json.loads(jsonstr, cls=MontyDecoder)
         self.assertEqual(type(d["uuid"]), UUID)
 
+    def test_nan(self):
+        x = [float("NaN")]
+        djson = json.dumps(x, cls=MontyEncoder)
+        d = json.loads(djson)
+        self.assertEqual(type(d[0]), float)
+
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         self.assertRaises(TypeError, json.dumps, x)
@@ -357,7 +363,10 @@ class JsonTest(unittest.TestCase):
 
         self.assertEqual(d["np_a"]["a"][0]["b"]["@module"], "numpy")
         self.assertEqual(d["np_a"]["a"][0]["b"]["@class"], "array")
-        self.assertEqual(d["np_a"]["a"][0]["b"]["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]])
+        self.assertEqual(
+            d["np_a"]["a"][0]["b"]["data"],
+            [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]],
+        )
         self.assertEqual(d["np_a"]["a"][0]["b"]["dtype"], "complex64")
 
         obj = ClassContainingNumpyArray.from_dict(d)

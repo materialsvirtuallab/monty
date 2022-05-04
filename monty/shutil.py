@@ -127,7 +127,7 @@ def decompress_dir(path):
 
 def remove(path, follow_symlink=False):
     """
-    Implements an remove function that will delete files, folder trees and
+    Implements a remove function that will delete files, folder trees and
     symlink trees
 
     1.) Remove a file

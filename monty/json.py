@@ -31,7 +31,7 @@ except ImportError:
 try:
     import bson
 except ImportError:
-    bson = None
+    bson = None  # type: ignore
 
 try:
     from ruamel.yaml import YAML
@@ -445,7 +445,10 @@ class MontyDecoder(json.JSONDecoder):
         :return: Object.
         """
         if orjson is not None:
-            d = orjson.loads(s)  # pylint: disable=E1101
+            try:
+                d = orjson.loads(s)  # pylint: disable=E1101
+            except orjson.JSONDecodeError:  # pylint: disable=E1101
+                d = json.loads(s)
         else:
             d = json.loads(s)
         return self.process_decoded(d)
@@ -501,7 +504,11 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
     if isinstance(obj, dict):
         return {
             k.__str__(): jsanitize(
-                v, strict=strict, allow_bson=allow_bson, enum_values=enum_values, recursive_msonable=recursive_msonable
+                v,
+                strict=strict,
+                allow_bson=allow_bson,
+                enum_values=enum_values,
+                recursive_msonable=recursive_msonable,
             )
             for k, v in obj.items()
         }
