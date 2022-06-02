@@ -15,6 +15,6 @@ flake8
 pandas==1.4.2
 black
 pylint
-orjson==3.6.8
+orjson==3.6.9
 types-orjson==3.6.2
 types-requests==2.27.20
