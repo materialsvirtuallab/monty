@@ -1,6 +1,6 @@
 pytest==7.1.2
 pytest-cov==3.0.0
-numpy==1.22.3
+numpy==1.23.0
 ruamel.yaml==0.17.21
 msgpack==1.0.3
 tqdm==4.64.0
