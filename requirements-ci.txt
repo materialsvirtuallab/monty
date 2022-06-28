@@ -10,7 +10,7 @@ pymongo==4.1.1
 pycodestyle
 mypy
 pydocstyle
-pydantic==1.9.0
+pydantic==1.9.1
 flake8
 pandas==1.4.2
 black
