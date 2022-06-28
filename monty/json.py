@@ -144,10 +144,10 @@ class MSONable:
         for c in args:
             if c != "self":
                 try:
-                    a = self.__getattribute__(c)
+                    a = getattr(self, c)
                 except AttributeError:
                     try:
-                        a = self.__getattribute__("_" + c)
+                        a = getattr(self, "_" + c)
                     except AttributeError:
                         raise NotImplementedError(
                             "Unable to automatically determine as_dict "
@@ -271,9 +271,9 @@ class MontyEncoder(json.JSONEncoder):
             Python dict representation.
         """
         if isinstance(o, datetime.datetime):
-            return {"@module": "datetime", "@class": "datetime", "string": o.__str__()}
+            return {"@module": "datetime", "@class": "datetime", "string": str(o)}
         if isinstance(o, UUID):
-            return {"@module": "uuid", "@class": "UUID", "string": o.__str__()}
+            return {"@module": "uuid", "@class": "UUID", "string": str(o)}
 
         if np is not None:
             if isinstance(o, np.ndarray):
@@ -281,13 +281,13 @@ class MontyEncoder(json.JSONEncoder):
                     return {
                         "@module": "numpy",
                         "@class": "array",
-                        "dtype": o.dtype.__str__(),
+                        "dtype": str(o.dtype),
                         "data": [o.real.tolist(), o.imag.tolist()],
                     }
                 return {
                     "@module": "numpy",
                     "@class": "array",
-                    "dtype": o.dtype.__str__(),
+                    "dtype": str(o.dtype),
                     "data": o.tolist(),
                 }
             if isinstance(o, np.generic):
@@ -411,7 +411,7 @@ class MontyDecoder(json.JSONDecoder):
                         data = {k: v for k, v in d.items() if not k.startswith("@")}
                         if hasattr(cls_, "from_dict"):
                             return cls_.from_dict(data)
-                        if pydantic is not None and issubclass(cls_, pydantic.BaseModel):
+                        if pydantic is not None and issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
                             return cls_(**data)
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
@@ -503,7 +503,7 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
-            k.__str__(): jsanitize(
+            str(k): jsanitize(
                 v,
                 strict=strict,
                 allow_bson=allow_bson,
@@ -527,12 +527,12 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return obj.as_dict()
 
     if not strict:
-        return obj.__str__()
+        return str(obj)
 
     if isinstance(obj, str):
-        return obj.__str__()
+        return obj
 
-    if pydantic is not None and isinstance(obj, pydantic.BaseModel):
+    if pydantic is not None and isinstance(obj, pydantic.BaseModel):  # pylint: disable=E1101
         return jsanitize(
             MontyEncoder().default(obj),
             strict=strict,
