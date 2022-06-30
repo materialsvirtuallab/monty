@@ -4,8 +4,8 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
 import functools
-import logging
 import inspect
+import logging
 import multiprocessing
 import os
 import re
@@ -51,13 +51,16 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
 
     def deprecated_decorator(old):
         if inspect.isclass(old):
+
             class _DecoratedClass(old):
                 def __init__(self, *args, **kwargs):
                     msg = craft_message(old, replacement, message)
                     warnings.warn(msg, category=category, stacklevel=2)
-                    return super(_DecoratedClass, self).__init__(*args, **kwargs)
+                    return super().__init__(*args, **kwargs)
+
             return _DecoratedClass
         else:
+
             def wrapped(*args, **kwargs):
                 msg = craft_message(old, replacement, message)
                 warnings.warn(msg, category=category, stacklevel=2)
