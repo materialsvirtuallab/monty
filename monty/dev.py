@@ -56,7 +56,7 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
                 def __init__(self, *args, **kwargs):
                     msg = craft_message(old, replacement, message)
                     warnings.warn(msg, category=category, stacklevel=2)
-                    return super().__init__(*args, **kwargs)
+                    super().__init__(*args, **kwargs)
 
             return _DecoratedClass
         else:
