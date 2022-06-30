@@ -5,6 +5,7 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 
 import functools
 import logging
+import inspect
 import multiprocessing
 import os
 import re
@@ -34,25 +35,37 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
         Original function, but with a warning to use the updated class.
     """
 
-    def wrap(old):
-        def wrapped(*args, **kwargs):
-            msg = f"{old.__name__} is deprecated"
-            if replacement is not None:
-                if isinstance(replacement, property):
-                    r = replacement.fget
-                elif isinstance(replacement, (classmethod, staticmethod)):
-                    r = replacement.__func__
-                else:
-                    r = replacement
-                msg += f"; use {r.__name__} in {r.__module__} instead."
-            if message is not None:
-                msg += "\n" + message
-            warnings.warn(msg, category=category, stacklevel=2)
-            return old(*args, **kwargs)
+    def craft_message(old, replacement, message):
+        msg = f"{old.__name__} is deprecated"
+        if replacement is not None:
+            if isinstance(replacement, property):
+                r = replacement.fget
+            elif isinstance(replacement, (classmethod, staticmethod)):
+                r = replacement.__func__
+            else:
+                r = replacement
+            msg += f"; use {r.__name__} in {r.__module__} instead."
+        if message is not None:
+            msg += "\n" + message
+        return msg
 
-        return wrapped
+    def deprecated_decorator(old):
+        if inspect.isclass(old):
+            class _DecoratedClass(old):
+                def __init__(self, *args, **kwargs):
+                    msg = craft_message(old, replacement, message)
+                    warnings.warn(msg, category=category, stacklevel=2)
+                    return super(_DecoratedClass, self).__init__(*args, **kwargs)
+            return _DecoratedClass
+        else:
+            def wrapped(*args, **kwargs):
+                msg = craft_message(old, replacement, message)
+                warnings.warn(msg, category=category, stacklevel=2)
+                return old(*args, **kwargs)
 
-    return wrap
+            return wrapped
+
+    return deprecated_decorator
 
 
 class requires:
