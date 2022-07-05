@@ -5,6 +5,7 @@ JSON serialization and deserialization utilities.
 import datetime
 import json
 import os
+import pathlib
 import types
 from collections import OrderedDict, defaultdict
 from enum import Enum
@@ -516,6 +517,8 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return obj
     if obj is None:
         return None
+    if isinstance(obj, pathlib.Path):
+        return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
         try:
