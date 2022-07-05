@@ -3,6 +3,7 @@ __version__ = "0.1"
 import datetime
 import json
 import os
+import pathlib
 import unittest
 from enum import Enum
 
@@ -510,6 +511,10 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertEqual(clean["a"], bytes(rnd_bin))
         self.assertIsInstance(clean["a"], bytes)
+
+        p = pathlib.Path("/home/user/")
+        clean = jsanitize(p, strict=True)
+        self.assertEqual(clean, "/home/user")
 
         # test jsanitizing callables (including classes)
         instance = MethodSerializationClass(a=1)
