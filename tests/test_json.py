@@ -514,7 +514,7 @@ class JsonTest(unittest.TestCase):
 
         p = pathlib.Path("/home/user/")
         clean = jsanitize(p, strict=True)
-        self.assertIn(clean, ["/home/user", '\\home\\user'])
+        self.assertIn(clean, ["/home/user", "\\home\\user"])
 
         # test jsanitizing callables (including classes)
         instance = MethodSerializationClass(a=1)
