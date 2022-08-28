@@ -154,7 +154,7 @@ class MSONable:
                             "Unable to automatically determine as_dict "
                             "format from class. MSONAble requires all "
                             "args to be present as either self.argname or "
-                            "self._argname, and kwargs to be present under"
+                            "self._argname, and kwargs to be present under "
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
                             "you can implement both as_dict and from_dict."
