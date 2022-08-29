@@ -1,7 +1,8 @@
 """
 Math functions.
 """
-from math import gcd as pygcd
+
+import math
 
 
 def gcd(*numbers):
@@ -16,7 +17,7 @@ def gcd(*numbers):
     """
     n = numbers[0]
     for i in numbers:
-        n = pygcd(n, i)
+        n = math.gcd(n, i)
     return n
 
 
