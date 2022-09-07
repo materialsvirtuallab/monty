@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.re module &#8212; monty 2022.4.26 documentation</title>
+    <title>monty.re module &#8212; monty 2022.9.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +41,7 @@
         <li class="right" >
           <a href="monty.pprint.html" title="monty.pprint module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.4.26 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.9.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.re module</a></li> 
       </ul>
@@ -52,14 +53,14 @@
           <div class="body" role="main">
             
   <section id="module-monty.re">
-<span id="monty-re-module"></span><h1>monty.re module<a class="headerlink" href="#module-monty.re" title="Permalink to this headline">¶</a></h1>
+<span id="monty-re-module"></span><h1>monty.re module<a class="headerlink" href="#module-monty.re" title="Permalink to this heading">¶</a></h1>
 <p>Helpful regex based functions. E.g., grepping.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="monty.re.regrep">
 <span class="sig-name descname"><span class="pre">regrep</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">terminate_on_match=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">postprocess=&lt;class</span> <span class="pre">'str'&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/re.html#regrep"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.re.regrep" title="Permalink to this definition">¶</a></dt>
 <dd><p>A powerful regular expression version of grep.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filename</strong> (<em>str</em>) – Filename to grep.</p></li>
 <li><p><strong>patterns</strong> (<em>dict</em>) – A dict of patterns, e.g.,
@@ -72,7 +73,7 @@ least one match in each key in pattern.</p></li>
 matches. Defaults to str, i.e., no change.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p><blockquote>
 <div><dl class="simple">
 <dt>{key1: [[[matches…], lineno], [[matches…], lineno],</dt><dd><p>[[matches…], lineno], …],</p>
@@ -84,7 +85,7 @@ matches. Defaults to str, i.e., no change.</p></li>
 that 0-based indexing is used.</p>
 </p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A dict of the following form</p>
 </dd>
 </dl>
@@ -123,7 +124,7 @@ that 0-based indexing is used.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>

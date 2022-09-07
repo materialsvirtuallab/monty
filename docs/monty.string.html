@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.string module &#8212; monty 2022.4.26 documentation</title>
+    <title>monty.string module &#8212; monty 2022.9.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +41,7 @@
         <li class="right" >
           <a href="monty.shutil.html" title="monty.shutil module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.4.26 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.9.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.string module</a></li> 
       </ul>
@@ -52,14 +53,14 @@
           <div class="body" role="main">
             
   <section id="module-monty.string">
-<span id="monty-string-module"></span><h1>monty.string module<a class="headerlink" href="#module-monty.string" title="Permalink to this headline">¶</a></h1>
+<span id="monty-string-module"></span><h1>monty.string module<a class="headerlink" href="#module-monty.string" title="Permalink to this heading">¶</a></h1>
 <p>Useful additional string functions.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="monty.string.boxed">
 <span class="sig-name descname"><span class="pre">boxed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'='</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pad</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#boxed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.string.boxed" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string in a box</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>msg</strong> – Input string.</p></li>
 <li><p><strong>ch</strong> – Character used to form the box.</p></li>
@@ -94,7 +95,7 @@ characters</p>
 <dd><p>Always return a list of strings, given a string or list of strings as
 input.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Examples</dt>
+<dt class="field-odd">Examples<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">list_strings</span><span class="p">(</span><span class="s1">&#39;A single string&#39;</span><span class="p">)</span>
@@ -115,14 +116,14 @@ input.</p>
 <dt class="sig sig-object py" id="monty.string.make_banner">
 <span class="sig-name descname"><span class="pre">make_banner</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">78</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mark</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#make_banner"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.string.make_banner" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>s</strong> – String</p></li>
 <li><p><strong>width</strong> – Width of banner. Defaults to 78.</p></li>
 <li><p><strong>mark</strong> – The mark used to create the banner.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Banner string.</p>
 </dd>
 </dl>
@@ -133,14 +134,14 @@ input.</p>
 <span class="sig-name descname"><span class="pre">marquee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">78</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mark</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/string.html#marquee"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.string.marquee" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the input string centered in a ‘marquee’.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>text</strong> (<em>str</em>) – Input string</p></li>
 <li><p><strong>width</strong> (<em>int</em>) – Width of final output string.</p></li>
 <li><p><strong>mark</strong> (<em>str</em>) – Character used to fill string.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Examples</dt>
+<dt class="field-even">Examples<span class="colon">:</span></dt>
 <dd class="field-even"><p></p></dd>
 </dl>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">marquee</span><span class="p">(</span><span class="s1">&#39;A test&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
@@ -161,10 +162,10 @@ input.</p>
 <dd><p>Remove non-ascii characters in a file. Needed when support for non-ASCII
 is not available.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>s</strong> (<em>str</em>) – Input string</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>String with all non-ascii characters removed.</p>
 </dd>
 </dl>
@@ -176,10 +177,10 @@ is not available.</p>
 <dd><p>Forces a unicode to a string in Python 2, but transparently handles
 Python 3.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>s</strong> (<em>str/unicode</em>) – Input string / unicode.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>str in Python 2. Unchanged otherwise.</p>
 </dd>
 </dl>
@@ -218,7 +219,7 @@ Python 3.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>

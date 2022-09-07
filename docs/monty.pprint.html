@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.pprint module &#8212; monty 2022.4.26 documentation</title>
+    <title>monty.pprint module &#8212; monty 2022.9.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +41,7 @@
         <li class="right" >
           <a href="monty.operator.html" title="monty.operator module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.4.26 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.9.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.pprint module</a></li> 
       </ul>
@@ -52,12 +53,12 @@
           <div class="body" role="main">
             
   <section id="module-monty.pprint">
-<span id="monty-pprint-module"></span><h1>monty.pprint module<a class="headerlink" href="#module-monty.pprint" title="Permalink to this headline">¶</a></h1>
+<span id="monty-pprint-module"></span><h1>monty.pprint module<a class="headerlink" href="#module-monty.pprint" title="Permalink to this heading">¶</a></h1>
 <p>Pretty printing functions.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="monty.pprint.DisplayEcoder">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DisplayEcoder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipkeys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ensure_ascii</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_circular</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allow_nan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_keys</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">indent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">separators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/pprint.html#DisplayEcoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.pprint.DisplayEcoder" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">json.encoder.JSONEncoder</span></code></p>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">JSONEncoder</span></code></p>
 <p>Help convert dicts and objects to a format that can be displayed in notebooks</p>
 <p>Constructor for JSONEncoder, with sensible defaults.</p>
 <p>If skipkeys is false, then it is a TypeError to attempt
@@ -100,7 +101,7 @@ version of the object or raise a <code class="docutils literal notranslate"><spa
 <dt class="sig sig-object py" id="monty.pprint.draw_tree">
 <span class="sig-name descname"><span class="pre">draw_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">child_iter=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">text_str=&lt;function</span> <span class="pre">&lt;lambda&gt;&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/pprint.html#draw_tree"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.pprint.draw_tree" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>node</strong> – the root of the tree to be drawn,</p></li>
 <li><p><strong>child_iter</strong> – function that when called with a node, returns an iterable
@@ -121,7 +122,7 @@ string. The resulting tree is drawn into a buffer and returned as a string.</p>
 <dd><p>Display a tree-like object in a jupyter notebook.
 Allows for collapsable interactive interaction with data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> – a dictionary or object</p>
 </dd>
 </dl>
@@ -135,7 +136,7 @@ Allows for collapsable interactive interaction with data.</p>
 <dd><p>Prints out a table of data, padded for alignment
 Each row must have the same number of columns.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>table</strong> – The table to print. A list of lists.</p></li>
 <li><p><strong>out</strong> – Output stream (file-like object)</p></li>
@@ -178,7 +179,7 @@ Each row must have the same number of columns.</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>

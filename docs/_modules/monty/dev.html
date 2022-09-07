@@ -1,16 +1,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.dev &#8212; monty 2022.4.26 documentation</title>
+    <title>monty.dev &#8212; monty 2022.9.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.4.26 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.9.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.dev</a></li> 
       </ul>
@@ -49,6 +50,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">multiprocessing</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -79,25 +81,40 @@
 <span class="sd">        Original function, but with a warning to use the updated class.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
-        <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">old</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is deprecated&quot;</span>
-            <span class="k">if</span> <span class="n">replacement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">replacement</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
-                    <span class="n">r</span> <span class="o">=</span> <span class="n">replacement</span><span class="o">.</span><span class="n">fget</span>
-                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">replacement</span><span class="p">,</span> <span class="p">(</span><span class="nb">classmethod</span><span class="p">,</span> <span class="nb">staticmethod</span><span class="p">)):</span>
-                    <span class="n">r</span> <span class="o">=</span> <span class="n">replacement</span><span class="o">.</span><span class="vm">__func__</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">r</span> <span class="o">=</span> <span class="n">replacement</span>
-                <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;; use </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
-            <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">message</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">old</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">craft_message</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">old</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> is deprecated&quot;</span>
+        <span class="k">if</span> <span class="n">replacement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">replacement</span><span class="p">,</span> <span class="nb">property</span><span class="p">):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">replacement</span><span class="o">.</span><span class="n">fget</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">replacement</span><span class="p">,</span> <span class="p">(</span><span class="nb">classmethod</span><span class="p">,</span> <span class="nb">staticmethod</span><span class="p">)):</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">replacement</span><span class="o">.</span><span class="vm">__func__</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">r</span> <span class="o">=</span> <span class="n">replacement</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;; use </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="vm">__module__</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="n">message</span>
+        <span class="k">return</span> <span class="n">msg</span>
 
-        <span class="k">return</span> <span class="n">wrapped</span>
+    <span class="k">def</span> <span class="nf">deprecated_decorator</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">inspect</span><span class="o">.</span><span class="n">isclass</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
 
-    <span class="k">return</span> <span class="n">wrap</span></div>
+            <span class="k">class</span> <span class="nc">_DecoratedClass</span><span class="p">(</span><span class="n">old</span><span class="p">):</span>
+                <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="n">craft_message</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">_DecoratedClass</span>
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">def</span> <span class="nf">wrapped</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">craft_message</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">replacement</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">category</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">old</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">wrapped</span>
+
+    <span class="k">return</span> <span class="n">deprecated_decorator</span></div>
 
 
 <div class="viewcode-block" id="requires"><a class="viewcode-back" href="../../monty.dev.html#monty.dev.requires">[docs]</a><span class="k">class</span> <span class="nc">requires</span><span class="p">:</span>
@@ -297,7 +314,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>

@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>monty.functools module &#8212; monty 2022.4.26 documentation</title>
+    <title>monty.functools module &#8212; monty 2022.9.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/flasky.css" />
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +41,7 @@
         <li class="right" >
           <a href="monty.fractions.html" title="monty.fractions module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.4.26 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="index.html">monty 2022.9.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="monty.html" accesskey="U">monty package</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.functools module</a></li> 
       </ul>
@@ -52,7 +53,7 @@
           <div class="body" role="main">
             
   <section id="module-monty.functools">
-<span id="monty-functools-module"></span><h1>monty.functools module<a class="headerlink" href="#module-monty.functools" title="Permalink to this headline">¶</a></h1>
+<span id="monty-functools-module"></span><h1>monty.functools module<a class="headerlink" href="#module-monty.functools" title="Permalink to this heading">¶</a></h1>
 <p>functools, especially backported from Python 3.</p>
 <dl class="py exception">
 <dt class="sig sig-object py" id="monty.functools.TimeoutError">
@@ -60,7 +61,7 @@
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
 <p>Exception class for timeouts.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> – Error message</p>
 </dd>
 </dl>
@@ -74,7 +75,7 @@
 <p>Used as a decorator to create lazy attributes. Lazy attributes
 are evaluated on first use.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>func</strong> – Function to decorate.</p>
 </dd>
 </dl>
@@ -180,7 +181,7 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
 </dd>
 </dl>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>seconds</strong> (<em>int</em>) – Allowed time for function in seconds.</p></li>
 <li><p><strong>error_message</strong> (<em>str</em>) – An error message.</p></li>
@@ -191,7 +192,7 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
 <dt class="sig sig-object py" id="monty.functools.timeout.handle_timeout">
 <span class="sig-name descname"><span class="pre">handle_timeout</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/monty/functools.html#timeout.handle_timeout"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#monty.functools.timeout.handle_timeout" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>signum</strong> – Return signal from call.</p></li>
 <li><p><strong>frame</strong> – </p></li>
@@ -235,7 +236,7 @@ this works only on Unix-based systems as it uses signal. Usage:</p>
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>

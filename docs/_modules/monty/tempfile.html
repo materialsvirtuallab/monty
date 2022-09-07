@@ -1,16 +1,17 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.tempfile &#8212; monty 2022.4.26 documentation</title>
+    <title>monty.tempfile &#8212; monty 2022.9.7 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
     <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -31,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.4.26 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.9.7 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.tempfile</a></li> 
       </ul>
@@ -51,7 +52,7 @@
 <span class="kn">import</span> <span class="nn">tempfile</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span> <span class="nn">monty.shutil</span> <span class="kn">import</span> <span class="n">copy_r</span><span class="p">,</span> <span class="n">remove</span>
+<span class="kn">from</span> <span class="nn">monty.shutil</span> <span class="kn">import</span> <span class="n">copy_r</span><span class="p">,</span> <span class="n">gzip_dir</span><span class="p">,</span> <span class="n">remove</span>
 
 
 <div class="viewcode-block" id="ScratchDir"><a class="viewcode-back" href="../../monty.tempfile.html#monty.tempfile.ScratchDir">[docs]</a><span class="k">class</span> <span class="nc">ScratchDir</span><span class="p">:</span>
@@ -86,6 +87,8 @@
         <span class="n">create_symbolic_link</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">copy_from_current_on_enter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">copy_to_current_on_exit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">gzip_on_exit</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">delete_removed_files</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initializes scratch directory given a **root** path. There is no need</span>
@@ -114,6 +117,12 @@
 <span class="sd">                scratch to the current directory (recursively) at the end. E</span>
 <span class="sd">                .g., if output files are generated during the operation.</span>
 <span class="sd">                Defaults to False.</span>
+<span class="sd">            gzip_on_exit (bool): Whether to gzip the files generated in the</span>
+<span class="sd">                ScratchDir before copying them back.</span>
+<span class="sd">                Defaults to False.</span>
+<span class="sd">            delete_removed_files (bool): Whether to delete files in the cwd</span>
+<span class="sd">                that are removed from the tmp dir.</span>
+<span class="sd">                Defaults to True</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
             <span class="n">rootpath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">rootpath</span><span class="p">)</span>
@@ -123,6 +132,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">create_symbolic_link</span> <span class="o">=</span> <span class="n">create_symbolic_link</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_copy</span> <span class="o">=</span> <span class="n">copy_from_current_on_enter</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">end_copy</span> <span class="o">=</span> <span class="n">copy_to_current_on_exit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gzip_on_exit</span> <span class="o">=</span> <span class="n">gzip_on_exit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delete_removed_files</span> <span class="o">=</span> <span class="n">delete_removed_files</span>
 
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">tempdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cwd</span>
@@ -130,7 +141,7 @@
             <span class="n">tempdir</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">(</span><span class="nb">dir</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rootpath</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_copy</span><span class="p">:</span>
-                <span class="n">copy_r</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">tempdir</span><span class="p">)</span>
+                <span class="n">copy_r</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">,</span> <span class="n">tempdir</span><span class="p">)</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_symbolic_link</span><span class="p">:</span>
                 <span class="n">os</span><span class="o">.</span><span class="n">symlink</span><span class="p">(</span><span class="n">tempdir</span><span class="p">,</span> <span class="n">ScratchDir</span><span class="o">.</span><span class="n">SCR_LINK</span><span class="p">)</span>
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">tempdir</span><span class="p">)</span>
@@ -142,16 +153,23 @@
                 <span class="n">files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span><span class="p">))</span>
                 <span class="n">orig_files</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">))</span>
 
-                <span class="c1"># First copy files over</span>
+                <span class="c1"># gzip files</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gzip_on_exit</span><span class="p">:</span>
+                    <span class="n">gzip_dir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span><span class="p">)</span>
+
+                <span class="c1"># copy files over</span>
                 <span class="n">copy_r</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">)</span>
 
                 <span class="c1"># Delete any files that are now gone</span>
-                <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">orig_files</span> <span class="o">-</span> <span class="n">files</span><span class="p">:</span>
-                    <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
-                    <span class="n">remove</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">delete_removed_files</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">orig_files</span> <span class="o">-</span> <span class="n">files</span><span class="p">:</span>
+                        <span class="n">fpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+                        <span class="n">remove</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
 
             <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cwd</span><span class="p">)</span>
-            <span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span><span class="p">)</span></div>
+            <span class="n">remove</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tempdir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_symbolic_link</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">islink</span><span class="p">(</span><span class="n">ScratchDir</span><span class="o">.</span><span class="n">SCR_LINK</span><span class="p">):</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">ScratchDir</span><span class="o">.</span><span class="n">SCR_LINK</span><span class="p">)</span></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -175,7 +193,7 @@
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
       <div class="clearer"></div>
