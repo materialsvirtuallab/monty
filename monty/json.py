@@ -44,6 +44,12 @@ try:
 except ImportError:
     orjson = None  # type: ignore
 
+try:
+    import dataclasses
+except ImportError:
+    dataclasses = None  # type: ignore
+
+
 __version__ = "3.0.0"
 
 
@@ -140,6 +146,10 @@ class MSONable:
                 return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
             if hasattr(obj, "as_dict"):
                 return obj.as_dict()
+            if dataclasses is not None and dataclasses.is_dataclass(obj):
+                d = dataclasses.asdict(obj)
+                d.update({"@module": obj.__class__.__module__, "@class": obj.__class__.__name__})
+                return d
             return obj
 
         for c in args:
@@ -407,12 +417,15 @@ class MontyDecoder(json.JSONDecoder):
                         return UUID(d["string"])
 
                     mod = __import__(modname, globals(), locals(), [classname], 0)
+
                     if hasattr(mod, classname):
                         cls_ = getattr(mod, classname)
                         data = {k: v for k, v in d.items() if not k.startswith("@")}
                         if hasattr(cls_, "from_dict"):
                             return cls_.from_dict(data)
                         if pydantic is not None and issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
+                            return cls_(**data)
+                        if dataclasses is not None and dataclasses.is_dataclass(cls_):
                             return cls_(**data)
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):

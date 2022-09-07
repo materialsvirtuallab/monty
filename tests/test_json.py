@@ -5,6 +5,7 @@ import json
 import os
 import pathlib
 import unittest
+import dataclasses
 from enum import Enum
 
 import numpy as np
@@ -107,6 +108,18 @@ class ClassContainingNumpyArray(MSONable):
     def __init__(self, np_a):
         self.np_a = np_a
 
+@dataclasses.dataclass
+class Point:
+    x: float = 1
+    y: float = 2
+
+class Coordinates(MSONable):
+
+    def __init__(self, points):
+        self.points = points
+
+    def __str__(self):
+        return str(self.points)
 
 class MSONableTest(unittest.TestCase):
     def setUp(self):
@@ -652,6 +665,15 @@ class JsonTest(unittest.TestCase):
         assert isinstance(obj.a, GoodMSONClass)
         assert obj.a.b == 1
 
+    def test_dataclass(self):
+
+        c = Coordinates([Point(1, 2), Point(3, 4)])
+        d = c.as_dict()
+        c2 = Coordinates.from_dict(d)
+        self.assertEqual(d["points"][0]['x'], 1)
+        self.assertEqual(d["points"][1]['y'], 4)
+        self.assertIsInstance(c2, Coordinates)
+        self.assertIsInstance(c2.points[0], Point)
 
 if __name__ == "__main__":
     unittest.main()
