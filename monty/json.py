@@ -328,6 +328,8 @@ class MontyEncoder(json.JSONEncoder):
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
                 d = o.dict()
+            elif dataclasses is not None and dataclasses.is_dataclass(o):
+                d = dataclasses.asdict(o)
             else:
                 d = o.as_dict()
 
@@ -417,7 +419,6 @@ class MontyDecoder(json.JSONDecoder):
                         return UUID(d["string"])
 
                     mod = __import__(modname, globals(), locals(), [classname], 0)
-
                     if hasattr(mod, classname):
                         cls_ = getattr(mod, classname)
                         data = {k: v for k, v in d.items() if not k.startswith("@")}

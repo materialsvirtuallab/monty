@@ -675,5 +675,10 @@ class JsonTest(unittest.TestCase):
         self.assertIsInstance(c2, Coordinates)
         self.assertIsInstance(c2.points[0], Point)
 
+        s = MontyEncoder().encode(Point(1, 2))
+        p = MontyDecoder().decode(s)
+        self.assertEqual(p.x, 1)
+        self.assertEqual(p.y, 2)
+
 if __name__ == "__main__":
     unittest.main()
