@@ -1,8 +1,8 @@
 Change log
 ==========
 
-v2022.9.7.1
------------
+v2022.9.8
+---------
 * Support for DataClasses in MontyEncoder, MontyDecoder and MSONable.
 
 v2022.4.26
