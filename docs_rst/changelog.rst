@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2022.9.7.1
+-----------
+* Support for DataClasses in MontyEncoder, MontyDecoder and MSONable.
+
 v2022.4.26
 ----------
 * Fall back on json if orjson is not present. (@munrojm)
