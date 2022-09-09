@@ -1,11 +1,11 @@
 __version__ = "0.1"
 
+import dataclasses
 import datetime
 import json
 import os
 import pathlib
 import unittest
-import dataclasses
 from enum import Enum
 
 import numpy as np
