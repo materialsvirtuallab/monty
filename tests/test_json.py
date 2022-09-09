@@ -122,6 +122,7 @@ class Coordinates(MSONable):
     def __str__(self):
         return str(self.points)
 
+
 @dataclasses.dataclass
 class NestedDataClass:
     points: list[Point]
