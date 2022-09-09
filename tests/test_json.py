@@ -122,6 +122,10 @@ class Coordinates(MSONable):
     def __str__(self):
         return str(self.points)
 
+@dataclasses.dataclass
+class NestedDataClass:
+    points: list[Point]
+
 
 class MSONableTest(unittest.TestCase):
     def setUp(self):
@@ -681,6 +685,11 @@ class JsonTest(unittest.TestCase):
         p = MontyDecoder().decode(s)
         self.assertEqual(p.x, 1)
         self.assertEqual(p.y, 2)
+
+        ndc = NestedDataClass([Point(1, 2), Point(3, 4)])
+        str_ = json.dumps(ndc, cls=MontyEncoder)
+        ndc2 = json.loads(str_, cls=MontyDecoder)
+        self.assertIsInstance(ndc2, NestedDataClass)
 
 
 if __name__ == "__main__":
