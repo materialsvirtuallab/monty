@@ -427,7 +427,11 @@ class MontyDecoder(json.JSONDecoder):
                             return cls_.from_dict(data)
                         if pydantic is not None and issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
                             return cls_(**data)
-                        if dataclasses is not None and (not issubclass(cls_, MSONable)) and dataclasses.is_dataclass(cls_):
+                        if (
+                            dataclasses is not None
+                            and (not issubclass(cls_, MSONable))
+                            and dataclasses.is_dataclass(cls_)
+                        ):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
                 elif np is not None and modname == "numpy" and classname == "array":
