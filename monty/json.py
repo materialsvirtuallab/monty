@@ -203,15 +203,15 @@ class MSONable:
         any nested keys, and then performing a hash on the resulting object
         """
 
-        def flatten(obj, seperator="."):
+        def flatten(obj, separator="."):
             # Flattens a dictionary
 
             flat_dict = {}
             for key, value in obj.items():
                 if isinstance(value, dict):
-                    flat_dict.update({seperator.join([key, _key]): _value for _key, _value in flatten(value).items()})
+                    flat_dict.update({separator.join([key, _key]): _value for _key, _value in flatten(value).items()})
                 elif isinstance(value, list):
-                    list_dict = {f"{key}{seperator}{num}": item for num, item in enumerate(value)}
+                    list_dict = {f"{key}{separator}{num}": item for num, item in enumerate(value)}
                     flat_dict.update(flatten(list_dict))
                 else:
                     flat_dict[key] = value
