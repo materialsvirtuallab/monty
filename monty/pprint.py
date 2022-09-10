@@ -113,7 +113,7 @@ class DisplayEcoder(JSONEncoder):
 def pprint_json(data):
     """
     Display a tree-like object in a jupyter notebook.
-    Allows for collapsable interactive interaction with data.
+    Allows for collapsible interactive interaction with data.
 
     Args:
         data: a dictionary or object
