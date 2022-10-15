@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import os
 from functools import wraps
-from typing import TypeVar
+from typing import Hashable, TypeVar
 
 
 def singleton(cls):
@@ -32,6 +32,7 @@ def singleton(cls):
     return getinstance
 
 
+# https://github.com/microsoft/pylance-release/issues/3478
 Klass = TypeVar("Klass")
 
 
@@ -52,10 +53,10 @@ def cached_class(klass: type[Klass]) -> type[Klass]:
     or positional) are non-hashable, that set of arguments
     is not cached.
     """
-    cache = {}
+    cache: dict[tuple[Hashable, ...], type[Klass]] = {}
 
     @wraps(klass, assigned=("__name__", "__module__"), updated=())
-    class _decorated(klass):
+    class _decorated(klass):  # type: ignore
         # The wraps decorator can't do this because __doc__
         # isn't writable once the class is created
         __doc__ = klass.__doc__
