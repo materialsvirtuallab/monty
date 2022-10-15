@@ -109,9 +109,9 @@ class NullFile:
 
 
 class NullStream:
-    """A fake stream with a no-op write.."""
+    """A fake stream with a no-op write."""
 
-    def write(*args):  # pylint: disable=E0211
+    def write(self, *args):  # pylint: disable=E0211
         """
         Does nothing...
         :param args:
