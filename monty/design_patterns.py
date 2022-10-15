@@ -4,6 +4,7 @@ Some common design patterns such as singleton and cached classes.
 
 import os
 from functools import wraps
+from typing import TypeVar
 
 
 def singleton(cls):
@@ -29,7 +30,10 @@ def singleton(cls):
     return getinstance
 
 
-def cached_class(klass):
+Klass = TypeVar("Klass")
+
+
+def cached_class(klass: type[Klass]) -> type[Klass]:
     """
     Decorator to cache class instances by constructor arguments.
     This results in a class that behaves like a singleton for each
