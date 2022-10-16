@@ -2,8 +2,11 @@
 Some common design patterns such as singleton and cached classes.
 """
 
+from __future__ import annotations
+
 import os
 from functools import wraps
+from typing import Hashable, TypeVar
 
 
 def singleton(cls):
@@ -29,7 +32,11 @@ def singleton(cls):
     return getinstance
 
 
-def cached_class(klass):
+# https://github.com/microsoft/pylance-release/issues/3478
+Klass = TypeVar("Klass")
+
+
+def cached_class(klass: type[Klass]) -> type[Klass]:
     """
     Decorator to cache class instances by constructor arguments.
     This results in a class that behaves like a singleton for each
@@ -46,10 +53,10 @@ def cached_class(klass):
     or positional) are non-hashable, that set of arguments
     is not cached.
     """
-    cache = {}
+    cache: dict[tuple[Hashable, ...], type[Klass]] = {}
 
     @wraps(klass, assigned=("__name__", "__module__"), updated=())
-    class _decorated(klass):
+    class _decorated(klass):  # type: ignore
         # The wraps decorator can't do this because __doc__
         # isn't writable once the class is created
         __doc__ = klass.__doc__
