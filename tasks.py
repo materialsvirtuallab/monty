@@ -126,14 +126,14 @@ def set_ver(ctx):
         contents = f.read()
         contents = re.sub(r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents)
 
-    with open("monty/__init__.py", "wt") as f:
+    with open("monty/__init__.py", "w") as f:
         f.write(contents)
 
     with open("setup.py") as f:
         contents = f.read()
         contents = re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, contents)
 
-    with open("setup.py", "wt") as f:
+    with open("setup.py", "w") as f:
         f.write(contents)
 
 
