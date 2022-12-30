@@ -3,7 +3,7 @@ ruamel.yaml==0.17.21
 msgpack==1.0.4
 tqdm==4.64.1
 pymongo==4.3.3
-pydantic==1.10.2
+pydantic==1.10.4
 pandas==1.5.2
 orjson==3.8.3
 types-orjson==3.6.2
