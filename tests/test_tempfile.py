@@ -45,7 +45,6 @@ class ScratchDirTest(unittest.TestCase):
         os.remove("scratch_text")
 
     def test_with_copy_gzip(self):
-
         # We write a pre-scratch file.
         with open("pre_scratch_text", "w") as f:
             f.write("write")
@@ -99,7 +98,6 @@ class ScratchDirTest(unittest.TestCase):
         os.remove("pre_scratch_text")
 
     def test_no_copy(self):
-
         with ScratchDir(
             self.scratch_root,
             copy_from_current_on_enter=False,

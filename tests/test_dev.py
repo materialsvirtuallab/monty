@@ -112,7 +112,6 @@ class DecoratorTest(unittest.TestCase):
             self.assertTrue(issubclass(w[-1].category, DeprecationWarning))
 
     def test_requires(self):
-
         try:
             import fictitious_mod  # type: ignore
         except ImportError:

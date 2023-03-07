@@ -185,7 +185,6 @@ def get_terminal_size():
 
     def ioctl_GWINSZ(fd):
         try:
-
             rc = struct.unpack("hh", fcntl.ioctl(fd, termios.TIOCGWINSZ, "1234"))
             return rc
         except Exception:

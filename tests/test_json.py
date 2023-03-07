@@ -396,7 +396,6 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(obj.np_a["a"][0]["b"][0][1], 2 + 1j)
 
     def test_pandas(self):
-
         cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
 
         d = json.loads(MontyEncoder().encode(cls))
@@ -673,7 +672,6 @@ class JsonTest(unittest.TestCase):
         assert obj.a.b == 1
 
     def test_dataclass(self):
-
         c = Coordinates([Point(1, 2), Point(3, 4)])
         d = c.as_dict()
         c2 = Coordinates.from_dict(d)
