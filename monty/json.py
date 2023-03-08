@@ -57,7 +57,7 @@ def _load_redirect(redirect_file):
     try:
         with open(redirect_file) as f:
             yaml = YAML()
-            d = yaml.load(f)
+            d = yaml.load(f, typ="safe")
     except OSError:
         # If we can't find the file
         # Just use an empty redirect dict
