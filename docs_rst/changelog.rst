@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2023.4.10
+----------
+* Fix for datetime support in jsanitize (@arosen93).
+
 v2022.9.8
 ---------
 * Support for DataClasses in MontyEncoder, MontyDecoder and MSONable.
