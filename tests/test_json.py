@@ -314,6 +314,8 @@ class JsonTest(unittest.TestCase):
         d = json.loads(jsonstr, cls=MontyDecoder)
         self.assertEqual(type(d["dt"]), datetime.datetime)
 
+        jsanitize(dt, strict=True)
+
     def test_uuid(self):
         from uuid import UUID, uuid4
 
