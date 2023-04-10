@@ -536,7 +536,7 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return obj
     if obj is None:
         return None
-    if isinstance(obj, pathlib.Path):
+    if isinstance(obj, pathlib.Path) or isinstance(obj, datetime.datetime):
         return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
