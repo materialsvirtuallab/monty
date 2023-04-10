@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.design_patterns &#8212; monty 2022.9.9 documentation</title>
+    <title>monty.design_patterns &#8212; monty 2023.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.9.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2023.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.design_patterns</a></li> 
       </ul>
@@ -48,8 +48,11 @@
 <span class="sd">Some common design patterns such as singleton and cached classes.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">wraps</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Hashable</span><span class="p">,</span> <span class="n">TypeVar</span>
 
 
 <div class="viewcode-block" id="singleton"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.singleton">[docs]</a><span class="k">def</span> <span class="nf">singleton</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
@@ -75,7 +78,11 @@
     <span class="k">return</span> <span class="n">getinstance</span></div>
 
 
-<div class="viewcode-block" id="cached_class"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.cached_class">[docs]</a><span class="k">def</span> <span class="nf">cached_class</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+<span class="c1"># https://github.com/microsoft/pylance-release/issues/3478</span>
+<span class="n">Klass</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s2">&quot;Klass&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="cached_class"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.cached_class">[docs]</a><span class="k">def</span> <span class="nf">cached_class</span><span class="p">(</span><span class="n">klass</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="n">Klass</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">type</span><span class="p">[</span><span class="n">Klass</span><span class="p">]:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Decorator to cache class instances by constructor arguments.</span>
 <span class="sd">    This results in a class that behaves like a singleton for each</span>
@@ -92,10 +99,10 @@
 <span class="sd">    or positional) are non-hashable, that set of arguments</span>
 <span class="sd">    is not cached.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cache</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="n">Hashable</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nb">type</span><span class="p">[</span><span class="n">Klass</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="nd">@wraps</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">assigned</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;__name__&quot;</span><span class="p">,</span> <span class="s2">&quot;__module__&quot;</span><span class="p">),</span> <span class="n">updated</span><span class="o">=</span><span class="p">())</span>
-    <span class="k">class</span> <span class="nc">_decorated</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">_decorated</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>  <span class="c1"># type: ignore</span>
         <span class="c1"># The wraps decorator can&#39;t do this because __doc__</span>
         <span class="c1"># isn&#39;t writable once the class is created</span>
         <span class="vm">__doc__</span> <span class="o">=</span> <span class="n">klass</span><span class="o">.</span><span class="vm">__doc__</span>
@@ -155,9 +162,9 @@
 
 
 <div class="viewcode-block" id="NullStream"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream">[docs]</a><span class="k">class</span> <span class="nc">NullStream</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A fake stream with a no-op write..&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;A fake stream with a no-op write.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="NullStream.write"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>  <span class="c1"># pylint: disable=E0211</span>
+<div class="viewcode-block" id="NullStream.write"><a class="viewcode-back" href="../../monty.design_patterns.html#monty.design_patterns.NullStream.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>  <span class="c1"># pylint: disable=E0211</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Does nothing...</span>
 <span class="sd">        :param args:</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>monty.itertools &#8212; monty 2022.9.9 documentation</title>
+    <title>monty.itertools &#8212; monty 2023.4.10 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/flasky.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
@@ -32,7 +32,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2022.9.9 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">monty 2023.4.10 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">monty.itertools</a></li> 
       </ul>
@@ -106,8 +106,8 @@
 <span class="sd">    ij: (0, 1) mate: (0, 1)</span>
 <span class="sd">    ij: (1, 1) mate: (1, 1)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">item1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">jj</span><span class="p">,</span> <span class="n">item2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">item1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">jj</span><span class="p">,</span> <span class="n">item2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
             <span class="n">do_yield</span> <span class="o">=</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&gt;=</span> <span class="n">ii</span><span class="p">)</span> <span class="k">if</span> <span class="n">diago</span> <span class="k">else</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&gt;</span> <span class="n">ii</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">do_yield</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">with_inds</span><span class="p">:</span>
@@ -131,8 +131,8 @@
 <span class="sd">    ij: (1, 0) mate: (1, 0)</span>
 <span class="sd">    ij: (1, 1) mate: (1, 1)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">item1</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
-        <span class="k">for</span> <span class="p">(</span><span class="n">jj</span><span class="p">,</span> <span class="n">item2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">ii</span><span class="p">,</span> <span class="n">item1</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">jj</span><span class="p">,</span> <span class="n">item2</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">items</span><span class="p">):</span>
             <span class="n">do_yield</span> <span class="o">=</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&lt;=</span> <span class="n">ii</span><span class="p">)</span> <span class="k">if</span> <span class="n">diago</span> <span class="k">else</span> <span class="p">(</span><span class="n">jj</span> <span class="o">&lt;</span> <span class="n">ii</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">do_yield</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">with_inds</span><span class="p">:</span>
