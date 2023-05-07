@@ -8,3 +8,4 @@ pydocstyle
 flake8
 black
 pylint
+pytorch

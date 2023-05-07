@@ -49,6 +49,10 @@ try:
 except ImportError:
     dataclasses = None  # type: ignore
 
+try:
+    import torch
+except ImportError:
+    torch = None  # type: ignore
 
 __version__ = "3.0.0"
 
@@ -286,6 +290,15 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": str(o)}
 
+        if isinstance(o, torch.Tensor):
+            # Support for Pytorch Tensors.
+            return {
+                        "@module": "torch",
+                        "@class": "Tensor",
+                        "dtype": str(o.dtype),
+                        "data": o.cpu().detach().numpy().tolist(),
+                    }
+
         if np is not None:
             if isinstance(o, np.ndarray):
                 if str(o.dtype).startswith("complex"):
@@ -407,7 +420,7 @@ class MontyDecoder(json.JSONDecoder):
                 classname = None
 
             if classname:
-                if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
+                if modname and modname not in ["bson.objectid", "numpy", "pandas", "torch"]:
                     if modname == "datetime" and classname == "datetime":
                         try:
                             dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
@@ -433,6 +446,8 @@ class MontyDecoder(json.JSONDecoder):
                         ):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
+                elif torch is not None and modname == "torch" and classname == "Tensor":
+                    return torch.tensor(d["data"])
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(

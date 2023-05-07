@@ -10,6 +10,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
+import torch
 from bson.objectid import ObjectId
 
 from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
@@ -301,6 +302,13 @@ class JsonTest(unittest.TestCase):
         s = json.dumps(listobj, cls=MontyEncoder)
         listobj2 = json.loads(s, cls=MontyDecoder)
         self.assertEqual(listobj2[0].a.a, 1)
+
+    def test_torch(self):
+        t = torch.tensor([0, 1, 2])
+        jsonstr = json.dumps(t, cls=MontyEncoder)
+        t2 = json.loads(jsonstr, cls=MontyDecoder)
+        self.assertEqual(type(t2), torch.Tensor)
+        self.assertTrue(np.array_equal(t2, t))
 
     def test_datetime(self):
         dt = datetime.datetime.now()
