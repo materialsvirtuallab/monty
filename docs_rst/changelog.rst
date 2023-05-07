@@ -1,6 +1,10 @@
 Change log
 ==========
 
+v2023.5.7
+---------
+* Pytorch tensor support for MontyEncoder/Decoder.
+
 v2023.4.10
 ----------
 * Fix for datetime support in jsanitize (@arosen93).
