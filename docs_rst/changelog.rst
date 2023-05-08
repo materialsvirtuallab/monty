@@ -1,6 +1,11 @@
 Change log
 ==========
 
+v2023.5.8
+---------
+* Improved Pytorch tensor support for MontyEncoder/Decoder.
+* Bug fix to avoid torch dependency.
+
 v2023.5.7
 ---------
 * Pytorch tensor support for MontyEncoder/Decoder.
