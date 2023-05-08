@@ -293,11 +293,11 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, torch.Tensor):
             # Support for Pytorch Tensors.
             return {
-                        "@module": "torch",
-                        "@class": "Tensor",
-                        "dtype": str(o.dtype),
-                        "data": o.cpu().detach().numpy().tolist(),
-                    }
+                "@module": "torch",
+                "@class": "Tensor",
+                "dtype": str(o.dtype),
+                "data": o.cpu().detach().numpy().tolist(),
+            }
 
         if np is not None:
             if isinstance(o, np.ndarray):
