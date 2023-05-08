@@ -308,6 +308,7 @@ class JsonTest(unittest.TestCase):
         jsonstr = json.dumps(t, cls=MontyEncoder)
         t2 = json.loads(jsonstr, cls=MontyDecoder)
         self.assertEqual(type(t2), torch.Tensor)
+        self.assertEqual(t2.type(), t.type())
         self.assertTrue(np.array_equal(t2, t))
 
     def test_datetime(self):
