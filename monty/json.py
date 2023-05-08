@@ -298,7 +298,7 @@ class MontyEncoder(json.JSONEncoder):
                 "dtype": o.type(),
             }
             if "Complex" in o.type():
-                d["data"] = [o.real.tolist(), o.imag.tolist()]
+                d["data"] = [o.real.tolist(), o.imag.tolist()]  # type: ignore
             else:
                 d["data"] = o.numpy().tolist()
             return d
@@ -361,7 +361,7 @@ class MontyEncoder(json.JSONEncoder):
                     module_version = import_module(parent_module).__version__  # type: ignore
                     d["@version"] = str(module_version)
                 except (AttributeError, ImportError):
-                    d["@version"] = None
+                    d["@version"] = None  # type: ignore
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
