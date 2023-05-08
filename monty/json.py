@@ -447,7 +447,7 @@ class MontyDecoder(json.JSONDecoder):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
                 elif torch is not None and modname == "torch" and classname == "Tensor":
-                    return torch.tensor(d["data"])
+                    return torch.tensor(d["data"])  # pylint: disable=E1101
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
