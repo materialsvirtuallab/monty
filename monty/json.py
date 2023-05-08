@@ -290,14 +290,18 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": str(o)}
 
-        if isinstance(o, torch.Tensor):
+        if torch is not None and isinstance(o, torch.Tensor):
             # Support for Pytorch Tensors.
-            return {
+            d = {
                 "@module": "torch",
                 "@class": "Tensor",
                 "type": o.type(),
-                "data": o.cpu().detach().numpy().tolist(),
             }
+            if "Complex" in o.type():
+                d["data"] = [o.real.tolist(), o.imag.tolist()]
+            else:
+                d["data"] = o.numpy().tolist()
+            return d
 
         if np is not None:
             if isinstance(o, np.ndarray):
@@ -447,6 +451,10 @@ class MontyDecoder(json.JSONDecoder):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
                 elif torch is not None and modname == "torch" and classname == "Tensor":
+                    if "Complex" in d["type"]:
+                        return torch.tensor(
+                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                        ).type(d["type"])
                     return torch.tensor(d["data"]).type(d["type"])  # pylint: disable=E1101
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
