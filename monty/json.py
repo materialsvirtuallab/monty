@@ -1,7 +1,6 @@
 """
 JSON serialization and deserialization utilities.
 """
-
 import datetime
 import json
 import os
@@ -12,6 +11,7 @@ from enum import Enum
 from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
+from typing import Any
 from uuid import UUID
 
 try:
@@ -480,7 +480,7 @@ class MontyDecoder(json.JSONDecoder):
 
         return d
 
-    def decode(self, s):
+    def decode(self, s: str):
         """
         Overrides decode from JSONDecoder.
 
@@ -503,7 +503,13 @@ class MSONError(Exception):
     """
 
 
-def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_msonable=False):
+def jsanitize(
+    obj: Any,
+    strict: bool = False,
+    allow_bson: bool = False,
+    enum_values: bool = False,
+    recursive_msonable: bool = False,
+) -> dict:
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
