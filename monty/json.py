@@ -1,7 +1,6 @@
 """
 JSON serialization and deserialization utilities.
 """
-from typing import Any
 import datetime
 import json
 import os
@@ -480,7 +479,7 @@ class MontyDecoder(json.JSONDecoder):
 
         return d
 
-    def decode(self, s: str) -> Any:
+    def decode(self, s: str):
         """
         Overrides decode from JSONDecoder.
 
