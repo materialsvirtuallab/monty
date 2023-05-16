@@ -11,6 +11,7 @@ from enum import Enum
 from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
+from typing import Any
 from uuid import UUID
 
 try:
