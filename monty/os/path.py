@@ -2,10 +2,10 @@
 Path based methods, e.g., which, zpath, etc.
 """
 import os
-import shutil
 
 from monty.fnmatch import WildCard
 from monty.string import list_strings
+
 
 def zpath(filename):
     """
