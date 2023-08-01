@@ -29,44 +29,40 @@ NEW_VER = datetime.datetime.today().strftime("%Y.%-m.%-d")
 
 @task
 def make_doc(ctx):
-    with cd("docs_rst"):
-        ctx.run("sphinx-apidoc --separate -d 6 -o . -f ../monty")
-        for f in glob.glob("*.rst"):
-            if f.startswith("monty") and f.endswith("rst"):
-                newoutput = []
-                suboutput = []
-                subpackage = False
-                with open(f) as fid:
-                    for line in fid:
-                        clean = line.strip()
-                        if clean == "Subpackages":
-                            subpackage = True
-                        if not subpackage and not clean.endswith("tests"):
-                            newoutput.append(line)
-                        else:
-                            if not clean.endswith("tests"):
-                                suboutput.append(line)
-                            if clean.startswith("monty") and not clean.endswith("tests"):
-                                newoutput.extend(suboutput)
-                                subpackage = False
-                                suboutput = []
-
-                with open(f, "w") as fid:
-                    fid.write("".join(newoutput))
-        ctx.run("make html")
-
-        # ctx.run("cp _static/* ../docs/html/_static")
-
     with cd("docs"):
-        ctx.run("cp -r html/* .")
-        ctx.run("rm -r html")
-        ctx.run("rm -r doctrees")
-        ctx.run("rm -r _sources")
+        ctx.run("rm monty.*.rst", warn=True)
+        ctx.run("sphinx-apidoc --separate -P -M -d 6 -o . -f ../monty")
+        # ctx.run("rm monty*.html", warn=True)
+        # ctx.run("sphinx-build -b html . ../docs")  # HTML building.
+        ctx.run("sphinx-build -M markdown . .")
+        ctx.run("rm *.rst", warn=True)
+        ctx.run("cp markdown/monty*.md .")
+        for fn in glob.glob("monty*.md"):
+            with open(fn) as f:
+                lines = [line.rstrip() for line in f if "Submodules" not in line]
+            if fn == "monty.md":
+                preamble = ["---", "layout: default", "title: API Documentation", "nav_order: 5", "---", ""]
+            else:
+                preamble = ["---", "layout: default", "title: " + fn, "nav_exclude: true", "---", ""]
+            with open(fn, "w") as f:
+                f.write("\n".join(preamble + lines))
 
-        # This makes sure monty.org works to redirect to the Gihub page
-        # ctx.run("echo \"monty.org\" > CNAME")
-        # Avoid the use of jekyll so that _dir works as intended.
-        ctx.run("touch .nojekyll")
+        ctx.run("rm -r markdown", warn=True)
+        ctx.run("cp ../*.md .")
+        ctx.run("mv README.md index.md")
+        ctx.run("rm -rf *.orig doctrees", warn=True)
+
+        with open("index.md") as f:
+            contents = f.read()
+        with open("index.md", "w") as f:
+            contents = re.sub(
+                r"\n## Official Documentation[^#]*",
+                "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
+                contents
+            )
+            contents = "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
+
+            f.write(contents)
 
 
 @task
@@ -91,7 +87,7 @@ def setver(ctx):
 
 @task
 def release_github(ctx):
-    with open("docs_rst/changelog.rst") as f:
+    with open("docs_rst/changelog.md") as f:
         contents = f.read()
     toks = re.split(r"\-+", contents)
     desc = toks[1].strip()
