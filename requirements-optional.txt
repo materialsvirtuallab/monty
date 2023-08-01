@@ -1,4 +1,4 @@
-numpy==1.25.1
+numpy==1.25.2
 ruamel.yaml==0.17.32
 msgpack==1.0.5
 tqdm==4.65.0
