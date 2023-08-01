@@ -4,7 +4,7 @@ from setuptools import find_packages, setup
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(current_dir, "README.rst")) as f:
+with open(os.path.join(current_dir, "README.md")) as f:
     long_desc = f.read()
 
 setup(
@@ -22,6 +22,7 @@ setup(
     license="MIT",
     description="Monty is the missing complement to Python.",
     long_description=long_desc,
+    long_description_content_type="text/markdown",
     keywords=["monty"],
     python_requires=">=3.5",
     classifiers=[
