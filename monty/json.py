@@ -25,6 +25,7 @@ except ImportError:
 
 try:
     import pydantic
+    from pydantic_core import core_schema
 except ImportError:
     pydantic = None  # type: ignore
 
@@ -212,12 +213,13 @@ class MSONable:
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
     @classmethod
-    def __get_validators__(cls):
-        """Return validators for use in pydantic"""
-        yield cls.validate_monty
+    def __get_pydantic_core_schema__(
+        cls, source, handler
+    ):
+        return core_schema.general_plain_validator_function(cls.validate_monty)
 
     @classmethod
-    def validate_monty(cls, v):
+    def validate_monty(cls, v, _):
         """
         pydantic Validator for MSONable pattern
         """
@@ -234,9 +236,10 @@ class MSONable:
         raise ValueError(f"Must provide {cls.__name__}, the as_dict form, or the proper")
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
+    def __get_pydantic_json_schema__(cls, core_schema, handler):
         """JSON schema for MSONable pattern"""
-        field_schema.update(
+        json_schema = handler(core_schema)
+        json_schema.update(
             {
                 "type": "object",
                 "properties": {
@@ -247,6 +250,7 @@ class MSONable:
                 "required": ["@class", "@module"],
             }
         )
+        return json_schema
 
 
 class MontyEncoder(json.JSONEncoder):
