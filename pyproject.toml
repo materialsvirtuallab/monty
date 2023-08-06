@@ -19,3 +19,23 @@ exclude = '''
   )/
 )
 '''
+
+[tool.coverage.run]
+branch = true
+
+[tool.coverage.report]
+exclude_also = [
+  "@deprecated",
+  "def __repr__",
+  "if 0:",
+  "if __name__ == .__main__.:",
+  "if self.debug:",
+  "if settings.DEBUG",
+  "pragma: no cover",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "show_plot",
+  "if TYPE_CHECKING:",
+  "if typing.TYPE_CHECKING:",
+  "except ImportError:"
+]
