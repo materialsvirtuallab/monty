@@ -4,8 +4,7 @@ Useful additional functions to help get information about live objects
 
 import inspect
 import os
-from functools import wraps
-from inspect import currentframe, getframeinfo, getfullargspec
+from inspect import currentframe, getframeinfo
 
 
 def all_subclasses(cls):
@@ -68,35 +67,3 @@ def caller_name(skip=2):
         name.append(codename)  # function or a method
     del parentframe
     return ".".join(name)
-
-
-def initializer(func):
-    """
-    Automatically assigns the parameters.
-    http://stackoverflow.com/questions/1389180/python-automatically-initialize
-    -instance-variables
-
-    >>> class process:
-    ...     @initializer
-    ...     def __init__(self, cmd, reachable=False, user='root'):
-    ...         pass
-    >>> p = process('halt', True)
-    >>> p.cmd, p.reachable, p.user
-    ('halt', True, 'root')
-    """
-    names, varargs, keywords, defaults = getfullargspec(func)  # type: ignore
-
-    @wraps(func)
-    def wrapper(self, *args, **kargs):
-        for name, arg in list(zip(names[1:], args)) + list(kargs.items()):
-            setattr(self, name, arg)
-
-        # Avoid TypeError: argument to reversed() must be a sequence
-        if defaults is not None:
-            for name, default in zip(reversed(names), reversed(defaults)):
-                if not hasattr(self, name):
-                    setattr(self, name, default)
-
-        return func(self, *args, **kargs)
-
-    return wrapper
