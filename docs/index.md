@@ -8,7 +8,7 @@ nav_order: 1
 [![Linting](https://github.com/materialsvirtuallab/monty/workflows/Linting/badge.svg)](https://github.com/materialsvirtuallab/monty/workflows/Linting/badge.svg)
 [![Testing](https://github.com/materialsvirtuallab/monty/workflows/Testing/badge.svg)](https://github.com/materialsvirtuallab/monty/workflows/Testing/badge.svg)
 [![Downloads](https://pepy.tech/badge/monty)](https://pepy.tech/project/monty)
-[![codecov](https://codecov.io/gh/materialsvirtuallab/monty/branch/main/graph/badge.svg?token=3V3O79GODQ)](https://codecov.io/gh/materialsvirtuallab/monty)
+[![codecov](https://codecov.io/gh/materialsvirtuallab/monty/branch/master/graph/badge.svg?token=QdfT2itxgu)](https://codecov.io/gh/materialsvirtuallab/monty)
 
 # Monty: Python Made Even Easier
 
