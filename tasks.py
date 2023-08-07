@@ -87,12 +87,10 @@ def setver(ctx):
 
 @task
 def release_github(ctx):
-    with open("docs_rst/changelog.md") as f:
+    with open("docs/changelog.md") as f:
         contents = f.read()
-    toks = re.split(r"\-+", contents)
+    toks = re.split("##", contents)
     desc = toks[1].strip()
-    toks = desc.split("\n")
-    desc = "\n".join(toks[:-1]).strip()
     payload = {
         "tag_name": "v" + NEW_VER,
         "target_commitish": "master",
@@ -134,9 +132,10 @@ def set_ver(ctx):
 
 
 @task
-def release(ctx):
+def release(ctx, notest=False):
     set_ver(ctx)
-    test(ctx)
+    if not notest:
+        test(ctx)
     update_doc(ctx)
     commit(ctx)
     release_github(ctx)
