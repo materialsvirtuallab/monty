@@ -1,6 +1,5 @@
-"""
-Copying and zipping utilities. Works on directories mostly.
-"""
+"""Copying and zipping utilities. Works on directories mostly."""
+from __future__ import annotations
 
 import os
 import shutil
@@ -20,7 +19,6 @@ def copy_r(src, dst):
         src (str): Source folder to copy.
         dst (str): Destination folder.
     """
-
     abssrc = os.path.abspath(src)
     absdst = os.path.abspath(dst)
     try:
@@ -90,12 +88,12 @@ def compress_dir(path, compression="gz"):
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to gz.
     """
-    for parent, subdirs, files in os.walk(path):
+    for parent, _subdirs, files in os.walk(path):
         for f in files:
             compress_file(os.path.join(parent, f), compression=compression)
 
 
-def decompress_file(filepath):
+def decompress_file(filepath) -> str:
     """
     Decompresses a file with the correct extension. Automatically detects
     gz, bz2 or z extension.
@@ -104,13 +102,19 @@ def decompress_file(filepath):
         filepath (str): Path to file.
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to "gz".
+
+    Returns:
+        str: The decompressed file path.
     """
     toks = filepath.split(".")
     file_ext = toks[-1].upper()
     if file_ext in ["BZ2", "GZ", "Z"]:
-        with open(".".join(toks[0:-1]), "wb") as f_out, zopen(filepath, "rb") as f_in:
+        out_file = ".".join(toks[0:-1])
+        with zopen(filepath, "rb") as f_in, open(out_file, "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
+
+    return out_file
 
 
 def decompress_dir(path):
@@ -120,7 +124,7 @@ def decompress_dir(path):
     Args:
         path (str): Path to parent directory.
     """
-    for parent, subdirs, files in os.walk(path):
+    for parent, _subdirs, files in os.walk(path):
         for f in files:
             decompress_file(os.path.join(parent, f))
 
@@ -128,7 +132,7 @@ def decompress_dir(path):
 def remove(path, follow_symlink=False):
     """
     Implements a remove function that will delete files, folder trees and
-    symlink trees
+    symlink trees.
 
     1.) Remove a file
     2.) Remove a symlink and follow into with a recursive rm if follow_symlink
