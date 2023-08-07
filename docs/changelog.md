@@ -1,5 +1,9 @@
 # Change log
 
+## v2023.8.7
+* Return path to decompressed file from decompress_file() (@janosh)
+* @deprecated change default category from FutureWarning to DeprecationWarning
+
 ## v2023.5.8
 * Improved Pytorch tensor support for MontyEncoder/Decoder.
 * Bug fix to avoid torch dependency.
