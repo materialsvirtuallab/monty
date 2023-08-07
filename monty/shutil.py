@@ -93,7 +93,7 @@ def compress_dir(path, compression="gz"):
             compress_file(os.path.join(parent, f), compression=compression)
 
 
-def decompress_file(filepath) -> str:
+def decompress_file(filepath) -> str | None:
     """
     Decompresses a file with the correct extension. Automatically detects
     gz, bz2 or z extension.
@@ -109,14 +109,13 @@ def decompress_file(filepath) -> str:
     toks = filepath.split(".")
     file_ext = toks[-1].upper()
     if file_ext in ["BZ2", "GZ", "Z"]:
-        out_file = ".".join(toks[0:-1])
-        with zopen(filepath, "rb") as f_in, open(out_file, "wb") as f_out:
+        decompressed_file = ".".join(toks[0:-1])
+        with zopen(filepath, "rb") as f_in, open(decompressed_file, "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
-    else:
-        out_file = filepath
 
-    return out_file
+        return decompressed_file
+    return None
 
 
 def decompress_dir(path):
