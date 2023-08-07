@@ -113,6 +113,8 @@ def decompress_file(filepath) -> str:
         with zopen(filepath, "rb") as f_in, open(out_file, "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
+    else:
+        out_file = filepath
 
     return out_file
 
