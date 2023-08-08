@@ -1,5 +1,8 @@
 # Change log
 
+## 2023.8.8
+* Bug fix for decompress_file() to maintain backwards compatibility (@janosh)
+
 ## v2023.8.7
 * Return path to decompressed file from decompress_file() (@janosh)
 * @deprecated change default category from FutureWarning to DeprecationWarning
