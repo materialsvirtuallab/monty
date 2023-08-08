@@ -31,19 +31,3 @@ Public Domain, i.e. feel free to copy/paste
 
 ### monty.inspect.find_top_pyfile()
 This function inspects the Cpython frame to find the path of the script.
-
-
-### monty.inspect.initializer(func)
-Automatically assigns the parameters.
-[http://stackoverflow.com/questions/1389180/python-automatically-initialize](http://stackoverflow.com/questions/1389180/python-automatically-initialize)
--instance-variables
-
-```python
->>> class process:
-...     @initializer
-...     def __init__(self, cmd, reachable=False, user='root'):
-...         pass
->>> p = process('halt', True)
->>> p.cmd, p.reachable, p.user
-('halt', True, 'root')
-```

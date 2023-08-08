@@ -20,15 +20,15 @@ no-op
 ### _class_ monty.design_patterns.NullStream()
 Bases: `object`
 
-A fake stream with a no-op write..
+A fake stream with a no-op write.
 
 
-#### write()
+#### write(\*args)
 Does nothing…
 :param args:
 
 
-### monty.design_patterns.cached_class(klass)
+### monty.design_patterns.cached_class(klass: type[Klass])
 Decorator to cache class instances by constructor arguments.
 This results in a class that behaves like a singleton for each
 set of constructor arguments, ensuring efficiency.

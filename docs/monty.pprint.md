@@ -81,7 +81,7 @@ Based on [https://pypi.python.org/pypi/asciitree/](https://pypi.python.org/pypi/
 
 ### monty.pprint.pprint_json(data)
 Display a tree-like object in a jupyter notebook.
-Allows for collapsable interactive interaction with data.
+Allows for collapsible interactive interaction with data.
 
 
 * **Parameters**

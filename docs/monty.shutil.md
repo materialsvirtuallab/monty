@@ -76,12 +76,19 @@ gz, bz2 or z extension.
 
 * **Parameters**
 
+    **filepath** (*str*) – Path to file.
 
-    * **filepath** (*str*) – Path to file.
 
 
-    * **compression** (*str*) – A compression mode. Valid options are “gz” or
-    “bz2”. Defaults to “gz”.
+* **Returns**
+
+    The decompressed file path.
+
+
+
+* **Return type**
+
+    str
 
 
 
@@ -105,7 +112,7 @@ commands like zless or zcat.
 
 ### monty.shutil.remove(path, follow_symlink=False)
 Implements a remove function that will delete files, folder trees and
-symlink trees
+symlink trees.
 
 1.) Remove a file
 2.) Remove a symlink and follow into with a recursive rm if follow_symlink

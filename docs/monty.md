@@ -186,9 +186,6 @@ useful design patterns such as singleton and cached_class, and many more.
     * [`find_top_pyfile()`](monty.inspect.md#monty.inspect.find_top_pyfile)
 
 
-    * [`initializer()`](monty.inspect.md#monty.inspect.initializer)
-
-
 * [monty.io module](monty.io.md)
 
 
