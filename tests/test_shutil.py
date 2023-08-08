@@ -67,6 +67,11 @@ class CompressFileDirTest(unittest.TestCase):
             self.assertEqual(txt, "hello world")
         self.assertRaises(ValueError, compress_file, "whatever", "badformat")
 
+        # test decompress non-existent/non-compressed file
+        self.assertIsNone(decompress_file("non-existent"))
+        self.assertIsNone(decompress_file("non-existent.gz"))
+        self.assertIsNone(decompress_file("non-existent.bz2"))
+
     def tearDown(self):
         os.remove(os.path.join(test_dir, "tempfile"))
 
