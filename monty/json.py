@@ -299,7 +299,6 @@ class MSONable:
     def __get_pydantic_json_schema__(cls, core_schema, handler):
         """JSON schema for MSONable pattern"""
         return cls._generic_json_schema()
-        
 
     @classmethod
     def __modify_schema__(cls, field_schema):
