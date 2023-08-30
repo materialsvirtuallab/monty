@@ -263,6 +263,11 @@ class MSONable:
         return cls._validate_monty(__input_value)
 
     @classmethod
+    def __get_validators__(cls):
+        """Return validators for use in pydantic"""
+        yield cls.validate_monty_v1
+
+    @classmethod
     def __get_pydantic_core_schema__(cls, source_type, handler):
         """
         pydantic v2 core schema definition
@@ -279,9 +284,7 @@ class MSONable:
         )
 
     @classmethod
-    def __get_pydantic_json_schema__(cls, core_schema, handler):
-        """JSON schema for MSONable pattern"""
-
+    def _generic_json_schema(cls):
         return {
             "type": "object",
             "properties": {
@@ -293,24 +296,16 @@ class MSONable:
         }
 
     @classmethod
-    def __get_validators__(cls):
-        """Return validators for use in pydantic"""
-        yield cls.validate_monty_v1
+    def __get_pydantic_json_schema__(cls, core_schema, handler):
+        """JSON schema for MSONable pattern"""
+        return cls._generic_json_schema()
+        
 
     @classmethod
     def __modify_schema__(cls, field_schema):
         """JSON schema for MSONable pattern"""
-        field_schema.update(
-            {
-                "type": "object",
-                "properties": {
-                    "@class": {"enum": [cls.__name__], "type": "string"},
-                    "@module": {"enum": [cls.__module__], "type": "string"},
-                    "@version": {"type": "string"},
-                },
-                "required": ["@class", "@module"],
-            }
-        )
+        custom_schema = cls._generic_json_schema()
+        field_schema.update(custom_schema)
 
 
 class MontyEncoder(json.JSONEncoder):
