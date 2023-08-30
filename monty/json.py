@@ -25,9 +25,13 @@ except ImportError:
 
 try:
     import pydantic
-    from pydantic_core import core_schema
 except ImportError:
     pydantic = None  # type: ignore
+
+try:
+    from pydantic_core import core_schema
+except ImportError:
+    core_schema = None  # type: ignore
 
 try:
     import bson
@@ -216,6 +220,12 @@ class MSONable:
     def __get_pydantic_core_schema__(
         cls, source_type, handler
     ):
+        """
+        pydantic v2 core schema definition
+        """
+        if core_schema is None:
+            raise RuntimeError("Pydantic >= 2.0 is required for validation")
+
         s = core_schema.general_plain_validator_function(cls.validate_monty)
 
         return core_schema.json_or_python_schema(
@@ -227,7 +237,7 @@ class MSONable:
             )
 
     @classmethod
-    def validate_monty(cls, __input_value, *agrs, **kwargs):
+    def validate_monty(cls, __input_value, *args, **kwargs):
         """
         pydantic Validator for MSONable pattern
         """
