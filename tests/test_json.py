@@ -1,13 +1,16 @@
-__version__ = "0.1"
+from __future__ import annotations
 
+import dataclasses
 import datetime
 import json
 import os
+import pathlib
 import unittest
 from enum import Enum
 
 import numpy as np
 import pandas as pd
+import torch
 from bson.objectid import ObjectId
 
 from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
@@ -105,6 +108,25 @@ class ClassContainingSeries(MSONable):
 class ClassContainingNumpyArray(MSONable):
     def __init__(self, np_a):
         self.np_a = np_a
+
+
+@dataclasses.dataclass
+class Point:
+    x: float = 1
+    y: float = 2
+
+
+class Coordinates(MSONable):
+    def __init__(self, points):
+        self.points = points
+
+    def __str__(self):
+        return str(self.points)
+
+
+@dataclasses.dataclass
+class NestedDataClass:
+    points: list[Point]
 
 
 class MSONableTest(unittest.TestCase):
@@ -281,6 +303,20 @@ class JsonTest(unittest.TestCase):
         listobj2 = json.loads(s, cls=MontyDecoder)
         self.assertEqual(listobj2[0].a.a, 1)
 
+    def test_torch(self):
+        t = torch.tensor([0, 1, 2])
+        jsonstr = json.dumps(t, cls=MontyEncoder)
+        t2 = json.loads(jsonstr, cls=MontyDecoder)
+        self.assertEqual(type(t2), torch.Tensor)
+        self.assertEqual(t2.type(), t.type())
+        self.assertTrue(np.array_equal(t2, t))
+        t = torch.tensor([1 + 1j, 2 + 1j])
+        jsonstr = json.dumps(t, cls=MontyEncoder)
+        t2 = json.loads(jsonstr, cls=MontyDecoder)
+        self.assertEqual(type(t2), torch.Tensor)
+        self.assertEqual(t2.type(), t.type())
+        self.assertTrue(np.array_equal(t2, t))
+
     def test_datetime(self):
         dt = datetime.datetime.now()
         jsonstr = json.dumps(dt, cls=MontyEncoder)
@@ -292,6 +328,8 @@ class JsonTest(unittest.TestCase):
         jsonstr = json.dumps(a, cls=MontyEncoder)
         d = json.loads(jsonstr, cls=MontyDecoder)
         self.assertEqual(type(d["dt"]), datetime.datetime)
+
+        jsanitize(dt, strict=True)
 
     def test_uuid(self):
         from uuid import UUID, uuid4
@@ -375,7 +413,6 @@ class JsonTest(unittest.TestCase):
         self.assertEqual(obj.np_a["a"][0]["b"][0][1], 2 + 1j)
 
     def test_pandas(self):
-
         cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
 
         d = json.loads(MontyEncoder().encode(cls))
@@ -510,6 +547,10 @@ class JsonTest(unittest.TestCase):
         clean = jsanitize(d, allow_bson=True)
         self.assertEqual(clean["a"], bytes(rnd_bin))
         self.assertIsInstance(clean["a"], bytes)
+
+        p = pathlib.Path("/home/user/")
+        clean = jsanitize(p, strict=True)
+        self.assertIn(clean, ["/home/user", "\\home\\user"])
 
         # test jsanitizing callables (including classes)
         instance = MethodSerializationClass(a=1)
@@ -646,6 +687,25 @@ class JsonTest(unittest.TestCase):
         assert isinstance(obj, BaseModel)
         assert isinstance(obj.a, GoodMSONClass)
         assert obj.a.b == 1
+
+    def test_dataclass(self):
+        c = Coordinates([Point(1, 2), Point(3, 4)])
+        d = c.as_dict()
+        c2 = Coordinates.from_dict(d)
+        self.assertEqual(d["points"][0]["x"], 1)
+        self.assertEqual(d["points"][1]["y"], 4)
+        self.assertIsInstance(c2, Coordinates)
+        self.assertIsInstance(c2.points[0], Point)
+
+        s = MontyEncoder().encode(Point(1, 2))
+        p = MontyDecoder().decode(s)
+        self.assertEqual(p.x, 1)
+        self.assertEqual(p.y, 2)
+
+        ndc = NestedDataClass([Point(1, 2), Point(3, 4)])
+        str_ = json.dumps(ndc, cls=MontyEncoder)
+        ndc2 = json.loads(str_, cls=MontyDecoder)
+        self.assertIsInstance(ndc2, NestedDataClass)
 
 
 if __name__ == "__main__":

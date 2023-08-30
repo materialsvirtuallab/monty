@@ -45,17 +45,16 @@ class ScratchDirTest(unittest.TestCase):
         os.remove("scratch_text")
 
     def test_with_copy_gzip(self):
-
         # We write a pre-scratch file.
         with open("pre_scratch_text", "w") as f:
             f.write("write")
-
+        init_gz = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
         with ScratchDir(
             self.scratch_root,
             copy_from_current_on_enter=True,
             copy_to_current_on_exit=True,
             gzip_on_exit=True,
-        ) as d:
+        ):
             with open("scratch_text", "w") as f:
                 f.write("write")
         files = os.listdir(os.getcwd())
@@ -63,7 +62,7 @@ class ScratchDirTest(unittest.TestCase):
         # Make sure the stratch_text.gz exists
         self.assertIn("scratch_text.gz", files)
         for f in files:
-            if f.endswith(".gz"):
+            if f.endswith(".gz") and f not in init_gz:
                 os.remove(f)
         os.remove("pre_scratch_text")
 
@@ -99,7 +98,6 @@ class ScratchDirTest(unittest.TestCase):
         os.remove("pre_scratch_text")
 
     def test_no_copy(self):
-
         with ScratchDir(
             self.scratch_root,
             copy_from_current_on_enter=False,

@@ -4,13 +4,13 @@ from setuptools import find_packages, setup
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-with open(os.path.join(current_dir, "README.rst")) as f:
+with open(os.path.join(current_dir, "README.md")) as f:
     long_desc = f.read()
 
 setup(
     name="monty",
     packages=find_packages(),
-    version="2022.4.26",
+    version="2023.8.8",
     extras_require={
         "yaml": ["ruamel.yaml"],
     },
@@ -22,6 +22,7 @@ setup(
     license="MIT",
     description="Monty is the missing complement to Python.",
     long_description=long_desc,
+    long_description_content_type="text/markdown",
     keywords=["monty"],
     python_requires=">=3.5",
     classifiers=[

@@ -5,6 +5,7 @@ JSON serialization and deserialization utilities.
 import datetime
 import json
 import os
+import pathlib
 import types
 from collections import OrderedDict, defaultdict
 from enum import Enum
@@ -47,6 +48,16 @@ try:
     import orjson
 except ImportError:
     orjson = None  # type: ignore
+
+try:
+    import dataclasses
+except ImportError:
+    dataclasses = None  # type: ignore
+
+try:
+    import torch
+except ImportError:
+    torch = None  # type: ignore
 
 __version__ = "3.0.0"
 
@@ -144,6 +155,10 @@ class MSONable:
                 return {kk: recursive_as_dict(vv) for kk, vv in obj.items()}
             if hasattr(obj, "as_dict"):
                 return obj.as_dict()
+            if dataclasses is not None and dataclasses.is_dataclass(obj):
+                d = dataclasses.asdict(obj)
+                d.update({"@module": obj.__class__.__module__, "@class": obj.__class__.__name__})
+                return d
             return obj
 
         for c in args:
@@ -158,7 +173,7 @@ class MSONable:
                             "Unable to automatically determine as_dict "
                             "format from class. MSONAble requires all "
                             "args to be present as either self.argname or "
-                            "self._argname, and kwargs to be present under"
+                            "self._argname, and kwargs to be present under "
                             "a self.kwargs variable to automatically "
                             "determine the dict format. Alternatively, "
                             "you can implement both as_dict and from_dict."
@@ -197,15 +212,15 @@ class MSONable:
         any nested keys, and then performing a hash on the resulting object
         """
 
-        def flatten(obj, seperator="."):
+        def flatten(obj, separator="."):
             # Flattens a dictionary
 
             flat_dict = {}
             for key, value in obj.items():
                 if isinstance(value, dict):
-                    flat_dict.update({seperator.join([key, _key]): _value for _key, _value in flatten(value).items()})
+                    flat_dict.update({separator.join([key, _key]): _value for _key, _value in flatten(value).items()})
                 elif isinstance(value, list):
-                    list_dict = {f"{key}{seperator}{num}": item for num, item in enumerate(value)}
+                    list_dict = {f"{key}{separator}{num}": item for num, item in enumerate(value)}
                     flat_dict.update(flatten(list_dict))
                 else:
                     flat_dict[key] = value
@@ -324,6 +339,19 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": str(o)}
 
+        if torch is not None and isinstance(o, torch.Tensor):
+            # Support for Pytorch Tensors.
+            d = {
+                "@module": "torch",
+                "@class": "Tensor",
+                "dtype": o.type(),
+            }
+            if "Complex" in o.type():
+                d["data"] = [o.real.tolist(), o.imag.tolist()]  # type: ignore
+            else:
+                d["data"] = o.numpy().tolist()
+            return d
+
         if np is not None:
             if isinstance(o, np.ndarray):
                 if str(o.dtype).startswith("complex"):
@@ -366,6 +394,9 @@ class MontyEncoder(json.JSONEncoder):
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
                 d = o.dict()
+            elif dataclasses is not None and (not issubclass(o.__class__, MSONable)) and dataclasses.is_dataclass(o):
+                # This handles dataclasses that are not subclasses of MSONAble.
+                d = dataclasses.asdict(o)
             else:
                 d = o.as_dict()
 
@@ -379,7 +410,7 @@ class MontyEncoder(json.JSONEncoder):
                     module_version = import_module(parent_module).__version__  # type: ignore
                     d["@version"] = str(module_version)
                 except (AttributeError, ImportError):
-                    d["@version"] = None
+                    d["@version"] = None  # type: ignore
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
@@ -442,8 +473,7 @@ class MontyDecoder(json.JSONDecoder):
                 classname = None
 
             if classname:
-
-                if modname and modname not in ["bson.objectid", "numpy", "pandas"]:
+                if modname and modname not in ["bson.objectid", "numpy", "pandas", "torch"]:
                     if modname == "datetime" and classname == "datetime":
                         try:
                             dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
@@ -462,6 +492,19 @@ class MontyDecoder(json.JSONDecoder):
                             return cls_.from_dict(data)
                         if pydantic is not None and issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
                             return cls_(**data)
+                        if (
+                            dataclasses is not None
+                            and (not issubclass(cls_, MSONable))
+                            and dataclasses.is_dataclass(cls_)
+                        ):
+                            d = {k: self.process_decoded(v) for k, v in data.items()}
+                            return cls_(**d)
+                elif torch is not None and modname == "torch" and classname == "Tensor":
+                    if "Complex" in d["dtype"]:
+                        return torch.tensor(  # pylint: disable=E1101
+                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                        ).type(d["dtype"])
+                    return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
@@ -565,6 +608,8 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return obj
     if obj is None:
         return None
+    if isinstance(obj, pathlib.Path) or isinstance(obj, datetime.datetime):
+        return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
         try:

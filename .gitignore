@@ -9,6 +9,7 @@
 dist
 build
 _build
+_site
 eggs
 parts
 bin

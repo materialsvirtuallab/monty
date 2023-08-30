@@ -60,8 +60,8 @@ def iuptri(items, diago=True, with_inds=False):
     ij: (0, 1) mate: (0, 1)
     ij: (1, 1) mate: (1, 1)
     """
-    for (ii, item1) in enumerate(items):
-        for (jj, item2) in enumerate(items):
+    for ii, item1 in enumerate(items):
+        for jj, item2 in enumerate(items):
             do_yield = (jj >= ii) if diago else (jj > ii)
             if do_yield:
                 if with_inds:
@@ -85,8 +85,8 @@ def ilotri(items, diago=True, with_inds=False):
     ij: (1, 0) mate: (1, 0)
     ij: (1, 1) mate: (1, 1)
     """
-    for (ii, item1) in enumerate(items):
-        for (jj, item2) in enumerate(items):
+    for ii, item1 in enumerate(items):
+        for jj, item2 in enumerate(items):
             do_yield = (jj <= ii) if diago else (jj < ii)
             if do_yield:
                 if with_inds:
