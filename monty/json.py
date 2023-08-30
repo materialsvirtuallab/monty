@@ -227,7 +227,7 @@ class MSONable:
             )
 
     @classmethod
-    def validate_monty(cls, __input_value, _):
+    def validate_monty(cls, __input_value, *agrs, **kwargs):
         """
         pydantic Validator for MSONable pattern
         """
@@ -257,6 +257,26 @@ class MSONable:
                 },
                 "required": ["@class", "@module"],
             }
+    
+    @classmethod
+    def __get_validators__(cls):
+        """Return validators for use in pydantic"""
+        yield cls.validate_monty
+
+    @classmethod
+    def __modify_schema__(cls, field_schema):
+        """JSON schema for MSONable pattern"""
+        field_schema.update(
+            {
+                "type": "object",
+                "properties": {
+                    "@class": {"enum": [cls.__name__], "type": "string"},
+                    "@module": {"enum": [cls.__module__], "type": "string"},
+                    "@version": {"type": "string"},
+                },
+                "required": ["@class", "@module"],
+            }
+        )
 
 
 
