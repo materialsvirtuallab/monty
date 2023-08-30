@@ -217,9 +217,7 @@ class MSONable:
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
     @classmethod
-    def __get_pydantic_core_schema__(
-        cls, source_type, handler
-    ):
+    def __get_pydantic_core_schema__(cls, source_type, handler):
         """
         pydantic v2 core schema definition
         """
@@ -229,12 +227,10 @@ class MSONable:
         s = core_schema.general_plain_validator_function(cls.validate_monty)
 
         return core_schema.json_or_python_schema(
-                json_schema=s,
-                python_schema=s,
-                serialization=core_schema.plain_serializer_function_ser_schema(
-                    lambda instance: instance.as_dict()
-                ),
-            )
+            json_schema=s,
+            python_schema=s,
+            serialization=core_schema.plain_serializer_function_ser_schema(lambda instance: instance.as_dict()),
+        )
 
     @classmethod
     def validate_monty(cls, __input_value, *args, **kwargs):
@@ -259,15 +255,15 @@ class MSONable:
         """JSON schema for MSONable pattern"""
 
         return {
-                "type": "object",
-                "properties": {
-                    "@class": {"enum": [cls.__name__], "type": "string"},
-                    "@module": {"enum": [cls.__module__], "type": "string"},
-                    "@version": {"type": "string"},
-                },
-                "required": ["@class", "@module"],
-            }
-    
+            "type": "object",
+            "properties": {
+                "@class": {"enum": [cls.__name__], "type": "string"},
+                "@module": {"enum": [cls.__module__], "type": "string"},
+                "@version": {"type": "string"},
+            },
+            "required": ["@class", "@module"],
+        }
+
     @classmethod
     def __get_validators__(cls):
         """Return validators for use in pydantic"""
@@ -287,7 +283,6 @@ class MSONable:
                 "required": ["@class", "@module"],
             }
         )
-
 
 
 class MontyEncoder(json.JSONEncoder):
