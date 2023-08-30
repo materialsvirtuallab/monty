@@ -217,23 +217,7 @@ class MSONable:
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
     @classmethod
-    def __get_pydantic_core_schema__(cls, source_type, handler):
-        """
-        pydantic v2 core schema definition
-        """
-        if core_schema is None:
-            raise RuntimeError("Pydantic >= 2.0 is required for validation")
-
-        s = core_schema.general_plain_validator_function(cls.validate_monty)
-
-        return core_schema.json_or_python_schema(
-            json_schema=s,
-            python_schema=s,
-            serialization=core_schema.plain_serializer_function_ser_schema(lambda instance: instance.as_dict()),
-        )
-
-    @classmethod
-    def validate_monty(cls, __input_value, *args, **kwargs):
+    def _validate_monty(cls, __input_value):
         """
         pydantic Validator for MSONable pattern
         """
@@ -249,6 +233,36 @@ class MSONable:
             return new_obj
 
         raise ValueError(f"Must provide {cls.__name__}, the as_dict form, or the proper")
+
+    @classmethod
+    def validate_monty_v1(cls, __input_value):
+        """
+        Pydantic validator with correct signature for pydantic v1.x
+        """
+        return cls._validate_monty(__input_value)
+
+    @classmethod
+    def validate_monty_v2(cls, __input_value, _):
+        """
+        Pydantic validator with correct signature for pydantic v2.x
+        """
+        return cls._validate_monty(__input_value)
+
+    @classmethod
+    def __get_pydantic_core_schema__(cls, source_type, handler):
+        """
+        pydantic v2 core schema definition
+        """
+        if core_schema is None:
+            raise RuntimeError("Pydantic >= 2.0 is required for validation")
+
+        s = core_schema.general_plain_validator_function(cls.validate_monty_v2)
+
+        return core_schema.json_or_python_schema(
+            json_schema=s,
+            python_schema=s,
+            serialization=core_schema.plain_serializer_function_ser_schema(lambda instance: instance.as_dict()),
+        )
 
     @classmethod
     def __get_pydantic_json_schema__(cls, core_schema, handler):
@@ -267,7 +281,7 @@ class MSONable:
     @classmethod
     def __get_validators__(cls):
         """Return validators for use in pydantic"""
-        yield cls.validate_monty
+        yield cls.validate_monty_v1
 
     @classmethod
     def __modify_schema__(cls, field_schema):
