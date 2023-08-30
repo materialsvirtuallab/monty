@@ -240,7 +240,6 @@ class MSONable:
         if isinstance(__input_value, cls):
             return __input_value
         if isinstance(__input_value, dict):
-
             new_obj = MontyDecoder().process_decoded(__input_value)
             if isinstance(new_obj, cls):
                 return new_obj
