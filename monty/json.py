@@ -214,23 +214,32 @@ class MSONable:
 
     @classmethod
     def __get_pydantic_core_schema__(
-        cls, source, handler
+        cls, source_type, handler
     ):
-        return core_schema.general_plain_validator_function(cls.validate_monty)
+        s = core_schema.general_plain_validator_function(cls.validate_monty)
+
+        return core_schema.json_or_python_schema(
+                json_schema=s,
+                python_schema=s,
+                serialization=core_schema.plain_serializer_function_ser_schema(
+                    lambda instance: instance.as_dict()
+                ),
+            )
 
     @classmethod
-    def validate_monty(cls, v, _):
+    def validate_monty(cls, __input_value, _):
         """
         pydantic Validator for MSONable pattern
         """
-        if isinstance(v, cls):
-            return v
-        if isinstance(v, dict):
-            new_obj = MontyDecoder().process_decoded(v)
+        if isinstance(__input_value, cls):
+            return __input_value
+        if isinstance(__input_value, dict):
+
+            new_obj = MontyDecoder().process_decoded(__input_value)
             if isinstance(new_obj, cls):
                 return new_obj
 
-            new_obj = cls(**v)
+            new_obj = cls(**__input_value)
             return new_obj
 
         raise ValueError(f"Must provide {cls.__name__}, the as_dict form, or the proper")
@@ -238,9 +247,8 @@ class MSONable:
     @classmethod
     def __get_pydantic_json_schema__(cls, core_schema, handler):
         """JSON schema for MSONable pattern"""
-        json_schema = handler(core_schema)
-        json_schema.update(
-            {
+
+        return {
                 "type": "object",
                 "properties": {
                     "@class": {"enum": [cls.__name__], "type": "string"},
@@ -249,8 +257,7 @@ class MSONable:
                 },
                 "required": ["@class", "@module"],
             }
-        )
-        return json_schema
+
 
 
 class MontyEncoder(json.JSONEncoder):
