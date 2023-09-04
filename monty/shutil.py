@@ -97,6 +97,7 @@ def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> 
 
     return None
 
+
 def decompress_file(filepath: str | Path) -> str | None:
     """
     Decompresses a file with the correct extension. Automatically detects
