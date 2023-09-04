@@ -39,7 +39,7 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
             warnings.warn(f"Cannot copy {fpath} to itself")
 
 
-def gzip_dir(path: str | Path, compresslevel=6):
+def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
     """
     Gzips all files in a directory. Note that this is different from
     shutil.make_archive, which creates a tar archive. The aim of this method
@@ -62,7 +62,7 @@ def gzip_dir(path: str | Path, compresslevel=6):
                 os.remove(full_f)
 
 
-def compress_file(filepath: str | Path, compression="gz"):
+def compress_file(filepath: str | Path, compression="gz") -> None:
     """
     Compresses a file with the correct extension. Functions like standard
     Unix command line gzip and bzip2 in the sense that the original
@@ -82,7 +82,7 @@ def compress_file(filepath: str | Path, compression="gz"):
         os.remove(filepath)
 
 
-def compress_dir(path: str | Path, compression="gz"):
+def compress_dir(path: str | Path, compression="gz") -> None:
     """
     Recursively compresses all files in a directory. Note that this
     compresses all files singly, i.e., it does not create a tar archive. For
@@ -123,7 +123,7 @@ def decompress_file(filepath: str | Path) -> str | None:
     return None
 
 
-def decompress_dir(path: str | Path):
+def decompress_dir(path: str | Path) -> None:
     """
     Recursively decompresses all files in a directory.
 
@@ -136,7 +136,7 @@ def decompress_dir(path: str | Path):
             decompress_file(Path(parent, f))
 
 
-def remove(path: str | Path, follow_symlink=False):
+def remove(path: str | Path, follow_symlink=False) -> None:
     """
     Implements a remove function that will delete files, folder trees and
     symlink trees.
