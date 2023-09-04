@@ -33,7 +33,7 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
         fpath = Path(abssrc, f)
         if Path(fpath).is_file():
             shutil.copy(fpath, absdst)
-        elif not absdst.startswith(fpath):
+        elif str(fpath) not in str(absdst):
             copy_r(fpath, Path(absdst, f))
         else:
             warnings.warn(f"Cannot copy {fpath} to itself")
@@ -62,7 +62,7 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
                 os.remove(full_f)
 
 
-def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] ="gz") -> None:
+def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] = "gz") -> None:
     """
     Compresses a file with the correct extension. Functions like standard
     Unix command line gzip and bzip2 in the sense that the original
@@ -135,7 +135,7 @@ def decompress_dir(path: str | Path) -> None:
             decompress_file(Path(parent, f))
 
 
-def remove(path: str | Path, follow_symlink=False) -> None:
+def remove(path: str | Path, follow_symlink: bool = False) -> None:
     """
     Implements a remove function that will delete files, folder trees and
     symlink trees.
