@@ -55,7 +55,8 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
     path = Path(path)
     for root, _, files in os.walk(path):
         for f in files:
-            full_f = os.path.abspath(os.path.join(root, f))
+            f = Path(f)
+            full_f = Path(root, f).resolve()
             if not f.suffix.lower() == ".gz" and not full_f.is_dir():
                 with open(full_f, "rb") as f_in, GzipFile(f"{full_f}.gz", "wb", compresslevel=compresslevel) as f_out:
                     shutil.copyfileobj(f_in, f_out)
