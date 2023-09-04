@@ -6,7 +6,7 @@ import shutil
 import warnings
 from gzip import GzipFile
 from pathlib import Path
-
+from typing import Literal
 from .io import zopen
 
 
@@ -62,7 +62,7 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
                 os.remove(full_f)
 
 
-def compress_file(filepath: str | Path, compression="gz") -> None:
+def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] ="gz") -> None:
     """
     Compresses a file with the correct extension. Functions like standard
     Unix command line gzip and bzip2 in the sense that the original
@@ -76,13 +76,13 @@ def compress_file(filepath: str | Path, compression="gz") -> None:
     filepath = Path(filepath)
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
-    if not filepath.suffix.lower() in (f".{compression}"):
+    if filepath.suffix.lower() != f".{compression}":
         with open(filepath, "rb") as f_in, zopen(f"{filepath}.{compression}", "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
 
 
-def compress_dir(path: str | Path, compression="gz") -> None:
+def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> None:
     """
     Recursively compresses all files in a directory. Note that this
     compresses all files singly, i.e., it does not create a tar archive. For
