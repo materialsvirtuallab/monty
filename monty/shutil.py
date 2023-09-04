@@ -25,11 +25,7 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
     dst = Path(dst)
     abssrc = src.resolve()
     absdst = dst.resolve()
-    try:
-        os.makedirs(absdst)
-    except OSError:
-        # If absdst exists, an OSError is raised. We ignore this error.
-        pass
+    os.makedirs(absdst, exist_ok=True)
     for f in os.listdir(abssrc):
         fpath = Path(abssrc, f)
         if Path(fpath).is_file():
