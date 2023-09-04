@@ -117,6 +117,7 @@ def decompress_file(filepath: str | Path) -> str | None:
         os.remove(filepath)
 
         return str(decompressed_file)
+    return None
 
 
 def decompress_dir(path: str | Path) -> None:
