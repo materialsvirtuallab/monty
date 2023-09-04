@@ -95,6 +95,7 @@ def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> 
         for f in files:
             compress_file(Path(parent, f), compression=compression)
 
+    return None
 
 def decompress_file(filepath: str | Path) -> str | None:
     """
