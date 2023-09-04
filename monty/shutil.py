@@ -7,6 +7,7 @@ import warnings
 from gzip import GzipFile
 from pathlib import Path
 from typing import Literal
+
 from .io import zopen
 
 
