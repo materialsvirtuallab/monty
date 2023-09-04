@@ -7,6 +7,7 @@ import warnings
 from gzip import GzipFile
 from pathlib import Path
 from typing import Literal
+
 from .io import zopen
 
 
@@ -62,7 +63,7 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
                 os.remove(full_f)
 
 
-def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] ="gz") -> None:
+def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] = "gz") -> None:
     """
     Compresses a file with the correct extension. Functions like standard
     Unix command line gzip and bzip2 in the sense that the original
