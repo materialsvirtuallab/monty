@@ -10,7 +10,7 @@ from pathlib import Path
 from .io import zopen
 
 
-def copy_r(src: str | Path, dst: str | Path):
+def copy_r(src: str | Path, dst: str | Path) -> None:
     """
     Implements a recursive copy function similar to Unix's "cp -r" command.
     Surprisingly, python does not have a real equivalent. shutil.copytree
@@ -20,21 +20,21 @@ def copy_r(src: str | Path, dst: str | Path):
         src (str | Path): Source folder to copy.
         dst (str | Path): Destination folder.
     """
-    src = str(src)
-    dst = str(dst)
-    abssrc = os.path.abspath(src)
-    absdst = os.path.abspath(dst)
+    src = Path(src)
+    dst = Path(dst)
+    abssrc = src.resolve()
+    absdst = dst.resolve()
     try:
         os.makedirs(absdst)
     except OSError:
         # If absdst exists, an OSError is raised. We ignore this error.
         pass
     for f in os.listdir(abssrc):
-        fpath = os.path.join(abssrc, f)
-        if os.path.isfile(fpath):
+        fpath = Path(abssrc, f)
+        if Path(fpath).is_file():
             shutil.copy(fpath, absdst)
         elif not absdst.startswith(fpath):
-            copy_r(fpath, os.path.join(absdst, f))
+            copy_r(fpath, Path(absdst, f))
         else:
             warnings.warn(f"Cannot copy {fpath} to itself")
 
@@ -51,7 +51,7 @@ def gzip_dir(path: str | Path, compresslevel=6):
         compresslevel (int): Level of compression, 1-9. 9 is default for
             GzipFile, 6 is default for gzip.
     """
-    path = str(path)
+    path = Path(path)
     for root, _, files in os.walk(path):
         for f in files:
             full_f = os.path.abspath(os.path.join(root, f))
@@ -73,7 +73,7 @@ def compress_file(filepath: str | Path, compression="gz"):
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to "gz".
     """
-    filepath = str(filepath)
+    filepath = Path(filepath)
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
     if not filepath.lower().endswith(f".{compression}"):
@@ -93,7 +93,7 @@ def compress_dir(path: str | Path, compression="gz"):
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to gz.
     """
-    path = str(path)
+    path = Path(path)
     for parent, _, files in os.walk(path):
         for f in files:
             compress_file(os.path.join(parent, f), compression=compression)
@@ -110,10 +110,10 @@ def decompress_file(filepath: str | Path) -> str | None:
     Returns:
         str: The decompressed file path.
     """
-    filepath = str(filepath)
-    toks = filepath.split(".")
+    filepath = Path(filepath)
+    toks = str(filepath).split(".")
     file_ext = toks[-1].upper()
-    if file_ext in ["BZ2", "GZ", "Z"] and os.path.isfile(filepath):
+    if file_ext in ["BZ2", "GZ", "Z"] and filepath.is_file():
         decompressed_file = ".".join(toks[0:-1])
         with zopen(filepath, "rb") as f_in, open(decompressed_file, "wb") as f_out:
             f_out.writelines(f_in)
@@ -130,10 +130,10 @@ def decompress_dir(path: str | Path):
     Args:
         path (str | Path): Path to parent directory.
     """
-    path = str(path)
+    path = Path(path)
     for parent, _, files in os.walk(path):
         for f in files:
-            decompress_file(os.path.join(parent, f))
+            decompress_file(Path(parent, f))
 
 
 def remove(path: str | Path, follow_symlink=False):
@@ -149,10 +149,10 @@ def remove(path: str | Path, follow_symlink=False):
         path (str | Path): path to remove
         follow_symlink(bool): follow symlinks and removes whatever is in them
     """
-    path = str(path)
-    if os.path.isfile(path):
+    path = Path(path)
+    if path.is_file():
         os.remove(path)
-    elif os.path.islink(path):
+    elif path.is_symlink():
         if follow_symlink:
             remove(os.readlink(path))
         os.unlink(path)
