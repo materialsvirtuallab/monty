@@ -111,10 +111,9 @@ def decompress_file(filepath: str | Path) -> str | None:
         str: The decompressed file path.
     """
     filepath = Path(filepath)
-    toks = str(filepath).split(".")
-    file_ext = toks[-1].upper()
-    if file_ext in ["BZ2", "GZ", "Z"] and filepath.is_file():
-        decompressed_file = ".".join(toks[0:-1])
+    file_ext = filepath.suffix
+    if file_ext.lower() in [".bz2", ".gz", ".z"] and filepath.is_file():
+        decompressed_file = Path(str(filepath).removesuffix(file_ext))
         with zopen(filepath, "rb") as f_in, open(decompressed_file, "wb") as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
