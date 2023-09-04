@@ -1,19 +1,16 @@
 # Copyright (c) Materials Virtual Lab.
 # Distributed under the terms of the BSD License.
 
-"""
-#TODO: Replace with proper module doc.
-"""
-
-import unittest
-
-from monty.itertools import iterator_from_slice
+from monty.itertools import chunks, iterator_from_slice
 
 
-class FuncTest(unittest.TestCase):
-    def test_iterator_from_slice(self):
-        self.assertEqual(list(iterator_from_slice(slice(0, 6, 2))), [0, 2, 4])
+def test_iterator_from_slice():
+    assert list(iterator_from_slice(slice(0, 6, 2))) == [0, 2, 4]
 
 
-if __name__ == "__main__":
-    unittest.main()
+def test_chunks():
+    assert list(chunks(range(1, 25), 10)) == [
+        (1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+        (11, 12, 13, 14, 15, 16, 17, 18, 19, 20),
+        (21, 22, 23, 24),
+    ]

@@ -27,3 +27,7 @@ jobs:
     - name: pytest
       run: |
         pytest --cov=monty --cov-report html:coverage_reports monty tests
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

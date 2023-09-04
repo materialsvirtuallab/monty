@@ -2,42 +2,9 @@
 Path based methods, e.g., which, zpath, etc.
 """
 import os
-import shutil
 
-from monty.dev import deprecated
 from monty.fnmatch import WildCard
 from monty.string import list_strings
-
-
-@deprecated(shutil.which, message="shutil.which has been available since Python 3.3. This will be removed in v2023.")
-def which(cmd):
-    """
-    Returns full path to a executable.
-
-    Args:
-        cmd (str): Executable command to search for.
-
-    Returns:
-        (str) Full path to command. None if it is not found.
-
-    Example::
-
-        full_path_to_python = which("python")
-    """
-
-    def is_exe(fp):
-        return os.path.isfile(fp) and os.access(fp, os.X_OK)
-
-    fpath, fname = os.path.split(cmd)
-    if fpath:
-        if is_exe(cmd):
-            return cmd
-    else:
-        for path in os.environ["PATH"].split(os.pathsep):
-            exe_file = os.path.join(path, cmd)
-            if is_exe(exe_file):
-                return exe_file
-    return None
 
 
 def zpath(filename):
