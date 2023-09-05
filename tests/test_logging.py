@@ -9,8 +9,7 @@ def add(a, b):
     return a + b
 
 
-class TestFunc:
-    def test_logged(self):
-        s = StringIO()
-        logging.basicConfig(level=logging.DEBUG, stream=s)
-        add(1, 2)
+def test_logged():
+    s = StringIO()
+    logging.basicConfig(level=logging.DEBUG, stream=s)
+    add(1, 2)
