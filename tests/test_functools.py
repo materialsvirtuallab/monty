@@ -164,9 +164,9 @@ class LazyTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertTrue(isinstance(Foo.foo, lazy_property))
-        self.assertTrue(f.foo is f.foo)
-        self.assertTrue(f.foo is f.__dict__["foo"])  # !
+        assert isinstance(Foo.foo, lazy_property)
+        assert f.foo is f.foo
+        assert f.foo is f.__dict__["foo"]  # !
         self.assertEqual(len(called), 1)
 
         self.assertEqual(f.foo, 1)
@@ -748,7 +748,7 @@ class TryOrReturnTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             a.reraise_value_error()
         aequal(a.catch_exc_list(), "hello")
-        self.assertTrue(a.return_none() is None)
+        assert a.return_none() is None
 
 
 class TimeoutTest(unittest.TestCase):
@@ -757,7 +757,7 @@ class TimeoutTest(unittest.TestCase):
         try:
             with timeout(1, "timeout!"):
                 time.sleep(2)
-            self.assertTrue(False, "Did not timeout!")
+            assert False, "Did not timeout!"
         except TimeoutError as ex:
             self.assertEqual(ex.message, "timeout!")
 
@@ -773,7 +773,7 @@ class ProfMainTest(unittest.TestCase):
 
         # Have to change argv before calling main.
         # Will restore original values before returning.
-        bkp_sysargv = sys.argv[:]
+        _ = sys.argv[:]
         if len(sys.argv) == 1:
             sys.argv.append("prof")
         else:

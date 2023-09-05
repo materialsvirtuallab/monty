@@ -4,6 +4,7 @@ import shutil
 import tempfile
 import unittest
 from gzip import GzipFile
+from pathlib import Path
 
 from monty.shutil import (
     compress_dir,
@@ -29,19 +30,25 @@ class CopyRTest(unittest.TestCase):
 
     def test_recursive_copy_and_compress(self):
         copy_r(os.path.join(test_dir, "cpr_src"), os.path.join(test_dir, "cpr_dst"))
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_dst", "test")))
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_dst", "sub", "testr")))
+        assert os.path.exists(os.path.join(test_dir, "cpr_dst", "test"))
+        assert os.path.exists(os.path.join(test_dir, "cpr_dst", "sub", "testr"))
 
         compress_dir(os.path.join(test_dir, "cpr_src"))
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "test.gz")))
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr.gz")))
+        assert os.path.exists(os.path.join(test_dir, "cpr_src", "test.gz"))
+        assert os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr.gz"))
 
         decompress_dir(os.path.join(test_dir, "cpr_src"))
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "test")))
-        self.assertTrue(os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr")))
+        assert os.path.exists(os.path.join(test_dir, "cpr_src", "test"))
+        assert os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr"))
         with open(os.path.join(test_dir, "cpr_src", "test")) as f:
             txt = f.read()
             self.assertEqual(txt, "what")
+
+    def test_pathlib(self):
+        test_path = Path(test_dir)
+        copy_r(test_path / "cpr_src", test_path / "cpr_dst")
+        assert (test_path / "cpr_dst" / "test").exists()
+        assert (test_path / "cpr_dst" / "sub" / "testr").exists()
 
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "cpr_src"))
@@ -57,11 +64,11 @@ class CompressFileDirTest(unittest.TestCase):
         fname = os.path.join(test_dir, "tempfile")
         for fmt in ["gz", "bz2"]:
             compress_file(fname, fmt)
-            self.assertTrue(os.path.exists(fname + "." + fmt))
-            self.assertFalse(os.path.exists(fname))
+            assert os.path.exists(fname + "." + fmt)
+            assert not os.path.exists(fname)
             decompress_file(fname + "." + fmt)
-            self.assertTrue(os.path.exists(fname))
-            self.assertFalse(os.path.exists(fname + "." + fmt))
+            assert os.path.exists(fname)
+            assert not os.path.exists(fname + "." + fmt)
         with open(fname) as f:
             txt = f.read()
             self.assertEqual(txt, "hello world")
@@ -88,8 +95,8 @@ class GzipDirTest(unittest.TestCase):
         full_f = os.path.join(test_dir, "gzip_dir", "tempfile")
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
-        self.assertTrue(os.path.exists(f"{full_f}.gz"))
-        self.assertFalse(os.path.exists(full_f))
+        assert os.path.exists(f"{full_f}.gz")
+        assert not os.path.exists(full_f)
 
         with GzipFile(f"{full_f}.gz") as g:
             self.assertEqual(g.readline().decode("utf-8"), "what")
@@ -105,8 +112,8 @@ class GzipDirTest(unittest.TestCase):
 
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
-        self.assertTrue(os.path.exists(f"{sub_file}.gz"))
-        self.assertFalse(os.path.exists(sub_file))
+        assert os.path.exists(f"{sub_file}.gz")
+        assert not os.path.exists(sub_file)
 
         with GzipFile(f"{sub_file}.gz") as g:
             self.assertEqual(g.readline().decode("utf-8"), "anotherwhat")
@@ -121,14 +128,14 @@ class RemoveTest(unittest.TestCase):
         tempdir = tempfile.mkdtemp(dir=test_dir)
         tempf = tempfile.mkstemp(dir=tempdir)[1]
         remove(tempf)
-        self.assertFalse(os.path.isfile(tempf))
+        assert not os.path.isfile(tempf)
         shutil.rmtree(tempdir)
 
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_folder(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)
         remove(tempdir)
-        self.assertFalse(os.path.isdir(tempdir))
+        assert not os.path.isdir(tempdir)
 
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_symlink(self):
@@ -138,9 +145,9 @@ class RemoveTest(unittest.TestCase):
         os.symlink(tempdir, os.path.join(test_dir, "temp_link"))
         templink = os.path.join(test_dir, "temp_link")
         remove(templink)
-        self.assertTrue(os.path.isfile(tempf))
-        self.assertTrue(os.path.isdir(tempdir))
-        self.assertFalse(os.path.islink(templink))
+        assert os.path.isfile(tempf)
+        assert os.path.isdir(tempdir)
+        assert not os.path.islink(templink)
         remove(tempdir)
 
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
@@ -151,9 +158,9 @@ class RemoveTest(unittest.TestCase):
         os.symlink(tempdir, os.path.join(test_dir, "temp_link"))
         templink = os.path.join(test_dir, "temp_link")
         remove(templink, follow_symlink=True)
-        self.assertFalse(os.path.isfile(tempf))
-        self.assertFalse(os.path.isdir(tempdir))
-        self.assertFalse(os.path.islink(templink))
+        assert not os.path.isfile(tempf)
+        assert not os.path.isdir(tempdir)
+        assert not os.path.islink(templink)
 
 
 if __name__ == "__main__":

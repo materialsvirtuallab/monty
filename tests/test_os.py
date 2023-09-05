@@ -13,7 +13,7 @@ class PathTest(unittest.TestCase):
         self.assertEqual(os.path.join(test_dir, "myfile_gz.gz"), fullzpath)
 
     def test_find_exts(self):
-        self.assertTrue(len(find_exts(os.path.dirname(__file__), "py")) >= 18)
+        assert len(find_exts(os.path.dirname(__file__), "py")) >= 18
         self.assertEqual(len(find_exts(os.path.dirname(__file__), "bz2")), 2)
         self.assertEqual(
             len(find_exts(os.path.dirname(__file__), "bz2", exclude_dirs="test_files")),
@@ -28,13 +28,13 @@ class PathTest(unittest.TestCase):
 class CdTest(unittest.TestCase):
     def test_cd(self):
         with cd(test_dir):
-            self.assertTrue(os.path.exists("empty_file.txt"))
-        self.assertFalse(os.path.exists("empty_file.txt"))
+            assert os.path.exists("empty_file.txt")
+        assert not os.path.exists("empty_file.txt")
 
     def test_cd_exception(self):
         with cd(test_dir):
-            self.assertTrue(os.path.exists("empty_file.txt"))
-        self.assertFalse(os.path.exists("empty_file.txt"))
+            assert os.path.exists("empty_file.txt")
+        assert not os.path.exists("empty_file.txt")
 
 
 class Makedirs_pTest(unittest.TestCase):
@@ -43,7 +43,7 @@ class Makedirs_pTest(unittest.TestCase):
 
     def test_makedirs_p(self):
         makedirs_p(self.test_dir_path)
-        self.assertTrue(os.path.exists(self.test_dir_path))
+        assert os.path.exists(self.test_dir_path)
         makedirs_p(self.test_dir_path)
         self.assertRaises(OSError, makedirs_p, os.path.join(test_dir, "myfile_txt"))
 

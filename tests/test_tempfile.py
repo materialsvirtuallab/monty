@@ -35,7 +35,7 @@ class ScratchDirTest(unittest.TestCase):
             os.remove("pre_scratch_text")
 
         # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
+        assert not os.path.exists(d)
         files = os.listdir(".")
         self.assertIn("scratch_text", files)
 
@@ -88,7 +88,7 @@ class ScratchDirTest(unittest.TestCase):
             os.remove("pre_scratch_text")
 
         # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
+        assert not os.path.exists(d)
         files = os.listdir(".")
         self.assertIn("scratch_text", files)
 
@@ -110,7 +110,7 @@ class ScratchDirTest(unittest.TestCase):
             self.assertNotIn("empty_file.txt", files)
 
         # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
+        assert not os.path.exists(d)
         files = os.listdir(".")
         self.assertNotIn("scratch_text", files)
 
@@ -129,7 +129,7 @@ class ScratchDirTest(unittest.TestCase):
                 self.assertNotIn("empty_file.txt", files)
 
             # Make sure the tempdir is deleted.
-            self.assertFalse(os.path.exists(d))
+            assert not os.path.exists(d)
             files = os.listdir(".")
             self.assertNotIn("scratch_text", files)
 
