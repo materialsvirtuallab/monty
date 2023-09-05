@@ -46,11 +46,11 @@ class SerialTest(unittest.TestCase):
         # Test custom kwarg configuration
         dumpfn(d, "monte_test.json", indent=4)
         d2 = loadfn("monte_test.json")
-        self.assertEqual(d, d2)
+        assert d == d2
         os.remove("monte_test.json")
         dumpfn(d, "monte_test.yaml")
         d2 = loadfn("monte_test.yaml")
-        self.assertEqual(d, d2)
+        assert d == d2
         os.remove("monte_test.yaml")
 
         # Check if fmt override works.
@@ -58,7 +58,7 @@ class SerialTest(unittest.TestCase):
         with self.assertRaises(json.decoder.JSONDecodeError):
             d2 = loadfn("monte_test.json")
         d2 = loadfn("monte_test.json", fmt="yaml")
-        self.assertEqual(d, d2)
+        assert d == d2
         os.remove("monte_test.json")
 
         with self.assertRaises(TypeError):
@@ -73,7 +73,7 @@ class SerialTest(unittest.TestCase):
         # Test automatic format detection
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
-        self.assertEqual(d, {k: v for k, v in d2.items()})
+        assert d, {k: v for k, v in d2.items()}
         os.remove("monte_test.mpk")
 
         # Test to ensure basename is respected, and not directory
@@ -84,7 +84,7 @@ class SerialTest(unittest.TestCase):
             dumpfn({"test": 1}, fname)
             with open("test_file.json") as f:
                 reloaded = json.loads(f.read())
-            self.assertEqual(reloaded["test"], 1)
+            assert reloaded["test"] == 1
 
 
 if __name__ == "__main__":

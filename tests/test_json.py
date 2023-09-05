@@ -206,12 +206,12 @@ class MSONableTest(unittest.TestCase):
             a_list[0].unsafe_hash().hexdigest(),
             "ea44de0e2ef627be582282c02c48e94de0d58ec6",
         )
-        self.assertEqual(obj.unsafe_hash().hexdigest(), "44204c8da394e878f7562c9aa2e37c2177f28b81")
+        assert obj.unsafe_hash().hexdigest() == "44204c8da394e878f7562c9aa2e37c2177f28b81"
 
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
-        self.assertEqual(d["@version"], tests_version)
+        assert d["@version"] == tests_version
 
     def test_nested_to_from_dict(self):
         GMC = GoodMSONClass
@@ -243,35 +243,35 @@ class MSONableTest(unittest.TestCase):
         obj2 = GoodNestedMSONClass.from_dict(obj_dict)
         assert [obj2.a_list[ii] == aa for ii, aa in enumerate(obj.a_list)]
         assert [obj2.b_dict[kk] == val for kk, val in obj.b_dict.items()]
-        self.assertEqual(len(obj.a_list), len(obj2.a_list))
-        self.assertEqual(len(obj.b_dict), len(obj2.b_dict))
+        assert len(obj.a_list) == len(obj2.a_list)
+        assert len(obj.b_dict) == len(obj2.b_dict)
         s = json.dumps(obj_dict)
         obj3 = json.loads(s, cls=MontyDecoder)
         assert [obj2.a_list[ii] == aa for ii, aa in enumerate(obj3.a_list)]
         assert [obj2.b_dict[kk] == val for kk, val in obj3.b_dict.items()]
-        self.assertEqual(len(obj3.a_list), len(obj2.a_list))
-        self.assertEqual(len(obj3.b_dict), len(obj2.b_dict))
+        assert len(obj3.a_list) == len(obj2.a_list)
+        assert len(obj3.b_dict) == len(obj2.b_dict)
         s = json.dumps(obj, cls=MontyEncoder)
         obj4 = json.loads(s, cls=MontyDecoder)
         assert [obj4.a_list[ii] == aa for ii, aa in enumerate(obj.a_list)]
         assert [obj4.b_dict[kk] == val for kk, val in obj.b_dict.items()]
-        self.assertEqual(len(obj.a_list), len(obj4.a_list))
-        self.assertEqual(len(obj.b_dict), len(obj4.b_dict))
+        assert len(obj.a_list) == len(obj4.a_list)
+        assert len(obj.b_dict) == len(obj4.b_dict)
 
     def test_enum_serialization(self):
         e = EnumTest.a
         d = e.as_dict()
         e_new = EnumTest.from_dict(d)
-        self.assertEqual(e_new.name, e.name)
-        self.assertEqual(e_new.value, e.value)
+        assert e_new.name == e.name
+        assert e_new.value == e.value
 
         d = {"123": EnumTest.a}
         f = jsanitize(d)
-        self.assertEqual(f["123"], "EnumTest.a")
+        assert f["123"] == "EnumTest.a"
 
         f = jsanitize(d, strict=True)
-        self.assertEqual(f["123"]["@module"], "tests.test_json")
-        self.assertEqual(f["123"]["@class"], "EnumTest")
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumTest"
         self.assertEqual(f["123"]["value"], 1)
 
         f = jsanitize(d, strict=True, enum_values=True)

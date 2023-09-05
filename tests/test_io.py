@@ -125,24 +125,24 @@ class ReverseReadfileTest(unittest.TestCase):
 class ZopenTest(unittest.TestCase):
     def test_zopen(self):
         with zopen(os.path.join(test_dir, "myfile_gz.gz"), mode="rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), mode="rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(test_dir, "myfile_xz.xz"), "rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(test_dir, "myfile_lzma.lzma"), "rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
 
     @unittest.skipIf(Path is None, "Not Py3k")
     def test_Path_objects(self):
         p = Path(test_dir) / "myfile_gz.gz"
 
         with zopen(p, mode="rt") as f:
-            self.assertEqual(f.read(), "HelloWorld.\n\n")
+            assert f.read() == "HelloWorld.\n\n"
 
 
 class FileLockTest(unittest.TestCase):

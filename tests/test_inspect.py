@@ -26,7 +26,7 @@ class InspectTest(unittest.TestCase):
         assert caller_name()
 
     def test_all_subclasses(self):
-        self.assertEqual(all_subclasses(LittleCatA), [LittleCatB, LittleCatD])
+        assert all_subclasses(LittleCatA) == [LittleCatB, LittleCatD]
 
 
 if __name__ == "__main__":

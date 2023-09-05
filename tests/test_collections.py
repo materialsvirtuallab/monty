@@ -11,25 +11,25 @@ class FrozenDictTest(unittest.TestCase):
         d = frozendict({"hello": "world"})
         self.assertRaises(KeyError, d.__setitem__, "k", "v")
         self.assertRaises(KeyError, d.update, {"k": "v"})
-        self.assertEqual(d["hello"], "world")
+        assert d["hello"] == "world"
 
     def test_namespace_dict(self):
         d = Namespace(foo="bar")
         d["hello"] = "world"
-        self.assertEqual(d["foo"], "bar")
+        assert d["foo"] == "bar"
         self.assertRaises(KeyError, d.__setitem__, "foo", "spam")
 
     def test_attr_dict(self):
         d = AttrDict(foo=1, bar=2)
-        self.assertEqual(d.bar, 2)
-        self.assertEqual(d["foo"], d.foo)
+        assert d.bar == 2
+        assert d["foo"] == d.foo
         d.bar = "hello"
-        self.assertEqual(d["bar"], "hello")
+        assert d["bar"] == "hello"
 
     def test_frozen_attrdict(self):
         d = FrozenAttrDict({"hello": "world", 1: 2})
-        self.assertEqual(d["hello"], "world")
-        self.assertEqual(d.hello, "world")
+        assert d["hello"] == "world"
+        assert d.hello == "world"
         self.assertRaises(KeyError, d.update, {"updating": 2})
         with self.assertRaises(KeyError):
             d["foo"] = "bar"
@@ -46,7 +46,7 @@ class TreeTest(unittest.TestCase):
         self.assertIn("b", x["a"])
         self.assertNotIn("c", x["a"])
         self.assertIn("c", x["a"]["b"])
-        self.assertEqual(x["a"]["b"]["c"]["d"], 1)
+        assert x["a"]["b"]["c"]["d"] == 1
 
 
 if __name__ == "__main__":

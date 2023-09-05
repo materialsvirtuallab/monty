@@ -12,7 +12,7 @@ class SingletonTest(unittest.TestCase):
         a1 = A()
         a2 = A()
 
-        self.assertEqual(id(a1), id(a2))
+        assert id(a1) == id(a2)
 
 
 @cached_class
@@ -36,13 +36,13 @@ class CachedClassTest(unittest.TestCase):
         a1b = A(1)
         a2 = A(2)
 
-        self.assertEqual(id(a1a), id(a1b))
+        assert id(a1a) == id(a1b)
         self.assertNotEqual(id(a1a), id(a2))
 
     # def test_pickle(self):
     #     a = A(2)
     #     o = pickle.dumps(a)
-    #     self.assertEqual(a, pickle.loads(o))
+    #     assert a == pickle.loads(o)
 
 
 if __name__ == "__main__":

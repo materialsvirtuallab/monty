@@ -42,7 +42,7 @@ class CopyRTest(unittest.TestCase):
         assert os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr"))
         with open(os.path.join(test_dir, "cpr_src", "test")) as f:
             txt = f.read()
-            self.assertEqual(txt, "what")
+            assert txt == "what"
 
     def test_pathlib(self):
         test_path = Path(test_dir)
@@ -71,7 +71,7 @@ class CompressFileDirTest(unittest.TestCase):
             assert not os.path.exists(fname + "." + fmt)
         with open(fname) as f:
             txt = f.read()
-            self.assertEqual(txt, "hello world")
+            assert txt == "hello world"
         self.assertRaises(ValueError, compress_file, "whatever", "badformat")
 
         # test decompress non-existent/non-compressed file
@@ -99,7 +99,7 @@ class GzipDirTest(unittest.TestCase):
         assert not os.path.exists(full_f)
 
         with GzipFile(f"{full_f}.gz") as g:
-            self.assertEqual(g.readline().decode("utf-8"), "what")
+            assert g.readline().decode("utf-8") == "what"
 
         self.assertAlmostEqual(os.path.getmtime(f"{full_f}.gz"), self.mtime, 4)
 
@@ -116,7 +116,7 @@ class GzipDirTest(unittest.TestCase):
         assert not os.path.exists(sub_file)
 
         with GzipFile(f"{sub_file}.gz") as g:
-            self.assertEqual(g.readline().decode("utf-8"), "anotherwhat")
+            assert g.readline().decode("utf-8") == "anotherwhat"
 
     def tearDown(self):
         shutil.rmtree(os.path.join(test_dir, "gzip_dir"))

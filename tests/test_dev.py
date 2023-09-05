@@ -56,7 +56,7 @@ class DecoratorTest(unittest.TestCase):
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(a().property_b, "b")
+            assert a().property_b == "b"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
@@ -64,7 +64,7 @@ class DecoratorTest(unittest.TestCase):
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(a().func_a(), "a")
+            assert a().func_a() == "a"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
@@ -86,7 +86,7 @@ class DecoratorTest(unittest.TestCase):
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(A().classmethod_b(), "b")
+            assert A().classmethod_b() == "b"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
@@ -107,7 +107,7 @@ class DecoratorTest(unittest.TestCase):
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            self.assertEqual(A().classmethod_b(), "b")
+            assert A().classmethod_b() == "b"
             # Verify some things
             assert issubclass(w[-1].category, DeprecationWarning)
 
@@ -127,10 +127,10 @@ class DecoratorTest(unittest.TestCase):
         def use_unittest():
             return "success"
 
-        self.assertEqual(use_unittest(), "success")
+        assert use_unittest() == "success"
 
     def test_get_ncpus(self):
-        self.assertEqual(get_ncpus(), multiprocessing.cpu_count())
+        assert get_ncpus() == multiprocessing.cpu_count()
 
     def test_install_except_hook(self):
         install_excepthook()

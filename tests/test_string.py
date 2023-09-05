@@ -14,13 +14,13 @@ class FuncTest(unittest.TestCase):
         s = "".join(chr(random.randint(0, 127)) for i in range(10))
         s += "".join(chr(random.randint(128, 150)) for i in range(10))
         clean = remove_non_ascii(s)
-        self.assertEqual(len(clean), 10)
+        assert len(clean) == 10
 
     def test_unicode2str(self):
         if sys.version_info.major < 3:
-            self.assertEqual(type(unicode2str("a")), str)
+            assert type(unicode2str("a")) == str
         else:
-            self.assertEqual(type(unicode2str("a")), str)
+            assert type(unicode2str("a")) == str
 
 
 if __name__ == "__main__":

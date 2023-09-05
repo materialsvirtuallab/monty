@@ -10,11 +10,11 @@ test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 class PathTest(unittest.TestCase):
     def test_zpath(self):
         fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
-        self.assertEqual(os.path.join(test_dir, "myfile_gz.gz"), fullzpath)
+        assert os.path.join(test_dir, "myfile_gz.gz") == fullzpath
 
     def test_find_exts(self):
         assert len(find_exts(os.path.dirname(__file__), "py")) >= 18
-        self.assertEqual(len(find_exts(os.path.dirname(__file__), "bz2")), 2)
+        assert len(find_exts(os.path.dirname(__file__), "bz2")) == 2
         self.assertEqual(
             len(find_exts(os.path.dirname(__file__), "bz2", exclude_dirs="test_files")),
             0,

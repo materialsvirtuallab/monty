@@ -21,17 +21,17 @@ class TestLRUCache(unittest.TestCase):
             return a + b + c
 
         # call a few times to get some stats
-        self.assertEqual(cached_func(1, 2, c=4), 7)
-        self.assertEqual(cached_func(3, 2), 8)
-        self.assertEqual(cached_func(3, 2), 8)
-        self.assertEqual(cached_func(1, 2, c=4), 7)
-        self.assertEqual(cached_func(4, 2), 9)
-        self.assertEqual(cached_func(4, 2), 9)
-        self.assertEqual(cached_func(3, 2), 8)
-        self.assertEqual(cached_func(1, 2), 6)
+        assert cached_func(1, 2, c=4) == 7
+        assert cached_func(3, 2) == 8
+        assert cached_func(3, 2) == 8
+        assert cached_func(1, 2, c=4) == 7
+        assert cached_func(4, 2) == 9
+        assert cached_func(4, 2) == 9
+        assert cached_func(3, 2) == 8
+        assert cached_func(1, 2) == 6
 
-        self.assertEqual(cached_func.cache_info().hits, 3)
-        self.assertEqual(cached_func.cache_info().misses, 5)
+        assert cached_func.cache_info().hits == 3
+        assert cached_func.cache_info().misses == 5
 
     def test_class_method(self):
         class TestClass:
@@ -42,14 +42,14 @@ class TestLRUCache(unittest.TestCase):
         a = TestClass()
         b = TestClass()
 
-        self.assertEqual(a.cached_func(1), 1)
-        self.assertEqual(b.cached_func(2), 2)
-        self.assertEqual(b.cached_func(3), 3)
-        self.assertEqual(a.cached_func(3), 3)
-        self.assertEqual(a.cached_func(1), 1)
+        assert a.cached_func(1) == 1
+        assert b.cached_func(2) == 2
+        assert b.cached_func(3) == 3
+        assert a.cached_func(3) == 3
+        assert a.cached_func(1) == 1
 
-        self.assertEqual(a.cached_func.cache_info().hits, 1)
-        self.assertEqual(a.cached_func.cache_info().misses, 4)
+        assert a.cached_func.cache_info().hits == 1
+        assert a.cached_func.cache_info().misses == 4
 
         class TestClass2:
             @lru_cache(None)
@@ -59,14 +59,14 @@ class TestLRUCache(unittest.TestCase):
         a = TestClass2()
         b = TestClass2()
 
-        self.assertEqual(a.cached_func(1), 1)
-        self.assertEqual(b.cached_func(2), 2)
-        self.assertEqual(b.cached_func(3), 3)
-        self.assertEqual(a.cached_func(3), 3)
-        self.assertEqual(a.cached_func(1), 1)
+        assert a.cached_func(1) == 1
+        assert b.cached_func(2) == 2
+        assert b.cached_func(3) == 3
+        assert a.cached_func(3) == 3
+        assert a.cached_func(1) == 1
 
-        self.assertEqual(a.cached_func.cache_info().hits, 1)
-        self.assertEqual(a.cached_func.cache_info().misses, 4)
+        assert a.cached_func.cache_info().hits == 1
+        assert a.cached_func.cache_info().misses == 4
 
 
 class TestCase(unittest.TestCase):

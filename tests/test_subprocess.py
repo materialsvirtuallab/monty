@@ -10,7 +10,7 @@ class CommandTest(unittest.TestCase):
 
         sleep05.run(timeout=1)
         print(sleep05)
-        self.assertEqual(sleep05.retcode, 0)
+        assert sleep05.retcode == 0
         assert not sleep05.killed
 
         sleep05.run(timeout=0.1)

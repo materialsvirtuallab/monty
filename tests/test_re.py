@@ -15,9 +15,9 @@ class RegrepTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt")
         matches = regrep(fname, {"1": r"1(\d+)", "3": r"3(\d+)"}, postprocess=int)
-        self.assertEqual(len(matches["1"]), 1380)
-        self.assertEqual(len(matches["3"]), 571)
-        self.assertEqual(matches["1"][0][0][0], 0)
+        assert len(matches["1"]) == 1380
+        assert len(matches["3"]) == 571
+        assert matches["1"][0][0][0] == 0
 
         matches = regrep(
             fname,
@@ -26,8 +26,8 @@ class RegrepTest(unittest.TestCase):
             terminate_on_match=True,
             postprocess=int,
         )
-        self.assertEqual(len(matches["1"]), 1)
-        self.assertEqual(len(matches["3"]), 11)
+        assert len(matches["1"]) == 1
+        assert len(matches["3"]) == 11
 
 
 if __name__ == "__main__":

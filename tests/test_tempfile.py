@@ -138,7 +138,7 @@ class ScratchDirTest(unittest.TestCase):
 
     def test_bad_root(self):
         with ScratchDir("bad_groot") as d:
-            self.assertEqual(d, test_dir)
+            assert d == test_dir
 
     def tearDown(self):
         os.chdir(self.cwd)
