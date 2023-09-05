@@ -5,6 +5,7 @@ coveralls
 pycodestyle
 mypy
 pydocstyle
+pydantic
 flake8
 black
 pylint
