@@ -8,8 +8,8 @@ nav_exclude: true
 
 Pretty printing functions.
 
+## *class* monty.pprint.DisplayEcoder(\*, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, default=None)
 
-### _class_ monty.pprint.DisplayEcoder(\*, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, default=None)
 Bases: `JSONEncoder`
 
 Help convert dicts and objects to a format that can be displayed in notebooks
@@ -52,25 +52,23 @@ If specified, default is a function that gets called for objects
 that can’t otherwise be serialized.  It should return a JSON encodable
 version of the object or raise a `TypeError`.
 
+### default(o)
 
-#### default(o)
 Try diffent ways of converting the present object for displaying
 
+## monty.pprint.draw_tree(node, child_iter=<function <lambda>>, text_str=<function <lambda>>)
 
-### monty.pprint.draw_tree(node, child_iter=<function <lambda>>, text_str=<function <lambda>>)
 
 * **Parameters**
-
 
     * **node** – the root of the tree to be drawn,
 
 
     * **child_iter** – function that when called with a node, returns an iterable
-    over all its children
+over all its children
 
 
     * **text_str** – turns a node into the text to be displayed in the tree.
-
 
 The default implementations of these two arguments retrieve the children
 by accessing node.children and simply use str(node) to convert a node to a
@@ -78,28 +76,25 @@ string. The resulting tree is drawn into a buffer and returned as a string.
 
 Based on [https://pypi.python.org/pypi/asciitree/](https://pypi.python.org/pypi/asciitree/)
 
+## monty.pprint.pprint_json(data)
 
-### monty.pprint.pprint_json(data)
 Display a tree-like object in a jupyter notebook.
 Allows for collapsible interactive interaction with data.
 
 
 * **Parameters**
-
-    **data** – a dictionary or object
-
+**data** – a dictionary or object
 
 Based on:
 [https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22](https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22)
 
+## monty.pprint.pprint_table(table, out=<_io.TextIOWrapper name=’<stdout>’ mode=’w’ encoding=’utf-8’>, rstrip=False)
 
-### monty.pprint.pprint_table(table, out=<_io.TextIOWrapper name='<stdout>' mode='w' encoding='utf-8'>, rstrip=False)
 Prints out a table of data, padded for alignment
 Each row must have the same number of columns.
 
 
 * **Parameters**
-
 
     * **table** – The table to print. A list of lists.
 

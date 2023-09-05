@@ -8,14 +8,14 @@ nav_exclude: true
 
 JSON serialization and deserialization utilities.
 
+## *exception* monty.json.MSONError()
 
-### _exception_ monty.json.MSONError()
 Bases: `Exception`
 
 Exception class for serialization errors.
 
+## *class* monty.json.MSONable()
 
-### _class_ monty.json.MSONable()
 Bases: `object`
 
 This is a mix-in base class specifying an API for msonable objects. MSON
@@ -60,42 +60,38 @@ home folder
 Example:
 old_module.old_class: new_module.new_class
 
+### REDIRECT(_ = {_ )
 
-#### REDIRECT(_ = {_ )
+### as_dict()
 
-#### as_dict()
 A JSON serializable dict representation of an object.
 
+### *classmethod* from_dict(d)
 
-#### _classmethod_ from_dict(d)
 
 * **Parameters**
-
-    **d** – Dict representation.
-
+**d** – Dict representation.
 
 
 * **Returns**
+MSONable class.
 
-    MSONable class.
+### to_json()
 
-
-
-#### to_json()
 Returns a json string representation of the MSONable object.
 
+### unsafe_hash()
 
-#### unsafe_hash()
 Returns an hash of the current object. This uses a generic but low
 performance method of converting the object to a dictionary, flattening
 any nested keys, and then performing a hash on the resulting object
 
+### *classmethod* validate_monty(v)
 
-#### _classmethod_ validate_monty(v)
 pydantic Validator for MSONable pattern
 
+## *class* monty.json.MontyDecoder(\*, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, strict=True, object_pairs_hook=None)
 
-### _class_ monty.json.MontyDecoder(\*, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, strict=True, object_pairs_hook=None)
 Bases: `JSONDecoder`
 
 A Json Decoder which supports the MSONable API. By default, the
@@ -106,9 +102,6 @@ nested lists and dicts containing pymatgen object will be decoded correctly
 as well.
 
 Usage:
-
-> # Add it as a *cls* keyword when using json.load
-> json.loads(json_string, cls=MontyDecoder)
 
 `object_hook`, if specified, will be called with the result
 of every JSON object decoded and its return value will be used in
@@ -140,31 +133,31 @@ are encountered.
 If `strict` is false (true is the default), then control
 characters will be allowed inside strings.  Control characters in
 this context are those with character codes in the 0-31 range,
-including `'\\t'` (tab), `'\\n'`, `'\\r'` and `'\\0'`.
+including `'\\\\t'` (tab), `'\\\\n'`, `'\\\\r'` and `'\\\\0'`.
 
+# Add it as a *cls* keyword when using json.load
 
-#### decode(s)
+json.loads(json_string, cls=MontyDecoder)
+
+## decode(s)
+
 Overrides decode from JSONDecoder.
 
 
 * **Parameters**
-
-    **s** – string
-
+**s** – string
 
 
 * **Returns**
+Object.
 
-    Object.
+## process_decoded(d)
 
-
-
-#### process_decoded(d)
 Recursive method to support decoding dicts and lists containing
 pymatgen objects.
 
+## *class* monty.json.MontyEncoder(\*, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, default=None)
 
-### _class_ monty.json.MontyEncoder(\*, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, sort_keys=False, indent=None, separators=None, default=None)
 Bases: `JSONEncoder`
 
 A Json Encoder which supports the MSONable API, plus adds support for
@@ -214,8 +207,8 @@ If specified, default is a function that gets called for objects
 that can’t otherwise be serialized.  It should return a JSON encodable
 version of the object or raise a `TypeError`.
 
+### default(o)
 
-#### default(o)
 Overriding default method for JSON encoding. This method does two
 things: (a) If an object has a to_dict property, return the to_dict
 output. (b) If the @module and @class keys are not in the to_dict,
@@ -225,12 +218,10 @@ property, the default Python json encoder default method is called.
 
 
 * **Returns**
+Python dict representation.
 
-    Python dict representation.
+## monty.json.jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_msonable=False)
 
-
-
-### monty.json.jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_msonable=False)
 This method cleans an input json-like object, either a list or a dict or
 some sequence, nested or otherwise, by converting all non-string
 dictionary keys (such as int and float) to strings, and also recursively
@@ -239,32 +230,29 @@ encodes all objects using Monty’s as_dict() protocol.
 
 * **Parameters**
 
-
     * **obj** – input json-like object.
 
 
     * **strict** (*bool*) – This parameters sets the behavior when jsanitize
-    encounters an object it does not understand. If strict is True,
-    jsanitize will try to get the as_dict() attribute of the object. If
-    no such attribute is found, an attribute error will be thrown. If
-    strict is False, jsanitize will simply call str(object) to convert
-    the object to a string representation.
+encounters an object it does not understand. If strict is True,
+jsanitize will try to get the as_dict() attribute of the object. If
+no such attribute is found, an attribute error will be thrown. If
+strict is False, jsanitize will simply call str(object) to convert
+the object to a string representation.
 
 
     * **allow_bson** (*bool*) – This parameters sets the behavior when jsanitize
-    encounters a bson supported type such as objectid and datetime. If
-    True, such bson types will be ignored, allowing for proper
-    insertion into MongoDB databases.
+encounters a bson supported type such as objectid and datetime. If
+True, such bson types will be ignored, allowing for proper
+insertion into MongoDB databases.
 
 
     * **enum_values** (*bool*) – Convert Enums to their values.
 
 
     * **recursive_msonable** (*bool*) – If True, uses .as_dict() for MSONables regardless
-    of the value of strict.
-
+of the value of strict.
 
 
 * **Returns**
-
-    Sanitized dict that can be json serialized.
+Sanitized dict that can be json serialized.
