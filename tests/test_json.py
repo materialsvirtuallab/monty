@@ -10,6 +10,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
+import pytest
 import torch
 from bson.objectid import ObjectId
 
@@ -129,8 +130,8 @@ class NestedDataClass:
     points: list[Point]
 
 
-class MSONableTest(unittest.TestCase):
-    def setUp(self):
+class TestMSONable:
+    def setup_method(self):
         self.good_cls = GoodMSONClass
 
         class BadMSONClass(MSONable):
@@ -161,17 +162,19 @@ class MSONableTest(unittest.TestCase):
     def test_to_from_dict(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
-        self.assertIsNotNone(d)
+        assert d is not None
         self.good_cls.from_dict(d)
         jsonstr = obj.to_json()
         d = json.loads(jsonstr)
         assert d["@class"], "GoodMSONClass"
         obj = self.bad_cls("Hello", "World")
         d = obj.as_dict()
-        self.assertIsNotNone(d)
-        self.assertRaises(TypeError, self.bad_cls.from_dict, d)
+        assert d is not None
+        with pytest.raises(TypeError):
+            self.bad_cls.from_dict(d)
         obj = self.bad_cls2("Hello", "World")
-        self.assertRaises(NotImplementedError, obj.as_dict)
+        with pytest.raises(NotImplementedError):
+            obj.as_dict()
         obj = self.auto_mson(2, 3)
         d = obj.as_dict()
         self.auto_mson.from_dict(d)
@@ -278,7 +281,7 @@ class MSONableTest(unittest.TestCase):
         assert f["123"] == 1
 
 
-class JsonTest(unittest.TestCase):
+class TestJson:
     def test_as_from_dict(self):
         obj = GoodMSONClass(1, 2, 3, hello="world")
         s = json.dumps(obj, cls=MontyEncoder)
@@ -350,7 +353,8 @@ class JsonTest(unittest.TestCase):
 
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
-        self.assertRaises(TypeError, json.dumps, x)
+        with pytest.raises(TypeError):
+            json.dumps(x)
         djson = json.dumps(x, cls=MontyEncoder)
         d = json.loads(djson)
         assert d["@class"] == "array"
@@ -360,10 +364,12 @@ class JsonTest(unittest.TestCase):
         x = json.loads(djson, cls=MontyDecoder)
         assert isinstance(x, np.ndarray)
         x = np.min([1, 2, 3]) > 2
-        self.assertRaises(TypeError, json.dumps, x)
+        with pytest.raises(TypeError):
+            json.dumps(x)
 
         x = np.array([1 + 1j, 2 + 1j, 3 + 1j], dtype="complex64")
-        self.assertRaises(TypeError, json.dumps, x)
+        with pytest.raises(TypeError):
+            json.dumps(x)
         djson = json.dumps(x, cls=MontyEncoder)
         d = json.loads(djson)
         assert d["@class"] == "array"
@@ -375,7 +381,8 @@ class JsonTest(unittest.TestCase):
         assert x.dtype == "complex64"
 
         x = np.array([[1 + 1j, 2 + 1j], [3 + 1j, 4 + 1j]], dtype="complex64")
-        self.assertRaises(TypeError, json.dumps, x)
+        with pytest.raises(TypeError):
+            json.dumps(x)
         djson = json.dumps(x, cls=MontyEncoder)
         d = json.loads(djson)
         assert d["@class"] == "array"
@@ -398,15 +405,12 @@ class JsonTest(unittest.TestCase):
 
         assert d["np_a"]["a"][0]["b"]["@module"] == "numpy"
         assert d["np_a"]["a"][0]["b"]["@class"] == "array"
-        self.assertEqual(
-            d["np_a"]["a"][0]["b"]["data"],
-            [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]],
-        )
+        assert d["np_a"]["a"][0]["b"]["data"] == [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0, 1.0]]]
         assert d["np_a"]["a"][0]["b"]["dtype"] == "complex64"
 
         obj = ClassContainingNumpyArray.from_dict(d)
-        self.assertIsInstance(obj, ClassContainingNumpyArray)
-        self.assertIsInstance(obj.np_a["a"][0]["b"], np.ndarray)
+        assert isinstance(obj, ClassContainingNumpyArray)
+        assert isinstance(obj.np_a["a"][0]["b"], np.ndarray)
         assert obj.np_a["a"][0]["b"][0][1] == 2 + 1j
 
     def test_pandas(self):
@@ -418,8 +422,8 @@ class JsonTest(unittest.TestCase):
         assert d["df"]["@class"] == "DataFrame"
 
         obj = ClassContainingDataFrame.from_dict(d)
-        self.assertIsInstance(obj, ClassContainingDataFrame)
-        self.assertIsInstance(obj.df, pd.DataFrame)
+        assert isinstance(obj, ClassContainingDataFrame)
+        assert isinstance(obj.df, pd.DataFrame)
         assert list(obj.df.a), [1 == 1]
 
         cls = ClassContainingSeries(s=pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]}))
@@ -430,8 +434,8 @@ class JsonTest(unittest.TestCase):
         assert d["s"]["@class"] == "Series"
 
         obj = ClassContainingSeries.from_dict(d)
-        self.assertIsInstance(obj, ClassContainingSeries)
-        self.assertIsInstance(obj.s, pd.Series)
+        assert isinstance(obj, ClassContainingSeries)
+        assert isinstance(obj.s, pd.Series)
         assert list(obj.s.a), [1, 2 == 3]
 
         cls = ClassContainingSeries(s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]})
@@ -442,8 +446,8 @@ class JsonTest(unittest.TestCase):
         assert d["s"]["df"][0]["@class"] == "Series"
 
         obj = ClassContainingSeries.from_dict(d)
-        self.assertIsInstance(obj, ClassContainingSeries)
-        self.assertIsInstance(obj.s["df"][0], pd.Series)
+        assert isinstance(obj, ClassContainingSeries)
+        assert isinstance(obj.s["df"][0], pd.Series)
         assert list(obj.s["df"][0].a), [1, 2 == 3]
 
     def test_callable(self):
@@ -468,7 +472,8 @@ class JsonTest(unittest.TestCase):
             MethodSerializationClass,
             Enum,
         ]:
-            self.assertRaises(TypeError, json.dumps, function)
+            with pytest.raises(TypeError):
+                json.dumps(function)
             djson = json.dumps(function, cls=MontyEncoder)
             d = json.loads(djson)
             assert "@callable" in d
@@ -478,7 +483,8 @@ class JsonTest(unittest.TestCase):
 
         # test method bound to instance
         for function in [instance.method]:
-            self.assertRaises(TypeError, json.dumps, function)
+            with pytest.raises(TypeError):
+                json.dumps(function)
             djson = json.dumps(function, cls=MontyEncoder)
             d = json.loads(djson)
             assert "@callable" in d
@@ -493,7 +499,8 @@ class JsonTest(unittest.TestCase):
 
         # test method bound to object that is not serializable
         for function in [MethodNonSerializationClass(1).method]:
-            self.assertRaises(TypeError, json.dumps, function, cls=MontyEncoder)
+            with pytest.raises(TypeError):
+                json.dumps(function, cls=MontyEncoder)
 
         # test that callable MSONable objects still get serialized as the objects
         # rather than as a callable
@@ -502,7 +509,8 @@ class JsonTest(unittest.TestCase):
 
     def test_objectid(self):
         oid = ObjectId("562e8301218dcbbc3d7d91ce")
-        self.assertRaises(TypeError, json.dumps, oid)
+        with pytest.raises(TypeError):
+            json.dumps(oid)
         djson = json.dumps(oid, cls=MontyEncoder)
         x = json.loads(djson, cls=MontyDecoder)
         assert isinstance(x, ObjectId)
@@ -511,13 +519,14 @@ class JsonTest(unittest.TestCase):
         # clean_json should have no effect on None types.
         d = {"hello": 1, "world": None}
         clean = jsanitize(d)
-        self.assertIsNone(clean["world"])
+        assert clean["world"] is None
         assert json.loads(json.dumps(d)) == json.loads(json.dumps(clean))
 
         d = {"hello": GoodMSONClass(1, 2, 3)}
-        self.assertRaises(TypeError, json.dumps, d)
+        with pytest.raises(TypeError):
+            json.dumps(d)
         clean = jsanitize(d)
-        self.assertIsInstance(clean["hello"], str)
+        assert isinstance(clean["hello"], str)
         clean_strict = jsanitize(d, strict=True)
         assert clean_strict["hello"]["a"] == 1
         assert clean_strict["hello"]["b"] == 2
@@ -527,9 +536,9 @@ class JsonTest(unittest.TestCase):
 
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
-        self.assertIsInstance(clean["dt"], str)
+        assert isinstance(clean["dt"], str)
         clean = jsanitize(d, allow_bson=True)
-        self.assertIsInstance(clean["dt"], datetime.datetime)
+        assert isinstance(clean["dt"], datetime.datetime)
 
         d = {
             "a": ["b", np.array([1, 2, 3])],
@@ -537,13 +546,13 @@ class JsonTest(unittest.TestCase):
         }
         clean = jsanitize(d)
         assert clean["a"], ["b", [1, 2 == 3]]
-        self.assertIsInstance(clean["b"], str)
+        assert isinstance(clean["b"], str)
 
         rnd_bin = bytes(np.random.rand(10))
         d = {"a": bytes(rnd_bin)}
         clean = jsanitize(d, allow_bson=True)
         assert clean["a"] == bytes(rnd_bin)
-        self.assertIsInstance(clean["a"], bytes)
+        assert isinstance(clean["a"], bytes)
 
         p = pathlib.Path("/home/user/")
         clean = jsanitize(p, strict=True)
@@ -592,7 +601,8 @@ class JsonTest(unittest.TestCase):
             assert isinstance(clean["f"], str)
 
             # test that strict checking gives an error
-            self.assertRaises(AttributeError, jsanitize, d, strict=True)
+            with pytest.raises(AttributeError):
+                jsanitize(d, strict=True)
 
         # test that callable MSONable objects still get serialized as the objects
         # rather than as a callable
@@ -629,10 +639,7 @@ class JsonTest(unittest.TestCase):
 
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
-        self.assertEqual(
-            data,
-            {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}},
-        )
+        assert data == {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}}
 
     def test_pydantic_integrations(self):
         from pydantic import BaseModel
@@ -691,8 +698,8 @@ class JsonTest(unittest.TestCase):
         c2 = Coordinates.from_dict(d)
         assert d["points"][0]["x"] == 1
         assert d["points"][1]["y"] == 4
-        self.assertIsInstance(c2, Coordinates)
-        self.assertIsInstance(c2.points[0], Point)
+        assert isinstance(c2, Coordinates)
+        assert isinstance(c2.points[0], Point)
 
         s = MontyEncoder().encode(Point(1, 2))
         p = MontyDecoder().decode(s)
@@ -702,7 +709,7 @@ class JsonTest(unittest.TestCase):
         ndc = NestedDataClass([Point(1, 2), Point(3, 4)])
         str_ = json.dumps(ndc, cls=MontyEncoder)
         ndc2 = json.loads(str_, cls=MontyDecoder)
-        self.assertIsInstance(ndc2, NestedDataClass)
+        assert isinstance(ndc2, NestedDataClass)
 
 
 if __name__ == "__main__":

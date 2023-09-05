@@ -1,6 +1,8 @@
 import os
 import unittest
 
+import pytest
+
 try:
     from pathlib import Path
 except ImportError:
@@ -17,7 +19,7 @@ from monty.io import (
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
-class ReverseReadlineTest(unittest.TestCase):
+class TestReverseReadline:
     NUMLINES = 3000
 
     def test_reverse_readline(self):
@@ -28,11 +30,9 @@ class ReverseReadlineTest(unittest.TestCase):
         """
         with open(os.path.join(test_dir, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f)):
-                self.assertEqual(
-                    int(line),
-                    self.NUMLINES - idx,
-                    "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
-                )
+                assert int(line) == self.NUMLINES - idx, "read_backwards read {} whereas it should "(
+                    "have read {" "}"
+                ).format(int(line), self.NUMLINES - idx)
 
     def test_reverse_readline_fake_big(self):
         """
@@ -40,11 +40,9 @@ class ReverseReadlineTest(unittest.TestCase):
         """
         with open(os.path.join(test_dir, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
-                self.assertEqual(
-                    int(line),
-                    self.NUMLINES - idx,
-                    "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
-                )
+                assert int(line) == self.NUMLINES - idx, "read_backwards read {} whereas it should "(
+                    "have read {" "}"
+                ).format(int(line), self.NUMLINES - idx)
 
     def test_reverse_readline_bz2(self):
         """
@@ -68,7 +66,7 @@ class ReverseReadlineTest(unittest.TestCase):
                 raise ValueError("an empty file is being read!")
 
 
-class ReverseReadfileTest(unittest.TestCase):
+class TestReverseReadfile:
     NUMLINES = 3000
 
     def test_reverse_readfile(self):
@@ -79,11 +77,7 @@ class ReverseReadfileTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt")
         for idx, line in enumerate(reverse_readfile(fname)):
-            self.assertEqual(
-                int(line),
-                self.NUMLINES - idx,
-                "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
-            )
+            assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_gz(self):
         """
@@ -93,11 +87,7 @@ class ReverseReadfileTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt.gz")
         for idx, line in enumerate(reverse_readfile(fname)):
-            self.assertEqual(
-                int(line),
-                self.NUMLINES - idx,
-                "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
-            )
+            assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_bz2(self):
         """
@@ -107,11 +97,7 @@ class ReverseReadfileTest(unittest.TestCase):
         """
         fname = os.path.join(test_dir, "3000_lines.txt.bz2")
         for idx, line in enumerate(reverse_readfile(fname)):
-            self.assertEqual(
-                int(line),
-                self.NUMLINES - idx,
-                "read_backwards read {} whereas it should " "have read {}".format(int(line), self.NUMLINES - idx),
-            )
+            assert int(line) == self.NUMLINES - idx
 
     def test_empty_file(self):
         """
@@ -122,7 +108,7 @@ class ReverseReadfileTest(unittest.TestCase):
             raise ValueError("an empty file is being read!")
 
 
-class ZopenTest(unittest.TestCase):
+class TestZopen:
     def test_zopen(self):
         with zopen(os.path.join(test_dir, "myfile_gz.gz"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
@@ -145,18 +131,18 @@ class ZopenTest(unittest.TestCase):
             assert f.read() == "HelloWorld.\n\n"
 
 
-class FileLockTest(unittest.TestCase):
-    def setUp(self):
+class TestFileLock:
+    def setup_method(self):
         self.file_name = "__lock__"
         self.lock = FileLock(self.file_name, timeout=1)
         self.lock.acquire()
 
     def test_raise(self):
-        with self.assertRaises(FileLockException):
+        with pytest.raises(FileLockException):
             new_lock = FileLock(self.file_name, timeout=1)
             new_lock.acquire()
 
-    def tearDown(self):
+    def teardown_method(self):
         self.lock.release()
 
 

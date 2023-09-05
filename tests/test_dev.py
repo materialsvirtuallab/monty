@@ -2,6 +2,8 @@ import multiprocessing
 import unittest
 import warnings
 
+import pytest
+
 from monty.dev import deprecated, get_ncpus, install_excepthook, requires
 
 
@@ -16,7 +18,7 @@ class A:
         pass
 
 
-class DecoratorTest(unittest.TestCase):
+class TestDecorator:
     def test_deprecated(self):
         def func_a():
             pass
@@ -121,7 +123,8 @@ class DecoratorTest(unittest.TestCase):
         def use_fictitious_mod():
             print("success")
 
-        self.assertRaises(RuntimeError, use_fictitious_mod)
+        with pytest.raises(RuntimeError):
+            use_fictitious_mod()
 
         @requires(unittest is not None, "scipy is not present.")
         def use_unittest():

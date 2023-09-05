@@ -6,7 +6,7 @@ from monty.re import regrep
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
-class RegrepTest(unittest.TestCase):
+class TestRegrep:
     def test_regrep(self):
         """
         We are making sure a file containing line numbers is read in reverse

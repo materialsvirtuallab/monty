@@ -9,7 +9,7 @@ import unittest
 from monty.string import remove_non_ascii, unicode2str
 
 
-class FuncTest(unittest.TestCase):
+class TestFunc:
     def test_remove_non_ascii(self):
         s = "".join(chr(random.randint(0, 127)) for i in range(10))
         s += "".join(chr(random.randint(128, 150)) for i in range(10))

@@ -6,6 +6,8 @@ import unittest
 from gzip import GzipFile
 from pathlib import Path
 
+import pytest
+
 from monty.shutil import (
     compress_dir,
     compress_file,
@@ -19,8 +21,8 @@ from monty.shutil import (
 test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 
 
-class CopyRTest(unittest.TestCase):
-    def setUp(self):
+class TestCopyR:
+    def setup_method(self):
         os.mkdir(os.path.join(test_dir, "cpr_src"))
         with open(os.path.join(test_dir, "cpr_src", "test"), "w") as f:
             f.write("what")
@@ -50,13 +52,13 @@ class CopyRTest(unittest.TestCase):
         assert (test_path / "cpr_dst" / "test").exists()
         assert (test_path / "cpr_dst" / "sub" / "testr").exists()
 
-    def tearDown(self):
+    def teardown_method(self):
         shutil.rmtree(os.path.join(test_dir, "cpr_src"))
         shutil.rmtree(os.path.join(test_dir, "cpr_dst"))
 
 
-class CompressFileDirTest(unittest.TestCase):
-    def setUp(self):
+class TestCompressFileDir:
+    def setup_method(self):
         with open(os.path.join(test_dir, "tempfile"), "w") as f:
             f.write("hello world")
 
@@ -72,19 +74,20 @@ class CompressFileDirTest(unittest.TestCase):
         with open(fname) as f:
             txt = f.read()
             assert txt == "hello world"
-        self.assertRaises(ValueError, compress_file, "whatever", "badformat")
+        with pytest.raises(ValueError):
+            compress_file("whatever", "badformat")
 
         # test decompress non-existent/non-compressed file
-        self.assertIsNone(decompress_file("non-existent"))
-        self.assertIsNone(decompress_file("non-existent.gz"))
-        self.assertIsNone(decompress_file("non-existent.bz2"))
+        assert decompress_file("non-existent") is None
+        assert decompress_file("non-existent.gz") is None
+        assert decompress_file("non-existent.bz2") is None
 
-    def tearDown(self):
+    def teardown_method(self):
         os.remove(os.path.join(test_dir, "tempfile"))
 
 
-class GzipDirTest(unittest.TestCase):
-    def setUp(self):
+class TestGzipDir:
+    def setup_method(self):
         os.mkdir(os.path.join(test_dir, "gzip_dir"))
         with open(os.path.join(test_dir, "gzip_dir", "tempfile"), "w") as f:
             f.write("what")
@@ -101,7 +104,7 @@ class GzipDirTest(unittest.TestCase):
         with GzipFile(f"{full_f}.gz") as g:
             assert g.readline().decode("utf-8") == "what"
 
-        self.assertAlmostEqual(os.path.getmtime(f"{full_f}.gz"), self.mtime, 4)
+        assert os.path.getmtime(f"{full_f}.gz") == pytest.approx(self.mtime, 4)
 
     def test_handle_sub_dirs(self):
         sub_dir = os.path.join(test_dir, "gzip_dir", "sub_dir")
@@ -118,11 +121,11 @@ class GzipDirTest(unittest.TestCase):
         with GzipFile(f"{sub_file}.gz") as g:
             assert g.readline().decode("utf-8") == "anotherwhat"
 
-    def tearDown(self):
+    def teardown_method(self):
         shutil.rmtree(os.path.join(test_dir, "gzip_dir"))
 
 
-class RemoveTest(unittest.TestCase):
+class TestRemove:
     @unittest.skipIf(platform.system() == "Windows", "Skip on windows")
     def test_remove_file(self):
         tempdir = tempfile.mkdtemp(dir=test_dir)

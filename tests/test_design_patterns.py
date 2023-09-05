@@ -3,7 +3,7 @@ import unittest
 from monty.design_patterns import cached_class, singleton
 
 
-class SingletonTest(unittest.TestCase):
+class TestSingleton:
     def test_singleton(self):
         @singleton
         class A:
@@ -30,7 +30,7 @@ class A:
         return (self.val,)
 
 
-class CachedClassTest(unittest.TestCase):
+class TestCachedClass:
     def test_cached_class(self):
         a1a = A(1)
         a1b = A(1)

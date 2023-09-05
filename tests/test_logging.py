@@ -10,7 +10,7 @@ def add(a, b):
     return a + b
 
 
-class FuncTest(unittest.TestCase):
+class TestFunc:
     def test_logged(self):
         s = StringIO()
         logging.basicConfig(level=logging.DEBUG, stream=s)

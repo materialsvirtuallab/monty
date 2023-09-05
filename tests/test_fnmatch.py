@@ -3,7 +3,7 @@ import unittest
 from monty.fnmatch import WildCard
 
 
-class FuncTest(unittest.TestCase):
+class TestFunc:
     def test_match(self):
         wc = WildCard("*.pdf")
         assert wc.match("A.pdf")

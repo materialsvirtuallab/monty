@@ -3,7 +3,7 @@ import unittest
 from monty.subprocess import Command
 
 
-class CommandTest(unittest.TestCase):
+class TestCommand:
     def test_command(self):
         """Test Command class"""
         sleep05 = Command("sleep 0.5")

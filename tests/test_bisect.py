@@ -3,7 +3,7 @@ import unittest
 from monty.bisect import find_ge, find_gt, find_le, find_lt, index
 
 
-class FuncTestCase(unittest.TestCase):
+class TestFunc:
     def test_funcs(self):
         l = [0, 1, 2, 3, 4]
         assert index(l, 1) == 1

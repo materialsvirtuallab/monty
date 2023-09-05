@@ -3,7 +3,7 @@ import unittest
 from monty.math import nCr, nPr
 
 
-class FuncTest(unittest.TestCase):
+class TestFunc:
     def test_nCr(self):
         assert nCr(4, 2) == 6
 

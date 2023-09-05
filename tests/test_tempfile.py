@@ -7,8 +7,8 @@ from monty.tempfile import ScratchDir
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
-class ScratchDirTest(unittest.TestCase):
-    def setUp(self):
+class TestScratchDir:
+    def setup_method(self):
         self.cwd = os.getcwd()
         os.chdir(test_dir)
         self.scratch_root = os.path.join(test_dir, "..", "..", "tempscratch")
@@ -140,7 +140,7 @@ class ScratchDirTest(unittest.TestCase):
         with ScratchDir("bad_groot") as d:
             assert d == test_dir
 
-    def tearDown(self):
+    def teardown_method(self):
         os.chdir(self.cwd)
         shutil.rmtree(self.scratch_root)
 

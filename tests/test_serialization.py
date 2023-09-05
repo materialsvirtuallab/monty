@@ -3,6 +3,8 @@ import json
 import os
 import unittest
 
+import pytest
+
 try:
     import msgpack
 except ImportError:
@@ -12,7 +14,7 @@ from monty.serialization import dumpfn, loadfn
 from monty.tempfile import ScratchDir
 
 
-class SerialTest(unittest.TestCase):
+class TestSerial:
     @classmethod
     def tearDownClass(cls):
         # Cleans up test files if a test fails
@@ -36,11 +38,7 @@ class SerialTest(unittest.TestCase):
             fn = f"monte_test.{ext}"
             dumpfn(d, fn)
             d2 = loadfn(fn)
-            self.assertEqual(
-                d,
-                d2,
-                msg=f"Test file with extension {ext} did not parse correctly",
-            )
+            assert d == d2, f"Test file with extension {ext} did not parse correctly"
             os.remove(fn)
 
         # Test custom kwarg configuration
@@ -55,15 +53,15 @@ class SerialTest(unittest.TestCase):
 
         # Check if fmt override works.
         dumpfn(d, "monte_test.json", fmt="yaml")
-        with self.assertRaises(json.decoder.JSONDecodeError):
-            d2 = loadfn("monte_test.json")
+        with pytest.raises(json.decoder.JSONDecodeError):
+            loadfn("monte_test.json")
         d2 = loadfn("monte_test.json", fmt="yaml")
         assert d == d2
         os.remove("monte_test.json")
 
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             dumpfn(d, "monte_test.txt", fmt="garbage")
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             loadfn("monte_test.txt", fmt="garbage")
 
     @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
