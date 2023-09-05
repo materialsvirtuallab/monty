@@ -14,7 +14,7 @@ class CommandTest(unittest.TestCase):
         assert not sleep05.killed
 
         sleep05.run(timeout=0.1)
-        self.assertNotEqual(sleep05.retcode, 0)
+        assert sleep05.retcode != 0
         assert sleep05.killed
 
 

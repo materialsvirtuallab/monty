@@ -37,7 +37,7 @@ class CachedClassTest(unittest.TestCase):
         a2 = A(2)
 
         assert id(a1a) == id(a1b)
-        self.assertNotEqual(id(a1a), id(a2))
+        assert id(a1a) != id(a2)
 
     # def test_pickle(self):
     #     a = A(2)

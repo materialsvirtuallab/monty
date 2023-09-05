@@ -97,8 +97,8 @@ class LazyTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 1)
+        assert f.foo == 1
+        assert len(called) == 1
 
     def test_evaluate_once(self):
         # lazy_property attributes should be evaluated only once.
@@ -111,10 +111,10 @@ class LazyTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 1)
+        assert f.foo == 1
+        assert f.foo == 1
+        assert f.foo == 1
+        assert len(called) == 1
 
     def test_private_attribute(self):
         # It should be possible to create private, name-mangled
@@ -131,10 +131,10 @@ class LazyTests(TestCase):
                 return self.__foo
 
         f = Foo()
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(len(called), 1)
+        assert f.get_foo() == 1
+        assert f.get_foo() == 1
+        assert f.get_foo() == 1
+        assert len(called) == 1
 
     def test_reserved_attribute(self):
         # It should be possible to create reserved lazy_property attributes.
@@ -147,10 +147,10 @@ class LazyTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(f.__foo__, 1)
-        self.assertEqual(f.__foo__, 1)
-        self.assertEqual(f.__foo__, 1)
-        self.assertEqual(len(called), 1)
+        assert f.__foo__ == 1
+        assert f.__foo__ == 1
+        assert f.__foo__ == 1
+        assert len(called) == 1
 
     def test_result_shadows_descriptor(self):
         # The result of the function call should be stored in
@@ -167,20 +167,20 @@ class LazyTests(TestCase):
         assert isinstance(Foo.foo, lazy_property)
         assert f.foo is f.foo
         assert f.foo is f.__dict__["foo"]  # !
-        self.assertEqual(len(called), 1)
+        assert len(called) == 1
 
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 1)
+        assert f.foo == 1
+        assert f.foo == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(f, "foo")
 
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 2)
+        assert f.foo == 1
+        assert len(called) == 2
 
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 2)
+        assert f.foo == 1
+        assert f.foo == 1
+        assert len(called) == 2
 
     def test_readonly_object(self):
         # The descriptor should raise an AttributeError when lazy_property is
@@ -196,7 +196,7 @@ class LazyTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(len(called), 0)
+        assert len(called) == 0
 
         self.assertException(
             AttributeError,
@@ -207,7 +207,7 @@ class LazyTests(TestCase):
         )
 
         # The function was not called
-        self.assertEqual(len(called), 0)
+        assert len(called) == 0
 
     def test_introspection(self):
         # The lazy_property decorator should support basic introspection.
@@ -220,12 +220,12 @@ class LazyTests(TestCase):
             def bar(self):
                 """bar func doc"""
 
-        self.assertEqual(Foo.foo.__name__, "foo")
-        self.assertEqual(Foo.foo.__doc__, "foo func doc")
+        assert Foo.foo.__name__ == "foo"
+        assert Foo.foo.__doc__ == "foo func doc"
         assert "test_functools" in Foo.foo.__module__
 
-        self.assertEqual(Foo.bar.__name__, "bar")
-        self.assertEqual(Foo.bar.__doc__, "bar func doc")
+        assert Foo.bar.__name__ == "bar"
+        assert Foo.bar.__doc__ == "bar func doc"
         assert "test_functools" in Foo.bar.__module__
 
 
@@ -241,13 +241,13 @@ class InvalidateTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 1)
+        assert f.foo == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(f, "foo")
 
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 2)
+        assert f.foo == 1
+        assert len(called) == 2
 
     def test_invalidate_attribute_twice(self):
         # It should be possible to invalidate a lazy_property attribute
@@ -261,14 +261,14 @@ class InvalidateTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 1)
+        assert f.foo == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(f, "foo")
         lazy_property.invalidate(f, "foo")  # Nothing happens
 
-        self.assertEqual(f.foo, 1)
-        self.assertEqual(len(called), 2)
+        assert f.foo == 1
+        assert len(called) == 2
 
     def test_invalidate_uncalled_attribute(self):
         # It should be possible to invalidate an empty attribute
@@ -282,7 +282,7 @@ class InvalidateTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(len(called), 0)
+        assert len(called) == 0
         lazy_property.invalidate(f, "foo")  # Nothing happens
 
     def test_invalidate_private_attribute(self):
@@ -299,13 +299,13 @@ class InvalidateTests(TestCase):
                 return self.__foo
 
         f = Foo()
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(len(called), 1)
+        assert f.get_foo() == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(f, "__foo")
 
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(len(called), 2)
+        assert f.get_foo() == 1
+        assert len(called) == 2
 
     def test_invalidate_mangled_attribute(self):
         # It should be possible to invalidate a private lazy_property attribute
@@ -322,13 +322,13 @@ class InvalidateTests(TestCase):
                 return self.__foo
 
         f = Foo()
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(len(called), 1)
+        assert f.get_foo() == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(f, "_Foo__foo")
 
-        self.assertEqual(f.get_foo(), 1)
-        self.assertEqual(len(called), 2)
+        assert f.get_foo() == 1
+        assert len(called) == 2
 
     def test_invalidate_reserved_attribute(self):
         # It should be possible to invalidate a reserved lazy_property attribute.
@@ -341,13 +341,13 @@ class InvalidateTests(TestCase):
                 return 1
 
         f = Foo()
-        self.assertEqual(f.__foo__, 1)
-        self.assertEqual(len(called), 1)
+        assert f.__foo__ == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(f, "__foo__")
 
-        self.assertEqual(f.__foo__, 1)
-        self.assertEqual(len(called), 2)
+        assert f.__foo__ == 1
+        assert len(called) == 2
 
     def test_invalidate_nonlazy_attribute(self):
         # Invalidating an attribute that is not lazy_property should
@@ -447,13 +447,13 @@ class InvalidateSubclassTests(TestCase):
                 return 1
 
         b = Bar()
-        self.assertEqual(b.bar, 1)
-        self.assertEqual(len(called), 1)
+        assert b.bar == 1
+        assert len(called) == 1
 
         cached.invalidate(b, "bar")
 
-        self.assertEqual(b.bar, 1)
-        self.assertEqual(len(called), 2)
+        assert b.bar == 1
+        assert len(called) == 2
 
     def test_invalidate_attribute_twice(self):
         # It should be possible to invalidate a cached attribute
@@ -467,14 +467,14 @@ class InvalidateSubclassTests(TestCase):
                 return 1
 
         b = Bar()
-        self.assertEqual(b.bar, 1)
-        self.assertEqual(len(called), 1)
+        assert b.bar == 1
+        assert len(called) == 1
 
         cached.invalidate(b, "bar")
         cached.invalidate(b, "bar")  # Nothing happens
 
-        self.assertEqual(b.bar, 1)
-        self.assertEqual(len(called), 2)
+        assert b.bar == 1
+        assert len(called) == 2
 
     def test_invalidate_uncalled_attribute(self):
         # It should be possible to invalidate an empty attribute
@@ -488,7 +488,7 @@ class InvalidateSubclassTests(TestCase):
                 return 1
 
         b = Bar()
-        self.assertEqual(len(called), 0)
+        assert len(called) == 0
         cached.invalidate(b, "bar")  # Nothing happens
 
     def test_invalidate_private_attribute(self):
@@ -505,13 +505,13 @@ class InvalidateSubclassTests(TestCase):
                 return self.__bar
 
         b = Bar()
-        self.assertEqual(b.get_bar(), 1)
-        self.assertEqual(len(called), 1)
+        assert b.get_bar() == 1
+        assert len(called) == 1
 
         cached.invalidate(b, "__bar")
 
-        self.assertEqual(b.get_bar(), 1)
-        self.assertEqual(len(called), 2)
+        assert b.get_bar() == 1
+        assert len(called) == 2
 
     def test_invalidate_mangled_attribute(self):
         # It should be possible to invalidate a private cached attribute
@@ -528,13 +528,13 @@ class InvalidateSubclassTests(TestCase):
                 return self.__bar
 
         b = Bar()
-        self.assertEqual(b.get_bar(), 1)
-        self.assertEqual(len(called), 1)
+        assert b.get_bar() == 1
+        assert len(called) == 1
 
         cached.invalidate(b, "_Bar__bar")
 
-        self.assertEqual(b.get_bar(), 1)
-        self.assertEqual(len(called), 2)
+        assert b.get_bar() == 1
+        assert len(called) == 2
 
     def test_invalidate_reserved_attribute(self):
         # It should be possible to invalidate a reserved cached attribute.
@@ -547,13 +547,13 @@ class InvalidateSubclassTests(TestCase):
                 return 1
 
         b = Bar()
-        self.assertEqual(b.__bar__, 1)
-        self.assertEqual(len(called), 1)
+        assert b.__bar__ == 1
+        assert len(called) == 1
 
         cached.invalidate(b, "__bar__")
 
-        self.assertEqual(b.__bar__, 1)
-        self.assertEqual(len(called), 2)
+        assert b.__bar__ == 1
+        assert len(called) == 2
 
     def test_invalidate_uncached_attribute(self):
         # Invalidating an attribute that is not cached should
@@ -665,13 +665,13 @@ class InvalidateSubclassTests(TestCase):
                 return 1
 
         b = Bar()
-        self.assertEqual(b.bar, 1)
-        self.assertEqual(len(called), 1)
+        assert b.bar == 1
+        assert len(called) == 1
 
         lazy_property.invalidate(b, "bar")
 
-        self.assertEqual(b.bar, 1)
-        self.assertEqual(len(called), 2)
+        assert b.bar == 1
+        assert len(called) == 2
 
 
 class AssertExceptionTests(TestCase):
@@ -759,7 +759,7 @@ class TimeoutTest(unittest.TestCase):
                 time.sleep(2)
             assert False, "Did not timeout!"
         except TimeoutError as ex:
-            self.assertEqual(ex.message, "timeout!")
+            assert ex.message == "timeout!"
 
 
 class ProfMainTest(unittest.TestCase):
