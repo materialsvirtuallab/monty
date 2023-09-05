@@ -43,9 +43,9 @@ class TreeTest(unittest.TestCase):
     def test_tree(self):
         x = tree()
         x["a"]["b"]["c"]["d"] = 1
-        self.assertIn("b", x["a"])
-        self.assertNotIn("c", x["a"])
-        self.assertIn("c", x["a"]["b"])
+        assert "b" in x["a"]
+        assert "c" not in x["a"]
+        assert "c" in x["a"]["b"]
         assert x["a"]["b"]["c"]["d"] == 1
 
 

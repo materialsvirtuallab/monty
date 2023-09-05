@@ -222,11 +222,11 @@ class LazyTests(TestCase):
 
         self.assertEqual(Foo.foo.__name__, "foo")
         self.assertEqual(Foo.foo.__doc__, "foo func doc")
-        self.assertIn("test_functools", Foo.foo.__module__)
+        assert "test_functools" in Foo.foo.__module__
 
         self.assertEqual(Foo.bar.__name__, "bar")
         self.assertEqual(Foo.bar.__doc__, "bar func doc")
-        self.assertIn("test_functools", Foo.bar.__module__)
+        assert "test_functools" in Foo.bar.__module__
 
 
 class InvalidateTests(TestCase):
