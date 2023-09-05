@@ -1,7 +1,7 @@
 [![GitHub license](https://img.shields.io/github/license/materialsvirtuallab/monty)](https://github.com/materialsvirtuallab/monty/blob/main/LICENSE)
 [![Linting](https://github.com/materialsvirtuallab/monty/workflows/Linting/badge.svg)](https://github.com/materialsvirtuallab/monty/workflows/Linting/badge.svg)
 [![Testing](https://github.com/materialsvirtuallab/monty/workflows/Testing/badge.svg)](https://github.com/materialsvirtuallab/monty/workflows/Testing/badge.svg)
-[![Downloads](https://pepy.tech/badge/monty)](https://pepy.tech/project/monty)
+[![Downloads](https://static.pepy.tech/badge/monty)](https://pepy.tech/project/monty)
 [![codecov](https://codecov.io/gh/materialsvirtuallab/monty/branch/master/graph/badge.svg?token=QdfT2itxgu)](https://codecov.io/gh/materialsvirtuallab/monty)
 
 # Monty: Python Made Even Easier
