@@ -144,7 +144,3 @@ class TestFileLock:
 
     def teardown_method(self):
         self.lock.release()
-
-
-if __name__ == "__main__":
-    unittest.main()

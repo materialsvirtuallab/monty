@@ -1,5 +1,3 @@
-import unittest
-
 from monty.math import nCr, nPr
 
 
@@ -9,7 +7,3 @@ class TestFunc:
 
     def test_deprecated_property(self):
         assert nPr(4, 2) == 12
-
-
-if __name__ == "__main__":
-    unittest.main()

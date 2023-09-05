@@ -1,5 +1,3 @@
-import unittest
-
 from monty.inspect import all_subclasses, caller_name, find_top_pyfile
 
 
@@ -27,7 +25,3 @@ class TestInspect:
 
     def test_all_subclasses(self):
         assert all_subclasses(LittleCatA) == [LittleCatB, LittleCatD]
-
-
-if __name__ == "__main__":
-    unittest.main()

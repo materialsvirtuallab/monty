@@ -4,7 +4,6 @@ TODO: Modify unittest doc.
 
 import random
 import sys
-import unittest
 
 from monty.string import remove_non_ascii, unicode2str
 
@@ -21,7 +20,3 @@ class TestFunc:
             assert type(unicode2str("a")) == str
         else:
             assert type(unicode2str("a")) == str
-
-
-if __name__ == "__main__":
-    unittest.main()

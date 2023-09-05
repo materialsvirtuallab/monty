@@ -15,7 +15,3 @@ class FuncCase(unittest.TestCase):
         assert len(results) == 10000
         assert results[0] == 0
         assert results[400] == 400
-
-
-if __name__ == "__main__":
-    unittest.main()

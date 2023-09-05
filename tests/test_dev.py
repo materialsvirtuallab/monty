@@ -137,7 +137,3 @@ class TestDecorator:
 
     def test_install_except_hook(self):
         install_excepthook()
-
-
-if __name__ == "__main__":
-    unittest.main()

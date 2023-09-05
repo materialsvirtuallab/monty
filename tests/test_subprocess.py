@@ -1,5 +1,3 @@
-import unittest
-
 from monty.subprocess import Command
 
 
@@ -16,7 +14,3 @@ class TestCommand:
         sleep05.run(timeout=0.1)
         assert sleep05.retcode != 0
         assert sleep05.killed
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -1,5 +1,4 @@
 import logging
-import unittest
 from io import StringIO
 
 from monty.logging import logged
@@ -15,7 +14,3 @@ class TestFunc:
         s = StringIO()
         logging.basicConfig(level=logging.DEBUG, stream=s)
         add(1, 2)
-
-
-if __name__ == "__main__":
-    unittest.main()

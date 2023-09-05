@@ -1,5 +1,3 @@
-import unittest
-
 from monty.fnmatch import WildCard
 
 
@@ -8,7 +6,3 @@ class TestFunc:
         wc = WildCard("*.pdf")
         assert wc.match("A.pdf")
         assert not wc.match("A.pdg")
-
-
-if __name__ == "__main__":
-    unittest.main()

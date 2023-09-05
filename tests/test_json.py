@@ -5,7 +5,6 @@ import datetime
 import json
 import os
 import pathlib
-import unittest
 from enum import Enum
 
 import numpy as np
@@ -710,7 +709,3 @@ class TestJson:
         str_ = json.dumps(ndc, cls=MontyEncoder)
         ndc2 = json.loads(str_, cls=MontyDecoder)
         assert isinstance(ndc2, NestedDataClass)
-
-
-if __name__ == "__main__":
-    unittest.main()

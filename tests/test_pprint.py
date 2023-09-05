@@ -1,5 +1,3 @@
-import unittest
-
 from monty.pprint import draw_tree, pprint_table
 
 
@@ -35,7 +33,3 @@ class TestDrawTree:
         )
 
         print(draw_tree(root))
-
-
-if __name__ == "__main__":
-    unittest.main()

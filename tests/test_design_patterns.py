@@ -1,5 +1,3 @@
-import unittest
-
 from monty.design_patterns import cached_class, singleton
 
 
@@ -43,7 +41,3 @@ class TestCachedClass:
     #     a = A(2)
     #     o = pickle.dumps(a)
     #     assert a == pickle.loads(o)
-
-
-if __name__ == "__main__":
-    unittest.main()

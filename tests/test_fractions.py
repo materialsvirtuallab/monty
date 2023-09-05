@@ -1,5 +1,3 @@
-import unittest
-
 import pytest
 
 from monty.fractions import gcd, gcd_float, lcm
@@ -15,7 +13,3 @@ class TestFunc:
     def test_gcd_float(self):
         vs = [6.2, 12.4, 15.5 + 5e-9]
         assert gcd_float(vs, 1e-8) == pytest.approx(3.1)
-
-
-if __name__ == "__main__":
-    unittest.main()

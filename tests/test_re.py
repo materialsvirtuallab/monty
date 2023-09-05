@@ -1,5 +1,4 @@
 import os
-import unittest
 
 from monty.re import regrep
 
@@ -28,7 +27,3 @@ class TestRegrep:
         )
         assert len(matches["1"]) == 1
         assert len(matches["3"]) == 11
-
-
-if __name__ == "__main__":
-    unittest.main()

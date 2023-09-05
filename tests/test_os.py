@@ -1,5 +1,4 @@
 import os
-import unittest
 
 import pytest
 
@@ -46,7 +45,3 @@ class TestMakedirs_p:
 
     def teardown_method(self):
         os.rmdir(self.test_dir_path)
-
-
-if __name__ == "__main__":
-    unittest.main()

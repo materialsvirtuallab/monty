@@ -83,7 +83,3 @@ class TestSerial:
             with open("test_file.json") as f:
                 reloaded = json.loads(f.read())
             assert reloaded["test"] == 1
-
-
-if __name__ == "__main__":
-    unittest.main()

@@ -164,7 +164,3 @@ class TestRemove:
         assert not os.path.isfile(tempf)
         assert not os.path.isdir(tempdir)
         assert not os.path.islink(templink)
-
-
-if __name__ == "__main__":
-    unittest.main()
