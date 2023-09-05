@@ -16,7 +16,7 @@ from monty.tempfile import ScratchDir
 
 class TestSerial:
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         # Cleans up test files if a test fails
         files_to_clean_up = glob.glob("monte_test.*")
         for fn in files_to_clean_up:
