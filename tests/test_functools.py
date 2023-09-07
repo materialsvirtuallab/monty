@@ -7,67 +7,11 @@ import pytest
 from monty.functools import (
     TimeoutError,
     lazy_property,
-    lru_cache,
     prof_main,
     return_if_raise,
     return_none_if_raise,
     timeout,
 )
-
-
-class TestLRUCache:
-    def test_function(self):
-        @lru_cache(2, typed=True)
-        def cached_func(a, b, c=3):
-            return a + b + c
-
-        # call a few times to get some stats
-        assert cached_func(1, 2, c=4) == 7
-        assert cached_func(3, 2) == 8
-        assert cached_func(3, 2) == 8
-        assert cached_func(1, 2, c=4) == 7
-        assert cached_func(4, 2) == 9
-        assert cached_func(4, 2) == 9
-        assert cached_func(3, 2) == 8
-        assert cached_func(1, 2) == 6
-
-        assert cached_func.cache_info().hits == 3
-        assert cached_func.cache_info().misses == 5
-
-    def test_class_method(self):
-        class TestClass:
-            @lru_cache(10)
-            def cached_func(self, x):
-                return x
-
-        a = TestClass()
-        b = TestClass()
-
-        assert a.cached_func(1) == 1
-        assert b.cached_func(2) == 2
-        assert b.cached_func(3) == 3
-        assert a.cached_func(3) == 3
-        assert a.cached_func(1) == 1
-
-        assert a.cached_func.cache_info().hits == 1
-        assert a.cached_func.cache_info().misses == 4
-
-        class TestClass2:
-            @lru_cache(None)
-            def cached_func(self, x):
-                return x
-
-        a = TestClass2()
-        b = TestClass2()
-
-        assert a.cached_func(1) == 1
-        assert b.cached_func(2) == 2
-        assert b.cached_func(3) == 3
-        assert a.cached_func(3) == 3
-        assert a.cached_func(1) == 1
-
-        assert a.cached_func.cache_info().hits == 1
-        assert a.cached_func.cache_info().misses == 4
 
 
 class TestLazy:
