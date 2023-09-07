@@ -4,7 +4,6 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
 import functools
-import inspect
 import logging
 import multiprocessing
 import os
@@ -18,8 +17,7 @@ logger = logging.getLogger(__name__)
 
 def deprecated(replacement=None, message=None, category=FutureWarning):
     """
-    Decorator to mark classes or functions as deprecated,
-    with a possible replacement.
+    Decorator to mark classes or functions as deprecated, with a possible replacement.
 
     Args:
         replacement (callable): A replacement class or method.
@@ -50,23 +48,12 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
         return msg
 
     def deprecated_decorator(old):
-        if inspect.isclass(old):
+        def wrapped(*args, **kwargs):
+            msg = craft_message(old, replacement, message)
+            warnings.warn(msg, category=category, stacklevel=2)
+            return old(*args, **kwargs)
 
-            class _DecoratedClass(old):
-                def __init__(self, *args, **kwargs):
-                    msg = craft_message(old, replacement, message)
-                    warnings.warn(msg, category=category, stacklevel=2)
-                    super().__init__(*args, **kwargs)
-
-            return _DecoratedClass
-        else:
-
-            def wrapped(*args, **kwargs):
-                msg = craft_message(old, replacement, message)
-                warnings.warn(msg, category=category, stacklevel=2)
-                return old(*args, **kwargs)
-
-            return wrapped
+        return wrapped
 
     return deprecated_decorator
 

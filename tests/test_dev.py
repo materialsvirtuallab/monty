@@ -105,13 +105,8 @@ class TestDecorator:
             def classmethod_b(self):
                 return "b"
 
-        with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
-            # Trigger a warning.
+        with pytest.warns(DeprecationWarning):
             assert A().classmethod_b() == "b"
-            # Verify some things
-            assert issubclass(w[-1].category, DeprecationWarning)
 
     def test_requires(self):
         try:
