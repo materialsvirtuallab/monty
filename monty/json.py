@@ -279,9 +279,7 @@ class MSONable:
 
         return core_schema.json_or_python_schema(
             json_schema=s,
-            python_schema=s,
-            serialization=core_schema.plain_serializer_function_ser_schema(lambda instance: instance.as_dict()),
-        )
+            python_schema=s)
 
     @classmethod
     def _generic_json_schema(cls):
