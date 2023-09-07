@@ -277,11 +277,7 @@ class MSONable:
 
         s = core_schema.general_plain_validator_function(cls.validate_monty_v2)
 
-        return core_schema.json_or_python_schema(
-            json_schema=s,
-            python_schema=s,
-            serialization=core_schema.plain_serializer_function_ser_schema(lambda instance: instance.as_dict()),
-        )
+        return core_schema.json_or_python_schema(json_schema=s, python_schema=s)
 
     @classmethod
     def _generic_json_schema(cls):
