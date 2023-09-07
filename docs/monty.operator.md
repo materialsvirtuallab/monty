@@ -8,11 +8,10 @@ nav_exclude: true
 
 Useful additional functions for operators
 
+## monty.operator.operator_from_str(op)
 
-### monty.operator.operator_from_str(op)
 Return the operator associated to the given string op.
 
 
 * **Raises**
-
-    **KeyError** –
+**KeyError** –

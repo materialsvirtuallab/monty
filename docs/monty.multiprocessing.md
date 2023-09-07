@@ -8,14 +8,13 @@ nav_exclude: true
 
 Multiprocessing utilities.
 
+## monty.multiprocessing.imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, \*args, \*\*kwargs)
 
-### monty.multiprocessing.imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, \*args, \*\*kwargs)
 A wrapper around Pool.imap. Creates a Pool with nprocs and then runs a f
 unction over an iterable with progress bar.
 
 
 * **Parameters**
-
 
     * **nprocs** – Number of processes
 
@@ -32,7 +31,5 @@ unction over an iterable with progress bar.
     * **kwargs** – Passthrough to Pool.imap
 
 
-
 * **Returns**
-
-    Results of Pool.imap.
+Results of Pool.imap.

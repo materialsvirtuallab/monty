@@ -8,27 +8,27 @@ nav_exclude: true
 
 Some common design patterns such as singleton and cached classes.
 
+## *class* monty.design_patterns.NullFile()
 
-### _class_ monty.design_patterns.NullFile()
 Bases: `object`
 
 A file object that is associated to /dev/null.
 
 no-op
 
+## *class* monty.design_patterns.NullStream()
 
-### _class_ monty.design_patterns.NullStream()
 Bases: `object`
 
 A fake stream with a no-op write.
 
+### write(\*args)
 
-#### write(\*args)
 Does nothing…
 :param args:
 
+## monty.design_patterns.cached_class(klass: type[Klass])
 
-### monty.design_patterns.cached_class(klass: type[Klass])
 Decorator to cache class instances by constructor arguments.
 This results in a class that behaves like a singleton for each
 set of constructor arguments, ensuring efficiency.
@@ -44,8 +44,8 @@ so are always hashable, but if any arguments (keyword
 or positional) are non-hashable, that set of arguments
 is not cached.
 
+## monty.design_patterns.singleton(cls)
 
-### monty.design_patterns.singleton(cls)
 This decorator can be used to create a singleton out of a class.
 
 Usage:

@@ -8,13 +8,13 @@ nav_exclude: true
 
 Useful additional functions to help get information about live objects
 
+## monty.inspect.all_subclasses(cls)
 
-### monty.inspect.all_subclasses(cls)
 Given a class cls, this recursive function returns a list with
 all subclasses, subclasses of subclasses, and so on.
 
+## monty.inspect.caller_name(skip=2)
 
-### monty.inspect.caller_name(skip=2)
 Get a name of a caller in the format module.class.method
 
 skip specifies how many levels of stack to skip while getting caller
@@ -28,6 +28,6 @@ Taken from:
 
 Public Domain, i.e. feel free to copy/paste
 
+## monty.inspect.find_top_pyfile()
 
-### monty.inspect.find_top_pyfile()
 This function inspects the Cpython frame to find the path of the script.

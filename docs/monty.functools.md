@@ -8,20 +8,18 @@ nav_exclude: true
 
 functools, especially backported from Python 3.
 
+## *exception* monty.functools.TimeoutError(message)
 
-### _exception_ monty.functools.TimeoutError(message)
 Bases: `Exception`
 
 Exception class for timeouts.
 
 
 * **Parameters**
+**message** – Error message
 
-    **message** – Error message
+## *class* monty.functools.lazy_property(func)
 
-
-
-### _class_ monty.functools.lazy_property(func)
 Bases: `object`
 
 lazy_property descriptor
@@ -31,19 +29,17 @@ are evaluated on first use.
 
 
 * **Parameters**
+**func** – Function to decorate.
 
-    **func** – Function to decorate.
+### *classmethod* invalidate(inst, name)
 
-
-
-#### _classmethod_ invalidate(inst, name)
 Invalidate a lazy attribute.
 
 This obviously violates the lazy contract. A subclass of lazy
 may however have a contract where invalidation is appropriate.
 
+## monty.functools.lru_cache(maxsize=128, typed=False)
 
-### monty.functools.lru_cache(maxsize=128, typed=False)
 Least-recently-used cache decorator, which is a backport of the same
 function in Python >= 3.2.
 
@@ -58,12 +54,12 @@ Arguments to the cached function must be hashable.
 
 View the cache statistics named tuple (hits, misses, maxsize, currsize)
 with f.cache_info().  Clear the cache and statistics with f.cache_clear().
-Access the underlying function with f.__wrapped__.
+Access the underlying function with f.**wrapped**.
 
 See:  [http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used](http://en.wikipedia.org/wiki/Cache_algorithms#Least_Recently_Used)
 
+## monty.functools.prof_main(main)
 
-### monty.functools.prof_main(main)
 Decorator for profiling main programs.
 
 Profiling is activated by prepending the command line options
@@ -80,14 +76,18 @@ The decorated main accepts two new arguments:
 
 > prof_file: Name of the output file with profiling data
 
->     If not given, a temporary file is created.
+> ```none
+> If not given, a temporary file is created.
+> ```
 
 > sortby: Profiling data are sorted according to this value.
 
->     default is “time”. See sort_stats.
+> ```none
+> default is “time”. See sort_stats.
+> ```
 
+## monty.functools.return_if_raise(exception_tuple, retval_if_exc, disabled=False)
 
-### monty.functools.return_if_raise(exception_tuple, retval_if_exc, disabled=False)
 Decorator for functions, methods or properties. Execute the callable in a
 try block, and return retval_if_exc if one of the exceptions listed in
 exception_tuple is raised (se also `return_node_if_raise`).
@@ -113,15 +113,15 @@ def name(self):
     return self._name
 ```
 
+## monty.functools.return_none_if_raise(exception_tuple, \*, retval_if_exc=None, disabled=False)
 
-### monty.functools.return_none_if_raise(exception_tuple, \*, retval_if_exc=None, disabled=False)
 This decorator returns None if one of the exceptions is raised.
 
 > @return_none_if_raise(ValueError)
 > def method(self):
 
+## *class* monty.functools.timeout(seconds=1, error_message=’Timeout’)
 
-### _class_ monty.functools.timeout(seconds=1, error_message='Timeout')
 Bases: `object`
 
 Timeout function. Use to limit matching to a certain time limit. Note that
@@ -129,29 +129,30 @@ this works only on Unix-based systems as it uses signal. Usage:
 
 try:
 
-    with timeout(3):
+```none
+with timeout(3):
 
-        do_stuff()
+    do_stuff()
+```
 
 except TimeoutError:
 
-    do_something_else()
+```none
+do_something_else()
+```
 
 
 * **Parameters**
-
 
     * **seconds** (*int*) – Allowed time for function in seconds.
 
 
     * **error_message** (*str*) – An error message.
 
+### handle_timeout(signum, frame)
 
-
-#### handle_timeout(signum, frame)
 
 * **Parameters**
-
 
     * **signum** – Return signal from call.
 

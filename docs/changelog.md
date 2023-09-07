@@ -1,5 +1,9 @@
 # Change log
 
+## 2023.9.5
+- Support pathlib.Path in shutil (@arosen93).
+- Pydantic2 support (@munrojm).
+
 ## 2023.8.8
 * Bug fix for decompress_file() to maintain backwards compatibility (@janosh)
 

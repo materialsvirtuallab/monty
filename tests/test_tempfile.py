@@ -7,8 +7,8 @@ from monty.tempfile import ScratchDir
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
-class ScratchDirTest(unittest.TestCase):
-    def setUp(self):
+class TestScratchDir:
+    def setup_method(self):
         self.cwd = os.getcwd()
         os.chdir(test_dir)
         self.scratch_root = os.path.join(test_dir, "..", "..", "tempscratch")
@@ -27,21 +27,21 @@ class ScratchDirTest(unittest.TestCase):
             with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
-            self.assertIn("scratch_text", files)
-            self.assertIn("empty_file.txt", files)
-            self.assertIn("pre_scratch_text", files)
+            assert "scratch_text" in files
+            assert "empty_file.txt" in files
+            assert "pre_scratch_text" in files
 
             # We remove the pre-scratch file.
             os.remove("pre_scratch_text")
 
         # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
+        assert not os.path.exists(d)
         files = os.listdir(".")
-        self.assertIn("scratch_text", files)
+        assert "scratch_text" in files
 
         # We check that the pre-scratch file no longer exists (because it is
         # deleted in the scratch)
-        self.assertNotIn("pre_scratch_text", files)
+        assert "pre_scratch_text" not in files
         os.remove("scratch_text")
 
     def test_with_copy_gzip(self):
@@ -60,7 +60,7 @@ class ScratchDirTest(unittest.TestCase):
         files = os.listdir(os.getcwd())
 
         # Make sure the stratch_text.gz exists
-        self.assertIn("scratch_text.gz", files)
+        assert "scratch_text.gz" in files
         for f in files:
             if f.endswith(".gz") and f not in init_gz:
                 os.remove(f)
@@ -80,20 +80,20 @@ class ScratchDirTest(unittest.TestCase):
             with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
-            self.assertIn("scratch_text", files)
-            self.assertIn("empty_file.txt", files)
-            self.assertIn("pre_scratch_text", files)
+            assert "scratch_text" in files
+            assert "empty_file.txt" in files
+            assert "pre_scratch_text" in files
 
             # We remove the pre-scratch file.
             os.remove("pre_scratch_text")
 
         # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
+        assert not os.path.exists(d)
         files = os.listdir(".")
-        self.assertIn("scratch_text", files)
+        assert "scratch_text" in files
 
         # We check that the pre-scratch file DOES still exists
-        self.assertIn("pre_scratch_text", files)
+        assert "pre_scratch_text" in files
         os.remove("scratch_text")
         os.remove("pre_scratch_text")
 
@@ -106,13 +106,13 @@ class ScratchDirTest(unittest.TestCase):
             with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
-            self.assertIn("scratch_text", files)
-            self.assertNotIn("empty_file.txt", files)
+            assert "scratch_text" in files
+            assert "empty_file.txt" not in files
 
         # Make sure the tempdir is deleted.
-        self.assertFalse(os.path.exists(d))
+        assert not os.path.exists(d)
         files = os.listdir(".")
-        self.assertNotIn("scratch_text", files)
+        assert "scratch_text" not in files
 
     def test_symlink(self):
         if os.name != "nt":
@@ -125,22 +125,22 @@ class ScratchDirTest(unittest.TestCase):
                 with open("scratch_text", "w") as f:
                     f.write("write")
                 files = os.listdir(d)
-                self.assertIn("scratch_text", files)
-                self.assertNotIn("empty_file.txt", files)
+                assert "scratch_text" in files
+                assert "empty_file.txt" not in files
 
             # Make sure the tempdir is deleted.
-            self.assertFalse(os.path.exists(d))
+            assert not os.path.exists(d)
             files = os.listdir(".")
-            self.assertNotIn("scratch_text", files)
+            assert "scratch_text" not in files
 
             # Make sure the symlink is removed
             assert not os.path.islink("scratch_link")
 
     def test_bad_root(self):
         with ScratchDir("bad_groot") as d:
-            self.assertEqual(d, test_dir)
+            assert d == test_dir
 
-    def tearDown(self):
+    def teardown_method(self):
         os.chdir(self.cwd)
         shutil.rmtree(self.scratch_root)
 
