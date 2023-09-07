@@ -649,7 +649,7 @@ class JsonTest(unittest.TestCase):
         test_dict_object = ModelWithMSONable(a=test_object.a.as_dict())
         assert test_dict_object.a.a == test_object.a.a
 
-        assert test_object.schema() == {
+        assert test_object.model_json_schema() == {
             "title": "ModelWithMSONable",
             "type": "object",
             "properties": {
@@ -667,7 +667,7 @@ class JsonTest(unittest.TestCase):
             "required": ["a"],
         }
 
-        d = jsanitize(test_object, strict=True)
+        d = jsanitize(test_object, strict=True, enum_values=True, allow_bson=True)
         assert d == {
             "a": {
                 "@module": "tests.test_json",
