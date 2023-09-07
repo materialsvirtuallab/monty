@@ -3,6 +3,8 @@ import json
 import os
 import unittest
 
+import pytest
+
 try:
     import msgpack
 except ImportError:
@@ -12,9 +14,9 @@ from monty.serialization import dumpfn, loadfn
 from monty.tempfile import ScratchDir
 
 
-class SerialTest(unittest.TestCase):
+class TestSerial:
     @classmethod
-    def tearDownClass(cls):
+    def teardown_class(cls):
         # Cleans up test files if a test fails
         files_to_clean_up = glob.glob("monte_test.*")
         for fn in files_to_clean_up:
@@ -36,34 +38,30 @@ class SerialTest(unittest.TestCase):
             fn = f"monte_test.{ext}"
             dumpfn(d, fn)
             d2 = loadfn(fn)
-            self.assertEqual(
-                d,
-                d2,
-                msg=f"Test file with extension {ext} did not parse correctly",
-            )
+            assert d == d2, f"Test file with extension {ext} did not parse correctly"
             os.remove(fn)
 
         # Test custom kwarg configuration
         dumpfn(d, "monte_test.json", indent=4)
         d2 = loadfn("monte_test.json")
-        self.assertEqual(d, d2)
+        assert d == d2
         os.remove("monte_test.json")
         dumpfn(d, "monte_test.yaml")
         d2 = loadfn("monte_test.yaml")
-        self.assertEqual(d, d2)
+        assert d == d2
         os.remove("monte_test.yaml")
 
         # Check if fmt override works.
         dumpfn(d, "monte_test.json", fmt="yaml")
-        with self.assertRaises(json.decoder.JSONDecodeError):
-            d2 = loadfn("monte_test.json")
+        with pytest.raises(json.decoder.JSONDecodeError):
+            loadfn("monte_test.json")
         d2 = loadfn("monte_test.json", fmt="yaml")
-        self.assertEqual(d, d2)
+        assert d == d2
         os.remove("monte_test.json")
 
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             dumpfn(d, "monte_test.txt", fmt="garbage")
-        with self.assertRaises(TypeError):
+        with pytest.raises(TypeError):
             loadfn("monte_test.txt", fmt="garbage")
 
     @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
@@ -73,7 +71,7 @@ class SerialTest(unittest.TestCase):
         # Test automatic format detection
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
-        self.assertEqual(d, {k: v for k, v in d2.items()})
+        assert d, {k: v for k, v in d2.items()}
         os.remove("monte_test.mpk")
 
         # Test to ensure basename is respected, and not directory
@@ -84,8 +82,4 @@ class SerialTest(unittest.TestCase):
             dumpfn({"test": 1}, fname)
             with open("test_file.json") as f:
                 reloaded = json.loads(f.read())
-            self.assertEqual(reloaded["test"], 1)
-
-
-if __name__ == "__main__":
-    unittest.main()
+            assert reloaded["test"] == 1

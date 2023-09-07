@@ -8,8 +8,8 @@ nav_exclude: true
 
 Temporary directory and file creation utilities.
 
+## *class* monty.tempfile.ScratchDir(rootpath, create_symbolic_link=False, copy_from_current_on_enter=False, copy_to_current_on_exit=False, gzip_on_exit=False, delete_removed_files=True)
 
-### _class_ monty.tempfile.ScratchDir(rootpath, create_symbolic_link=False, copy_from_current_on_enter=False, copy_to_current_on_exit=False, gzip_on_exit=False, delete_removed_files=True)
 Bases: `object`
 
 **NOTE**: With effect from Python 3.2, tempfile.TemporaryDirectory already
@@ -60,38 +60,35 @@ simple pass through, i.e., nothing happens.
 
 * **Parameters**
 
-
     * **rootpath** (*str/Path*) – Path in which to create temp subdirectories.
-    If this is None, no temp directories will be created and
-    this will just be a simple pass through.
+If this is None, no temp directories will be created and
+this will just be a simple pass through.
 
 
     * **create_symbolic_link** (*bool*) – Whether to create a symbolic link in
-    the current working directory to the scratch directory
-    created.
+the current working directory to the scratch directory
+created.
 
 
     * **copy_from_current_on_enter** (*bool*) – Whether to copy all files from
-    the current directory (recursively) to the temp dir at the
-    start, e.g., if input files are needed for performing some
-    actions. Defaults to False.
+the current directory (recursively) to the temp dir at the
+start, e.g., if input files are needed for performing some
+actions. Defaults to False.
 
 
     * **copy_to_current_on_exit** (*bool*) – Whether to copy files from the
-    scratch to the current directory (recursively) at the end. E
-    .g., if output files are generated during the operation.
-    Defaults to False.
+scratch to the current directory (recursively) at the end. E
+.g., if output files are generated during the operation.
+Defaults to False.
 
 
     * **gzip_on_exit** (*bool*) – Whether to gzip the files generated in the
-    ScratchDir before copying them back.
-    Defaults to False.
+ScratchDir before copying them back.
+Defaults to False.
 
 
     * **delete_removed_files** (*bool*) – Whether to delete files in the cwd
-    that are removed from the tmp dir.
-    Defaults to True
+that are removed from the tmp dir.
+Defaults to True
 
-
-
-#### SCR_LINK(_ = 'scratch_link_ )
+### SCR_LINK(_ = ‘scratch_link_ )

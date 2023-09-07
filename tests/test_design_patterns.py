@@ -1,9 +1,7 @@
-import unittest
-
 from monty.design_patterns import cached_class, singleton
 
 
-class SingletonTest(unittest.TestCase):
+class TestSingleton:
     def test_singleton(self):
         @singleton
         class A:
@@ -12,7 +10,7 @@ class SingletonTest(unittest.TestCase):
         a1 = A()
         a2 = A()
 
-        self.assertEqual(id(a1), id(a2))
+        assert id(a1) == id(a2)
 
 
 @cached_class
@@ -30,20 +28,16 @@ class A:
         return (self.val,)
 
 
-class CachedClassTest(unittest.TestCase):
+class TestCachedClass:
     def test_cached_class(self):
         a1a = A(1)
         a1b = A(1)
         a2 = A(2)
 
-        self.assertEqual(id(a1a), id(a1b))
-        self.assertNotEqual(id(a1a), id(a2))
+        assert id(a1a) == id(a1b)
+        assert id(a1a) != id(a2)
 
     # def test_pickle(self):
     #     a = A(2)
     #     o = pickle.dumps(a)
-    #     self.assertEqual(a, pickle.loads(o))
-
-
-if __name__ == "__main__":
-    unittest.main()
+    #     assert a == pickle.loads(o)

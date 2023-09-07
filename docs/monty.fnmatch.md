@@ -8,8 +8,8 @@ nav_exclude: true
 
 This module provides support for Unix shell-style wildcards
 
+## *class* monty.fnmatch.WildCard(wildcard, sep=’|’)
 
-### _class_ monty.fnmatch.WildCard(wildcard, sep='|')
 Bases: `object`
 
 This object provides an easy-to-use interface for filename matching with
@@ -31,18 +31,16 @@ Initializes a WildCard.
 
 * **Parameters**
 
-
     * **wildcard** (*str*) – String of tokens separated by sep. Each token
-    represents a pattern.
+represents a pattern.
 
 
     * **sep** (*str*) – Separator for shell patterns.
 
+### filter(names)
 
-
-#### filter(names)
 Returns a list with the names matching the pattern.
 
+### match(name)
 
-#### match(name)
 Returns True if name matches one of the patterns.

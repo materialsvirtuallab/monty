@@ -8,13 +8,12 @@ nav_exclude: true
 
 Addition math functions.
 
+## monty.math.nCr(n, r)
 
-### monty.math.nCr(n, r)
 Calculates nCr.
 
 
 * **Parameters**
-
 
     * **n** (*int*) – total number of items.
 
@@ -22,19 +21,15 @@ Calculates nCr.
     * **r** (*int*) – items to choose
 
 
-
 * **Returns**
+nCr.
 
-    nCr.
+## monty.math.nPr(n, r)
 
-
-
-### monty.math.nPr(n, r)
 Calculates nPr.
 
 
 * **Parameters**
-
 
     * **n** (*int*) – total number of items.
 
@@ -42,7 +37,5 @@ Calculates nPr.
     * **r** (*int*) – items to permute
 
 
-
 * **Returns**
-
-    nPr.
+nPr.

@@ -1,5 +1,3 @@
-import unittest
-
 from monty.inspect import all_subclasses, caller_name, find_top_pyfile
 
 
@@ -19,15 +17,11 @@ class LittleCatD(LittleCatB):
     pass
 
 
-class InspectTest(unittest.TestCase):
+class TestInspect:
     def test_func(self):
         # Not a real test. Need something better.
-        self.assertTrue(find_top_pyfile())
-        self.assertTrue(caller_name())
+        assert find_top_pyfile()
+        assert caller_name()
 
     def test_all_subclasses(self):
-        self.assertEqual(all_subclasses(LittleCatA), [LittleCatB, LittleCatD])
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert all_subclasses(LittleCatA) == [LittleCatB, LittleCatD]

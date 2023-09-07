@@ -8,8 +8,8 @@ nav_exclude: true
 
 Additional tools for iteration.
 
+## monty.itertools.chunks(items, n)
 
-### monty.itertools.chunks(items, n)
 Yield successive n-sized chunks from a list-like object.
 
 ```python
@@ -20,13 +20,12 @@ Yield successive n-sized chunks from a list-like object.
  (21, 22, 23, 24)]
 ```
 
+## monty.itertools.ilotri(items, diago=True, with_inds=False)
 
-### monty.itertools.ilotri(items, diago=True, with_inds=False)
 A generator that yields the lower triangle of the matrix (items x items)
 
 
 * **Parameters**
-
 
     * **items** – Iterable object with elements [e0, e1, …]
 
@@ -35,7 +34,6 @@ A generator that yields the lower triangle of the matrix (items x items)
 
 
     * **with_inds** – If True, (i,j) (e_i, e_j) is returned else (e_i, e_j)
-
 
 ```python
 >>> for (ij, mate) in ilotri([0,1], with_inds=True):
@@ -45,19 +43,18 @@ ij: (1, 0) mate: (1, 0)
 ij: (1, 1) mate: (1, 1)
 ```
 
+## monty.itertools.iterator_from_slice(s)
 
-### monty.itertools.iterator_from_slice(s)
 Constructs an iterator given a slice object s.
 
 **NOTE**: The function returns an infinite iterator if s.stop is None
 
+## monty.itertools.iuptri(items, diago=True, with_inds=False)
 
-### monty.itertools.iuptri(items, diago=True, with_inds=False)
 A generator that yields the upper triangle of the matrix (items x items)
 
 
 * **Parameters**
-
 
     * **items** – Iterable object with elements [e0, e1, …]
 
@@ -66,7 +63,6 @@ A generator that yields the upper triangle of the matrix (items x items)
 
 
     * **with_inds** – If True, (i,j) (e_i, e_j) is returned else (e_i, e_j)
-
 
 ```python
 >>> for (ij, mate) in iuptri([0,1], with_inds=True):

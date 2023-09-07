@@ -8,14 +8,14 @@ nav_exclude: true
 
 Useful collection classes, e.g., tree, frozendict, etc.
 
+## *class* monty.collections.AttrDict(\*args, \*\*kwargs)
 
-### _class_ monty.collections.AttrDict(\*args, \*\*kwargs)
 Bases: `dict`
 
 Allows to access dict keys as obj.foo in addition
 to the traditional way obj[‘foo’]”
 
-### Example
+## Example
 
 ```python
 >>> d = AttrDict(foo=1, bar=2)
@@ -27,46 +27,41 @@ to the traditional way obj[‘foo’]”
 
 * **Parameters**
 
-
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+### copy()
 
-
-#### copy()
 
 * **Returns**
+Copy of AttrDict
 
-    Copy of AttrDict
+## *class* monty.collections.FrozenAttrDict(\*args, \*\*kwargs)
 
-
-
-### _class_ monty.collections.FrozenAttrDict(\*args, \*\*kwargs)
 Bases: `frozendict`
 
 A dictionary that:
 
+```none
+* does not permit changes.
 
-    * does not permit changes.
 
-
-    * Allows to access dict keys as obj.foo in addition
-    to the traditional way obj[‘foo’]
+* Allows to access dict keys as obj.foo in addition
+to the traditional way obj[‘foo’]
+```
 
 
 * **Parameters**
-
 
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+## *class* monty.collections.MongoDict(\*args, \*\*kwargs)
 
-
-### _class_ monty.collections.MongoDict(\*args, \*\*kwargs)
 Bases: `object`
 
 This dict-like object allows one to access the entries in a nested dict as
@@ -91,15 +86,13 @@ e.g MongoDict({“keys”: 1}).keys would be the ABC dict method.
 
 * **Parameters**
 
-
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+## *class* monty.collections.Namespace(\*args, \*\*kwargs)
 
-
-### _class_ monty.collections.Namespace(\*args, \*\*kwargs)
 Bases: `dict`
 
 A dictionary that does not permit to redefine its keys.
@@ -107,30 +100,26 @@ A dictionary that does not permit to redefine its keys.
 
 * **Parameters**
 
-
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+### update(\*args, \*\*kwargs)
 
-
-#### update(\*args, \*\*kwargs)
 
 * **Parameters**
 
-
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+## monty.collections.dict2namedtuple(\*args, \*\*kwargs)
 
-
-### monty.collections.dict2namedtuple(\*args, \*\*kwargs)
 Helper function to create a `namedtuple` from a dictionary.
 
-### Example
+## Example
 
 ```python
 >>> t = dict2namedtuple(foo=1, bar="hello")
@@ -143,6 +132,8 @@ Helper function to create a `namedtuple` from a dictionary.
 ```
 
 **WARNING**:
+
+
 * The order of the items in the namedtuple is not deterministic if
 kwargs are used.
 namedtuples, however, should always be accessed by attribute hence
@@ -152,8 +143,8 @@ this behaviour should not represent a serious problem.
 * Don’t use this function in code in which memory and performance are
 crucial since a dict is needed to instantiate the tuple!
 
+## *class* monty.collections.frozendict(\*args, \*\*kwargs)
 
-### _class_ monty.collections.frozendict(\*args, \*\*kwargs)
 Bases: `dict`
 
 A dictionary that does not permit changes. The naming
@@ -162,36 +153,33 @@ violates PEP8 to be consistent with standard Python’s “frozenset” naming.
 
 * **Parameters**
 
-
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+### update(\*args, \*\*kwargs)
 
-
-#### update(\*args, \*\*kwargs)
 
 * **Parameters**
 
-
     * **args** – Passthrough arguments for standard dict.
 
 
     * **kwargs** – Passthrough keyword arguments for standard dict.
 
+## monty.collections.tree()
 
-
-### monty.collections.tree()
 A tree object, which is effectively a recursive defaultdict that
 adds tree as members.
 
 Usage:
 
-    x = tree()
-    x[‘a’][‘b’][‘c’] = 1
+```none
+x = tree()
+x[‘a’][‘b’][‘c’] = 1
+```
 
 
 * **Returns**
-
-    A tree.
+A tree.
