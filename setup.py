@@ -14,7 +14,7 @@ setup(
     extras_require={
         "yaml": ["ruamel.yaml"],
     },
-    package_data={},
+    package_data={"monty": ["py.typed"]},
     author="Shyue Ping Ong",
     author_email="ongsp@ucsd.edu",
     maintainer="Shyue Ping Ong",
