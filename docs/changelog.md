@@ -1,5 +1,9 @@
 # Change log
 
+## 2023.9.25
+
+- Improved pydantic2 support (@munrojm).
+
 ## 2023.9.5
 
 - Support pathlib.Path in shutil (@Andrew-S-Rosen).
