@@ -10,7 +10,7 @@ with open(os.path.join(current_dir, "README.md")) as f:
 setup(
     name="monty",
     packages=find_packages(),
-    version="2023.9.5",
+    version="2023.9.25",
     extras_require={
         "yaml": ["ruamel.yaml"],
     },

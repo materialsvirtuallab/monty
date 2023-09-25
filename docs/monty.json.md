@@ -133,7 +133,7 @@ are encountered.
 If `strict` is false (true is the default), then control
 characters will be allowed inside strings.  Control characters in
 this context are those with character codes in the 0-31 range,
-including `'\\\\t'` (tab), `'\\\\n'`, `'\\\\r'` and `'\\\\0'`.
+including `'\\\\\\\\t'` (tab), `'\\\\\\\\n'`, `'\\\\\\\\r'` and `'\\\\\\\\0'`.
 
 # Add it as a *cls* keyword when using json.load
 
