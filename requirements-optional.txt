@@ -7,4 +7,4 @@ pydantic==2.4.1
 pandas==2.1.1
 orjson==3.9.7
 types-orjson==3.6.2
-types-requests==2.31.0.5
+types-requests==2.31.0.6
