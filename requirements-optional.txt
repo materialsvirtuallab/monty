@@ -1,6 +1,6 @@
 numpy==1.26.0
 ruamel.yaml==0.17.32
-msgpack==1.0.6
+msgpack==1.0.7
 tqdm==4.66.1
 pymongo==4.5.0
 pydantic==2.4.1
