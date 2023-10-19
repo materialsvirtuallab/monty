@@ -481,7 +481,8 @@ class MontyDecoder(json.JSONDecoder):
                         if hasattr(cls_, "from_dict"):
                             return cls_.from_dict(data)
                         if pydantic is not None and issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
-                            return cls_(**data)
+                            d = {k: self.process_decoded(v) for k, v in data.items()}
+                            return cls_(**d)
                         if (
                             dataclasses is not None
                             and (not issubclass(cls_, MSONable))
