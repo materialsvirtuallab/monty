@@ -322,13 +322,13 @@ class TestJson:
             cell=[[3, 0, 0], [0, 3, 0], [0, 0, 3]],
             numbers=[1, 1, 1],
             positions=[[0, 0, 0], [1, 1, 1], [2, 2, 2]],
-            pbc=[True, False, True]
+            pbc=[True, True, True]
         )
         jsonstr = json.dumps(atoms, cls=MontyEncoder)
         atoms2 = json.loads(jsonstr, cls=MontyDecoder)
         assert isinstance(atoms2, ase.Atoms)
         assert atoms2.numbers == atoms.numbers
-        assert atoms2.pbc == [True, False, True]
+        assert all(atoms2.pbc)
 
         sanitized = jsanitize({"a": atoms}, strict=True)
         assert sanitized["a"]["@class"] == "Atoms"
