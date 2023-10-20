@@ -59,6 +59,11 @@ try:
 except ImportError:
     torch = None  # type: ignore
 
+try:
+    import ase
+except ImportError:
+    ase = None  # type: ignore
+
 __version__ = "3.0.0"
 
 
@@ -374,6 +379,9 @@ class MontyEncoder(json.JSONEncoder):
                     "data": o.to_json(default_handler=MontyEncoder().encode),
                 }
 
+        if ase is not None and isinstance(o, ase.Atoms):
+            return {"@module": "ase", "@class": "Atoms", "data": MontyEncoder().encode(o.todict())}
+
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
                 return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
@@ -463,7 +471,31 @@ class MontyDecoder(json.JSONDecoder):
                 classname = None
 
             if classname:
-                if modname and modname not in ["bson.objectid", "numpy", "pandas", "torch"]:
+                if torch is not None and modname == "torch" and classname == "Tensor":
+                    if "Complex" in d["dtype"]:
+                        return torch.tensor(  # pylint: disable=E1101
+                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                        ).type(d["dtype"])
+                    return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
+                elif np is not None and modname == "numpy" and classname == "array":
+                    if d["dtype"].startswith("complex"):
+                        return np.array(
+                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
+                            dtype=d["dtype"],
+                        )
+                    return np.array(d["data"], dtype=d["dtype"])
+                elif pd is not None and modname == "pandas":
+                    if classname == "DataFrame":
+                        decoded_data = MontyDecoder().decode(d["data"])
+                        return pd.DataFrame(decoded_data)
+                    if classname == "Series":
+                        decoded_data = MontyDecoder().decode(d["data"])
+                        return pd.Series(decoded_data)
+                elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
+                    return bson.objectid.ObjectId(d["oid"])
+                elif ase is not None and modname == "ase" and classname == "Atoms":
+                    return ase.Atoms.fromdict(MontyDecoder().decode(d["data"]))
+                elif modname:
                     if modname == "datetime" and classname == "datetime":
                         try:
                             dt = datetime.datetime.strptime(d["string"], "%Y-%m-%d %H:%M:%S.%f")
@@ -489,28 +521,6 @@ class MontyDecoder(json.JSONDecoder):
                         ):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
-                elif torch is not None and modname == "torch" and classname == "Tensor":
-                    if "Complex" in d["dtype"]:
-                        return torch.tensor(  # pylint: disable=E1101
-                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
-                        ).type(d["dtype"])
-                    return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
-                elif np is not None and modname == "numpy" and classname == "array":
-                    if d["dtype"].startswith("complex"):
-                        return np.array(
-                            [np.array(r) + np.array(i) * 1j for r, i in zip(*d["data"])],
-                            dtype=d["dtype"],
-                        )
-                    return np.array(d["data"], dtype=d["dtype"])
-                elif pd is not None and modname == "pandas":
-                    if classname == "DataFrame":
-                        decoded_data = MontyDecoder().decode(d["data"])
-                        return pd.DataFrame(decoded_data)
-                    if classname == "Series":
-                        decoded_data = MontyDecoder().decode(d["data"])
-                        return pd.Series(decoded_data)
-                elif (bson is not None) and modname == "bson.objectid" and classname == "ObjectId":
-                    return bson.objectid.ObjectId(d["oid"])
 
             return {self.process_decoded(k): self.process_decoded(v) for k, v in d.items()}
 
@@ -583,6 +593,14 @@ def jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_
         return obj.item()
     if pd is not None and isinstance(obj, (pd.Series, pd.DataFrame)):
         return obj.to_dict()
+    if ase is not None and isinstance(obj, ase.Atoms):
+        return jsanitize(
+            MontyEncoder().default(obj),
+            strict=strict,
+            allow_bson=allow_bson,
+            enum_values=enum_values,
+            recursive_msonable=recursive_msonable,
+        )
     if isinstance(obj, dict):
         return {
             str(k): jsanitize(

@@ -9,6 +9,7 @@ from enum import Enum
 
 import numpy as np
 import pandas as pd
+import ase
 import pytest
 import torch
 from bson.objectid import ObjectId
@@ -315,6 +316,23 @@ class TestJson:
         assert isinstance(t2, torch.Tensor)
         assert t2.type() == t.type()
         assert np.array_equal(t2, t)
+
+    def test_ase(self):
+        atoms = ase.Atoms(
+            cell=[[3, 0, 0], [0, 3, 0], [0, 0, 3]],
+            numbers=[1, 1, 1],
+            positions=[[0, 0, 0], [1, 1, 1], [2, 2, 2]],
+            pbc=[True, False, True]
+        )
+        jsonstr = json.dumps(atoms, cls=MontyEncoder)
+        atoms2 = json.loads(jsonstr, cls=MontyDecoder)
+        assert isinstance(atoms2, ase.Atoms)
+        assert atoms2.numbers == atoms.numbers
+        assert atoms2.pbc == [True, False, True]
+
+        sanitized = jsanitize({"a": atoms}, strict=True)
+        assert sanitized["a"]["@class"] == "Atoms"
+        assert sanitized["a"]["@module"] == "ase"
 
     def test_datetime(self):
         dt = datetime.datetime.now()
