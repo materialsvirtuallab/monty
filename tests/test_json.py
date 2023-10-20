@@ -327,7 +327,7 @@ class TestJson:
         jsonstr = json.dumps(atoms, cls=MontyEncoder)
         atoms2 = json.loads(jsonstr, cls=MontyDecoder)
         assert isinstance(atoms2, ase.Atoms)
-        assert atoms2.numbers == atoms.numbers
+        assert tuple(atoms2.numbers) == tuple(atoms.numbers)
         assert all(atoms2.pbc)
 
         sanitized = jsanitize({"a": atoms}, strict=True)
