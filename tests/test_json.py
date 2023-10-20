@@ -7,9 +7,9 @@ import os
 import pathlib
 from enum import Enum
 
+import ase
 import numpy as np
 import pandas as pd
-import ase
 import pytest
 import torch
 from bson.objectid import ObjectId
@@ -322,7 +322,7 @@ class TestJson:
             cell=[[3, 0, 0], [0, 3, 0], [0, 0, 3]],
             numbers=[1, 1, 1],
             positions=[[0, 0, 0], [1, 1, 1], [2, 2, 2]],
-            pbc=[True, True, True]
+            pbc=[True, True, True],
         )
         jsonstr = json.dumps(atoms, cls=MontyEncoder)
         atoms2 = json.loads(jsonstr, cls=MontyDecoder)
