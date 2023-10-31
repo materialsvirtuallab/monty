@@ -1,10 +1,9 @@
-import multiprocessing
 import unittest
 import warnings
 
 import pytest
 
-from monty.dev import deprecated, get_ncpus, install_excepthook, requires
+from monty.dev import deprecated, install_excepthook, requires
 
 
 class A:
@@ -126,9 +125,6 @@ class TestDecorator:
             return "success"
 
         assert use_unittest() == "success"
-
-    def test_get_ncpus(self):
-        assert get_ncpus() == multiprocessing.cpu_count()
 
     def test_install_except_hook(self):
         install_excepthook()
