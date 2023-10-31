@@ -691,6 +691,37 @@ class TestJson:
         assert isinstance(obj.a, GoodMSONClass)
         assert obj.a.b == 1
 
+        # check that a model that is not validated by pydantic still
+        # gets completely deserialized.
+        global ModelWithDict  # allow model to be deserialized in test
+
+        class ModelWithDict(BaseModel):
+            a: dict
+
+        test_object_with_dict = ModelWithDict(a={"x": GoodMSONClass(1, 1, 1)})
+        d = jsanitize(test_object_with_dict, strict=True, enum_values=True, allow_bson=True)
+        assert d == {
+            "a": {
+                "x": {
+                    "@module": "tests.test_json",
+                    "@class": "GoodMSONClass",
+                    "@version": "0.1",
+                    "a": 1,
+                    "b": 1,
+                    "c": 1,
+                    "d": 1,
+                    "values": [],
+                }
+            },
+            "@module": "tests.test_json",
+            "@class": "ModelWithDict",
+            "@version": "0.1",
+        }
+        obj = MontyDecoder().process_decoded(d)
+        assert isinstance(obj, BaseModel)
+        assert isinstance(obj.a["x"], GoodMSONClass)
+        assert obj.a["x"].b == 1
+
     def test_dataclass(self):
         c = Coordinates([Point(1, 2), Point(3, 4)])
         d = c.as_dict()
