@@ -2,8 +2,6 @@
 Useful additional string functions.
 """
 
-import sys
-
 
 def remove_non_ascii(s):
     """
@@ -17,20 +15,6 @@ def remove_non_ascii(s):
         String with all non-ascii characters removed.
     """
     return "".join(i for i in s if ord(i) < 128)
-
-
-def unicode2str(s):
-    """
-    Forces a unicode to a string in Python 2, but transparently handles
-    Python 3.
-
-    Args:
-        s (str/unicode): Input string / unicode.
-
-    Returns:
-        str in Python 2. Unchanged otherwise.
-    """
-    return s.encode("utf-8") if sys.version_info.major < 3 else s
 
 
 def is_string(s):

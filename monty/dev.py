@@ -5,10 +5,6 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 
 import functools
 import logging
-import multiprocessing
-import os
-import re
-import subprocess
 import sys
 import warnings
 
@@ -100,108 +96,6 @@ class requires:
             return _callable(*args, **kwargs)
 
         return decorated
-
-
-def get_ncpus():
-    """
-    .. note::
-
-        If you are using Python >= 2.7, multiprocessing.cpu_count() already
-        provides the number of CPUs. In fact, this is the first method tried.
-        The purpose of this function is to cater to old Python versions that
-        still exist on many Linux style clusters.
-
-    Number of virtual or physical CPUs on this system, i.e.
-    user/real as output by time(1) when called with an optimally scaling
-    userspace-only program. Return -1 if ncpus cannot be detected. Taken from:
-    http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of-
-    cpus-in-python
-    """
-    # Python 2.6+
-    # May raise NonImplementedError
-    try:
-        return multiprocessing.cpu_count()
-    except (ImportError, NotImplementedError):
-        pass
-
-    # POSIX
-    try:
-        res = int(os.sysconf("SC_NPROCESSORS_ONLN"))
-        if res > 0:
-            return res
-    except (AttributeError, ValueError):
-        pass
-
-    # Windows
-    try:
-        res = int(os.environ["NUMBER_OF_PROCESSORS"])
-        if res > 0:
-            return res
-    except (KeyError, ValueError):
-        pass
-
-    # jython
-    try:
-        from java.lang import Runtime  # pylint: disable=import-outside-toplevel
-
-        runtime = Runtime.getRuntime()
-        res = runtime.availableProcessors()
-        if res > 0:
-            return res
-    except ImportError:
-        pass
-
-    # BSD
-    try:
-        with subprocess.Popen(["sysctl", "-n", "hw.ncpu"], stdout=subprocess.PIPE) as sysctl:
-            scstdout = sysctl.communicate()[0]
-            res = int(scstdout)
-            if res > 0:
-                return res
-    except (OSError, ValueError):
-        pass
-
-    # Linux
-    try:
-        res = open("/proc/cpuinfo").read().count("processor\t:")  # pylint: disable=R1732
-        if res > 0:
-            return res
-    except OSError:
-        pass
-
-    # Solaris
-    try:
-        pseudo_devices = os.listdir("/devices/pseudo/")
-        expr = re.compile("^cpuid@[0-9]+$")
-        res = 0
-        for pd in pseudo_devices:
-            if expr.match(pd) is not None:
-                res += 1
-        if res > 0:
-            return res
-    except OSError:
-        pass
-
-    # Other UNIXes (heuristic)
-    try:
-        try:
-            with open("/var/run/dmesg.boot") as f:
-                dmesg = f.read()
-        except OSError:
-            with subprocess.Popen(["dmesg"], stdout=subprocess.PIPE) as dmesg_process:
-                dmesg = dmesg_process.communicate()[0]
-
-        res = 0
-        while "\ncpu" + str(res) + ":" in dmesg:
-            res += 1
-
-        if res > 0:
-            return res
-    except OSError:
-        pass
-
-    logger.warning("Cannot determine number of CPUs on this system!")
-    return -1
 
 
 def install_excepthook(hook_type="color", **kwargs):
