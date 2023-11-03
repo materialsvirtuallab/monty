@@ -34,9 +34,9 @@ def regrep(filename, patterns, reverse=False, terminate_on_match=False, postproc
     compiled = {k: re.compile(v) for k, v in patterns.items()}
     matches = collections.defaultdict(list)
     gen = reverse_readfile(filename) if reverse else zopen(filename, "rt")
-    for i, l in enumerate(gen):
+    for i, line in enumerate(gen):
         for k, p in compiled.items():
-            m = p.search(l)
+            m = p.search(line)
             if m:
                 matches[k].append([[postprocess(g) for g in m.groups()], -i if reverse else i])
         if terminate_on_match and all(len(matches.get(k, [])) for k in compiled.keys()):
