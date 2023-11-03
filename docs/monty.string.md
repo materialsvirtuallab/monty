@@ -12,16 +12,10 @@ Useful additional string functions.
 
 Returns a string in a box
 
-
 * **Parameters**
-
-    * **msg** – Input string.
-
-
-    * **ch** – Character used to form the box.
-
-
-    * **pad** – Number of characters ch added before and after msg.
+  * **msg** – Input string.
+  * **ch** – Character used to form the box.
+  * **pad** – Number of characters ch added before and after msg.
 
 ```python
 >>> print(boxed("hello", ch="*", pad=2))
@@ -44,8 +38,8 @@ True if s behaves like a string (duck typing test).
 Always return a list of strings, given a string or list of strings as
 input.
 
-
 * **Examples**
+
 ```python
 >>> list_strings('A single string')
 ['A single string']
@@ -63,38 +57,23 @@ input.
 
 ## monty.string.make_banner(s, width=78, mark=’\*’)
 
-
 * **Parameters**
-
-    * **s** – String
-
-
-    * **width** – Width of banner. Defaults to 78.
-
-
-    * **mark** – The mark used to create the banner.
-
-
+  * **s** – String
+  * **width** – Width of banner. Defaults to 78.
+  * **mark** – The mark used to create the banner.
 * **Returns**
-Banner string.
+  Banner string.
 
 ## monty.string.marquee(text=’’, width=78, mark=’\*’)
 
 Return the input string centered in a ‘marquee’.
 
-
 * **Parameters**
-
-    * **text** (*str*) – Input string
-
-
-    * **width** (*int*) – Width of final output string.
-
-
-    * **mark** (*str*) – Character used to fill string.
-
-
+  * **text** (*str*) – Input string
+  * **width** (*int*) – Width of final output string.
+  * **mark** (*str*) – Character used to fill string.
 * **Examples**
+
 ```python
 >>> marquee('A test', width=40)
 '**************** A test ****************'
@@ -113,23 +92,17 @@ marquee(‘A test’,40, ‘ ‘)
 Remove non-ascii characters in a file. Needed when support for non-ASCII
 is not available.
 
-
 * **Parameters**
-**s** (*str*) – Input string
-
-
+  **s** (*str*) – Input string
 * **Returns**
-String with all non-ascii characters removed.
+  String with all non-ascii characters removed.
 
 ## monty.string.unicode2str(s)
 
 Forces a unicode to a string in Python 2, but transparently handles
 Python 3.
 
-
 * **Parameters**
-**s** (*str/unicode*) – Input string / unicode.
-
-
+  **s** (*str/unicode*) – Input string / unicode.
 * **Returns**
-str in Python 2. Unchanged otherwise.
+  str in Python 2. Unchanged otherwise.

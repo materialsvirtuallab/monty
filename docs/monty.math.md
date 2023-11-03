@@ -12,30 +12,18 @@ Addition math functions.
 
 Calculates nCr.
 
-
 * **Parameters**
-
-    * **n** (*int*) – total number of items.
-
-
-    * **r** (*int*) – items to choose
-
-
+  * **n** (*int*) – total number of items.
+  * **r** (*int*) – items to choose
 * **Returns**
-nCr.
+  nCr.
 
 ## monty.math.nPr(n, r)
 
 Calculates nPr.
 
-
 * **Parameters**
-
-    * **n** (*int*) – total number of items.
-
-
-    * **r** (*int*) – items to permute
-
-
+  * **n** (*int*) – total number of items.
+  * **r** (*int*) – items to permute
 * **Returns**
-nPr.
+  nPr.

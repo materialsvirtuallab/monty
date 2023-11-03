@@ -14,25 +14,17 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 Decorator to mark classes or functions as deprecated,
 with a possible replacement.
 
-
 * **Parameters**
-
-    * **replacement** (*callable*) – A replacement class or method.
-
-
-    * **message** (*str*) – A warning message to be displayed.
-
-
-    * **category** (*Warning*) – Choose the category of the warning to issue. Defaults
-to FutureWarning. Another choice can be DeprecationWarning. NOte that
-FutureWarning is meant for end users and is always shown unless silenced.
-DeprecationWarning is meant for developers and is never shown unless
-python is run in developmental mode or the filter is changed. Make
-the choice accordingly.
-
-
+  * **replacement** (*callable*) – A replacement class or method.
+  * **message** (*str*) – A warning message to be displayed.
+  * **category** (*Warning*) – Choose the category of the warning to issue. Defaults
+    to FutureWarning. Another choice can be DeprecationWarning. NOte that
+    FutureWarning is meant for end users and is always shown unless silenced.
+    DeprecationWarning is meant for developers and is never shown unless
+    python is run in developmental mode or the filter is changed. Make
+    the choice accordingly.
 * **Returns**
-Original function, but with a warning to use the updated class.
+  Original function, but with a warning to use the updated class.
 
 ## monty.dev.get_ncpus()
 
@@ -55,9 +47,8 @@ verbose for Ka-Ping Yee’s “cgitb.py” version kwargs are the keyword
 arguments passed to the constructor. See IPython.core.ultratb.py for more
 info.
 
-
 * **Returns**
-0 if hook is installed successfully.
+  0 if hook is installed successfully.
 
 ## *class* monty.dev.requires(condition, message)
 
@@ -80,16 +71,8 @@ def use_scipy():
     print(scipy.majver)
 ```
 
-
 * **Parameters**
-
-    * **condition** – Condition necessary to use the class or function.
-
-
-    * **message** – A message to be displayed if the condition is not True.
-
-
-    * **condition** – A expression returning a bool.
-
-
-    * **message** – Message to display if condition is False.
+  * **condition** – Condition necessary to use the class or function.
+  * **message** – A message to be displayed if the condition is not True.
+  * **condition** – A expression returning a bool.
+  * **message** – Message to display if condition is False.

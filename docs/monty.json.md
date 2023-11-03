@@ -68,13 +68,10 @@ A JSON serializable dict representation of an object.
 
 ### *classmethod* from_dict(d)
 
-
 * **Parameters**
-**d** – Dict representation.
-
-
+  **d** – Dict representation.
 * **Returns**
-MSONable class.
+  MSONable class.
 
 ### to_json()
 
@@ -143,13 +140,10 @@ json.loads(json_string, cls=MontyDecoder)
 
 Overrides decode from JSONDecoder.
 
-
 * **Parameters**
-**s** – string
-
-
+  **s** – string
 * **Returns**
-Object.
+  Object.
 
 ## process_decoded(d)
 
@@ -216,9 +210,8 @@ add them to the output automatically. If the object has no to_dict
 property, the default Python json encoder default method is called.
 :param o: Python object.
 
-
 * **Returns**
-Python dict representation.
+  Python dict representation.
 
 ## monty.json.jsanitize(obj, strict=False, allow_bson=False, enum_values=False, recursive_msonable=False)
 
@@ -227,32 +220,20 @@ some sequence, nested or otherwise, by converting all non-string
 dictionary keys (such as int and float) to strings, and also recursively
 encodes all objects using Monty’s as_dict() protocol.
 
-
 * **Parameters**
-
-    * **obj** – input json-like object.
-
-
-    * **strict** (*bool*) – This parameters sets the behavior when jsanitize
-encounters an object it does not understand. If strict is True,
-jsanitize will try to get the as_dict() attribute of the object. If
-no such attribute is found, an attribute error will be thrown. If
-strict is False, jsanitize will simply call str(object) to convert
-the object to a string representation.
-
-
-    * **allow_bson** (*bool*) – This parameters sets the behavior when jsanitize
-encounters a bson supported type such as objectid and datetime. If
-True, such bson types will be ignored, allowing for proper
-insertion into MongoDB databases.
-
-
-    * **enum_values** (*bool*) – Convert Enums to their values.
-
-
-    * **recursive_msonable** (*bool*) – If True, uses .as_dict() for MSONables regardless
-of the value of strict.
-
-
+  * **obj** – input json-like object.
+  * **strict** (*bool*) – This parameters sets the behavior when jsanitize
+    encounters an object it does not understand. If strict is True,
+    jsanitize will try to get the as_dict() attribute of the object. If
+    no such attribute is found, an attribute error will be thrown. If
+    strict is False, jsanitize will simply call str(object) to convert
+    the object to a string representation.
+  * **allow_bson** (*bool*) – This parameters sets the behavior when jsanitize
+    encounters a bson supported type such as objectid and datetime. If
+    True, such bson types will be ignored, allowing for proper
+    insertion into MongoDB databases.
+  * **enum_values** (*bool*) – Convert Enums to their values.
+  * **recursive_msonable** (*bool*) – If True, uses .as_dict() for MSONables regardless
+    of the value of strict.
 * **Returns**
-Sanitized dict that can be json serialized.
+  Sanitized dict that can be json serialized.

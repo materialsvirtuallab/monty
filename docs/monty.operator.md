@@ -12,6 +12,5 @@ Useful additional functions for operators
 
 Return the operator associated to the given string op.
 
-
 * **Raises**
-**KeyError** –
+  **KeyError** –

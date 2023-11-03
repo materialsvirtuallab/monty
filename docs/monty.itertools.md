@@ -24,16 +24,10 @@ Yield successive n-sized chunks from a list-like object.
 
 A generator that yields the lower triangle of the matrix (items x items)
 
-
 * **Parameters**
-
-    * **items** – Iterable object with elements [e0, e1, …]
-
-
-    * **diago** – False if diagonal matrix elements should be excluded
-
-
-    * **with_inds** – If True, (i,j) (e_i, e_j) is returned else (e_i, e_j)
+  * **items** – Iterable object with elements [e0, e1, …]
+  * **diago** – False if diagonal matrix elements should be excluded
+  * **with_inds** – If True, (i,j) (e_i, e_j) is returned else (e_i, e_j)
 
 ```python
 >>> for (ij, mate) in ilotri([0,1], with_inds=True):
@@ -53,16 +47,10 @@ Constructs an iterator given a slice object s.
 
 A generator that yields the upper triangle of the matrix (items x items)
 
-
 * **Parameters**
-
-    * **items** – Iterable object with elements [e0, e1, …]
-
-
-    * **diago** – False if diagonal matrix elements should be excluded
-
-
-    * **with_inds** – If True, (i,j) (e_i, e_j) is returned else (e_i, e_j)
+  * **items** – Iterable object with elements [e0, e1, …]
+  * **diago** – False if diagonal matrix elements should be excluded
+  * **with_inds** – If True, (i,j) (e_i, e_j) is returned else (e_i, e_j)
 
 ```python
 >>> for (ij, mate) in iuptri([0,1], with_inds=True):
