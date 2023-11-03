@@ -134,10 +134,8 @@ def colored_map(text, cmap):
     """
     Return colorized text. cmap is a dict mapping tokens to color options.
 
-    .. Example:
-
-        colored_key("foo bar", {bar: "green"})
-        colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
+    colored_key("foo bar", {bar: "green"})
+    colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
     """
     if not __ISON:
         return text
