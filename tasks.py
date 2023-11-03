@@ -41,9 +41,23 @@ def make_doc(ctx):
             with open(fn) as f:
                 lines = [line.rstrip() for line in f if "Submodules" not in line]
             if fn == "monty.md":
-                preamble = ["---", "layout: default", "title: API Documentation", "nav_order: 5", "---", ""]
+                preamble = [
+                    "---",
+                    "layout: default",
+                    "title: API Documentation",
+                    "nav_order: 5",
+                    "---",
+                    "",
+                ]
             else:
-                preamble = ["---", "layout: default", "title: " + fn, "nav_exclude: true", "---", ""]
+                preamble = [
+                    "---",
+                    "layout: default",
+                    "title: " + fn,
+                    "nav_exclude: true",
+                    "---",
+                    "",
+                ]
             with open(fn, "w") as f:
                 f.write("\n".join(preamble + lines))
 
