@@ -47,7 +47,9 @@ HIGHLIGHTS = dict(
     on_white=47,
 )
 
-COLORS = dict(grey=30, red=31, green=32, yellow=33, blue=34, magenta=35, cyan=36, white=37)
+COLORS = dict(
+    grey=30, red=31, green=32, yellow=33, blue=34, magenta=35, cyan=36, white=37
+)
 
 RESET = "\033[0m"
 

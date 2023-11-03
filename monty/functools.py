@@ -34,7 +34,9 @@ class _HashedSeq(list):  # pylint: disable=C0205
         return self.hashvalue
 
 
-def _make_key(args, kwds, typed, kwd_mark=(object(),), fasttypes={int, str, frozenset, type(None)}):
+def _make_key(
+    args, kwds, typed, kwd_mark=(object(),), fasttypes={int, str, frozenset, type(None)}
+):
     """
     Make a cache key from optionally typed positional and keyword arguments
 
@@ -81,7 +83,9 @@ class lazy_property:
             return self
 
         if not hasattr(inst, "__dict__"):
-            raise AttributeError(f"'{inst_cls.__name__}' object has no attribute '__dict__'")
+            raise AttributeError(
+                f"'{inst_cls.__name__}' object has no attribute '__dict__'"
+            )
 
         name = self.__name__  # pylint: disable=E1101
         if name.startswith("__") and not name.endswith("__"):
@@ -101,13 +105,17 @@ class lazy_property:
         inst_cls = inst.__class__
 
         if not hasattr(inst, "__dict__"):
-            raise AttributeError(f"'{inst_cls.__name__}' object has no attribute '__dict__'")
+            raise AttributeError(
+                f"'{inst_cls.__name__}' object has no attribute '__dict__'"
+            )
 
         if name.startswith("__") and not name.endswith("__"):
             name = f"_{inst_cls.__name__}{name}"
 
         if not isinstance(getattr(inst_cls, name), cls):
-            raise AttributeError(f"'{inst_cls.__name__}.{name}' is not a {cls.__name__} attribute")
+            raise AttributeError(
+                f"'{inst_cls.__name__}.{name}' is not a {cls.__name__} attribute"
+            )
 
         if name in inst.__dict__:
             del inst.__dict__[name]

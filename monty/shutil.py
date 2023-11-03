@@ -53,13 +53,17 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
         for f in files:
             full_f = Path(root, f).resolve()
             if Path(f).suffix.lower() != ".gz" and not full_f.is_dir():
-                with open(full_f, "rb") as f_in, GzipFile(f"{full_f}.gz", "wb", compresslevel=compresslevel) as f_out:
+                with open(full_f, "rb") as f_in, GzipFile(
+                    f"{full_f}.gz", "wb", compresslevel=compresslevel
+                ) as f_out:
                     shutil.copyfileobj(f_in, f_out)
                 shutil.copystat(full_f, f"{full_f}.gz")
                 os.remove(full_f)
 
 
-def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] = "gz") -> None:
+def compress_file(
+    filepath: str | Path, compression: Literal["gz", "bz2"] = "gz"
+) -> None:
     """
     Compresses a file with the correct extension. Functions like standard
     Unix command line gzip and bzip2 in the sense that the original
@@ -74,7 +78,9 @@ def compress_file(filepath: str | Path, compression: Literal["gz", "bz2"] = "gz"
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
     if filepath.suffix.lower() != f".{compression}":
-        with open(filepath, "rb") as f_in, zopen(f"{filepath}.{compression}", "wb") as f_out:
+        with open(filepath, "rb") as f_in, zopen(
+            f"{filepath}.{compression}", "wb"
+        ) as f_out:
             f_out.writelines(f_in)
         os.remove(filepath)
 

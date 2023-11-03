@@ -74,7 +74,9 @@ def make_doc(ctx):
                 "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
                 contents,
             )
-            contents = "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
+            contents = (
+                "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
+            )
 
             f.write(contents)
 
@@ -132,14 +134,18 @@ def commit(ctx):
 def set_ver(ctx):
     with open("monty/__init__.py") as f:
         contents = f.read()
-        contents = re.sub(r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents)
+        contents = re.sub(
+            r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents
+        )
 
     with open("monty/__init__.py", "w") as f:
         f.write(contents)
 
     with open("pyproject.toml") as f:
         contents = f.read()
-        contents = re.sub(r"version = ([\.\d\"]+)", 'version = "%s"' % NEW_VER, contents)
+        contents = re.sub(
+            r"version = ([\.\d\"]+)", 'version = "%s"' % NEW_VER, contents
+        )
 
     with open("pyproject.toml", "w") as f:
         f.write(contents)

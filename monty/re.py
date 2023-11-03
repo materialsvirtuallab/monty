@@ -8,7 +8,9 @@ import re
 from monty.io import reverse_readfile, zopen
 
 
-def regrep(filename, patterns, reverse=False, terminate_on_match=False, postprocess=str):
+def regrep(
+    filename, patterns, reverse=False, terminate_on_match=False, postprocess=str
+):
     r"""
     A powerful regular expression version of grep.
 
@@ -38,7 +40,9 @@ def regrep(filename, patterns, reverse=False, terminate_on_match=False, postproc
         for k, p in compiled.items():
             m = p.search(line)
             if m:
-                matches[k].append([[postprocess(g) for g in m.groups()], -i if reverse else i])
+                matches[k].append(
+                    [[postprocess(g) for g in m.groups()], -i if reverse else i]
+                )
         if terminate_on_match and all(len(matches.get(k, [])) for k in compiled.keys()):
             break
     try:
