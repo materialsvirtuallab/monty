@@ -139,6 +139,7 @@ def release(ctx, notest=False):
     update_doc(ctx)
     commit(ctx)
     release_github(ctx)
-    ctx.run("python setup.py sdist bdist_wheel", warn=True)
+    ctx.run("python -m build", warn=True)
+    ctx.run("python -m build --wheel", warn=True)
     ctx.run("twine upload --skip-existing dist/*.whl", warn=True)
     ctx.run("twine upload --skip-existing dist/*.tar.gz", warn=True)

@@ -48,9 +48,8 @@ stderr of the subprocess
 com = Command(“sleep 1”).run(timeout=2)
 print(com.retcode, com.killed, com.output, com.output)
 
-
 * **Parameters**
-**command** – Command to execute
+  **command** – Command to execute
 
 ### run(timeout=None, \*\*kwargs)
 

@@ -22,16 +22,10 @@ Taken from [http://www.evanfosmark.com/2009/01/cross-platform-file-locking](http
 Prepare the file locker. Specify the file to lock and optionally
 the maximum timeout and the delay between each attempt to lock.
 
-
 * **Parameters**
-
-    * **file_name** – Name of file to lock.
-
-
-    * **timeout** – Maximum timeout for locking. Defaults to 10.
-
-
-    * **delay** – Delay between each attempt to lock. Defaults to 0.05.
+  * **file_name** – Name of file to lock.
+  * **timeout** – Maximum timeout for locking. Defaults to 10.
+  * **delay** – Delay between each attempt to lock. Defaults to 0.05.
 
 ### Error()
 
@@ -61,6 +55,7 @@ Exception raised by FileLock.
 Return the number of open file descriptors for current process
 
 <!-- warning: will only work on UNIX-like OS-es. -->
+
 ## monty.io.reverse_readfile(filename: str | Path)
 
 A much faster reverse read of file by using Python’s mmap to generate a
@@ -68,13 +63,10 @@ memory-mapped file. It is slower for very small files than
 reverse_readline, but at least 2x faster for large files (the primary use
 of such a method).
 
-
 * **Parameters**
-**filename** (*str*) – Name of file to read.
-
-
+  **filename** (*str*) – Name of file to read.
 * **Yields**
-Lines from the file in reverse order.
+  Lines from the file in reverse order.
 
 ## monty.io.reverse_readline(m_file, blk_size=4096, max_mem=4000000)
 
@@ -91,25 +83,17 @@ max_mem parameter, or for gzip files where reverse seeks are not supported.
 
 Files larger than max_mem are dynamically read backwards.
 
-
 * **Parameters**
-
-    * **m_file** (*File*) – File stream to read (backwards)
-
-
-    * **blk_size** (*int*) – The buffer size. Defaults to 4096.
-
-
-    * **max_mem** (*int*) – The maximum amount of memory to involve in this
-operation. This is used to determine when to reverse a file
-in-memory versus seeking portions of a file. For bz2 files,
-this sets the maximum block size.
-
-
+  * **m_file** (*File*) – File stream to read (backwards)
+  * **blk_size** (*int*) – The buffer size. Defaults to 4096.
+  * **max_mem** (*int*) – The maximum amount of memory to involve in this
+    operation. This is used to determine when to reverse a file
+    in-memory versus seeking portions of a file. For bz2 files,
+    this sets the maximum block size.
 * **Returns**
-Generator that returns lines from the file. Similar behavior to the
-file.readline() method, except the lines are returned from the back
-of the file.
+  Generator that returns lines from the file. Similar behavior to the
+  file.readline() method, except the lines are returned from the back
+  of the file.
 
 ## monty.io.zopen(filename: str | Path, \*args, \*\*kwargs)
 
@@ -117,18 +101,10 @@ This function wraps around the bz2, gzip, lzma, xz and standard python’s open
 function to deal intelligently with bzipped, gzipped or standard text
 files.
 
-
 * **Parameters**
-
-    * **filename** (*str/Path*) – filename or pathlib.Path.
-
-
-    * **\*args** – Standard args for python open(..). E.g., ‘r’ for read, ‘w’ for
-write.
-
-
-    * **\*\*kwargs** – Standard kwargs for python open(..).
-
-
+  * **filename** (*str/Path*) – filename or pathlib.Path.
+  * **\*args** – Standard args for python open(..). E.g., ‘r’ for read, ‘w’ for
+    write.
+  * **\*\*kwargs** – Standard kwargs for python open(..).
 * **Returns**
-File-like object. Supports with context.
+  File-like object. Supports with context.

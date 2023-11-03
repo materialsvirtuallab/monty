@@ -16,15 +16,13 @@ one to select the loglevel.
 Useful if we are writing simple main functions that call libraries where
 the logging module is used
 
-
 * **Parameters**
-**main** – main function.
+  **main** – main function.
 
 ## monty.logging.logged(level=10)
 
 Useful logging decorator. If a method is logged, the beginning and end of
 the method call will be logged at a pre-specified level.
 
-
 * **Parameters**
-**level** – Level to log method at. Defaults to DEBUG.
+  **level** – Level to log method at. Defaults to DEBUG.

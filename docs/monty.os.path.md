@@ -14,33 +14,19 @@ Find all files with the extension listed in exts that are located within
 the directory tree rooted at top (including top itself, but excluding
 ‘.’ and ‘..’)
 
-
 * **Parameters**
-
-    * **top** (*str*) – Root directory
-
-
-    * **exts** (*str*\* or **list** of \**strings*) – List of extensions.
-
-
-    * **exclude_dirs** (*str*) – Wildcards used to exclude particular directories.
-Can be concatenated via |
-
-
-    * **include_dirs** (*str*) – Wildcards used to select particular directories.
-include_dirs and exclude_dirs are mutually exclusive
-
-
-    * **match_mode** (*str*) – “basename” if  match should be done on the basename.
-“abspath” for absolute path.
-
-
+  * **top** (*str*) – Root directory
+  * **exts** (*str*\* or **list** of \**strings*) – List of extensions.
+  * **exclude_dirs** (*str*) – Wildcards used to exclude particular directories.
+    Can be concatenated via |
+  * **include_dirs** (*str*) – Wildcards used to select particular directories.
+    include_dirs and exclude_dirs are mutually exclusive
+  * **match_mode** (*str*) – “basename” if  match should be done on the basename.
+    “abspath” for absolute path.
 * **Returns**
-Absolute paths of the files.
-
-
+  Absolute paths of the files.
 * **Return type**
-(list of str)
+  (list of str)
 
 Examples:
 
@@ -62,12 +48,9 @@ find_exts(".", "ps", include_dirs="output*"))
 Returns an existing (zipped or unzipped) file path given the unzipped
 version. If no path exists, returns the filename unmodified.
 
-
 * **Parameters**
-**filename** – filename without zip extension
-
-
+  **filename** – filename without zip extension
 * **Returns**
-filename with a zip extension (unless an unzipped version
-exists). If filename is not found, the same filename is returned
-unchanged.
+  filename with a zip extension (unless an unzipped version
+  exists). If filename is not found, the same filename is returned
+  unchanged.

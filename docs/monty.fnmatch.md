@@ -28,14 +28,10 @@ shell patterns (fnmatch).
 
 Initializes a WildCard.
 
-
 * **Parameters**
-
-    * **wildcard** (*str*) – String of tokens separated by sep. Each token
-represents a pattern.
-
-
-    * **sep** (*str*) – Separator for shell patterns.
+  * **wildcard** (*str*) – String of tokens separated by sep. Each token
+    represents a pattern.
+  * **sep** (*str*) – Separator for shell patterns.
 
 ### filter(names)
 
