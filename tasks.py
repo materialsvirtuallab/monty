@@ -123,11 +123,11 @@ def set_ver(ctx):
     with open("monty/__init__.py", "w") as f:
         f.write(contents)
 
-    with open("setup.py") as f:
+    with open("pyproject.toml") as f:
         contents = f.read()
-        contents = re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, contents)
+        contents = re.sub(r"version = ([\.\d\"]+)", 'version = "%s"' % NEW_VER, contents)
 
-    with open("setup.py", "w") as f:
+    with open("pyproject.toml", "w") as f:
         f.write(contents)
 
 
