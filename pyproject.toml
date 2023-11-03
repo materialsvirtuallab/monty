@@ -68,3 +68,6 @@ exclude_also = [
     "if typing.TYPE_CHECKING:",
     "except ImportError:"
 ]
+
+[tool.mypy]
+ignore_missing_imports = true
