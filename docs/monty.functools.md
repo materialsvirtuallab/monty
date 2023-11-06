@@ -14,9 +14,8 @@ Bases: `Exception`
 
 Exception class for timeouts.
 
-
 * **Parameters**
-**message** – Error message
+  **message** – Error message
 
 ## *class* monty.functools.lazy_property(func)
 
@@ -27,9 +26,8 @@ lazy_property descriptor
 Used as a decorator to create lazy attributes. Lazy attributes
 are evaluated on first use.
 
-
 * **Parameters**
-**func** – Function to decorate.
+  **func** – Function to decorate.
 
 ### *classmethod* invalidate(inst, name)
 
@@ -75,13 +73,10 @@ becomes
 The decorated main accepts two new arguments:
 
 > prof_file: Name of the output file with profiling data
-
 > ```none
 > If not given, a temporary file is created.
 > ```
-
 > sortby: Profiling data are sorted according to this value.
-
 > ```none
 > default is “time”. See sort_stats.
 > ```
@@ -141,20 +136,12 @@ except TimeoutError:
 do_something_else()
 ```
 
-
 * **Parameters**
-
-    * **seconds** (*int*) – Allowed time for function in seconds.
-
-
-    * **error_message** (*str*) – An error message.
+  * **seconds** (*int*) – Allowed time for function in seconds.
+  * **error_message** (*str*) – An error message.
 
 ### handle_timeout(signum, frame)
 
-
 * **Parameters**
-
-    * **signum** – Return signal from call.
-
-
-    * **frame** –
+  * **signum** – Return signal from call.
+  * **frame** –

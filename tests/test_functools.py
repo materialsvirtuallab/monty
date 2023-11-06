@@ -127,7 +127,9 @@ class TestLazy:
         f = Foo()
         assert len(called) == 0
 
-        with pytest.raises(AttributeError, match="'Foo' object has no attribute '__dict__'"):
+        with pytest.raises(
+            AttributeError, match="'Foo' object has no attribute '__dict__'"
+        ):
             f.foo
 
         # The function was not called
@@ -284,7 +286,9 @@ class TestInvalidate:
                 return 1
 
         f = Foo()
-        with pytest.raises(AttributeError, match="'Foo.foo' is not a lazy_property attribute"):
+        with pytest.raises(
+            AttributeError, match="'Foo.foo' is not a lazy_property attribute"
+        ):
             lazy_property.invalidate(f, "foo")
 
     def test_invalidate_nonlazy_private_attribute(self):
@@ -298,7 +302,9 @@ class TestInvalidate:
                 return 1
 
         f = Foo()
-        with pytest.raises(AttributeError, match="type object 'Foo' has no attribute 'foo'"):
+        with pytest.raises(
+            AttributeError, match="type object 'Foo' has no attribute 'foo'"
+        ):
             lazy_property.invalidate(f, "foo")
 
     def test_invalidate_unknown_attribute(self):
@@ -313,7 +319,9 @@ class TestInvalidate:
                 return 1
 
         f = Foo()
-        with pytest.raises(AttributeError, match="type object 'Foo' has no attribute 'bar'"):
+        with pytest.raises(
+            AttributeError, match="type object 'Foo' has no attribute 'bar'"
+        ):
             lazy_property.invalidate(f, "bar")
 
     def test_invalidate_readonly_object(self):
@@ -330,7 +338,9 @@ class TestInvalidate:
                 return 1
 
         f = Foo()
-        with pytest.raises(AttributeError, match="'Foo' object has no attribute '__dict__'"):
+        with pytest.raises(
+            AttributeError, match="'Foo' object has no attribute '__dict__'"
+        ):
             lazy_property.invalidate(f, "foo")
 
 
@@ -484,7 +494,9 @@ class TestInvalidateSubclass:
                 return 1
 
         b = Bar()
-        with pytest.raises(AttributeError, match="'Bar._Bar__bar' is not a cached attribute"):
+        with pytest.raises(
+            AttributeError, match="'Bar._Bar__bar' is not a cached attribute"
+        ):
             cached.invalidate(
                 b,
                 "__bar",
@@ -502,7 +514,9 @@ class TestInvalidateSubclass:
                 return 1
 
         b = Bar()
-        with pytest.raises(AttributeError, match="type object 'Bar' has no attribute 'baz'"):
+        with pytest.raises(
+            AttributeError, match="type object 'Bar' has no attribute 'baz'"
+        ):
             lazy_property.invalidate(
                 b,
                 "baz",
@@ -522,7 +536,9 @@ class TestInvalidateSubclass:
                 return 1
 
         b = Bar()
-        with pytest.raises(AttributeError, match="'Bar' object has no attribute '__dict__'"):
+        with pytest.raises(
+            AttributeError, match="'Bar' object has no attribute '__dict__'"
+        ):
             cached.invalidate(
                 b,
                 "bar",

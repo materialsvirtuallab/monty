@@ -30,7 +30,9 @@ class TestReverseReadline:
         """
         with open(os.path.join(test_dir, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f)):
-                assert int(line) == self.NUMLINES - idx, "read_backwards read {} whereas it should "(
+                assert (
+                    int(line) == self.NUMLINES - idx
+                ), "read_backwards read {} whereas it should "(
                     "have read {" "}"
                 ).format(int(line), self.NUMLINES - idx)
 
@@ -40,7 +42,9 @@ class TestReverseReadline:
         """
         with open(os.path.join(test_dir, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
-                assert int(line) == self.NUMLINES - idx, "read_backwards read {} whereas it should "(
+                assert (
+                    int(line) == self.NUMLINES - idx
+                ), "read_backwards read {} whereas it should "(
                     "have read {" "}"
                 ).format(int(line), self.NUMLINES - idx)
 
@@ -104,7 +108,9 @@ class TestReverseReadfile:
         make sure an empty file does not throw an error when reverse_readline
         is called this was a problem with an earlier implementation
         """
-        for idx, line in enumerate(reverse_readfile(os.path.join(test_dir, "empty_file.txt"))):
+        for idx, line in enumerate(
+            reverse_readfile(os.path.join(test_dir, "empty_file.txt"))
+        ):
             raise ValueError("an empty file is being read!")
 
 

@@ -58,17 +58,11 @@ Try diffent ways of converting the present object for displaying
 
 ## monty.pprint.draw_tree(node, child_iter=<function <lambda>>, text_str=<function <lambda>>)
 
-
 * **Parameters**
-
-    * **node** – the root of the tree to be drawn,
-
-
-    * **child_iter** – function that when called with a node, returns an iterable
-over all its children
-
-
-    * **text_str** – turns a node into the text to be displayed in the tree.
+  * **node** – the root of the tree to be drawn,
+  * **child_iter** – function that when called with a node, returns an iterable
+    over all its children
+  * **text_str** – turns a node into the text to be displayed in the tree.
 
 The default implementations of these two arguments retrieve the children
 by accessing node.children and simply use str(node) to convert a node to a
@@ -81,9 +75,8 @@ Based on [https://pypi.python.org/pypi/asciitree/](https://pypi.python.org/pypi/
 Display a tree-like object in a jupyter notebook.
 Allows for collapsible interactive interaction with data.
 
-
 * **Parameters**
-**data** – a dictionary or object
+  **data** – a dictionary or object
 
 Based on:
 [https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22](https://gist.github.com/jmmshn/d37d5a1be80a6da11f901675f195ca22)
@@ -93,13 +86,7 @@ Based on:
 Prints out a table of data, padded for alignment
 Each row must have the same number of columns.
 
-
 * **Parameters**
-
-    * **table** – The table to print. A list of lists.
-
-
-    * **out** – Output stream (file-like object)
-
-
-    * **rstrip** – if True, trailing withespaces are removed from the entries.
+  * **table** – The table to print. A list of lists.
+  * **out** – Output stream (file-like object)
+  * **rstrip** – if True, trailing withespaces are removed from the entries.

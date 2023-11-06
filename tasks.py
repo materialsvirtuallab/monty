@@ -41,9 +41,23 @@ def make_doc(ctx):
             with open(fn) as f:
                 lines = [line.rstrip() for line in f if "Submodules" not in line]
             if fn == "monty.md":
-                preamble = ["---", "layout: default", "title: API Documentation", "nav_order: 5", "---", ""]
+                preamble = [
+                    "---",
+                    "layout: default",
+                    "title: API Documentation",
+                    "nav_order: 5",
+                    "---",
+                    "",
+                ]
             else:
-                preamble = ["---", "layout: default", "title: " + fn, "nav_exclude: true", "---", ""]
+                preamble = [
+                    "---",
+                    "layout: default",
+                    "title: " + fn,
+                    "nav_exclude: true",
+                    "---",
+                    "",
+                ]
             with open(fn, "w") as f:
                 f.write("\n".join(preamble + lines))
 
@@ -60,7 +74,9 @@ def make_doc(ctx):
                 "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
                 contents,
             )
-            contents = "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
+            contents = (
+                "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
+            )
 
             f.write(contents)
 
@@ -118,16 +134,20 @@ def commit(ctx):
 def set_ver(ctx):
     with open("monty/__init__.py") as f:
         contents = f.read()
-        contents = re.sub(r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents)
+        contents = re.sub(
+            r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents
+        )
 
     with open("monty/__init__.py", "w") as f:
         f.write(contents)
 
-    with open("setup.py") as f:
+    with open("pyproject.toml") as f:
         contents = f.read()
-        contents = re.sub(r"version=([^,]+),", 'version="%s",' % NEW_VER, contents)
+        contents = re.sub(
+            r"version = ([\.\d\"]+)", 'version = "%s"' % NEW_VER, contents
+        )
 
-    with open("setup.py", "w") as f:
+    with open("pyproject.toml", "w") as f:
         f.write(contents)
 
 
@@ -139,6 +159,7 @@ def release(ctx, notest=False):
     update_doc(ctx)
     commit(ctx)
     release_github(ctx)
-    ctx.run("python setup.py sdist bdist_wheel", warn=True)
+    ctx.run("python -m build", warn=True)
+    ctx.run("python -m build --wheel", warn=True)
     ctx.run("twine upload --skip-existing dist/*.whl", warn=True)
     ctx.run("twine upload --skip-existing dist/*.tar.gz", warn=True)

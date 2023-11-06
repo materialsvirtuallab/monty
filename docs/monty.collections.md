@@ -24,19 +24,14 @@ to the traditional way obj[‘foo’]”
 >>> assert d.bar == "hello"
 ```
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ### copy()
 
-
 * **Returns**
-Copy of AttrDict
+  Copy of AttrDict
 
 ## *class* monty.collections.FrozenAttrDict(\*args, \*\*kwargs)
 
@@ -52,13 +47,9 @@ A dictionary that:
 to the traditional way obj[‘foo’]
 ```
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ## *class* monty.collections.MongoDict(\*args, \*\*kwargs)
 
@@ -83,13 +74,9 @@ database).
 dict.keys and dict.items will pollute the namespace.
 e.g MongoDict({“keys”: 1}).keys would be the ABC dict method.
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ## *class* monty.collections.Namespace(\*args, \*\*kwargs)
 
@@ -97,23 +84,15 @@ Bases: `dict`
 
 A dictionary that does not permit to redefine its keys.
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ### update(\*args, \*\*kwargs)
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ## monty.collections.dict2namedtuple(\*args, \*\*kwargs)
 
@@ -133,15 +112,12 @@ Helper function to create a `namedtuple` from a dictionary.
 
 **WARNING**:
 
-
 * The order of the items in the namedtuple is not deterministic if
-kwargs are used.
-namedtuples, however, should always be accessed by attribute hence
-this behaviour should not represent a serious problem.
-
-
+  kwargs are used.
+  namedtuples, however, should always be accessed by attribute hence
+  this behaviour should not represent a serious problem.
 * Don’t use this function in code in which memory and performance are
-crucial since a dict is needed to instantiate the tuple!
+  crucial since a dict is needed to instantiate the tuple!
 
 ## *class* monty.collections.frozendict(\*args, \*\*kwargs)
 
@@ -150,23 +126,15 @@ Bases: `dict`
 A dictionary that does not permit changes. The naming
 violates PEP8 to be consistent with standard Python’s “frozenset” naming.
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ### update(\*args, \*\*kwargs)
 
-
 * **Parameters**
-
-    * **args** – Passthrough arguments for standard dict.
-
-
-    * **kwargs** – Passthrough keyword arguments for standard dict.
+  * **args** – Passthrough arguments for standard dict.
+  * **kwargs** – Passthrough keyword arguments for standard dict.
 
 ## monty.collections.tree()
 
@@ -180,6 +148,5 @@ x = tree()
 x[‘a’][‘b’][‘c’] = 1
 ```
 
-
 * **Returns**
-A tree.
+  A tree.

@@ -122,7 +122,9 @@ class FrozenAttrDict(frozendict):
                 raise AttributeError(str(exc))
 
     def __setattr__(self, name, value):
-        raise KeyError(f"You cannot modify attribute {name} of {self.__class__.__name__}")
+        raise KeyError(
+            f"You cannot modify attribute {name} of {self.__class__.__name__}"
+        )
 
 
 class MongoDict:
@@ -161,7 +163,9 @@ class MongoDict:
         return str(self._mongo_dict_)
 
     def __setattr__(self, name, value):
-        raise NotImplementedError(f"You cannot modify attribute {name} of {self.__class__.__name__}")
+        raise NotImplementedError(
+            f"You cannot modify attribute {name} of {self.__class__.__name__}"
+        )
 
     def __getattribute__(self, name):
         try:
@@ -217,4 +221,6 @@ def dict2namedtuple(*args, **kwargs):
     """
     d = collections.OrderedDict(*args)
     d.update(**kwargs)
-    return collections.namedtuple(typename="dict2namedtuple", field_names=list(d.keys()))(**d)
+    return collections.namedtuple(
+        typename="dict2namedtuple", field_names=list(d.keys())
+    )(**d)

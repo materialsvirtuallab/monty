@@ -32,7 +32,12 @@ author = "Shyue Ping Ong"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 # Napoleon is necessary to parse Google style docstrings. Markdown builder allows the generation of markdown output.
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon", "myst_parser", "sphinx_markdown_builder"]
+extensions = [
+    "sphinx.ext.autodoc",
+    "sphinx.ext.napoleon",
+    "myst_parser",
+    "sphinx_markdown_builder",
+]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 autoclass_content = "both"

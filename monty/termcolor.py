@@ -7,10 +7,8 @@ Copyright (c) 2008-2011 Volvox Development Team
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-#
 # The above copyright notice and this permission notice shall be included in
 # all copies or substantial portions of the Software.
-#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -18,7 +16,6 @@ Copyright (c) 2008-2011 Volvox Development Team
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
-#
 # Author: Konstantin Lepa <konstantin.lepa@gmail.com>
 
 ANSII Color formatting for output in terminal.
@@ -50,7 +47,9 @@ HIGHLIGHTS = dict(
     on_white=47,
 )
 
-COLORS = dict(grey=30, red=31, green=32, yellow=33, blue=34, magenta=35, cyan=36, white=37)
+COLORS = dict(
+    grey=30, red=31, green=32, yellow=33, blue=34, magenta=35, cyan=36, white=37
+)
 
 RESET = "\033[0m"
 
@@ -134,10 +133,8 @@ def colored_map(text, cmap):
     """
     Return colorized text. cmap is a dict mapping tokens to color options.
 
-    .. Example:
-
-        colored_key("foo bar", {bar: "green"})
-        colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
+    colored_key("foo bar", {bar: "green"})
+    colored_key("foo bar", {bar: {"color": "green", "on_color": "on_red"}})
     """
     if not __ISON:
         return text

@@ -62,7 +62,8 @@ def enable_logging(main):
             "--loglevel",
             default="ERROR",
             type=str,
-            help="Set the loglevel. Possible values: CRITICAL, ERROR (default)," "WARNING, INFO, DEBUG",
+            help="Set the loglevel. Possible values: CRITICAL, ERROR (default),"
+            "WARNING, INFO, DEBUG",
         )
 
         options = parser.parse_args()
