@@ -6,6 +6,7 @@ import datetime
 import json
 import os
 import pathlib
+import traceback
 import types
 from collections import OrderedDict, defaultdict
 from enum import Enum
@@ -257,12 +258,19 @@ class MSONable:
         if isinstance(__input_value, cls):
             return __input_value
         if isinstance(__input_value, dict):
-            new_obj = MontyDecoder().process_decoded(__input_value)
-            if isinstance(new_obj, cls):
+            # Do not any exception raised while deserialization since
+            # pydantic may handle them incorrectly.
+            try:
+                new_obj = MontyDecoder().process_decoded(__input_value)
+                if isinstance(new_obj, cls):
+                    return new_obj
+                new_obj = cls(**__input_value)
                 return new_obj
-
-            new_obj = cls(**__input_value)
-            return new_obj
+            except Exception:
+                raise ValueError(
+                    f"Error while deserializing {cls.__name__} "
+                    f"object: {traceback.format_exc()}"
+                )
 
         raise ValueError(
             f"Must provide {cls.__name__}, the as_dict form, or the proper"
