@@ -764,3 +764,13 @@ class TestJson:
         str_ = json.dumps(ndc, cls=MontyEncoder)
         ndc2 = json.loads(str_, cls=MontyDecoder)
         assert isinstance(ndc2, NestedDataClass)
+
+    def test_enum(self):
+        class A(Enum):
+            name_a = "value_a"
+            name_b = "value_b"
+
+        s = MontyEncoder().encode(A.a)
+        p = MontyDecoder().decode(s)
+        assert p.name == "name_a"
+        assert p.value == "value_a"
