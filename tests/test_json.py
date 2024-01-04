@@ -770,7 +770,7 @@ class TestJson:
             name_a = "value_a"
             name_b = "value_b"
 
-        s = MontyEncoder().encode(A.a)
+        s = MontyEncoder().encode(A.name_a)
         p = MontyDecoder().decode(s)
         assert p.name == "name_a"
         assert p.value == "value_a"
