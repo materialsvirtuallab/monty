@@ -404,6 +404,8 @@ class MontyEncoder(json.JSONEncoder):
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
                 d = o.dict()
+            elif isinstance(o, Enum):
+                d = {"value": o.value}
             elif (
                 dataclasses is not None
                 and (not issubclass(o.__class__, MSONable))
@@ -513,6 +515,8 @@ class MontyDecoder(json.JSONDecoder):
                         data = {k: v for k, v in d.items() if not k.startswith("@")}
                         if hasattr(cls_, "from_dict"):
                             return cls_.from_dict(data)
+                        if issubclass(cls_, Enum):
+                            return cls_(d["value"])
                         if pydantic is not None and issubclass(
                             cls_, pydantic.BaseModel
                         ):  # pylint: disable=E1101
