@@ -4,6 +4,6 @@ msgpack==1.0.7
 tqdm==4.66.1
 pymongo==4.6.0
 pandas==2.1.2
-orjson==3.9.10
+orjson==3.9.12
 types-orjson==3.6.2
 types-requests==2.31.0.10
