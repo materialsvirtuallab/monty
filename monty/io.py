@@ -131,11 +131,11 @@ def reverse_readline(
         buf = ""
         m_file.seek(0, 2)
         if is_text:
-            lastchar = m_file.read(1)
+            last_char = m_file.read(1)
         else:
-            lastchar = m_file.read(1).decode("utf-8")
+            last_char = m_file.read(1).decode("utf-8")
 
-        trailing_newline = lastchar == "\n"
+        trailing_newline = last_char == "\n"
 
         while 1:
             newline_pos = buf.rfind("\n")
@@ -149,14 +149,14 @@ def reverse_readline(
                 yield line
             elif pos:
                 # Need to fill buffer
-                toread = min(blk_size, pos)
-                m_file.seek(pos - toread, 0)
+                to_read = min(blk_size, pos)
+                m_file.seek(pos - to_read, 0)
                 if is_text:
-                    buf = m_file.read(toread) + buf
+                    buf = m_file.read(to_read) + buf
                 else:
-                    buf = m_file.read(toread).decode("utf-8") + buf
-                m_file.seek(pos - toread, 0)
-                if pos == toread:
+                    buf = m_file.read(to_read).decode("utf-8") + buf
+                m_file.seek(pos - to_read, 0)
+                if pos == to_read:
                     buf = "\n" + buf
             else:
                 # Start-of-file

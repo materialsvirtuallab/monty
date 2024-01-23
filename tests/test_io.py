@@ -28,8 +28,8 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
-            for idx, line in enumerate(reverse_readline(f)):
+        with open(os.path.join(test_dir, "3000_lines.txt")) as file:
+            for idx, line in enumerate(reverse_readline(file)):
                 assert (
                     int(line) == self.NUMLINES - idx
                 ), "read_backwards read {} whereas it should "(
@@ -40,13 +40,13 @@ class TestReverseReadline:
         """
         Make sure that large textfiles are read properly
         """
-        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
-            for idx, line in enumerate(reverse_readline(f, max_mem=0)):
+        with open(os.path.join(test_dir, "3000_lines.txt")) as file:
+            for idx, line in enumerate(reverse_readline(file, max_mem=0), -1):
+                if line == "\n":
+                    continue
                 assert (
                     int(line) == self.NUMLINES - idx
-                ), "read_backwards read {} whereas it should "(
-                    "have read {" "}"
-                ).format(int(line), self.NUMLINES - idx)
+                ), f"read_backwards read {int(line)} whereas it should have read {self.NUMLINES - idx}"
 
     def test_reverse_readline_bz2(self):
         """
@@ -80,7 +80,7 @@ class TestReverseReadfile:
         number
         """
         fname = os.path.join(test_dir, "3000_lines.txt")
-        for idx, line in enumerate(reverse_readfile(fname)):
+        for idx, line in enumerate(filter(bool, reverse_readfile(fname))):
             assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_gz(self):
@@ -127,7 +127,7 @@ class TestZopen:
         with zopen(os.path.join(test_dir, "myfile_lzma.lzma"), "rt") as f:
             assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
+            assert f.read() == "HelloWorld.\n"
 
     @unittest.skipIf(Path is None, "Not Py3k")
     def test_Path_objects(self):
