@@ -20,11 +20,6 @@ except ImportError:
     np = None  # type: ignore
 
 try:
-    import pandas as pd
-except ImportError:
-    pd = None  # type: ignore
-
-try:
     import pydantic
 except ImportError:
     pydantic = None  # type: ignore
@@ -380,7 +375,9 @@ class MontyEncoder(json.JSONEncoder):
             if isinstance(o, np.generic):
                 return o.item()
 
-        if pd is not None:
+        try:
+            import pandas as pd
+
             if isinstance(o, pd.DataFrame):
                 return {
                     "@module": "pandas",
@@ -393,6 +390,8 @@ class MontyEncoder(json.JSONEncoder):
                     "@class": "Series",
                     "data": o.to_json(default_handler=MontyEncoder().encode),
                 }
+        except ImportError:
+            pass
 
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
