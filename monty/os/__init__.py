@@ -2,6 +2,8 @@
 Os functions, e.g., cd, makedirs_p.
 """
 
+from __future__ import annotations
+
 import errno
 import os
 from contextlib import contextmanager
