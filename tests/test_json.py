@@ -20,6 +20,11 @@ from . import __version__ as tests_version
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
+class A(Enum):
+    name_a = "value_a"
+    name_b = "value_b"
+
+
 class GoodMSONClass(MSONable):
     def __init__(self, a, b, c, d=1, *values, **kwargs):
         self.a = a
@@ -764,3 +769,9 @@ class TestJson:
         str_ = json.dumps(ndc, cls=MontyEncoder)
         ndc2 = json.loads(str_, cls=MontyDecoder)
         assert isinstance(ndc2, NestedDataClass)
+
+    def test_enum(self):
+        s = MontyEncoder().encode(A.name_a)
+        p = MontyDecoder().decode(s)
+        assert p.name == "name_a"
+        assert p.value == "value_a"
