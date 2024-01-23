@@ -1,5 +1,8 @@
 # Change log
 
+## 2024.1.23
+- Lazy import of optional libraries to speed up startup.
+
 ## 2023.9.25
 
 - Improved pydantic2 support (@munrojm).
