@@ -20,6 +20,26 @@ except ImportError:
     np = None  # type: ignore
 
 try:
+    import pandas as pd
+except ImportError:
+    pd = None  # type: ignore
+
+try:
+    import pydantic
+except ImportError:
+    pydantic = None  # type: ignore
+
+try:
+    from pydantic_core import core_schema
+except ImportError:
+    core_schema = None  # type: ignore
+
+try:
+    import bson
+except ImportError:
+    bson = None  # type: ignore
+
+try:
     from ruamel.yaml import YAML
 except ImportError:
     YAML = None  # type: ignore
@@ -34,32 +54,12 @@ try:
 except ImportError:
     dataclasses = None  # type: ignore
 
+try:
+    import torch
+except ImportError:
+    torch = None  # type: ignore
 
 __version__ = "3.0.0"
-
-
-def _load_optional_imports():
-    try:
-        import pandas as pd
-    except ImportError:
-        pd = None  # type: ignore
-
-    try:
-        import pydantic
-    except ImportError:
-        pydantic = None  # type: ignore
-
-    try:
-        import bson
-    except ImportError:
-        bson = None  # type: ignore
-
-    try:
-        import torch
-    except ImportError:
-        torch = None  # type: ignore
-
-    return pd, torch, bson, pydantic
 
 
 def _load_redirect(redirect_file):
@@ -292,10 +292,6 @@ class MSONable:
         """
         pydantic v2 core schema definition
         """
-        try:
-            from pydantic_core import core_schema
-        except ImportError:
-            core_schema = None  # type: ignore
         if core_schema is None:
             raise RuntimeError("Pydantic >= 2.0 is required for validation")
 
@@ -348,13 +344,10 @@ class MontyEncoder(json.JSONEncoder):
         Return:
             Python dict representation.
         """
-
         if isinstance(o, datetime.datetime):
             return {"@module": "datetime", "@class": "datetime", "string": str(o)}
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": str(o)}
-
-        pd, torch, bson, pydantic = _load_optional_imports()
 
         if torch is not None and isinstance(o, torch.Tensor):
             # Support for Pytorch Tensors.
@@ -459,9 +452,6 @@ class MontyDecoder(json.JSONDecoder):
         Recursive method to support decoding dicts and lists containing
         pymatgen objects.
         """
-
-        pd, torch, bson, pydantic = _load_optional_imports()
-
         if isinstance(d, dict):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
@@ -632,7 +622,6 @@ def jsanitize(
     Returns:
         Sanitized dict that can be json serialized.
     """
-    pd, torch, bson, pydantic = _load_optional_imports()
     if isinstance(obj, Enum) and enum_values:
         return obj.value
 
