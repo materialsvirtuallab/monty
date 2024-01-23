@@ -642,7 +642,8 @@ def jsanitize(
         ]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
-    if pd is not None and isinstance(obj, (pd.Series, pd.DataFrame)):
+    if callable(getattr(obj, "to_dict", None)):
+        # handle dataframes and series. used to check isinstance(obj, (pd.Series, pd.DataFrame))
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
