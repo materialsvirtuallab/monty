@@ -543,13 +543,18 @@ class MontyDecoder(json.JSONDecoder):
                             dtype=d["dtype"],
                         )
                     return np.array(d["data"], dtype=d["dtype"])
-                elif pd is not None and modname == "pandas":
-                    if classname == "DataFrame":
-                        decoded_data = MontyDecoder().decode(d["data"])
-                        return pd.DataFrame(decoded_data)
-                    if classname == "Series":
-                        decoded_data = MontyDecoder().decode(d["data"])
-                        return pd.Series(decoded_data)
+                elif modname == "pandas":
+                    try:
+                        import pandas as pd
+
+                        if classname == "DataFrame":
+                            decoded_data = MontyDecoder().decode(d["data"])
+                            return pd.DataFrame(decoded_data)
+                        if classname == "Series":
+                            decoded_data = MontyDecoder().decode(d["data"])
+                            return pd.Series(decoded_data)
+                    except ImportError:
+                        pass
                 elif (
                     (bson is not None)
                     and modname == "bson.objectid"
