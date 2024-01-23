@@ -158,13 +158,13 @@ class TestMSONable:
 
         self.auto_mson = AutoMSON
 
-    def test_to_from_dict(self):
+    def test_as_from_dict(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
         assert d is not None
         self.good_cls.from_dict(d)
-        jsonstr = obj.to_json()
-        d = json.loads(jsonstr)
+        json_str = obj.to_json()
+        d = json.loads(json_str)
         assert d["@class"], "GoodMSONClass"
         obj = self.bad_cls("Hello", "World")
         d = obj.as_dict()
@@ -219,7 +219,7 @@ class TestMSONable:
         d = obj.as_dict()
         assert d["@version"] == tests_version
 
-    def test_nested_to_from_dict(self):
+    def test_nested_as_from_dict(self):
         GMC = GoodMSONClass
         a_list = [GMC(1, 1.0, "one"), GMC(2, 2.0, "two")]
         b_dict = {"first": GMC(3, 3.0, "three"), "second": GMC(4, 4.0, "four")}
@@ -313,28 +313,28 @@ class TestJson:
 
     def test_torch(self):
         t = torch.tensor([0, 1, 2])
-        jsonstr = json.dumps(t, cls=MontyEncoder)
-        t2 = json.loads(jsonstr, cls=MontyDecoder)
+        json_str = json.dumps(t, cls=MontyEncoder)
+        t2 = json.loads(json_str, cls=MontyDecoder)
         assert isinstance(t2, torch.Tensor)
         assert t2.type() == t.type()
         assert np.array_equal(t2, t)
         t = torch.tensor([1 + 1j, 2 + 1j])
-        jsonstr = json.dumps(t, cls=MontyEncoder)
-        t2 = json.loads(jsonstr, cls=MontyDecoder)
+        json_str = json.dumps(t, cls=MontyEncoder)
+        t2 = json.loads(json_str, cls=MontyDecoder)
         assert isinstance(t2, torch.Tensor)
         assert t2.type() == t.type()
         assert np.array_equal(t2, t)
 
     def test_datetime(self):
         dt = datetime.datetime.now()
-        jsonstr = json.dumps(dt, cls=MontyEncoder)
-        d = json.loads(jsonstr, cls=MontyDecoder)
+        json_str = json.dumps(dt, cls=MontyEncoder)
+        d = json.loads(json_str, cls=MontyDecoder)
         assert isinstance(d, datetime.datetime)
         assert dt == d
         # Test a nested datetime.
         a = {"dt": dt, "a": 1}
-        jsonstr = json.dumps(a, cls=MontyEncoder)
-        d = json.loads(jsonstr, cls=MontyDecoder)
+        json_str = json.dumps(a, cls=MontyEncoder)
+        d = json.loads(json_str, cls=MontyDecoder)
         assert isinstance(d["dt"], datetime.datetime)
 
         jsanitize(dt, strict=True)
@@ -343,33 +343,33 @@ class TestJson:
         from uuid import UUID, uuid4
 
         uuid = uuid4()
-        jsonstr = json.dumps(uuid, cls=MontyEncoder)
-        d = json.loads(jsonstr, cls=MontyDecoder)
+        json_str = json.dumps(uuid, cls=MontyEncoder)
+        d = json.loads(json_str, cls=MontyDecoder)
         assert isinstance(d, UUID)
         assert uuid == d
         # Test a nested UUID.
         a = {"uuid": uuid, "a": 1}
-        jsonstr = json.dumps(a, cls=MontyEncoder)
-        d = json.loads(jsonstr, cls=MontyDecoder)
+        json_str = json.dumps(a, cls=MontyEncoder)
+        d = json.loads(json_str, cls=MontyDecoder)
         assert isinstance(d["uuid"], UUID)
 
     def test_nan(self):
         x = [float("NaN")]
-        djson = json.dumps(x, cls=MontyEncoder)
-        d = json.loads(djson)
+        dct_json = json.dumps(x, cls=MontyEncoder)
+        d = json.loads(dct_json)
         assert isinstance(d[0], float)
 
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         with pytest.raises(TypeError):
             json.dumps(x)
-        djson = json.dumps(x, cls=MontyEncoder)
-        d = json.loads(djson)
+        dct_json = json.dumps(x, cls=MontyEncoder)
+        d = json.loads(dct_json)
         assert d["@class"] == "array"
         assert d["@module"] == "numpy"
         assert d["data"], [1, 2 == 3]
         assert d["dtype"] == "int64"
-        x = json.loads(djson, cls=MontyDecoder)
+        x = json.loads(dct_json, cls=MontyDecoder)
         assert isinstance(x, np.ndarray)
         x = np.min([1, 2, 3]) > 2
         with pytest.raises(TypeError):
@@ -378,26 +378,26 @@ class TestJson:
         x = np.array([1 + 1j, 2 + 1j, 3 + 1j], dtype="complex64")
         with pytest.raises(TypeError):
             json.dumps(x)
-        djson = json.dumps(x, cls=MontyEncoder)
-        d = json.loads(djson)
+        dct_json = json.dumps(x, cls=MontyEncoder)
+        d = json.loads(dct_json)
         assert d["@class"] == "array"
         assert d["@module"] == "numpy"
         assert d["data"], [[1.0, 2.0, 3.0], [1.0, 1.0 == 1.0]]
         assert d["dtype"] == "complex64"
-        x = json.loads(djson, cls=MontyDecoder)
+        x = json.loads(dct_json, cls=MontyDecoder)
         assert isinstance(x, np.ndarray)
         assert x.dtype == "complex64"
 
         x = np.array([[1 + 1j, 2 + 1j], [3 + 1j, 4 + 1j]], dtype="complex64")
         with pytest.raises(TypeError):
             json.dumps(x)
-        djson = json.dumps(x, cls=MontyEncoder)
-        d = json.loads(djson)
+        dct_json = json.dumps(x, cls=MontyEncoder)
+        d = json.loads(dct_json)
         assert d["@class"] == "array"
         assert d["@module"] == "numpy"
         assert d["data"], [[[1.0, 2.0], [3.0, 4.0]], [[1.0, 1.0], [1.0 == 1.0]]]
         assert d["dtype"] == "complex64"
-        x = json.loads(djson, cls=MontyDecoder)
+        x = json.loads(dct_json, cls=MontyDecoder)
         assert isinstance(x, np.ndarray)
         assert x.dtype == "complex64"
 
@@ -489,22 +489,22 @@ class TestJson:
         ]:
             with pytest.raises(TypeError):
                 json.dumps(function)
-            djson = json.dumps(function, cls=MontyEncoder)
-            d = json.loads(djson)
+            dct_json = json.dumps(function, cls=MontyEncoder)
+            d = json.loads(dct_json)
             assert "@callable" in d
             assert "@module" in d
-            x = json.loads(djson, cls=MontyDecoder)
+            x = json.loads(dct_json, cls=MontyDecoder)
             assert x == function
 
         # test method bound to instance
         for function in [instance.method]:
             with pytest.raises(TypeError):
                 json.dumps(function)
-            djson = json.dumps(function, cls=MontyEncoder)
-            d = json.loads(djson)
+            dct_json = json.dumps(function, cls=MontyEncoder)
+            d = json.loads(dct_json)
             assert "@callable" in d
             assert "@module" in d
-            x = json.loads(djson, cls=MontyDecoder)
+            x = json.loads(dct_json, cls=MontyDecoder)
 
             # can't just check functions are equal as the instance the function is bound
             # to will be different. Instead, we check that the serialized instance
@@ -519,15 +519,15 @@ class TestJson:
 
         # test that callable MSONable objects still get serialized as the objects
         # rather than as a callable
-        djson = json.dumps(instance, cls=MontyEncoder)
-        assert "@class" in djson
+        dct_json = json.dumps(instance, cls=MontyEncoder)
+        assert "@class" in dct_json
 
     def test_objectid(self):
         oid = ObjectId("562e8301218dcbbc3d7d91ce")
         with pytest.raises(TypeError):
             json.dumps(oid)
-        djson = json.dumps(oid, cls=MontyEncoder)
-        x = json.loads(djson, cls=MontyDecoder)
+        dct_json = json.dumps(oid, cls=MontyEncoder)
+        x = json.loads(dct_json, cls=MontyDecoder)
         assert isinstance(x, ObjectId)
 
     def test_jsanitize(self):
