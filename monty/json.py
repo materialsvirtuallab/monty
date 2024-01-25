@@ -84,7 +84,7 @@ def _load_redirect(redirect_file):
     return dict(redirect_dict)
 
 
-def _check_type(obj, type_str: str | tuple[str]) -> bool:
+def _check_type(obj, type_str) -> bool:
     """Alternative to isinstance that avoids imports.
 
     Checks whether obj is an instance of the type defined by type_str. This
@@ -97,6 +97,8 @@ def _check_type(obj, type_str: str | tuple[str]) -> bool:
         assert isinstance(b, B)
         assert isinstance(b, A)
         assert not isinstance(a, B)
+
+    type_str: str | tuple[str]
 
     Note for future developers: the type_str is not always obvious for an
     object. For example, pandas.DataFrame is actually pandas.core.frame.DataFrame.
