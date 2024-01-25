@@ -110,7 +110,7 @@ def _check_type(obj, type_str: str | tuple[str]) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any([o.__module__+'.'+o.__name__ == ts for o in mro for ts in type_str])
+    return any([o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str])
 
 
 class MSONable:
@@ -404,13 +404,13 @@ class MontyEncoder(json.JSONEncoder):
             if isinstance(o, np.generic):
                 return o.item()
 
-        if _check_type(o, 'pandas.core.frame.DataFrame'):
+        if _check_type(o, "pandas.core.frame.DataFrame"):
             return {
                 "@module": "pandas",
                 "@class": "DataFrame",
                 "data": o.to_json(default_handler=MontyEncoder().encode),
             }
-        if _check_type(o, 'pandas.core.series.Series'):
+        if _check_type(o, "pandas.core.series.Series"):
             return {
                 "@module": "pandas",
                 "@class": "Series",
@@ -573,6 +573,7 @@ class MontyDecoder(json.JSONDecoder):
                     return np.array(d["data"], dtype=d["dtype"])
                 elif modname == "pandas":
                     import pandas as pd
+
                     if classname == "DataFrame":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.DataFrame(decoded_data)
@@ -666,7 +667,14 @@ def jsanitize(
         ]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
-    if _check_type(obj, ('pandas.core.series.Series', 'pandas.core.frame.DataFrame', 'pandas.core.base.PandasObject')):
+    if _check_type(
+        obj,
+        (
+            "pandas.core.series.Series",
+            "pandas.core.frame.DataFrame",
+            "pandas.core.base.PandasObject",
+        ),
+    ):
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
