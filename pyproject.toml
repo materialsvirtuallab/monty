@@ -22,7 +22,7 @@ classifiers = [
 dependencies = [
 
 ]
-version = "2023.11.3"
+version = "2024.1.23"
 
 [tool.setuptools]
 packages = ["monty"]

@@ -90,7 +90,7 @@ class DisplayEcoder(JSONEncoder):
 
     def default(self, o):
         """
-        Try diffent ways of converting the present object for displaying
+        Try different ways of converting the present object for displaying
         """
         try:
             return o.as_dict()
