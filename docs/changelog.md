@@ -1,5 +1,8 @@
 # Change log
 
+## 2024.1.26
+- Fix import of optional libraries.
+
 ## 2024.1.23
 - Lazy import of optional libraries to speed up startup.
 
