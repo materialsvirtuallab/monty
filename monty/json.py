@@ -258,8 +258,8 @@ class MSONable:
         if isinstance(__input_value, cls):
             return __input_value
         if isinstance(__input_value, dict):
-            # Do not any exception raised while deserialization since
-            # pydantic may handle them incorrectly.
+            # Do not allow generic exceptions to be raised during deserialization
+            # since pydantic may handle them incorrectly.
             try:
                 new_obj = MontyDecoder().process_decoded(__input_value)
                 if isinstance(new_obj, cls):

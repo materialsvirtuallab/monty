@@ -689,6 +689,11 @@ class TestJson:
         test_object = ModelWithMSONable(a=GoodMSONClass(1, 1, 1))
         test_dict_object = ModelWithMSONable(a=test_object.a.as_dict())
         assert test_dict_object.a.a == test_object.a.a
+        dict_no_class = test_object.a.as_dict()
+        dict_no_class.pop("@class")
+        dict_no_class.pop("@module")
+        test_dict_object = ModelWithMSONable(a=dict_no_class)
+        assert test_dict_object.a.a == test_object.a.a
 
         assert test_object.model_json_schema() == {
             "title": "ModelWithMSONable",
