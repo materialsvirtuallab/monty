@@ -412,8 +412,6 @@ class MontyEncoder(json.JSONEncoder):
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
                 d = o.dict()
-            elif isinstance(o, Enum):
-                d = {"value": o.value}
             elif (
                 dataclasses is not None
                 and (not issubclass(o.__class__, MSONable))
@@ -421,8 +419,14 @@ class MontyEncoder(json.JSONEncoder):
             ):
                 # This handles dataclasses that are not subclasses of MSONAble.
                 d = dataclasses.asdict(o)
-            else:
+            elif hasattr(o, "as_dict"):
                 d = o.as_dict()
+            elif isinstance(o, Enum):
+                d = {"value": o.value}
+            else:
+                raise TypeError(
+                    f"Object of type {o.__class__.__name__} is not JSON serializable"
+                )
 
             if "@module" not in d:
                 d["@module"] = str(o.__class__.__module__)
