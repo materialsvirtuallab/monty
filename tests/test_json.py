@@ -20,11 +20,6 @@ from . import __version__ as tests_version
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
-class A(Enum):
-    name_a = "value_a"
-    name_b = "value_b"
-
-
 class GoodMSONClass(MSONable):
     def __init__(self, a, b, c, d=1, *values, **kwargs):
         self.a = a
@@ -103,6 +98,23 @@ class MethodNonSerializationClass:
 
 def my_callable(a, b):
     return a + b
+
+
+class EnumNoAsDict(Enum):
+    name_a = "value_a"
+    name_b = "value_b"
+
+
+class EnumAsDict(Enum):
+    name_a = "value_a"
+    name_b = "value_b"
+
+    def as_dict(self):
+        return {"v": self.value}
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(d["v"])
 
 
 class EnumTest(MSONable, Enum):
@@ -815,7 +827,13 @@ class TestJson:
         assert isinstance(ndc2, NestedDataClass)
 
     def test_enum(self):
-        s = MontyEncoder().encode(A.name_a)
+        s = MontyEncoder().encode(EnumNoAsDict.name_a)
         p = MontyDecoder().decode(s)
         assert p.name == "name_a"
         assert p.value == "value_a"
+
+        na1 = EnumAsDict.name_a
+        d_ = na1.as_dict()
+        assert d_ == {"v": "value_a"}
+        na2 = EnumAsDict.from_dict(d_)
+        assert na2 == na1
