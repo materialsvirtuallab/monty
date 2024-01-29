@@ -21,11 +21,6 @@ except ImportError:
     np = None  # type: ignore
 
 try:
-    import pandas as pd
-except ImportError:
-    pd = None  # type: ignore
-
-try:
     import pydantic
 except ImportError:
     pydantic = None  # type: ignore
@@ -88,6 +83,37 @@ def _load_redirect(redirect_file):
         }
 
     return dict(redirect_dict)
+
+
+def _check_type(obj, type_str) -> bool:
+    """Alternative to isinstance that avoids imports.
+
+    Checks whether obj is an instance of the type defined by type_str. This
+    removes the need to explicitly import type_str. Handles subclasses like
+    isinstance does. E.g.::
+        class A: pass
+        class B(A): pass
+        a, b = A(), B()
+        assert isinstance(a, A)
+        assert isinstance(b, B)
+        assert isinstance(b, A)
+        assert not isinstance(a, B)
+
+    type_str: str | tuple[str]
+
+    Note for future developers: the type_str is not always obvious for an
+    object. For example, pandas.DataFrame is actually pandas.core.frame.DataFrame.
+    To find out the type_str for an object, run type(obj).mro(). This will
+    list all the types that an object can resolve to in order of generality
+    (all objects have the builtins.object as the last one).
+    """
+    type_str = type_str if isinstance(type_str, tuple) else (type_str,)
+    # I believe this try-except is only necessary for callable types
+    try:
+        mro = type(obj).mro()
+    except TypeError:
+        return False
+    return any([o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str])
 
 
 class MSONable:
@@ -388,19 +414,18 @@ class MontyEncoder(json.JSONEncoder):
             if isinstance(o, np.generic):
                 return o.item()
 
-        if pd is not None:
-            if isinstance(o, pd.DataFrame):
-                return {
-                    "@module": "pandas",
-                    "@class": "DataFrame",
-                    "data": o.to_json(default_handler=MontyEncoder().encode),
-                }
-            if isinstance(o, pd.Series):
-                return {
-                    "@module": "pandas",
-                    "@class": "Series",
-                    "data": o.to_json(default_handler=MontyEncoder().encode),
-                }
+        if _check_type(o, "pandas.core.frame.DataFrame"):
+            return {
+                "@module": "pandas",
+                "@class": "DataFrame",
+                "data": o.to_json(default_handler=MontyEncoder().encode),
+            }
+        if _check_type(o, "pandas.core.series.Series"):
+            return {
+                "@module": "pandas",
+                "@class": "Series",
+                "data": o.to_json(default_handler=MontyEncoder().encode),
+            }
 
         if bson is not None:
             if isinstance(o, bson.objectid.ObjectId):
@@ -560,7 +585,9 @@ class MontyDecoder(json.JSONDecoder):
                             dtype=d["dtype"],
                         )
                     return np.array(d["data"], dtype=d["dtype"])
-                elif pd is not None and modname == "pandas":
+                elif modname == "pandas":
+                    import pandas as pd
+
                     if classname == "DataFrame":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.DataFrame(decoded_data)
@@ -654,7 +681,14 @@ def jsanitize(
         ]
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
-    if pd is not None and isinstance(obj, (pd.Series, pd.DataFrame)):
+    if _check_type(
+        obj,
+        (
+            "pandas.core.series.Series",
+            "pandas.core.frame.DataFrame",
+            "pandas.core.base.PandasObject",
+        ),
+    ):
         return obj.to_dict()
     if isinstance(obj, dict):
         return {
