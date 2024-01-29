@@ -45,6 +45,16 @@ class GoodMSONClass(MSONable):
         )
 
 
+class LimitedMSONClass(MSONable):
+    """An MSONable class that only accepts a limited number of options"""
+
+    def __init__(self, a):
+        self.a = a
+
+    def __eq__(self, other):
+        return self.a == other.a
+
+
 class GoodNestedMSONClass(MSONable):
     def __init__(self, a_list, b_dict, c_list_dict_list, **kwargs):
         assert isinstance(a_list, list)
@@ -668,15 +678,21 @@ class TestJson:
         }
 
     def test_pydantic_integrations(self):
-        from pydantic import BaseModel
+        from pydantic import BaseModel, ValidationError
 
         global ModelWithMSONable  # allow model to be deserialized in test
+        global LimitedMSONClass
 
         class ModelWithMSONable(BaseModel):
             a: GoodMSONClass
 
         test_object = ModelWithMSONable(a=GoodMSONClass(1, 1, 1))
         test_dict_object = ModelWithMSONable(a=test_object.a.as_dict())
+        assert test_dict_object.a.a == test_object.a.a
+        dict_no_class = test_object.a.as_dict()
+        dict_no_class.pop("@class")
+        dict_no_class.pop("@module")
+        test_dict_object = ModelWithMSONable(a=dict_no_class)
         assert test_dict_object.a.a == test_object.a.a
 
         assert test_object.model_json_schema() == {
@@ -750,6 +766,34 @@ class TestJson:
         assert isinstance(obj, BaseModel)
         assert isinstance(obj.a["x"], GoodMSONClass)
         assert obj.a["x"].b == 1
+
+        # check that if an MSONable object raises an exception during
+        # the model validation it is properly handled by pydantic
+        global ModelWithUnion  # allow model to be deserialized in test
+        global ModelWithLimited  # allow model to be deserialized in test
+
+        class ModelWithLimited(BaseModel):
+            a: LimitedMSONClass
+
+        class ModelWithUnion(BaseModel):
+            a: LimitedMSONClass | dict
+
+        limited_dict = jsanitize(ModelWithLimited(a=LimitedMSONClass(1)), strict=True)
+        assert ModelWithLimited.model_validate(limited_dict)
+        limited_dict["a"]["b"] = 2
+        with pytest.raises(ValidationError):
+            ModelWithLimited.model_validate(limited_dict)
+
+        limited_union_dict = jsanitize(
+            ModelWithUnion(a=LimitedMSONClass(1)), strict=True
+        )
+        validated_model = ModelWithUnion.model_validate(limited_union_dict)
+        assert isinstance(validated_model, ModelWithUnion)
+        assert isinstance(validated_model.a, LimitedMSONClass)
+        limited_union_dict["a"]["b"] = 2
+        validated_model = ModelWithUnion.model_validate(limited_union_dict)
+        assert isinstance(validated_model, ModelWithUnion)
+        assert isinstance(validated_model.a, dict)
 
     def test_dataclass(self):
         c = Coordinates([Point(1, 2), Point(3, 4)])
