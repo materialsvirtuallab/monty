@@ -1,5 +1,8 @@
 # Change log
 
+## 2024.2.2
+- Bug fix for  Enum subclasses with custom as_dict, from_dict (@jmmshn)
+
 ## 2024.1.26
 - Fix import of optional libraries.
 
