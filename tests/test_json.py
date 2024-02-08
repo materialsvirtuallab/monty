@@ -185,6 +185,12 @@ class TestMSONable:
 
         self.auto_mson = AutoMSON
 
+        class ClassContainingKWOnlyArgs(MSONable):
+            def __init__(self, *, a):
+                self.a = a
+
+        self.kw_only_args_cls = ClassContainingKWOnlyArgs
+
     def test_to_from_dict(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
@@ -204,6 +210,16 @@ class TestMSONable:
         obj = self.auto_mson(2, 3)
         d = obj.as_dict()
         self.auto_mson.from_dict(d)
+
+    def test_kw_only_args(self):
+        obj = self.kw_only_args_cls(a=1)
+        d = obj.as_dict()
+        assert d is not None
+        assert d["a"] == 1
+        self.kw_only_args_cls.from_dict(d)
+        jsonstr = obj.to_json()
+        d = json.loads(jsonstr)
+        assert d["@class"], "ClassContainingKWOnlyArgs"
 
     def test_unsafe_hash(self):
         GMC = GoodMSONClass
