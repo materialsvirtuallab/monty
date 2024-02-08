@@ -173,7 +173,6 @@ class MSONable:
             d["@version"] = None  # type: ignore
 
         spec = getfullargspec(self.__class__.__init__)
-        args = spec.args
 
         def recursive_as_dict(obj):
             if isinstance(obj, (list, tuple)):
@@ -193,7 +192,7 @@ class MSONable:
                 return d
             return obj
 
-        for c in args:
+        for c in spec.args + spec.kwonlyargs:
             if c != "self":
                 try:
                     a = getattr(self, c)
