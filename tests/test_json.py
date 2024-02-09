@@ -670,8 +670,8 @@ class TestJson:
         clean = jsanitize(s)
         assert clean == s.to_dict()
 
-    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
-    def test_jsanitize_bson(self):
+    @pytest.mark.skipif(np is None or ObjectId is None, reason="numpy and bson not present")
+    def test_jsanitize_numpy_bson(self):
         d = {
             "a": ["b", np.array([1, 2, 3])],
             "b": ObjectId.from_datetime(datetime.datetime.now()),
