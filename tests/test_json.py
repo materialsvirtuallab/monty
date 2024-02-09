@@ -352,6 +352,19 @@ class TestJson:
         assert t2.type() == t.type()
         assert np.array_equal(t2, t)
 
+    def test_ase(self):
+        from ase.build import bulk
+        from ase.constraints import FixAtoms
+
+        atoms = bulk("Si")
+        c = FixAtoms(indices=[0])
+        atoms.set_constraint(c)
+
+        jsonstr = json.dumps(atoms, cls=MontyEncoder)
+        atoms2 = json.loads(jsonstr, cls=MontyDecoder)
+        assert isinstance(atoms2, ase.Atoms)
+        assert atoms2 == atoms
+
     def test_datetime(self):
         dt = datetime.datetime.now()
         jsonstr = json.dumps(dt, cls=MontyEncoder)

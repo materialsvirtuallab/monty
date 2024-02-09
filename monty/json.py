@@ -55,6 +55,11 @@ try:
 except ImportError:
     torch = None  # type: ignore
 
+try:
+    import ase
+except ImportError:
+    ase = None  # type: ignore
+
 __version__ = "3.0.0"
 
 
@@ -414,6 +419,14 @@ class MontyEncoder(json.JSONEncoder):
             if isinstance(o, np.generic):
                 return o.item()
 
+        if _check_type(o, "ase.atoms.Atoms"):
+            from ase.io.jsonio import encode
+
+            # Normally, we would want to this to be a wrapper around atoms.todict() with @module and
+            # @class key-value pairs inserted. However, atoms.todict()/atoms.fromdict() does not currently
+            # work properly with constraints.
+            {"@module": "ase.atoms", "@class": "Atoms", "atoms_json": encode(o)}
+
         if _check_type(o, "pandas.core.frame.DataFrame"):
             return {
                 "@module": "pandas",
@@ -594,6 +607,13 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
+                elif ase is not None and modname == "ase.atoms" and classname == "Atoms":
+                    from ase.io.jsonio import decode
+
+                    # Normally, we would want to have this be a wrapper around atoms.fromdict()
+                    # that just ignores the @module/@class key-value pairs. However, atoms.todict()/atoms.fromdict()
+                    # does not currently work properly with constraints.
+                    return decode(d["atoms_json"])
                 elif (
                     (bson is not None)
                     and modname == "bson.objectid"
