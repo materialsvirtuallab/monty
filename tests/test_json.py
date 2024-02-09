@@ -280,7 +280,9 @@ class TestMSONable:
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
+        obj = GoodNestedMSONClass(
+            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
+        )
 
         obj_dict = obj.as_dict()
         obj2 = GoodNestedMSONClass.from_dict(obj_dict)
@@ -463,7 +465,9 @@ class TestJson:
 
     @pytest.mark.skipif(pd is None, reason="pandas needed")
     def test_pandas(self):
-        cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
+        cls = ClassContainingDataFrame(
+            df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
+        )
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -475,7 +479,9 @@ class TestJson:
         assert isinstance(obj.df, pd.DataFrame)
         assert list(obj.df.a), [1 == 1]
 
-        cls = ClassContainingSeries(s=pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]}))
+        cls = ClassContainingSeries(
+            s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]}
+        )
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -687,7 +693,9 @@ class TestJson:
         assert clean == s.to_dict()
 
     def test_redirect(self):
-        MSONable.REDIRECT["tests.test_json"] = {"test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}}
+        MSONable.REDIRECT["tests.test_json"] = {
+            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
+        }
 
         d = {
             "@class": "test_class",
@@ -706,7 +714,11 @@ class TestJson:
 
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
-        assert data == {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}}
+        assert data == {
+            "old_module": {
+                "old_class": {"@class": "new_class", "@module": "new_module"}
+            }
+        }
 
     def test_pydantic_integrations(self):
         from pydantic import BaseModel, ValidationError
@@ -744,7 +756,9 @@ class TestJson:
             "required": ["a"],
         }
 
-        d = jsanitize(test_object, strict=True, enum_values=True, allow_bson=True)
+        d = jsanitize(
+            test_object_with_dict, strict=True, enum_values=True, allow_bson=True
+        )
         assert d == {
             "a": {
                 "@module": "tests.test_json",
@@ -813,7 +827,9 @@ class TestJson:
         with pytest.raises(ValidationError):
             ModelWithLimited.model_validate(limited_dict)
 
-        limited_union_dict = jsanitize(ModelWithUnion(a=LimitedMSONClass(1)), strict=True)
+        limited_union_dict = jsanitize(
+            ModelWithUnion(a=LimitedMSONClass(1)), strict=True
+        )
         validated_model = ModelWithUnion.model_validate(limited_union_dict)
         assert isinstance(validated_model, ModelWithUnion)
         assert isinstance(validated_model.a, LimitedMSONClass)
