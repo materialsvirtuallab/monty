@@ -607,7 +607,9 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
-                elif ase is not None and modname == "ase.atoms" and classname == "Atoms":
+                elif (
+                    ase is not None and modname == "ase.atoms" and classname == "Atoms"
+                ):
                     from ase.io.jsonio import decode
 
                     # Normally, we would want to have this be a wrapper around atoms.fromdict()
