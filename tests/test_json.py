@@ -7,11 +7,27 @@ import os
 import pathlib
 from enum import Enum
 
-import numpy as np
-import pandas as pd
+try:
+    import numpy as np
+except ImportError:
+    np = None
+
+try:
+    import pandas as pd
+except ImportError:
+    pd = None
+
+try:
+    import torch
+except ImportError:
+    torch = None
+
+try:
+    from bson.objectid import ObjectId
+except ImportError:
+    ObjectId = None
+
 import pytest
-import torch
-from bson.objectid import ObjectId
 
 from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
 
@@ -338,6 +354,7 @@ class TestJson:
         listobj2 = json.loads(s, cls=MontyDecoder)
         assert listobj2[0].a.a == 1
 
+    @pytest.mark.skipif(torch is None, reason="torch not present")
     def test_torch(self):
         t = torch.tensor([0, 1, 2])
         jsonstr = json.dumps(t, cls=MontyEncoder)
@@ -386,6 +403,7 @@ class TestJson:
         d = json.loads(djson)
         assert isinstance(d[0], float)
 
+    @pytest.mark.skipif(np is None, reason="numpy not present")
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         with pytest.raises(TypeError):
@@ -451,6 +469,7 @@ class TestJson:
         assert isinstance(obj.np_a["a"][0]["b"], np.ndarray)
         assert obj.np_a["a"][0]["b"][0][1] == 2 + 1j
 
+    @pytest.mark.skipif(pd is None, reason="pandas not present")
     def test_pandas(self):
         cls = ClassContainingDataFrame(
             df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
@@ -549,6 +568,7 @@ class TestJson:
         djson = json.dumps(instance, cls=MontyEncoder)
         assert "@class" in djson
 
+    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
     def test_objectid(self):
         oid = ObjectId("562e8301218dcbbc3d7d91ce")
         with pytest.raises(TypeError):
@@ -581,14 +601,6 @@ class TestJson:
         assert isinstance(clean["dt"], str)
         clean = jsanitize(d, allow_bson=True)
         assert isinstance(clean["dt"], datetime.datetime)
-
-        d = {
-            "a": ["b", np.array([1, 2, 3])],
-            "b": ObjectId.from_datetime(datetime.datetime.now()),
-        }
-        clean = jsanitize(d)
-        assert clean["a"], ["b", [1, 2 == 3]]
-        assert isinstance(clean["b"], str)
 
         rnd_bin = bytes(np.random.rand(10))
         d = {"a": bytes(rnd_bin)}
@@ -652,14 +664,21 @@ class TestJson:
         clean = jsanitize(d, strict=True)
         assert "@class" in clean["c"]
 
-        # test on pandas
-        df = pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
-        clean = jsanitize(df)
-        assert clean == df.to_dict()
-
+    @pytest.mark.skipif(pd is None, reason="pandas not present")
+    def test_jsanitize_pandas(self):
         s = pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})
         clean = jsanitize(s)
         assert clean == s.to_dict()
+
+    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
+    def test_jsanitize_bson(self):
+        d = {
+            "a": ["b", np.array([1, 2, 3])],
+            "b": ObjectId.from_datetime(datetime.datetime.now()),
+        }
+        clean = jsanitize(d)
+        assert clean["a"], ["b", [1, 2 == 3]]
+        assert isinstance(clean["b"], str)
 
     def test_redirect(self):
         MSONable.REDIRECT["tests.test_json"] = {
