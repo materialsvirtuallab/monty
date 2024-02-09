@@ -765,9 +765,7 @@ class TestJson:
             "required": ["a"],
         }
 
-        d = jsanitize(
-            test_object_with_dict, strict=True, enum_values=True, allow_bson=True
-        )
+        d = jsanitize(test_object, strict=True, enum_values=True, allow_bson=True)
         assert d == {
             "a": {
                 "@module": "tests.test_json",
