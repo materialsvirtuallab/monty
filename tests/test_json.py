@@ -246,10 +246,17 @@ class TestMSONable:
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
+        obj = GoodNestedMSONClass(
+            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
+        )
 
-        assert a_list[0].unsafe_hash().hexdigest() == "ea44de0e2ef627be582282c02c48e94de0d58ec6"
-        assert obj.unsafe_hash().hexdigest() == "44204c8da394e878f7562c9aa2e37c2177f28b81"
+        assert (
+            a_list[0].unsafe_hash().hexdigest()
+            == "ea44de0e2ef627be582282c02c48e94de0d58ec6"
+        )
+        assert (
+            obj.unsafe_hash().hexdigest() == "44204c8da394e878f7562c9aa2e37c2177f28b81"
+        )
 
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
@@ -493,7 +500,9 @@ class TestJson:
         assert isinstance(obj.s, pd.Series)
         assert list(obj.s.a), [1, 2 == 3]
 
-        cls = ClassContainingSeries(s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]})
+        cls = ClassContainingSeries(
+            s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]}
+        )
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -787,7 +796,9 @@ class TestJson:
             a: dict
 
         test_object_with_dict = ModelWithDict(a={"x": GoodMSONClass(1, 1, 1)})
-        d = jsanitize(test_object_with_dict, strict=True, enum_values=True, allow_bson=True)
+        d = jsanitize(
+            test_object_with_dict, strict=True, enum_values=True, allow_bson=True
+        )
         assert d == {
             "a": {
                 "x": {
