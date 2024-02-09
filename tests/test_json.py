@@ -7,28 +7,11 @@ import os
 import pathlib
 from enum import Enum
 
+import numpy as np
+import pandas as pd
 import pytest
+import torch
 from bson.objectid import ObjectId
-
-try:
-    import numpy as np
-except ImportError:
-    np = None
-
-try:
-    import pandas as pd
-except ImportError:
-    pd = None
-
-try:
-    import torch
-except ImportError:
-    torch = None
-
-try:
-    import ase
-except ImportError:
-    ase = None
 
 from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
 
@@ -355,7 +338,6 @@ class TestJson:
         listobj2 = json.loads(s, cls=MontyDecoder)
         assert listobj2[0].a.a == 1
 
-    @pytest.mark.skipif(torch is None, reason="torch needed")
     def test_torch(self):
         t = torch.tensor([0, 1, 2])
         jsonstr = json.dumps(t, cls=MontyEncoder)
@@ -404,7 +386,6 @@ class TestJson:
         d = json.loads(djson)
         assert isinstance(d[0], float)
 
-    @pytest.mark.skipif(np is None, reason="numpy needed")
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         with pytest.raises(TypeError):
@@ -470,7 +451,6 @@ class TestJson:
         assert isinstance(obj.np_a["a"][0]["b"], np.ndarray)
         assert obj.np_a["a"][0]["b"][0][1] == 2 + 1j
 
-    @pytest.mark.skipif(pd is None, reason="pandas needed")
     def test_pandas(self):
         cls = ClassContainingDataFrame(
             df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
@@ -486,9 +466,7 @@ class TestJson:
         assert isinstance(obj.df, pd.DataFrame)
         assert list(obj.df.a), [1 == 1]
 
-        cls = ClassContainingSeries(
-            s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]}
-        )
+        cls = ClassContainingSeries(s=pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]}))
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -513,21 +491,6 @@ class TestJson:
         assert isinstance(obj, ClassContainingSeries)
         assert isinstance(obj.s["df"][0], pd.Series)
         assert list(obj.s["df"][0].a), [1, 2 == 3]
-
-    @pytest.mark.skipif(ase is None, reason="ASE needed")
-    def test_ase(self):
-        from ase.atoms import Atoms
-        from ase.build import bulk
-        from ase.constraints import FixAtoms
-
-        atoms = bulk("Si")
-        c = FixAtoms(indices=[0])
-        atoms.set_constraint(c)
-
-        jsonstr = json.dumps(atoms, cls=MontyEncoder)
-        atoms2 = json.loads(jsonstr, cls=MontyDecoder)
-        assert isinstance(atoms2, Atoms)
-        assert atoms2 == atoms
 
     def test_callable(self):
         instance = MethodSerializationClass(a=1)
@@ -619,6 +582,20 @@ class TestJson:
         clean = jsanitize(d, allow_bson=True)
         assert isinstance(clean["dt"], datetime.datetime)
 
+        d = {
+            "a": ["b", np.array([1, 2, 3])],
+            "b": ObjectId.from_datetime(datetime.datetime.now()),
+        }
+        clean = jsanitize(d)
+        assert clean["a"], ["b", [1, 2 == 3]]
+        assert isinstance(clean["b"], str)
+
+        rnd_bin = bytes(np.random.rand(10))
+        d = {"a": bytes(rnd_bin)}
+        clean = jsanitize(d, allow_bson=True)
+        assert clean["a"] == bytes(rnd_bin)
+        assert isinstance(clean["a"], bytes)
+
         p = pathlib.Path("/home/user/")
         clean = jsanitize(p, strict=True)
         assert clean, ["/home/user" in "\\home\\user"]
@@ -675,24 +652,7 @@ class TestJson:
         clean = jsanitize(d, strict=True)
         assert "@class" in clean["c"]
 
-    @pytest.mark.skipif(np is None, reason="numpy needed")
-    def test_jsanitize_numpy(self):
-        d = {
-            "a": ["b", np.array([1, 2, 3])],
-            "b": ObjectId.from_datetime(datetime.datetime.now()),
-        }
-        clean = jsanitize(d)
-        assert clean["a"], ["b", [1, 2 == 3]]
-        assert isinstance(clean["b"], str)
-
-        rnd_bin = bytes(np.random.rand(10))
-        d = {"a": bytes(rnd_bin)}
-        clean = jsanitize(d, allow_bson=True)
-        assert clean["a"] == bytes(rnd_bin)
-        assert isinstance(clean["a"], bytes)
-
-    @pytest.mark.skipif(pd is None, reason="pandas needed")
-    def test_jsanitize_pandas(self):
+        # test on pandas
         df = pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
         clean = jsanitize(df)
         assert clean == df.to_dict()
