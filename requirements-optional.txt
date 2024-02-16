@@ -1,5 +1,5 @@
 numpy==1.26.4
-ruamel.yaml==0.18.5
+ruamel.yaml==0.18.6
 msgpack==1.0.7
 tqdm==4.66.2
 pymongo==4.6.1
