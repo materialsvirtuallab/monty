@@ -113,18 +113,28 @@ class TestDecorator:
         except ImportError:
             fictitious_mod = None  # type: ignore
 
-        @requires(fictitious_mod is not None, "fictitious_mod is not present.")
+        err_msg = "fictitious_mod is not present."
+
+        @requires(fictitious_mod is not None, err_msg)
         def use_fictitious_mod():
             print("success")
 
-        with pytest.raises(RuntimeError):
+        with pytest.raises(RuntimeError, match=err_msg):
             use_fictitious_mod()
 
-        @requires(unittest is not None, "scipy is not present.")
+        @requires(unittest is not None, "unittest is not present.")
         def use_unittest():
             return "success"
 
         assert use_unittest() == "success"
+
+        # test with custom error class
+        @requires(False, "expect ImportError", err_cls=ImportError)
+        def use_import_error():
+            return "success"
+
+        with pytest.raises(ImportError, match="expect ImportError"):
+            use_import_error()
 
     def test_install_except_hook(self):
         install_excepthook()
