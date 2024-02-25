@@ -29,8 +29,9 @@ class TestCopyR:
         os.mkdir(os.path.join(test_dir, "cpr_src", "sub"))
         with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
             f.write("what2")
-        if os.name != "nt" and not Path("test_dir", "symlink1").exists():
-            Path(test_dir, "symlink1").symlink_to(Path(test_dir, "cpr_src", "test"))
+        symlink_path = Path(test_dir, "cpr_src", "test")
+        if os.name != "nt" and not symlink_path.exists():
+            Path(test_dir, "symlink1").symlink_to(symlink_path)
 
     def test_recursive_copy_and_compress(self):
         copy_r(os.path.join(test_dir, "cpr_src"), os.path.join(test_dir, "cpr_dst"))
