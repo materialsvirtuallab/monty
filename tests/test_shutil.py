@@ -29,7 +29,6 @@ class TestCopyR:
         os.mkdir(os.path.join(test_dir, "cpr_src", "sub"))
         with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
             f.write("what2")
-        symlink_path = Path(test_dir, "cpr_src", "test")
         if os.name != "nt":
             os.symlink(
                 os.path.join(test_dir, "cpr_src", "test"),
