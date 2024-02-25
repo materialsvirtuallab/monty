@@ -29,7 +29,7 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
     for f in os.listdir(abssrc):
         if fpath.is_symlink():
             continue
-        if fpath.is_file():
+        elif fpath.is_file():
             shutil.copy(fpath, absdst)
         elif str(fpath) not in str(absdst):
             copy_r(fpath, Path(absdst, f))
