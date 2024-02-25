@@ -27,8 +27,9 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
     absdst = dst.resolve()
     os.makedirs(absdst, exist_ok=True)
     for f in os.listdir(abssrc):
-        fpath = Path(abssrc, f)
-        if Path(fpath).is_file():
+        if fpath.is_symlink():
+            continue
+        if fpath.is_file():
             shutil.copy(fpath, absdst)
         elif str(fpath) not in str(absdst):
             copy_r(fpath, Path(absdst, f))
