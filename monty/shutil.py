@@ -79,7 +79,7 @@ def compress_file(
     filepath = Path(filepath)
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
-    if filepath.suffix.lower() != f".{compression}":
+    if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
         with open(filepath, "rb") as f_in, zopen(
             f"{filepath}.{compression}", "wb"
         ) as f_out:
