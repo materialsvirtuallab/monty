@@ -27,6 +27,7 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
     absdst = dst.resolve()
     os.makedirs(absdst, exist_ok=True)
     for f in os.listdir(abssrc):
+        fpath = Path(abssrc, f)
         if fpath.is_symlink():
             continue
         elif fpath.is_file():
