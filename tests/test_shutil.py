@@ -33,7 +33,7 @@ class TestCopyR:
         if os.name != "nt":
             os.symlink(
                 os.path.join(test_dir, "cpr_src", "test"),
-                os.path.join(test_dir, "cpr_src"),
+                os.path.join(test_dir, "cpr_src", "mysymlink"),
             )
 
     def test_recursive_copy_and_compress(self):
