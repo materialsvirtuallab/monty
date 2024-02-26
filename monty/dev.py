@@ -76,13 +76,16 @@ class requires:
         message: A message to be displayed if the condition is not True.
     """
 
-    def __init__(self, condition, message):
+    def __init__(
+        self, condition: bool, message: str, err_cls: Exception = RuntimeError
+    ) -> None:
         """
         :param condition: A expression returning a bool.
         :param message: Message to display if condition is False.
         """
         self.condition = condition
         self.message = message
+        self.err_cls = err_cls
 
     def __call__(self, _callable):
         """
@@ -92,7 +95,7 @@ class requires:
         @functools.wraps(_callable)
         def decorated(*args, **kwargs):
             if not self.condition:
-                raise RuntimeError(self.message)
+                raise self.err_cls(self.message)
             return _callable(*args, **kwargs)
 
         return decorated
