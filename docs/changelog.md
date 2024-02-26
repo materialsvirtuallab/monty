@@ -1,5 +1,8 @@
 # Change log
 
+## 2024.2.26
+- Bug fix for symlinks when using copy_r (@Andrew-S-Rosen)
+
 ## 2024.2.2
 - Bug fix for  Enum subclasses with custom as_dict, from_dict (@jmmshn)
 
