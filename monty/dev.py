@@ -77,7 +77,7 @@ class requires:
     """
 
     def __init__(
-        self, condition: bool, message: str, err_cls: Exception = RuntimeError
+        self, condition: bool, message: str, err_cls: type[Exception] = RuntimeError
     ) -> None:
         """
         :param condition: A expression returning a bool.
