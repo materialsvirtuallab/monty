@@ -28,7 +28,9 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
     os.makedirs(absdst, exist_ok=True)
     for f in os.listdir(abssrc):
         fpath = Path(abssrc, f)
-        if Path(fpath).is_file():
+        if fpath.is_symlink():
+            continue
+        elif fpath.is_file():
             shutil.copy(fpath, absdst)
         elif str(fpath) not in str(absdst):
             copy_r(fpath, Path(absdst, f))
@@ -77,7 +79,7 @@ def compress_file(
     filepath = Path(filepath)
     if compression not in ["gz", "bz2"]:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
-    if filepath.suffix.lower() != f".{compression}":
+    if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
         with open(filepath, "rb") as f_in, zopen(
             f"{filepath}.{compression}", "wb"
         ) as f_out:
