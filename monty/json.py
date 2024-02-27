@@ -328,7 +328,7 @@ class MSONable:
         if core_schema is None:
             raise RuntimeError("Pydantic >= 2.0 is required for validation")
 
-        s = core_schema.general_plain_validator_function(cls.validate_monty_v2)
+        s = core_schema.with_info_plain_validator_function(cls.validate_monty_v2)
 
         return core_schema.json_or_python_schema(json_schema=s, python_schema=s)
 
