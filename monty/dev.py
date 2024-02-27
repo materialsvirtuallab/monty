@@ -48,7 +48,7 @@ def deprecated(
         msg = f"{old.__name__} is deprecated"
 
         if deadline is not None:
-            msg += f", and would be removed on {deadline.strftime('%Y-%m-%d')}\n"
+            msg += f", and will be removed on {deadline:%Y-%m-%d}\n"
 
         if replacement is not None:
             if isinstance(replacement, property):
@@ -73,7 +73,9 @@ def deprecated(
 
     # Raise a CI error after removal deadline
     if deadline is not None and "CI" in os.environ and datetime.now() > deadline:
-        raise RuntimeError("This function should have been removed.")
+        raise DeprecationWarning(
+            "This function should have been removed on {deadline:%Y-%m-%d}."
+        )
 
     return deprecated_decorator
 

@@ -97,7 +97,7 @@ class TestDecorator:
             # Trigger a warning.
             func_old()
             # Verify message
-            assert "would be removed on 2000-01-01" in str(w[0].message)
+            assert "will be removed on 2000-01-01" in str(w[0].message)
 
     def test_requires(self):
         try:
