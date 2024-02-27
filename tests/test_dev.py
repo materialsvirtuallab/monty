@@ -4,6 +4,9 @@ import warnings
 import pytest
 from monty.dev import deprecated, install_excepthook, requires
 
+# Set all warnings to always be triggered.
+warnings.simplefilter("always")
+
 
 class TestDecorator:
     def test_deprecated(self):
@@ -15,8 +18,6 @@ class TestDecorator:
             pass
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
             func_old()
             # Verify Warning and message
@@ -41,16 +42,12 @@ class TestDecorator:
                 return "a"
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
             assert TestClass().property_b == "b"
             # Verify warning type
             assert issubclass(w[-1].category, FutureWarning)
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
             assert TestClass().func_a() == "a"
             # Verify some things
@@ -70,8 +67,6 @@ class TestDecorator:
                 return "b"
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
             assert TestClass().classmethod_b() == "b"
             # Verify some things
