@@ -2,32 +2,30 @@ import unittest
 import warnings
 
 import pytest
-
 from monty.dev import deprecated, install_excepthook, requires
 
 
 class TestDecorator:
     def test_deprecated(self):
-        def func_a():
+        def func_replace():
             pass
 
-        @deprecated(func_a, "hello")
-        def func_b():
+        @deprecated(func_replace, "Use func_replace instead")
+        def func_old():
             pass
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            func_b()
-            # Verify some things
+            func_old()
+            # Verify Warning and message
             assert issubclass(w[0].category, FutureWarning)
-            assert "hello" in str(w[0].message)
+            assert "Use func_replace instead" in str(w[0].message)
 
     def test_deprecated_property(self):
-        class a:
-            def __init__(self):
-                pass
+        class TestClass:
+            """A dummy class for tests."""
 
             @property
             def property_a(self):
@@ -46,22 +44,21 @@ class TestDecorator:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            assert a().property_b == "b"
-            # Verify some things
+            assert TestClass().property_b == "b"
+            # Verify warning type
             assert issubclass(w[-1].category, FutureWarning)
 
         with warnings.catch_warnings(record=True) as w:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            assert a().func_a() == "a"
+            assert TestClass().func_a() == "a"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
     def test_deprecated_classmethod(self):
-        class A:
-            def __init__(self):
-                pass
+        class TestClass:
+            """A dummy class for tests."""
 
             @classmethod
             def classmethod_a(self):
@@ -76,13 +73,12 @@ class TestDecorator:
             # Cause all warnings to always be triggered.
             warnings.simplefilter("always")
             # Trigger a warning.
-            assert A().classmethod_b() == "b"
+            assert TestClass().classmethod_b() == "b"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
-        class A:
-            def __init__(self):
-                pass
+        class TestClass:
+            """A dummy class for tests."""
 
             @classmethod
             def classmethod_a(self):
@@ -94,7 +90,7 @@ class TestDecorator:
                 return "b"
 
         with pytest.warns(DeprecationWarning):
-            assert A().classmethod_b() == "b"
+            assert TestClass().classmethod_b() == "b"
 
     def test_requires(self):
         try:
