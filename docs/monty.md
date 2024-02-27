@@ -44,7 +44,6 @@ useful design patterns such as singleton and cached_class, and many more.
   * `singleton()`
 * [monty.dev module](monty.dev.md)
   * `deprecated()`
-  * `get_ncpus()`
   * `install_excepthook()`
   * `requires`
 * [monty.fnmatch module](monty.fnmatch.md)
