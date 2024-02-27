@@ -7,11 +7,16 @@ import functools
 import logging
 import sys
 import warnings
+from typing import Callable, Optional, Type
 
 logger = logging.getLogger(__name__)
 
 
-def deprecated(replacement=None, message=None, category=FutureWarning):
+def deprecated(
+    replacement: Optional[Callable] = None,
+    message: Optional[str] = None,
+    category: Type[Warning] = FutureWarning,
+):
     """
     Decorator to mark classes or functions as deprecated, with a possible replacement.
 
@@ -19,7 +24,7 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
         replacement (callable): A replacement class or method.
         message (str): A warning message to be displayed.
         category (Warning): Choose the category of the warning to issue. Defaults
-            to FutureWarning. Another choice can be DeprecationWarning. NOte that
+            to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.
             DeprecationWarning is meant for developers and is never shown unless
             python is run in developmental mode or the filter is changed. Make
@@ -29,7 +34,7 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
         Original function, but with a warning to use the updated class.
     """
 
-    def craft_message(old, replacement, message):
+    def craft_message(old: Callable, replacement: Callable, message: str):
         msg = f"{old.__name__} is deprecated"
         if replacement is not None:
             if isinstance(replacement, property):
@@ -43,7 +48,7 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
             msg += "\n" + message
         return msg
 
-    def deprecated_decorator(old):
+    def deprecated_decorator(old: Callable):
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message)
             warnings.warn(msg, category=category, stacklevel=2)
@@ -101,7 +106,7 @@ class requires:
         return decorated
 
 
-def install_excepthook(hook_type="color", **kwargs):
+def install_excepthook(hook_type: str = "color", **kwargs):
     """
     This function replaces the original python traceback with an improved
     version from Ipython. Use `color` for colourful traceback formatting,
