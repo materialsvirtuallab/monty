@@ -6,17 +6,6 @@ import pytest
 from monty.dev import deprecated, install_excepthook, requires
 
 
-class A:
-    @property
-    def repl_prop(self):
-        pass
-
-    @deprecated(repl_prop)  # type: ignore
-    @property
-    def prop(self):
-        pass
-
-
 class TestDecorator:
     def test_deprecated(self):
         def func_a():
