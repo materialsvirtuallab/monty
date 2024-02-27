@@ -18,7 +18,7 @@ with a possible replacement.
   * **replacement** (*callable*) – A replacement class or method.
   * **message** (*str*) – A warning message to be displayed.
   * **category** (*Warning*) – Choose the category of the warning to issue. Defaults
-    to FutureWarning. Another choice can be DeprecationWarning. NOte that
+    to FutureWarning. Another choice can be DeprecationWarning. Note that
     FutureWarning is meant for end users and is always shown unless silenced.
     DeprecationWarning is meant for developers and is never shown unless
     python is run in developmental mode or the filter is changed. Make

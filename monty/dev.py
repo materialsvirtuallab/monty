@@ -41,9 +41,7 @@ def deprecated(
     """
 
     def _convert_date(date: tuple[int, int, int]) -> datetime:
-        """Convert a date in int tuple for datetime type.
-        Expect the date in (yyyy, MM, dd) format.
-        """
+        """Convert date as int tuple (yyyy, MM, dd) to datetime type."""
         return datetime(*date)
 
     def craft_message(
