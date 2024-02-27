@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def deprecated(
     replacement: Optional[Callable] = None,
     message: str = "",
-    deadline: Optional[datetime] = None,
+    deadline: Optional[tuple[int, int, int]] = None,
     category: Type[Warning] = FutureWarning,
 ):
     """
@@ -26,8 +26,9 @@ def deprecated(
     Args:
         replacement (callable): A replacement class or method.
         message (str): A warning message to be displayed.
-        deadline (datetime): Optional deadline for removal of the old function/class.
-            A CI error would be raised after this date.
+        deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
+            of the old function/class, in format (yyyy, MM, dd). A CI error would
+            be raised after this date.
         category (Warning): Choose the category of the warning to issue. Defaults
             to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.
@@ -38,6 +39,12 @@ def deprecated(
     Returns:
         Original function, but with a warning to use the updated class.
     """
+
+    def _convert_date(date: tuple[int, int, int]) -> datetime:
+        """Convert a date in int tuple for datetime type.
+        Expect the date in (yyyy, MM, dd) format.
+        """
+        return datetime(*date)
 
     def craft_message(
         old: Callable,
@@ -65,17 +72,22 @@ def deprecated(
 
     def deprecated_decorator(old: Callable):
         def wrapped(*args, **kwargs):
-            msg = craft_message(old, replacement, message, deadline)
+            msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
             return old(*args, **kwargs)
 
         return wrapped
 
     # Raise a CI error after removal deadline
-    if deadline is not None and os.getenv("CI") and datetime.now() > deadline:
-        raise DeprecationWarning(
-            "This function should have been removed on {deadline:%Y-%m-%d}."
-        )
+    if deadline is None:
+        _deadline = None
+
+    else:
+        _deadline = _convert_date(deadline)
+        if os.getenv("CI") and datetime.now() > _deadline:
+            raise DeprecationWarning(
+                "This function should have been removed on {deadline:%Y-%m-%d}."
+            )
 
     return deprecated_decorator
 

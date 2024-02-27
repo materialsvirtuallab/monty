@@ -1,6 +1,5 @@
 import unittest
 import warnings
-from datetime import datetime
 
 import pytest
 from monty.dev import deprecated, install_excepthook, requires
@@ -89,7 +88,7 @@ class TestDecorator:
             assert TestClass().classmethod_b() == "b"
 
     def test_deprecated_deadline(self):
-        @deprecated(deadline=datetime(2000, 1, 1))
+        @deprecated(deadline=(2000, 1, 1))
         def func_old():
             pass
 
