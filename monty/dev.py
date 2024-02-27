@@ -5,8 +5,10 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 
 import functools
 import logging
+import os
 import sys
 import warnings
+from datetime import datetime
 from typing import Callable, Optional, Type
 
 logger = logging.getLogger(__name__)
@@ -14,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 def deprecated(
     replacement: Optional[Callable] = None,
-    message: Optional[str] = None,
+    message: str = "",
+    deadline: Optional[datetime] = None,
     category: Type[Warning] = FutureWarning,
 ):
     """
@@ -23,6 +26,8 @@ def deprecated(
     Args:
         replacement (callable): A replacement class or method.
         message (str): A warning message to be displayed.
+        deadline (datetime): Optional deadline for removal of the old function/class.
+            A CI error would be raised after this date.
         category (Warning): Choose the category of the warning to issue. Defaults
             to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.
@@ -34,8 +39,17 @@ def deprecated(
         Original function, but with a warning to use the updated class.
     """
 
-    def craft_message(old: Callable, replacement: Callable, message: str):
+    def craft_message(
+        old: Callable,
+        replacement: Callable,
+        message: str,
+        deadline: datetime,
+    ):
         msg = f"{old.__name__} is deprecated"
+
+        if deadline is not None:
+            msg += f", and would be removed on {deadline.strftime('%Y-%m-%d')}\n"
+
         if replacement is not None:
             if isinstance(replacement, property):
                 r = replacement.fget
@@ -44,17 +58,22 @@ def deprecated(
             else:
                 r = replacement
             msg += f"; use {r.__name__} in {r.__module__} instead."
-        if message is not None:
+
+        if message:
             msg += "\n" + message
         return msg
 
     def deprecated_decorator(old: Callable):
         def wrapped(*args, **kwargs):
-            msg = craft_message(old, replacement, message)
+            msg = craft_message(old, replacement, message, deadline)
             warnings.warn(msg, category=category, stacklevel=2)
             return old(*args, **kwargs)
 
         return wrapped
+
+    # Raise a CI error after removal deadline
+    if deadline is not None and "CI" in os.environ and datetime.now() > deadline:
+        raise RuntimeError("This function should have been removed.")
 
     return deprecated_decorator
 
