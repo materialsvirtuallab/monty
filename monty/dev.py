@@ -72,7 +72,7 @@ def deprecated(
         return wrapped
 
     # Raise a CI error after removal deadline
-    if deadline is not None and "CI" in os.environ and datetime.now() > deadline:
+    if deadline is not None and os.getenv("CI") and datetime.now() > deadline:
         raise DeprecationWarning(
             "This function should have been removed on {deadline:%Y-%m-%d}."
         )
