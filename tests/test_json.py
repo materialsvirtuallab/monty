@@ -261,17 +261,10 @@ class TestMSONable:
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(
-            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
-        )
+        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
 
-        assert (
-            a_list[0].unsafe_hash().hexdigest()
-            == "ea44de0e2ef627be582282c02c48e94de0d58ec6"
-        )
-        assert (
-            obj.unsafe_hash().hexdigest() == "44204c8da394e878f7562c9aa2e37c2177f28b81"
-        )
+        assert a_list[0].unsafe_hash().hexdigest() == "ea44de0e2ef627be582282c02c48e94de0d58ec6"
+        assert obj.unsafe_hash().hexdigest() == "44204c8da394e878f7562c9aa2e37c2177f28b81"
 
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
@@ -302,9 +295,7 @@ class TestMSONable:
                 "list5": [GMC(15, 15.0, "fifteen")],
             },
         ]
-        obj = GoodNestedMSONClass(
-            a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list
-        )
+        obj = GoodNestedMSONClass(a_list=a_list, b_dict=b_dict, c_list_dict_list=c_list_dict_list)
 
         obj_dict = obj.as_dict()
         obj2 = GoodNestedMSONClass.from_dict(obj_dict)
@@ -413,6 +404,15 @@ class TestJson:
         d = json.loads(jsonstr, cls=MontyDecoder)
         assert isinstance(d["uuid"], UUID)
 
+    def test_path(self):
+        from pathlib import Path
+
+        p = Path("/home/user/")
+        jsonstr = json.dumps(p, cls=MontyEncoder)
+        d = json.loads(jsonstr, cls=MontyDecoder)
+        assert isinstance(d, Path)
+        assert d == p
+
     def test_nan(self):
         x = [float("NaN")]
         djson = json.dumps(x, cls=MontyEncoder)
@@ -487,9 +487,7 @@ class TestJson:
 
     @pytest.mark.skipif(pd is None, reason="pandas not present")
     def test_pandas(self):
-        cls = ClassContainingDataFrame(
-            df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}])
-        )
+        cls = ClassContainingDataFrame(df=pd.DataFrame([{"a": 1, "b": 1}, {"a": 1, "b": 2}]))
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -513,9 +511,7 @@ class TestJson:
         assert isinstance(obj.s, pd.Series)
         assert list(obj.s.a), [1, 2 == 3]
 
-        cls = ClassContainingSeries(
-            s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]}
-        )
+        cls = ClassContainingSeries(s={"df": [pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})]})
 
         d = json.loads(MontyEncoder().encode(cls))
 
@@ -686,9 +682,7 @@ class TestJson:
         clean = jsanitize(s)
         assert clean == s.to_dict()
 
-    @pytest.mark.skipif(
-        np is None or ObjectId is None, reason="numpy and bson not present"
-    )
+    @pytest.mark.skipif(np is None or ObjectId is None, reason="numpy and bson not present")
     def test_jsanitize_numpy_bson(self):
         d = {
             "a": ["b", np.array([1, 2, 3])],
@@ -699,9 +693,7 @@ class TestJson:
         assert isinstance(clean["b"], str)
 
     def test_redirect(self):
-        MSONable.REDIRECT["tests.test_json"] = {
-            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
-        }
+        MSONable.REDIRECT["tests.test_json"] = {"test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}}
 
         d = {
             "@class": "test_class",
@@ -720,11 +712,7 @@ class TestJson:
 
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
-        assert data == {
-            "old_module": {
-                "old_class": {"@class": "new_class", "@module": "new_module"}
-            }
-        }
+        assert data == {"old_module": {"old_class": {"@class": "new_class", "@module": "new_module"}}}
 
     def test_pydantic_integrations(self):
         from pydantic import BaseModel, ValidationError
@@ -791,9 +779,7 @@ class TestJson:
             a: dict
 
         test_object_with_dict = ModelWithDict(a={"x": GoodMSONClass(1, 1, 1)})
-        d = jsanitize(
-            test_object_with_dict, strict=True, enum_values=True, allow_bson=True
-        )
+        d = jsanitize(test_object_with_dict, strict=True, enum_values=True, allow_bson=True)
         assert d == {
             "a": {
                 "x": {
@@ -833,9 +819,7 @@ class TestJson:
         with pytest.raises(ValidationError):
             ModelWithLimited.model_validate(limited_dict)
 
-        limited_union_dict = jsanitize(
-            ModelWithUnion(a=LimitedMSONClass(1)), strict=True
-        )
+        limited_union_dict = jsanitize(ModelWithUnion(a=LimitedMSONClass(1)), strict=True)
         validated_model = ModelWithUnion.model_validate(limited_union_dict)
         assert isinstance(validated_model, ModelWithUnion)
         assert isinstance(validated_model.a, LimitedMSONClass)
