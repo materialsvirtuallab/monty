@@ -547,7 +547,7 @@ class MontyDecoder(json.JSONDecoder):
 
                     if modname == "uuid" and classname == "UUID":
                         return UUID(d["string"])
-                
+
                     if modname == "pathlib" and classname == "Path":
                         return Path(d["string"])
 

@@ -1,6 +1,7 @@
 """
 Useful additional functions for operators
 """
+
 import operator
 
 
