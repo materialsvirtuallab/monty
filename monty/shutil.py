@@ -6,7 +6,7 @@ import shutil
 import warnings
 from gzip import GzipFile
 from pathlib import Path
-from typing import Literal
+from typing import Literal, Optional
 
 from .io import zopen
 
@@ -66,7 +66,7 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
 def compress_file(
     filepath: str | Path,
     compression: Literal["gz", "bz2"] = "gz",
-    target_dir: str | Path = "",
+    target_dir: Optional[str | Path] = None,
 ) -> None:
     """
     Compresses a file with the correct extension. Functions like standard
@@ -78,16 +78,16 @@ def compress_file(
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to "gz".
         target_dir (str | Path): An optional target dir where the result compressed
-            file would be stored. Defaults to in-place compression.
+            file would be stored. Defaults to None for in-place compression.
     """
     filepath = Path(filepath)
-    target_dir = str(target_dir)
+    target_dir = Path(target_dir) if target_dir is not None else None
 
     if compression not in {"gz", "bz2"}:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
 
     if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
-        if target_dir:
+        if target_dir is not None:
             os.makedirs(target_dir, exist_ok=True)
             compressed_file = os.path.join(
                 target_dir, f"{os.path.basename(filepath)}.{compression}"
@@ -121,7 +121,9 @@ def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> 
     return None
 
 
-def decompress_file(filepath: str | Path, target_dir: str | Path = "") -> str | None:
+def decompress_file(
+    filepath: str | Path, target_dir: Optional[str | Path] = None
+) -> str | None:
     """
     Decompresses a file with the correct extension. Automatically detects
     gz, bz2 or z extension.
@@ -129,17 +131,17 @@ def decompress_file(filepath: str | Path, target_dir: str | Path = "") -> str | 
     Args:
         filepath (str | Path): Path to file.
         target_dir (str | Path): An optional target dir where the result decompressed
-            file would be stored. Defaults to in-place decompression.
+            file would be stored. Defaults to None for in-place decompression.
 
     Returns:
         str | None: The decompressed file path, None if no operation.
     """
     filepath = Path(filepath)
+    target_dir = Path(target_dir) if target_dir is not None else None
     file_ext = filepath.suffix
-    target_dir = str(target_dir)
 
     if file_ext.lower() in {".bz2", ".gz", ".z"} and filepath.is_file():
-        if target_dir:
+        if target_dir is not None:
             os.makedirs(target_dir, exist_ok=True)
             decompressed_file = os.path.join(
                 target_dir, os.path.basename(str(filepath)).removesuffix(file_ext)
