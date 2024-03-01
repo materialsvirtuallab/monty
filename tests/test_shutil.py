@@ -114,7 +114,6 @@ class TestCompressFileDir:
             with open(fname) as f:
                 assert f.read() == "hello world"
 
-
     def teardown_method(self):
         os.remove(os.path.join(test_dir, "tempfile"))
 
