@@ -64,7 +64,9 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
 
 
 def compress_file(
-    filepath: str | Path, compression: Literal["gz", "bz2"] = "gz"
+    filepath: str | Path,
+    compression: Literal["gz", "bz2"] = "gz",
+    target_dir: str | Path = "",
 ) -> None:
     """
     Compresses a file with the correct extension. Functions like standard
@@ -75,15 +77,25 @@ def compress_file(
         filepath (str | Path): Path to file.
         compression (str): A compression mode. Valid options are "gz" or
             "bz2". Defaults to "gz".
+        target_dir (str | Path): An optional target dir where the result compressed
+            file would be stored. Defaults to in-place compression.
     """
     filepath = Path(filepath)
-    if compression not in ["gz", "bz2"]:
+
+    if compression not in {"gz", "bz2"}:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
+
     if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
-        with open(filepath, "rb") as f_in, zopen(
-            f"{filepath}.{compression}", "wb"
-        ) as f_out:
+        if target_dir:
+            compressed_file = Path(target_dir) / filepath.with_suffix(
+                filepath.suffix + f".{compression}"
+            )
+        else:
+            compressed_file = filepath.with_suffix(filepath.suffix + f".{compression}")
+
+        with open(filepath, "rb") as f_in, zopen(compressed_file, "wb") as f_out:
             f_out.writelines(f_in)
+
         os.remove(filepath)
 
 
@@ -106,23 +118,33 @@ def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> 
     return None
 
 
-def decompress_file(filepath: str | Path) -> str | None:
+def decompress_file(filepath: str | Path, target_dir: str | Path = "") -> str | None:
     """
     Decompresses a file with the correct extension. Automatically detects
     gz, bz2 or z extension.
 
     Args:
-        filepath (str): Path to file.
+        filepath (str | Path): Path to file.
+        target_dir (str | Path): An optional target dir where the result decompressed
+            file would be stored. Defaults to in-place decompression.
 
     Returns:
-        str: The decompressed file path.
+        str | None: The decompressed file path, None if no operation.
     """
     filepath = Path(filepath)
     file_ext = filepath.suffix
-    if file_ext.lower() in [".bz2", ".gz", ".z"] and filepath.is_file():
-        decompressed_file = Path(str(filepath).removesuffix(file_ext))
+
+    if file_ext.lower() in {".bz2", ".gz", ".z"} and filepath.is_file():
+        if target_dir:
+            decompressed_file = Path(target_dir) / Path(
+                str(filepath).removesuffix(file_ext)
+            )
+        else:
+            decompressed_file = Path(str(filepath).removesuffix(file_ext))
+
         with zopen(filepath, "rb") as f_in, open(decompressed_file, "wb") as f_out:
             f_out.writelines(f_in)
+
         os.remove(filepath)
 
         return str(decompressed_file)
