@@ -88,6 +88,7 @@ def compress_file(
 
     if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
         if target_dir:
+            os.makedirs(target_dir, exist_ok=True)
             compressed_file = os.path.join(
                 target_dir, f"{os.path.basename(filepath)}.{compression}"
             )
@@ -139,6 +140,7 @@ def decompress_file(filepath: str | Path, target_dir: str | Path = "") -> str | 
 
     if file_ext.lower() in {".bz2", ".gz", ".z"} and filepath.is_file():
         if target_dir:
+            os.makedirs(target_dir, exist_ok=True)
             decompressed_file = os.path.join(
                 target_dir, os.path.basename(str(filepath)).removesuffix(file_ext)
             )

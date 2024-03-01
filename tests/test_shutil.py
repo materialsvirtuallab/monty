@@ -95,8 +95,6 @@ class TestCompressFileDir:
         target_dir = os.path.join(test_dir, "temp_target_dir")
 
         for fmt in ["gz", "bz2"]:
-            os.makedirs(target_dir)
-
             compress_file(fname, fmt, target_dir)
             compressed_file_path = os.path.join(
                 target_dir, f"{os.path.basename(fname)}.{fmt}"
@@ -111,11 +109,11 @@ class TestCompressFileDir:
 
             # Reset temp file position
             shutil.move(decompressed_file_path, fname)
+            shutil.rmtree(target_dir)
 
             with open(fname) as f:
                 assert f.read() == "hello world"
 
-            shutil.rmtree(target_dir)
 
     def teardown_method(self):
         os.remove(os.path.join(test_dir, "tempfile"))
