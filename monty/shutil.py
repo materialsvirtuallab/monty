@@ -81,17 +81,19 @@ def compress_file(
             file would be stored. Defaults to in-place compression.
     """
     filepath = Path(filepath)
+    target_dir = str(target_dir)
 
     if compression not in {"gz", "bz2"}:
         raise ValueError("Supported compression formats are 'gz' and 'bz2'.")
 
     if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
         if target_dir:
-            compressed_file = Path(target_dir) / filepath.with_suffix(
-                filepath.suffix + f".{compression}"
+            compressed_file = os.path.join(
+                target_dir, f"{os.path.basename(filepath)}.{compression}"
             )
+
         else:
-            compressed_file = filepath.with_suffix(filepath.suffix + f".{compression}")
+            compressed_file = f"{str(filepath)}.{compression}"
 
         with open(filepath, "rb") as f_in, zopen(compressed_file, "wb") as f_out:
             f_out.writelines(f_in)
@@ -133,14 +135,15 @@ def decompress_file(filepath: str | Path, target_dir: str | Path = "") -> str | 
     """
     filepath = Path(filepath)
     file_ext = filepath.suffix
+    target_dir = str(target_dir)
 
     if file_ext.lower() in {".bz2", ".gz", ".z"} and filepath.is_file():
         if target_dir:
-            decompressed_file = Path(target_dir) / Path(
-                str(filepath).removesuffix(file_ext)
+            decompressed_file = os.path.join(
+                target_dir, os.path.basename(str(filepath)).removesuffix(file_ext)
             )
         else:
-            decompressed_file = Path(str(filepath).removesuffix(file_ext))
+            decompressed_file = str(filepath).removesuffix(file_ext)
 
         with zopen(filepath, "rb") as f_in, open(decompressed_file, "wb") as f_out:
             f_out.writelines(f_in)
