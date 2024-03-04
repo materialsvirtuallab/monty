@@ -600,7 +600,7 @@ class TestJson:
         assert clean["world"] is None
         assert json.loads(json.dumps(d)) == json.loads(json.dumps(clean))
 
-        d = {"hello": GoodMSONClass(1, 2, 3)}
+        d = {"hello": GoodMSONClass(1, 2, 3), "test": "hi"}
         with pytest.raises(TypeError):
             json.dumps(d)
         clean = jsanitize(d)
@@ -611,6 +611,7 @@ class TestJson:
         clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
         assert clean_recursive_msonable["hello"]["a"] == 1
         assert clean_recursive_msonable["hello"]["b"] == 2
+        assert clean_recursive_msonable["test"] == "hi"
 
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
