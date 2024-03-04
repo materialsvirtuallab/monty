@@ -713,7 +713,7 @@ def jsanitize(
         except TypeError:
             pass
 
-    if recursive_msonable and isinstance(obj, MSONable):
+    if recursive_msonable and hasattr(obj, "as_dict") and callable(obj.as_dict):
         return obj.as_dict()
 
     if not strict:
