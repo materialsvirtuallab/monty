@@ -608,6 +608,7 @@ class TestJson:
         clean_strict = jsanitize(d, strict=True)
         assert clean_strict["hello"]["a"] == 1
         assert clean_strict["hello"]["b"] == 2
+        assert clean_strict["test"] == "hi"
         clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
         assert clean_recursive_msonable["hello"]["a"] == 1
         assert clean_recursive_msonable["hello"]["b"] == 2
