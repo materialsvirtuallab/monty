@@ -1,6 +1,7 @@
 """
 Path based methods, e.g., which, zpath, etc.
 """
+
 import os
 
 from monty.fnmatch import WildCard
