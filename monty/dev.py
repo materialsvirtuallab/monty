@@ -27,7 +27,7 @@ def deprecated(
         replacement (callable): A replacement class or method.
         message (str): A warning message to be displayed.
         deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
-            of the old function/class, in format (yyyy, MM, dd). A CI error would
+            of the old function/class, in format (yyyy, MM, dd). A CI warning would
             be raised after this date.
         category (Warning): Choose the category of the warning to issue. Defaults
             to FutureWarning. Another choice can be DeprecationWarning. Note that
@@ -76,7 +76,7 @@ def deprecated(
 
         return wrapped
 
-    # Raise a CI error after removal deadline
+    # Raise a CI warning after removal deadline
     if deadline is None:
         _deadline = None
 
