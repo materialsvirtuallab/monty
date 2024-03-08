@@ -7,6 +7,7 @@ import functools
 import logging
 import os
 import sys
+import subprocess
 import warnings
 from datetime import datetime
 from typing import Callable, Optional, Type
@@ -28,7 +29,7 @@ def deprecated(
         message (str): A warning message to be displayed.
         deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
             of the old function/class, in format (yyyy, MM, dd). A CI warning would
-            be raised after this date.
+            be raised after this date if is running in code owner' repo.
         category (Warning): Choose the category of the warning to issue. Defaults
             to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.
@@ -42,7 +43,46 @@ def deprecated(
 
     def _convert_date(date: tuple[int, int, int]) -> datetime:
         """Convert date as int tuple (yyyy, MM, dd) to datetime type."""
+
         return datetime(*date)
+
+    def deadline_warning() -> None:
+        """Raise CI warning after removal deadline in code owner's repo."""
+
+        def _is_in_owner_repo() -> bool:
+            """Check if is running in code owner's repo.
+            Only generate reliable check when `git` is installed and remote name
+            is "origin".
+            """
+
+            try:
+                # Get current running repo
+                result = subprocess.run(
+                    ["git", "config", "--get", "remote.origin.url"],
+                    stdout=subprocess.PIPE,
+                )
+                owner_repo = (
+                    result.stdout.decode("utf-8")
+                    .strip()
+                    .lstrip("git@github.com:")
+                    .rstrip(".git")
+                )
+
+                return owner_repo == os.getenv("GITHUB_REPOSITORY")
+
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                return False
+
+        # Only raise warning in code owner's repo CI
+        if (
+            _deadline is not None
+            and os.getenv("CI")
+            and datetime.now() > _deadline
+            and _is_in_owner_repo()
+        ):
+            raise DeprecationWarning(
+                "This function should have been removed on {deadline:%Y-%m-%d}."
+            )
 
     def craft_message(
         old: Callable,
@@ -76,16 +116,11 @@ def deprecated(
 
         return wrapped
 
-    # Raise a CI warning after removal deadline
-    if deadline is None:
-        _deadline = None
+    # Convert deadline to datetime
+    _deadline = _convert_date(deadline) if deadline is not None else None
 
-    else:
-        _deadline = _convert_date(deadline)
-        if os.getenv("CI") and datetime.now() > _deadline:
-            raise DeprecationWarning(
-                "This function should have been removed on {deadline:%Y-%m-%d}."
-            )
+    # Raise a CI warning after removal deadline
+    deadline_warning()
 
     return deprecated_decorator
 
