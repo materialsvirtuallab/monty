@@ -6,6 +6,7 @@ import json
 import os
 import pathlib
 from enum import Enum
+from typing import Union
 
 try:
     import numpy as np
@@ -825,7 +826,7 @@ class TestJson:
             a: LimitedMSONClass
 
         class ModelWithUnion(BaseModel):
-            a: LimitedMSONClass | dict
+            a: Union[LimitedMSONClass, dict]
 
         limited_dict = jsanitize(ModelWithLimited(a=LimitedMSONClass(1)), strict=True)
         assert ModelWithLimited.model_validate(limited_dict)
