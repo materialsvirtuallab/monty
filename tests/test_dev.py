@@ -93,11 +93,11 @@ class TestDecorator:
         def func_old():
             pass
 
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True) as warn_msgs:
             # Trigger a warning.
             func_old()
             # Verify message
-            assert "will be removed on 2000-01-01" in str(w[0].message)
+            assert "will be removed on 2000-01-01" in str(warn_msgs[0].message)
 
     def test_deprecated_deadline_no_warn(self, monkeypatch):
         # Test cases where no warning should be raised
@@ -106,33 +106,33 @@ class TestDecorator:
             pass
 
         # No warn case 1: date before deadline
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True) as warn_msgs:
             monkeypatch.setattr(
                 datetime, "datetime", lambda: datetime.datetime(1999, 1, 1)
             )
             func_old()
 
-            for warning in w:
+            for warning in warn_msgs:
                 assert "This function should have been removed on" not in str(
                     warning.message
                 )
 
         # No warn case 2: not in CI env
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True) as warn_msgs:
             monkeypatch.delenv("CI", raising=False)
             func_old()
 
-            for warning in w:
+            for warning in warn_msgs:
                 assert "This function should have been removed on" not in str(
                     warning.message
                 )
 
         # No warn case 3: not in code owner repo
-        with warnings.catch_warnings(record=True) as w:
+        with warnings.catch_warnings(record=True) as warn_msgs:
             monkeypatch.setenv("GITHUB_REPOSITORY", "NONE/NONE")
             func_old()
 
-            for warning in w:
+            for warning in warn_msgs:
                 assert "This function should have been removed on" not in str(
                     warning.message
                 )
