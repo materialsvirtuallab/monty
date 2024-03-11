@@ -1,5 +1,6 @@
 import unittest
 import warnings
+import datetime
 
 import pytest
 from monty.dev import deprecated, install_excepthook, requires
@@ -58,12 +59,12 @@ class TestDecorator:
             """A dummy class for tests."""
 
             @classmethod
-            def classmethod_a(self):
+            def classmethod_a(cls):
                 pass
 
             @classmethod
             @deprecated(classmethod_a)
-            def classmethod_b(self):
+            def classmethod_b(cls):
                 return "b"
 
         with warnings.catch_warnings(record=True) as w:
@@ -72,20 +73,20 @@ class TestDecorator:
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
-        class TestClass:
+        class TestClass_deprecationwarning:
             """A dummy class for tests."""
 
             @classmethod
-            def classmethod_a(self):
+            def classmethod_a(cls):
                 pass
 
             @classmethod
             @deprecated(classmethod_a, category=DeprecationWarning)
-            def classmethod_b(self):
+            def classmethod_b(cls):
                 return "b"
 
         with pytest.warns(DeprecationWarning):
-            assert TestClass().classmethod_b() == "b"
+            assert TestClass_deprecationwarning().classmethod_b() == "b"
 
     def test_deprecated_deadline(self):
         @deprecated(deadline=(2000, 1, 1))
@@ -97,6 +98,44 @@ class TestDecorator:
             func_old()
             # Verify message
             assert "will be removed on 2000-01-01" in str(w[0].message)
+
+    def test_deprecated_deadline_no_warn(self, monkeypatch):
+        # Test cases where no warning should be raised
+        @deprecated(deadline=(2000, 1, 1))
+        def func_old():
+            pass
+
+        # No warn case 1: date before deadline
+        with warnings.catch_warnings(record=True) as w:
+            monkeypatch.setattr(
+                datetime, "datetime", lambda: datetime.datetime(1999, 1, 1)
+            )
+            func_old()
+
+            for warning in w:
+                assert "This function should have been removed on" not in str(
+                    warning.message
+                )
+
+        # No warn case 2: not in CI env
+        with warnings.catch_warnings(record=True) as w:
+            monkeypatch.delenv("CI", raising=False)
+            func_old()
+
+            for warning in w:
+                assert "This function should have been removed on" not in str(
+                    warning.message
+                )
+
+        # No warn case 3: not in code owner repo
+        with warnings.catch_warnings(record=True) as w:
+            monkeypatch.setenv("GITHUB_REPOSITORY", "NONE/NONE")
+            func_old()
+
+            for warning in w:
+                assert "This function should have been removed on" not in str(
+                    warning.message
+                )
 
     def test_requires(self):
         try:
