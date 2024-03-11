@@ -100,7 +100,8 @@ class TestDecorator:
             assert "will be removed on 2000-01-01" in str(warn_msgs[0].message)
 
     def test_deprecated_deadline_no_warn(self, monkeypatch):
-        # Test cases where no warning should be raised
+        """Test cases where no warning should be raised."""
+
         @deprecated(deadline=(2000, 1, 1))
         def func_old():
             pass
