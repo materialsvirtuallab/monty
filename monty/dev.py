@@ -46,7 +46,7 @@ def deprecated(
 
         return datetime(*date)
 
-    def deadline_warning() -> None:
+    def raise_deadline_warning() -> None:
         """Raise CI warning after removal deadline in code owner's repo."""
 
         def _is_in_owner_repo() -> bool:
@@ -121,7 +121,7 @@ def deprecated(
     _deadline = _convert_date(deadline) if deadline is not None else None
 
     # Raise a CI warning after removal deadline
-    deadline_warning()
+    raise_deadline_warning()
 
     return deprecated_decorator
 
