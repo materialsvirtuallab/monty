@@ -41,11 +41,6 @@ def deprecated(
         Original function, but with a warning to use the updated class.
     """
 
-    def _convert_date(date: tuple[int, int, int]) -> datetime:
-        """Convert date as int tuple (yyyy, MM, dd) to datetime type."""
-
-        return datetime(*date)
-
     def raise_deadline_warning() -> None:
         """Raise CI warning after removal deadline in code owner's repo."""
 
@@ -117,8 +112,8 @@ def deprecated(
 
         return wrapped
 
-    # Convert deadline to datetime
-    _deadline = _convert_date(deadline) if deadline is not None else None
+    # Convert deadline to datetime type
+    _deadline = datetime(*deadline) if deadline is not None else None
 
     # Raise a CI warning after removal deadline
     raise_deadline_warning()
