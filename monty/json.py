@@ -663,6 +663,8 @@ def jsanitize(
     if isinstance(obj, Enum):
         if enum_values:
             return obj.value
+        elif hasattr(obj, "as_dict"):
+            return obj.as_dict()
         return MontyEncoder().default(obj)
 
     if allow_bson and (
