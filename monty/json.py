@@ -654,7 +654,7 @@ def jsanitize(
             True, such bson types will be ignored, allowing for proper
             insertion into MongoDB databases.
         enum_values (bool): Convert Enums to their values.
-        recursive_msonable (bool): If True, uses as_dict() for MSONables regardless
+        recursive_msonable (bool): If True, uses .as_dict() for MSONables regardless
             of the value of strict.
 
     Returns:
