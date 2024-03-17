@@ -2,6 +2,7 @@
 This module implements serialization support for common formats such as json
 and yaml.
 """
+
 import json
 import os
 

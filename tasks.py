@@ -4,7 +4,6 @@
 Deployment file to facilitate releases of monty.
 """
 
-
 import datetime
 import glob
 import json

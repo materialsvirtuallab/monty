@@ -20,6 +20,7 @@ Copyright (c) 2008-2011 Volvox Development Team
 
 ANSII Color formatting for output in terminal.
 """
+
 import os
 
 try:
