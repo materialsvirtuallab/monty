@@ -18,26 +18,13 @@ with a possible replacement.
   * **replacement** (*callable*) – A replacement class or method.
   * **message** (*str*) – A warning message to be displayed.
   * **category** (*Warning*) – Choose the category of the warning to issue. Defaults
-    to FutureWarning. Another choice can be DeprecationWarning. NOte that
+    to FutureWarning. Another choice can be DeprecationWarning. Note that
     FutureWarning is meant for end users and is always shown unless silenced.
     DeprecationWarning is meant for developers and is never shown unless
     python is run in developmental mode or the filter is changed. Make
     the choice accordingly.
 * **Returns**
   Original function, but with a warning to use the updated class.
-
-## monty.dev.get_ncpus()
-
-**NOTE**: If you are using Python >= 2.7, multiprocessing.cpu_count() already
-provides the number of CPUs. In fact, this is the first method tried.
-The purpose of this function is to cater to old Python versions that
-still exist on many Linux style clusters.
-
-Number of virtual or physical CPUs on this system, i.e.
-user/real as output by time(1) when called with an optimally scaling
-userspace-only program. Return -1 if ncpus cannot be detected. Taken from:
-[http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of](http://stackoverflow.com/questions/1006289/how-to-find-out-the-number-of)-
-cpus-in-python
 
 ## monty.dev.install_excepthook(hook_type=’color’, \*\*kwargs)
 

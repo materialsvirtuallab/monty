@@ -1,44 +1,33 @@
 import unittest
 import warnings
+import datetime
 
 import pytest
-
 from monty.dev import deprecated, install_excepthook, requires
 
-
-class A:
-    @property
-    def repl_prop(self):
-        pass
-
-    @deprecated(repl_prop)  # type: ignore
-    @property
-    def prop(self):
-        pass
+# Set all warnings to always be triggered.
+warnings.simplefilter("always")
 
 
 class TestDecorator:
     def test_deprecated(self):
-        def func_a():
+        def func_replace():
             pass
 
-        @deprecated(func_a, "hello")
-        def func_b():
+        @deprecated(func_replace, "Use func_replace instead")
+        def func_old():
             pass
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
-            func_b()
-            # Verify some things
+            func_old()
+            # Verify Warning and message
             assert issubclass(w[0].category, FutureWarning)
-            assert "hello" in str(w[0].message)
+            assert "Use func_replace instead" in str(w[0].message)
 
     def test_deprecated_property(self):
-        class a:
-            def __init__(self):
-                pass
+        class TestClass:
+            """A dummy class for tests."""
 
             @property
             def property_a(self):
@@ -54,58 +43,100 @@ class TestDecorator:
                 return "a"
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
-            assert a().property_b == "b"
-            # Verify some things
+            assert TestClass().property_b == "b"
+            # Verify warning type
             assert issubclass(w[-1].category, FutureWarning)
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
-            assert a().func_a() == "a"
+            assert TestClass().func_a() == "a"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
     def test_deprecated_classmethod(self):
-        class A:
-            def __init__(self):
-                pass
+        class TestClass:
+            """A dummy class for tests."""
 
             @classmethod
-            def classmethod_a(self):
+            def classmethod_a(cls):
                 pass
 
             @classmethod
             @deprecated(classmethod_a)
-            def classmethod_b(self):
+            def classmethod_b(cls):
                 return "b"
 
         with warnings.catch_warnings(record=True) as w:
-            # Cause all warnings to always be triggered.
-            warnings.simplefilter("always")
             # Trigger a warning.
-            assert A().classmethod_b() == "b"
+            assert TestClass().classmethod_b() == "b"
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
-        class A:
-            def __init__(self):
-                pass
+        class TestClass_deprecationwarning:
+            """A dummy class for tests."""
 
             @classmethod
-            def classmethod_a(self):
+            def classmethod_a(cls):
                 pass
 
             @classmethod
             @deprecated(classmethod_a, category=DeprecationWarning)
-            def classmethod_b(self):
+            def classmethod_b(cls):
                 return "b"
 
         with pytest.warns(DeprecationWarning):
-            assert A().classmethod_b() == "b"
+            assert TestClass_deprecationwarning().classmethod_b() == "b"
+
+    def test_deprecated_deadline(self):
+        @deprecated(deadline=(2000, 1, 1))
+        def func_old():
+            pass
+
+        with warnings.catch_warnings(record=True) as warn_msgs:
+            # Trigger a warning.
+            func_old()
+            # Verify message
+            assert "will be removed on 2000-01-01" in str(warn_msgs[0].message)
+
+    def test_deprecated_deadline_no_warn(self, monkeypatch):
+        """Test cases where no warning should be raised."""
+
+        @deprecated(deadline=(2000, 1, 1))
+        def func_old():
+            pass
+
+        # No warn case 1: date before deadline
+        with warnings.catch_warnings(record=True) as warn_msgs:
+            monkeypatch.setattr(
+                datetime, "datetime", lambda: datetime.datetime(1999, 1, 1)
+            )
+            func_old()
+
+            for warning in warn_msgs:
+                assert "This function should have been removed on" not in str(
+                    warning.message
+                )
+
+        # No warn case 2: not in CI env
+        with warnings.catch_warnings(record=True) as warn_msgs:
+            monkeypatch.delenv("CI", raising=False)
+            func_old()
+
+            for warning in warn_msgs:
+                assert "This function should have been removed on" not in str(
+                    warning.message
+                )
+
+        # No warn case 3: not in code owner repo
+        with warnings.catch_warnings(record=True) as warn_msgs:
+            monkeypatch.setenv("GITHUB_REPOSITORY", "NONE/NONE")
+            func_old()
+
+            for warning in warn_msgs:
+                assert "This function should have been removed on" not in str(
+                    warning.message
+                )
 
     def test_requires(self):
         try:
