@@ -69,16 +69,19 @@ class TestCompressFileDir:
 
     def test_compress_and_decompress_file(self):
         fname = os.path.join(test_dir, "tempfile")
+
         for fmt in ["gz", "bz2"]:
             compress_file(fname, fmt)
             assert os.path.exists(fname + "." + fmt)
             assert not os.path.exists(fname)
+
             decompress_file(fname + "." + fmt)
             assert os.path.exists(fname)
             assert not os.path.exists(fname + "." + fmt)
-        with open(fname) as f:
-            txt = f.read()
-            assert txt == "hello world"
+
+            with open(fname) as f:
+                assert f.read() == "hello world"
+
         with pytest.raises(ValueError):
             compress_file("whatever", "badformat")
 
@@ -86,6 +89,30 @@ class TestCompressFileDir:
         assert decompress_file("non-existent") is None
         assert decompress_file("non-existent.gz") is None
         assert decompress_file("non-existent.bz2") is None
+
+    def test_compress_and_decompress_with_target_dir(self):
+        fname = os.path.join(test_dir, "tempfile")
+        target_dir = os.path.join(test_dir, "temp_target_dir")
+
+        for fmt in ["gz", "bz2"]:
+            compress_file(fname, fmt, target_dir)
+            compressed_file_path = os.path.join(
+                target_dir, f"{os.path.basename(fname)}.{fmt}"
+            )
+            assert os.path.exists(compressed_file_path)
+            assert not os.path.exists(fname)
+
+            decompress_file(compressed_file_path, target_dir)
+            decompressed_file_path = os.path.join(target_dir, os.path.basename(fname))
+            assert os.path.exists(decompressed_file_path)
+            assert not os.path.exists(compressed_file_path)
+
+            # Reset temp file position
+            shutil.move(decompressed_file_path, fname)
+            shutil.rmtree(target_dir)
+
+            with open(fname) as f:
+                assert f.read() == "hello world"
 
     def teardown_method(self):
         os.remove(os.path.join(test_dir, "tempfile"))
