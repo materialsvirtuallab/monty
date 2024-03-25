@@ -7,7 +7,7 @@ import math
 from typing import Sequence
 
 
-def gcd(*numbers: Sequence[int]) -> int:
+def gcd(*numbers: int) -> int:
     r"""
     Returns the greatest common divisor for a sequence of numbers.
 
@@ -23,7 +23,7 @@ def gcd(*numbers: Sequence[int]) -> int:
     return n
 
 
-def lcm(*numbers: Sequence[int]) -> int:
+def lcm(*numbers: int) -> int:
     r"""
     Return lowest common multiple of a sequence of numbers.
 
@@ -39,7 +39,7 @@ def lcm(*numbers: Sequence[int]) -> int:
     return n
 
 
-def gcd_float(numbers: Sequence[float], tol: float = 1e-8) -> int:
+def gcd_float(numbers: Sequence[float], tol: float = 1e-8) -> float:
     """
     Returns the greatest common divisor for a sequence of numbers.
     Uses a numerical tolerance, so can be used on floats
@@ -49,10 +49,10 @@ def gcd_float(numbers: Sequence[float], tol: float = 1e-8) -> int:
         tol: Numerical tolerance
 
     Returns:
-        (int) Greatest common divisor of numbers.
+        int: Greatest common divisor of numbers.
     """
 
-    def pair_gcd_tol(a: int, b: int) -> int:
+    def pair_gcd_tol(a: float, b: float) -> float:
         """Calculate the Greatest Common Divisor of a and b.
 
         Unless b==0, the result will have the same sign as b (so that when
