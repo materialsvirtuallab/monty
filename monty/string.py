@@ -2,7 +2,7 @@
 Useful additional string functions.
 """
 
-from typing import Any, Union
+from typing import Any, Union, cast
 
 
 def remove_non_ascii(s: str) -> str:
@@ -46,7 +46,7 @@ def list_strings(arg: Union[str, list[str]]) -> list[str]:
         ['A', 'list', 'of', 'strings']
     """
     if is_string(arg):
-        return [arg]
+        return [cast(str, arg)]
 
     elif isinstance(arg, list):
         return arg
