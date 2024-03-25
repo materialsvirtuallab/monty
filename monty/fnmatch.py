@@ -20,7 +20,7 @@ class WildCard:
     ['foo.nc']
     """
 
-    def __init__(self, wildcard, sep="|"):
+    def __init__(self, wildcard: str, sep: str = "|") -> None:
         """
         Initializes a WildCard.
 
@@ -33,10 +33,10 @@ class WildCard:
         if wildcard:
             self.pats = wildcard.split(sep)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"<{self.__class__.__name__}, patterns = {self.pats}>"
 
-    def filter(self, names):
+    def filter(self, names: list[str]) -> list[str]:
         """
         Returns a list with the names matching the pattern.
         """
@@ -50,7 +50,7 @@ class WildCard:
 
         return fnames
 
-    def match(self, name):
+    def match(self, name: str) -> bool:
         """
         Returns True if name matches one of the patterns.
         """
