@@ -90,7 +90,7 @@ def compress_file(
     if filepath.suffix.lower() != f".{compression}" and not filepath.is_symlink():
         if target_dir is not None:
             os.makedirs(target_dir, exist_ok=True)
-            compressed_file = target_dir / f"{filepath.name}.{compression}"
+            compressed_file: str | Path = target_dir / f"{filepath.name}.{compression}"
 
         else:
             compressed_file = f"{str(filepath)}.{compression}"
@@ -142,7 +142,9 @@ def decompress_file(
     if file_ext.lower() in {".bz2", ".gz", ".z"} and filepath.is_file():
         if target_dir is not None:
             os.makedirs(target_dir, exist_ok=True)
-            decompressed_file = target_dir / filepath.name.removesuffix(file_ext)
+            decompressed_file: str | Path = target_dir / filepath.name.removesuffix(
+                file_ext
+            )
         else:
             decompressed_file = str(filepath).removesuffix(file_ext)
 
