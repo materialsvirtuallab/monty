@@ -6,6 +6,7 @@ import json
 import os
 import pathlib
 from enum import Enum
+from typing import Union
 
 try:
     import numpy as np
@@ -334,7 +335,9 @@ class TestMSONable:
 
         d = {"123": EnumTest.a}
         f = jsanitize(d)
-        assert f["123"] == "EnumTest.a"
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumTest"
+        assert f["123"]["value"] == 1
 
         f = jsanitize(d, strict=True)
         assert f["123"]["@module"] == "tests.test_json"
@@ -346,6 +349,24 @@ class TestMSONable:
 
         f = jsanitize(d, enum_values=True)
         assert f["123"] == 1
+
+    def test_enum_serialization_no_msonable(self):
+        d = {"123": EnumNoAsDict.name_a}
+        f = jsanitize(d)
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumNoAsDict"
+        assert f["123"]["value"] == "value_a"
+
+        f = jsanitize(d, strict=True)
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumNoAsDict"
+        assert f["123"]["value"] == "value_a"
+
+        f = jsanitize(d, strict=True, enum_values=True)
+        assert f["123"] == "value_a"
+
+        f = jsanitize(d, enum_values=True)
+        assert f["123"] == "value_a"
 
 
 class TestJson:
@@ -600,7 +621,7 @@ class TestJson:
         assert clean["world"] is None
         assert json.loads(json.dumps(d)) == json.loads(json.dumps(clean))
 
-        d = {"hello": GoodMSONClass(1, 2, 3)}
+        d = {"hello": GoodMSONClass(1, 2, 3), "test": "hi"}
         with pytest.raises(TypeError):
             json.dumps(d)
         clean = jsanitize(d)
@@ -608,9 +629,11 @@ class TestJson:
         clean_strict = jsanitize(d, strict=True)
         assert clean_strict["hello"]["a"] == 1
         assert clean_strict["hello"]["b"] == 2
+        assert clean_strict["test"] == "hi"
         clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
         assert clean_recursive_msonable["hello"]["a"] == 1
         assert clean_recursive_msonable["hello"]["b"] == 2
+        assert clean_recursive_msonable["test"] == "hi"
 
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
@@ -825,7 +848,7 @@ class TestJson:
             a: LimitedMSONClass
 
         class ModelWithUnion(BaseModel):
-            a: LimitedMSONClass | dict
+            a: Union[LimitedMSONClass, dict]
 
         limited_dict = jsanitize(ModelWithLimited(a=LimitedMSONClass(1)), strict=True)
         assert ModelWithLimited.model_validate(limited_dict)

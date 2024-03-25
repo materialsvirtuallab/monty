@@ -5,21 +5,33 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 
 import functools
 import logging
+import os
 import sys
+import subprocess
 import warnings
+from datetime import datetime
+from typing import Callable, Optional, Type
 
 logger = logging.getLogger(__name__)
 
 
-def deprecated(replacement=None, message=None, category=FutureWarning):
+def deprecated(
+    replacement: Optional[Callable] = None,
+    message: str = "",
+    deadline: Optional[tuple[int, int, int]] = None,
+    category: Type[Warning] = FutureWarning,
+):
     """
     Decorator to mark classes or functions as deprecated, with a possible replacement.
 
     Args:
         replacement (callable): A replacement class or method.
         message (str): A warning message to be displayed.
+        deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
+            of the old function/class, in format (yyyy, MM, dd). A CI warning would
+            be raised after this date if is running in code owner' repo.
         category (Warning): Choose the category of the warning to issue. Defaults
-            to FutureWarning. Another choice can be DeprecationWarning. NOte that
+            to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.
             DeprecationWarning is meant for developers and is never shown unless
             python is run in developmental mode or the filter is changed. Make
@@ -29,8 +41,56 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
         Original function, but with a warning to use the updated class.
     """
 
-    def craft_message(old, replacement, message):
+    def raise_deadline_warning() -> None:
+        """Raise CI warning after removal deadline in code owner's repo."""
+
+        def _is_in_owner_repo() -> bool:
+            """Check if is running in code owner's repo.
+            Only generate reliable check when `git` is installed and remote name
+            is "origin".
+            """
+
+            try:
+                # Get current running repo
+                result = subprocess.run(
+                    ["git", "config", "--get", "remote.origin.url"],
+                    stdout=subprocess.PIPE,
+                )
+                owner_repo = (
+                    result.stdout.decode("utf-8")
+                    .strip()
+                    .lstrip("https://github.com/")  # https clone
+                    .lstrip("git@github.com:")  # ssh clone
+                    .rstrip(".git")  # ssh clone
+                )
+
+                return owner_repo == os.getenv("GITHUB_REPOSITORY")
+
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                return False
+
+        # Only raise warning in code owner's repo CI
+        if (
+            _deadline is not None
+            and os.getenv("CI")
+            and datetime.now() > _deadline
+            and _is_in_owner_repo()
+        ):
+            raise DeprecationWarning(
+                "This function should have been removed on {deadline:%Y-%m-%d}."
+            )
+
+    def craft_message(
+        old: Callable,
+        replacement: Callable,
+        message: str,
+        deadline: datetime,
+    ):
         msg = f"{old.__name__} is deprecated"
+
+        if deadline is not None:
+            msg += f", and will be removed on {deadline:%Y-%m-%d}\n"
+
         if replacement is not None:
             if isinstance(replacement, property):
                 r = replacement.fget
@@ -39,17 +99,24 @@ def deprecated(replacement=None, message=None, category=FutureWarning):
             else:
                 r = replacement
             msg += f"; use {r.__name__} in {r.__module__} instead."
-        if message is not None:
+
+        if message:
             msg += "\n" + message
         return msg
 
-    def deprecated_decorator(old):
+    def deprecated_decorator(old: Callable):
         def wrapped(*args, **kwargs):
-            msg = craft_message(old, replacement, message)
+            msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
             return old(*args, **kwargs)
 
         return wrapped
+
+    # Convert deadline to datetime type
+    _deadline = datetime(*deadline) if deadline is not None else None
+
+    # Raise a CI warning after removal deadline
+    raise_deadline_warning()
 
     return deprecated_decorator
 
@@ -101,7 +168,7 @@ class requires:
         return decorated
 
 
-def install_excepthook(hook_type="color", **kwargs):
+def install_excepthook(hook_type: str = "color", **kwargs):
     """
     This function replaces the original python traceback with an improved
     version from Ipython. Use `color` for colourful traceback formatting,
