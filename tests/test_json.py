@@ -335,7 +335,9 @@ class TestMSONable:
 
         d = {"123": EnumTest.a}
         f = jsanitize(d)
-        assert f["123"] == "EnumTest.a"
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumTest"
+        assert f["123"]["value"] == 1
 
         f = jsanitize(d, strict=True)
         assert f["123"]["@module"] == "tests.test_json"
@@ -347,6 +349,24 @@ class TestMSONable:
 
         f = jsanitize(d, enum_values=True)
         assert f["123"] == 1
+
+    def test_enum_serialization_no_msonable(self):
+        d = {"123": EnumNoAsDict.name_a}
+        f = jsanitize(d)
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumNoAsDict"
+        assert f["123"]["value"] == "value_a"
+
+        f = jsanitize(d, strict=True)
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumNoAsDict"
+        assert f["123"]["value"] == "value_a"
+
+        f = jsanitize(d, strict=True, enum_values=True)
+        assert f["123"] == "value_a"
+
+        f = jsanitize(d, enum_values=True)
+        assert f["123"] == "value_a"
 
 
 class TestJson:
