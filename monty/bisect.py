@@ -9,6 +9,8 @@ lists.
 
 import bisect as bs
 
+from typing import Optional
+
 __author__ = "Matteo Giantomassi"
 __copyright__ = "Copyright 2013, The Materials Virtual Lab"
 __version__ = "0.1"
@@ -17,7 +19,7 @@ __email__ = "gmatteo@gmail.com"
 __date__ = "11/09/14"
 
 
-def index(a, x, atol=None):
+def index(a: list[float], x: float, atol: Optional[float] = None) -> int:
     """Locate the leftmost value exactly equal to x."""
     i = bs.bisect_left(a, x)
     if i != len(a):
@@ -30,7 +32,7 @@ def index(a, x, atol=None):
     raise ValueError
 
 
-def find_lt(a, x):
+def find_lt(a: list[float], x: float) -> int:
     """Find rightmost value less than x."""
     i = bs.bisect_left(a, x)
     if i:
@@ -38,7 +40,7 @@ def find_lt(a, x):
     raise ValueError
 
 
-def find_le(a, x):
+def find_le(a: list[float], x: float) -> int:
     """Find rightmost value less than or equal to x."""
     i = bs.bisect_right(a, x)
     if i:
@@ -46,7 +48,7 @@ def find_le(a, x):
     raise ValueError
 
 
-def find_gt(a, x):
+def find_gt(a: list[float], x: float) -> int:
     """Find leftmost value greater than x."""
     i = bs.bisect_right(a, x)
     if i != len(a):
@@ -54,7 +56,7 @@ def find_gt(a, x):
     raise ValueError
 
 
-def find_ge(a, x):
+def find_ge(a: list[float], x: float) -> int:
     """Find leftmost item greater than or equal to x."""
     i = bs.bisect_left(a, x)
     if i != len(a):
