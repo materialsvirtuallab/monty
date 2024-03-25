@@ -4,8 +4,10 @@ Math functions.
 
 import math
 
+from typing import Sequence
 
-def gcd(*numbers):
+
+def gcd(*numbers: Sequence[int]) -> int:
     r"""
     Returns the greatest common divisor for a sequence of numbers.
 
@@ -13,15 +15,15 @@ def gcd(*numbers):
         *numbers: Sequence of numbers.
 
     Returns:
-        (int) Greatest common divisor of numbers.
+        int: Greatest common divisor of numbers.
     """
-    n = numbers[0]
+    n: int = numbers[0]
     for i in numbers:
         n = math.gcd(n, i)
     return n
 
 
-def lcm(*numbers):
+def lcm(*numbers: Sequence[int]) -> int:
     r"""
     Return lowest common multiple of a sequence of numbers.
 
@@ -29,7 +31,7 @@ def lcm(*numbers):
         *numbers: Sequence of numbers.
 
     Returns:
-        (int) Lowest common multiple of numbers.
+        int: Lowest common multiple of numbers.
     """
     n = 1
     for i in numbers:
@@ -37,7 +39,7 @@ def lcm(*numbers):
     return n
 
 
-def gcd_float(numbers, tol=1e-8):
+def gcd_float(numbers: Sequence[float], tol: float = 1e-8) -> int:
     """
     Returns the greatest common divisor for a sequence of numbers.
     Uses a numerical tolerance, so can be used on floats
@@ -50,7 +52,7 @@ def gcd_float(numbers, tol=1e-8):
         (int) Greatest common divisor of numbers.
     """
 
-    def pair_gcd_tol(a, b):
+    def pair_gcd_tol(a: int, b: int) -> int:
         """Calculate the Greatest Common Divisor of a and b.
 
         Unless b==0, the result will have the same sign as b (so that when

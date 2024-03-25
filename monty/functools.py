@@ -10,6 +10,8 @@ import tempfile
 from collections import namedtuple
 from functools import partial, wraps
 
+from typing import Callable
+
 _CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
 
@@ -22,15 +24,16 @@ class _HashedSeq(list):  # pylint: disable=C0205
 
     __slots__ = "hashvalue"
 
-    def __init__(self, tup, hashfunc=hash):
+    def __init__(self, tup: tuple, hashfunc: Callable = hash) -> None:
         """
-        :param tup: Tuple.
-        :param hashfunc: Hash function.
+        Args:
+            tup: Tuple.
+            hashfunc: Hash function.
         """
         self[:] = tup
         self.hashvalue = hashfunc(tup)
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return self.hashvalue
 
 
@@ -205,8 +208,9 @@ class timeout:
 
     def handle_timeout(self, signum, frame):
         """
-        :param signum: Return signal from call.
-        :param frame:
+        ArgsL
+            signum: Return signal from call.
+            frame:
         """
         raise TimeoutError(self.error_message)
 
@@ -225,7 +229,8 @@ class TimeoutError(Exception):
 
     def __init__(self, message):
         """
-        :param message: Error message
+        Args:
+            message: Error message
         """
         self.message = message
 
