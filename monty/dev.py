@@ -20,7 +20,7 @@ def deprecated(
     message: str = "",
     deadline: Optional[tuple[int, int, int]] = None,
     category: Type[Warning] = FutureWarning,
-):
+) -> Callable:
     """
     Decorator to mark classes or functions as deprecated, with a possible replacement.
 
@@ -85,7 +85,7 @@ def deprecated(
         replacement: Callable,
         message: str,
         deadline: datetime,
-    ):
+    ) -> str:
         msg = f"{old.__name__} is deprecated"
 
         if deadline is not None:
@@ -104,7 +104,7 @@ def deprecated(
             msg += "\n" + message
         return msg
 
-    def deprecated_decorator(old: Callable):
+    def deprecated_decorator(old: Callable) -> Callable:
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
@@ -147,16 +147,18 @@ class requires:
         self, condition: bool, message: str, err_cls: type[Exception] = RuntimeError
     ) -> None:
         """
-        :param condition: A expression returning a bool.
-        :param message: Message to display if condition is False.
+        Args:
+            condition: A expression returning a bool.
+            message: Message to display if condition is False.
         """
         self.condition = condition
         self.message = message
         self.err_cls = err_cls
 
-    def __call__(self, _callable):
+    def __call__(self, _callable: Callable) -> Callable:
         """
-        :param _callable: Callable function.
+        Args:
+            _callable: Callable function.
         """
 
         @functools.wraps(_callable)
@@ -168,7 +170,7 @@ class requires:
         return decorated
 
 
-def install_excepthook(hook_type: str = "color", **kwargs):
+def install_excepthook(hook_type: str = "color", **kwargs) -> int:
     """
     This function replaces the original python traceback with an improved
     version from Ipython. Use `color` for colourful traceback formatting,
