@@ -27,7 +27,8 @@ def chunks(items: Iterable, n: int) -> Iterable:
      (21, 22, 23, 24)]
     """
     it = iter(items)
-    while chunk := tuple(itertools.islice(it, n)):
+    chunk = tuple(itertools.islice(it, n))
+    while chunk:
         yield chunk
         chunk = tuple(itertools.islice(it, n))
 
