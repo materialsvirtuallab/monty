@@ -7,9 +7,12 @@ import shutil
 import warnings
 from gzip import GzipFile
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING
 
-from .io import zopen
+from monty.io import zopen
+
+if TYPE_CHECKING:
+    from typing import Literal
 
 
 def copy_r(src: str | Path, dst: str | Path) -> None:

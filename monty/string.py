@@ -2,7 +2,12 @@
 Useful additional string functions.
 """
 
-from typing import Any, Union, cast
+from __future__ import annotations
+
+from typing import cast, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Any, Union
 
 
 def remove_non_ascii(s: str) -> str:

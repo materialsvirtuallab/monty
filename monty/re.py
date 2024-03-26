@@ -2,15 +2,25 @@
 Helpful regex based functions. E.g., grepping.
 """
 
+from __future__ import annotations
+
 import collections
 import re
+from typing import TYPE_CHECKING
 
 from monty.io import reverse_readfile, zopen
 
+if TYPE_CHECKING:
+    from typing import Callable
+
 
 def regrep(
-    filename, patterns, reverse=False, terminate_on_match=False, postprocess=str
-):
+    filename: str,
+    patterns: dict,
+    reverse: bool = False,
+    terminate_on_match: bool = False,
+    postprocess: Callable = str,
+) -> dict:
     r"""
     A powerful regular expression version of grep.
 
@@ -47,7 +57,7 @@ def regrep(
             break
     try:
         # Try to close open file handle. Pass if it is a generator.
-        gen.close()
+        gen.close()  # type: ignore[attr-defined]
     except Exception:
         pass
     return matches

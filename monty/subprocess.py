@@ -2,12 +2,20 @@
 Calling shell processes.
 """
 
+from __future__ import annotations
+
 import shlex
 import threading
 import traceback
 from subprocess import PIPE, Popen
+from typing import TYPE_CHECKING
 
-from .string import is_string
+from monty.string import is_string
+
+if TYPE_CHECKING:
+    from typing import Optional
+
+    from typing_extensions import Self
 
 __author__ = "Matteo Giantomass"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
@@ -27,34 +35,26 @@ class Command:
     and
         https://gist.github.com/kirpit/1306188
 
-    .. attribute:: retcode
 
-        Return code of the subprocess
-
-    .. attribute:: killed
-
-        True if subprocess has been killed due to the timeout
-
-    .. attribute:: output
-
-        stdout of the subprocess
-
-    .. attribute:: error
-
-        stderr of the subprocess
+    Attributes:
+        retcode: Return code of the subprocess
+        killed: True if subprocess has been killed due to the timeout
+        output: stdout of the subprocess
+        error: stderr of the subprocess
 
     Example:
         com = Command("sleep 1").run(timeout=2)
         print(com.retcode, com.killed, com.output, com.output)
     """
 
-    def __init__(self, command):
+    def __init__(self, command: str):
         """
-        :param command: Command to execute
+        Args:
+            command: Command to execute
         """
         if is_string(command):
-            command = shlex.split(command)
-        self.command = command
+            _command: list[str] = shlex.split(command)
+        self.command = _command
         self.process = None
         self.retcode = None
         self.output, self.error = "", ""
@@ -63,12 +63,13 @@ class Command:
     def __str__(self):
         return f"command: {self.command}, retcode: {self.retcode}"
 
-    def run(self, timeout=None, **kwargs):
+    def run(self, timeout: Optional[float] = None, **kwargs) -> Self:
         """
         Run a command in a separated thread and wait timeout seconds.
         kwargs are keyword arguments passed to Popen.
 
-        Return: self
+        Returns:
+            self
         """
 
         def target(**kw):
@@ -94,7 +95,7 @@ class Command:
         thread.start()
         thread.join(timeout)
 
-        if thread.is_alive():
+        if thread.is_alive() and self.process is not None:
             # print("Terminating process")
             self.process.terminate()
             self.killed = True

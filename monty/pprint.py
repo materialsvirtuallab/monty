@@ -2,12 +2,21 @@
 Pretty printing functions.
 """
 
+from __future__ import annotations
+
 import sys
 from io import StringIO
 from json import JSONEncoder, loads
 
+from typing import TYPE_CHECKING
 
-def pprint_table(table, out=sys.stdout, rstrip=False):
+if TYPE_CHECKING:
+    from typing import Callable, TextIO
+
+
+def pprint_table(
+    table: list[list], out: TextIO = sys.stdout, rstrip: bool = False
+) -> None:
     """
     Prints out a table of data, padded for alignment
     Each row must have the same number of columns.
@@ -18,10 +27,8 @@ def pprint_table(table, out=sys.stdout, rstrip=False):
         rstrip: if True, trailing withespaces are removed from the entries.
     """
 
-    def max_width_col(table, col_idx):
-        """
-        Get the maximum width of the given column index
-        """
+    def max_width_col(table: list[list], col_idx: int) -> int:
+        """Get the maximum width of the given column index."""
         return max(len(row[col_idx]) for row in table)
 
     if rstrip:
@@ -60,7 +67,7 @@ def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
     return _draw_tree(node, "", child_iter, text_str)
 
 
-def _draw_tree(node, prefix, child_iter, text_str):
+def _draw_tree(node, prefix: str, child_iter: Callable, text_str: Callable):
     buf = StringIO()
 
     children = list(child_iter(node))

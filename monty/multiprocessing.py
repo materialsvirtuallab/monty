@@ -11,17 +11,20 @@ except ImportError:
     tqdm = None
 
 
-def imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, *args, **kwargs):
+def imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, *args, **kwargs) -> list:
     """
     A wrapper around Pool.imap. Creates a Pool with nprocs and then runs a f
     unction over an iterable with progress bar.
 
-    :param nprocs: Number of processes
-    :param func: Callable
-    :param iterable: Iterable of arguments.
-    :param args: Passthrough to Pool.imap
-    :param kwargs: Passthrough to Pool.imap
-    :return: Results of Pool.imap.
+    Args:
+        nprocs: Number of processes
+        func: Callable
+        iterable: Iterable of arguments.
+        args: Passthrough to Pool.imap
+        kwargs: Passthrough to Pool.imap
+
+    Returns:
+        Results of Pool.imap.
     """
     if tqdm is None:
         raise ImportError("tqdm must be installed for this function.")
@@ -32,7 +35,7 @@ def imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, *args, **kwargs):
         except TypeError:
             n = None  # type: ignore
         with tqdm(total=n) as pbar:
-            for i, d in enumerate(pool.imap(func, iterable, *args, **kwargs)):
+            for d in pool.imap(func, iterable, *args, **kwargs):
                 pbar.update()
                 data.append(d)
     return data

@@ -3,13 +3,16 @@ This module implements serialization support for common formats such as json
 and yaml.
 """
 
+from __future__ import annotations
+
 import json
 import os
+from typing import TYPE_CHECKING
 
 try:
     from ruamel.yaml import YAML
 except ImportError:
-    YAML = None  # type: ignore
+    YAML = None
 
 from monty.io import zopen
 from monty.json import MontyDecoder, MontyEncoder
@@ -20,9 +23,14 @@ try:
 except ImportError:
     msgpack = None
 
+if TYPE_CHECKING:
+    from typing import Any, Optional, Union
 
-def loadfn(fn, *args, fmt=None, **kwargs):
-    r"""
+    from pathlib import Path
+
+
+def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> Any:
+    """
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
     compressed file.
@@ -41,7 +49,7 @@ def loadfn(fn, *args, fmt=None, **kwargs):
         **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
-        (object) Result of json/yaml/msgpack.load.
+        object: Result of json/yaml/msgpack.load.
     """
 
     if fmt is None:
@@ -77,7 +85,7 @@ def loadfn(fn, *args, fmt=None, **kwargs):
             raise TypeError(f"Invalid format: {fmt}")
 
 
-def dumpfn(obj, fn, *args, fmt=None, **kwargs):
+def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None:
     r"""
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")

@@ -7,7 +7,7 @@ msgpack's default and object_hook naming.
 from monty.json import MontyDecoder, MontyEncoder
 
 
-def default(obj):
+def default(obj: object) -> dict:
     """
     For use with msgpack.packb(obj, default=default). Supports Monty's as_dict
     protocol, numpy arrays and datetime.
@@ -15,7 +15,7 @@ def default(obj):
     return MontyEncoder().default(obj)
 
 
-def object_hook(d):
+def object_hook(d: dict):
     """
     For use with msgpack.unpackb(dict, object_hook=object_hook.).  Supports
     Monty's as_dict protocol, numpy arrays and datetime.
