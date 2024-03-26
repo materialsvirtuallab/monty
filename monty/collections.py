@@ -213,9 +213,9 @@ class MongoDict:
         return sorted(list(k for k in self._mongo_dict_ if not callable(k)))
 
 
-def dict2namedtuple(*args, **kwargs) -> collections.namedtuple:
+def dict2namedtuple(*args, **kwargs) -> tuple:
     """
-    Helper function to create a :class:`namedtuple` from a dictionary.
+    Helper function to create a class `namedtuple` from a dictionary.
 
     Examples:
         >>> t = dict2namedtuple(foo=1, bar="hello")

@@ -3,6 +3,8 @@ This module implements several useful functions and decorators that can be
 particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
+from __future__ import annotations
+
 import functools
 import logging
 import os
@@ -10,7 +12,10 @@ import sys
 import subprocess
 import warnings
 from datetime import datetime
-from typing import Callable, Optional, Type
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Callable, Optional, Type
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +132,7 @@ class requires:
     to be true. This can be used to present useful error messages for
     optional dependencies. For example, decorating the following code will
     check if scipy is present and if not, a runtime error will be raised if
-    someone attempts to call the use_scipy function::
+    someone attempts to call the use_scipy function:
 
         try:
             import scipy
@@ -178,7 +183,7 @@ def install_excepthook(hook_type: str = "color", **kwargs) -> int:
     arguments passed to the constructor. See IPython.core.ultratb.py for more
     info.
 
-    Return:
+    Returns:
         0 if hook is installed successfully.
     """
     try:

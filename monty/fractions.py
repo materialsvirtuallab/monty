@@ -8,7 +8,7 @@ from typing import Sequence
 
 
 def gcd(*numbers: int) -> int:
-    r"""
+    """
     Returns the greatest common divisor for a sequence of numbers.
 
     Args:
@@ -24,7 +24,7 @@ def gcd(*numbers: int) -> int:
 
 
 def lcm(*numbers: int) -> int:
-    r"""
+    """
     Return lowest common multiple of a sequence of numbers.
 
     Args:
@@ -49,7 +49,7 @@ def gcd_float(numbers: Sequence[float], tol: float = 1e-8) -> float:
         tol: Numerical tolerance
 
     Returns:
-        int: Greatest common divisor of numbers.
+        float: Greatest common divisor of numbers.
     """
 
     def pair_gcd_tol(a: float, b: float) -> float:
