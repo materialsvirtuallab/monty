@@ -7,9 +7,14 @@ The functions show how to transform them into the standard lookups for sorted
 lists.
 """
 
+from __future__ import annotations
+
 import bisect as bs
 
-from typing import Optional
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Optional
 
 __author__ = "Matteo Giantomassi"
 __copyright__ = "Copyright 2013, The Materials Virtual Lab"

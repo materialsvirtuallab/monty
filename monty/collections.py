@@ -2,15 +2,19 @@
 Useful collection classes, e.g., tree, frozendict, etc.
 """
 
+from __future__ import annotations
+
 import collections
 
-from typing import Any, TYPE_CHECKING, Iterable
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from typing import Any, Iterable
+
     from typing_extensions import Self
 
 
-def tree():
+def tree() -> collections.defaultdict:
     """
     A tree object, which is effectively a recursive defaultdict that
     adds tree as members.
@@ -56,7 +60,6 @@ class Namespace(dict):
 
     def __init__(self, *args, **kwargs) -> None:
         """
-
         Args:
             args: Passthrough arguments for standard dict.
             kwargs: Passthrough keyword arguments for standard dict.
@@ -84,7 +87,7 @@ class AttrDict(dict):
     Allows to access dict keys as obj.foo in addition
     to the traditional way obj['foo']"
 
-    Example:
+    Examples:
         >>> d = AttrDict(foo=1, bar=2)
         >>> assert d["foo"] == d.foo
         >>> d.bar = "hello"
@@ -155,8 +158,7 @@ class MongoDict:
     >>> m["a"]
     {'b': 1}
 
-    .. note::
-
+    Notes:
         Cannot inherit from ABC collections.Mapping because otherwise
         dict.keys and dict.items will pollute the namespace.
         e.g MongoDict({"keys": 1}).keys would be the ABC dict method.
@@ -211,20 +213,18 @@ class MongoDict:
         return sorted(list(k for k in self._mongo_dict_ if not callable(k)))
 
 
-def dict2namedtuple(*args, **kwargs):
+def dict2namedtuple(*args, **kwargs) -> collections.namedtuple:
     """
     Helper function to create a :class:`namedtuple` from a dictionary.
 
-    Example:
-
+    Examples:
         >>> t = dict2namedtuple(foo=1, bar="hello")
         >>> assert t.foo == 1 and t.bar == "hello"
 
         >>> t = dict2namedtuple([("foo", 1), ("bar", "hello")])
         >>> assert t[0] == t.foo and t[1] == t.bar
 
-    .. warning::
-
+    Warnings:
         - The order of the items in the namedtuple is not deterministic if
           kwargs are used.
           namedtuples, however, should always be accessed by attribute hence
