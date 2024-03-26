@@ -2,15 +2,21 @@
 Additional tools for iteration.
 """
 
+from __future__ import annotations
+
 import itertools
+from typing import TYPE_CHECKING
 
 try:
     import numpy as np
 except ImportError:
     np = None  # type: ignore
 
+if TYPE_CHECKING:
+    from typing import Iterable
 
-def chunks(items, n):
+
+def chunks(items: Iterable, n: int) -> Iterable:
     """
     Yield successive n-sized chunks from a list-like object.
 
@@ -21,18 +27,16 @@ def chunks(items, n):
      (21, 22, 23, 24)]
     """
     it = iter(items)
-    chunk = tuple(itertools.islice(it, n))
-    while chunk:
+    while chunk := tuple(itertools.islice(it, n)):
         yield chunk
         chunk = tuple(itertools.islice(it, n))
 
 
-def iterator_from_slice(s):
+def iterator_from_slice(s) -> Iterable:
     """
     Constructs an iterator given a slice object s.
 
-    .. note::
-
+    Notes:
         The function returns an infinite iterator if s.stop is None
     """
     start = s.start if s.start is not None else 0
@@ -46,7 +50,9 @@ def iterator_from_slice(s):
     return iter(np.arange(start, s.stop, step))
 
 
-def iuptri(items, diago=True, with_inds=False):
+def iuptri(
+    items: Iterable[Iterable], diago: bool = True, with_inds: bool = False
+) -> Iterable[Iterable]:
     """
     A generator that yields the upper triangle of the matrix (items x items)
 
@@ -71,7 +77,9 @@ def iuptri(items, diago=True, with_inds=False):
                     yield item1, item2
 
 
-def ilotri(items, diago=True, with_inds=False):
+def ilotri(
+    items: Iterable[Iterable], diago: bool = True, with_inds: bool = False
+) -> Iterable[Iterable]:
     """
     A generator that yields the lower triangle of the matrix (items x items)
 

@@ -10,7 +10,7 @@ import tempfile
 from collections import namedtuple
 from functools import partial, wraps
 
-from typing import Callable
+from typing import Callable, Any, Union
 
 _CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
@@ -31,15 +31,19 @@ class _HashedSeq(list):  # pylint: disable=C0205
             hashfunc: Hash function.
         """
         self[:] = tup
-        self.hashvalue = hashfunc(tup)
+        self.hashvalue: int = hashfunc(tup)
 
-    def __hash__(self) -> int:
+    def __hash__(self) -> int:  # type: ignore[override]
         return self.hashvalue
 
 
 def _make_key(
-    args, kwds, typed, kwd_mark=(object(),), fasttypes={int, str, frozenset, type(None)}
-):
+    args: tuple,
+    kwds: dict,
+    typed: bool,
+    kwd_mark: tuple[object] = (object(),),
+    fasttypes={int, str, frozenset, type(None)},
+) -> Any:
     """
     Make a cache key from optionally typed positional and keyword arguments
 
@@ -49,7 +53,6 @@ def _make_key(
     If there is only a single argument and its data type is known to cache
     its hash value, then that argument is returned without a wrapper.  This
     saves space and improves lookup speed.
-
     """
     key = args
     if kwds:
@@ -74,14 +77,15 @@ class lazy_property:
     are evaluated on first use.
     """
 
-    def __init__(self, func):
+    def __init__(self, func: Callable) -> None:
         """
-        :param func: Function to decorate.
+        Args:
+            func: Function to decorate.
         """
         self.__func = func
         wraps(self.__func)(self)
 
-    def __get__(self, inst, inst_cls):
+    def __get__(self, inst: Any, inst_cls) -> Any:
         if inst is None:
             return self
 
@@ -90,7 +94,7 @@ class lazy_property:
                 f"'{inst_cls.__name__}' object has no attribute '__dict__'"
             )
 
-        name = self.__name__  # pylint: disable=E1101
+        name = self.__name__  # type: ignore  # pylint: disable=E1101
         if name.startswith("__") and not name.endswith("__"):
             name = f"_{inst_cls.__name__}{name}"
 
@@ -99,7 +103,7 @@ class lazy_property:
         return value
 
     @classmethod
-    def invalidate(cls, inst, name):
+    def invalidate(cls, inst: object, name: str) -> None:
         """Invalidate a lazy attribute.
 
         This obviously violates the lazy contract. A subclass of lazy
@@ -124,7 +128,9 @@ class lazy_property:
             del inst.__dict__[name]
 
 
-def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
+def return_if_raise(
+    exception_tuple: Union[list, tuple], retval_if_exc: Any, disabled: bool = False
+) -> Any:
     """
     Decorator for functions, methods or properties. Execute the callable in a
     try block, and return retval_if_exc if one of the exceptions listed in
@@ -208,7 +214,7 @@ class timeout:
 
     def handle_timeout(self, signum, frame):
         """
-        ArgsL
+        Args:
             signum: Return signal from call.
             frame:
         """

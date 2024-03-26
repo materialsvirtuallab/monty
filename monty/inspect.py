@@ -2,12 +2,19 @@
 Useful additional functions to help get information about live objects
 """
 
+from __future__ import annotations
+
 import inspect
 import os
 from inspect import currentframe, getframeinfo
 
+from typing import TYPE_CHECKING
 
-def all_subclasses(cls):
+if TYPE_CHECKING:
+    from typing import Type, Literal
+
+
+def all_subclasses(cls: Type) -> list[Type]:
     """
     Given a class `cls`, this recursive function returns a list with
     all subclasses, subclasses of subclasses, and so on.
@@ -29,7 +36,7 @@ def find_top_pyfile():
         frame = frame.f_back
 
 
-def caller_name(skip=2):
+def caller_name(skip: Literal[1, 2] = 2) -> str:
     """
     Get a name of a caller in the format module.class.method
 
@@ -56,14 +63,17 @@ def caller_name(skip=2):
     # TODO(techtonik): consider using __main__
     if module:
         name.append(module.__name__)
+
     # detect classname
     if "self" in parentframe.f_locals:
         # I don't know any way to detect call from the object method
         # XXX: there seems to be no way to detect static method call - it will
         #      be just a function call
         name.append(parentframe.f_locals["self"].__class__.__name__)
+
     codename = parentframe.f_code.co_name
     if codename != "<module>":  # top level usually
         name.append(codename)  # function or a method
     del parentframe
+
     return ".".join(name)

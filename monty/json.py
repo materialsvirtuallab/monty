@@ -2,6 +2,8 @@
 JSON serialization and deserialization utilities.
 """
 
+from __future__ import annotations
+
 import datetime
 import json
 import os
@@ -14,6 +16,7 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from uuid import UUID
+from typing import TYPE_CHECKING
 
 try:
     import numpy as np
@@ -55,12 +58,18 @@ try:
 except ImportError:
     torch = None  # type: ignore
 
+if TYPE_CHECKING:
+    from pathlib import Path
+    from typing import Union, Generator
+
+    from typing_extensions import Self
+
 __version__ = "3.0.0"
 
 
-def _load_redirect(redirect_file):
+def _load_redirect(redirect_file: Union[str, Path]) -> dict:
     try:
-        with open(redirect_file) as f:
+        with open(redirect_file, encoding="utf-8") as f:
             yaml = YAML()
             d = yaml.load(f)
     except OSError:
@@ -69,7 +78,7 @@ def _load_redirect(redirect_file):
         return {}
 
     # Convert the full paths to module/class
-    redirect_dict = defaultdict(dict)
+    redirect_dict: dict = defaultdict(dict)
     for old_path, new_path in d.items():
         old_class = old_path.split(".")[-1]
         old_module = ".".join(old_path.split(".")[:-1])
@@ -85,7 +94,7 @@ def _load_redirect(redirect_file):
     return dict(redirect_dict)
 
 
-def _check_type(obj, type_str) -> bool:
+def _check_type(obj: object, type_str: Union[str, tuple[str]]) -> bool:
     """Alternative to isinstance that avoids imports.
 
     Checks whether obj is an instance of the type defined by type_str. This
@@ -222,10 +231,13 @@ class MSONable:
         return d
 
     @classmethod
-    def from_dict(cls, d):
+    def from_dict(cls, d: dict) -> Self:
         """
-        :param d: Dict representation.
-        :return: MSONable class.
+        Args:
+            d: Dict representation.
+
+        Returns:
+            MSONable class.
         """
         decoded = {
             k: MontyDecoder().process_decoded(v)
@@ -247,11 +259,10 @@ class MSONable:
         any nested keys, and then performing a hash on the resulting object
         """
 
-        def flatten(obj, separator="."):
-            # Flattens a dictionary
-
+        def flatten(dct: dict, separator: str = ".") -> dict:
+            """Flattens a dictionary"""
             flat_dict = {}
-            for key, value in obj.items():
+            for key, value in dct.items():
                 if isinstance(value, dict):
                     flat_dict.update(
                         {
@@ -276,7 +287,7 @@ class MSONable:
         return sha1(json.dumps(OrderedDict(ordered_keys)).encode("utf-8"))
 
     @classmethod
-    def _validate_monty(cls, __input_value):
+    def _validate_monty(cls, __input_value) -> Self:
         """
         pydantic Validator for MSONable pattern
         """
@@ -302,21 +313,21 @@ class MSONable:
         )
 
     @classmethod
-    def validate_monty_v1(cls, __input_value):
+    def validate_monty_v1(cls, __input_value) -> Self:
         """
         Pydantic validator with correct signature for pydantic v1.x
         """
         return cls._validate_monty(__input_value)
 
     @classmethod
-    def validate_monty_v2(cls, __input_value, _):
+    def validate_monty_v2(cls, __input_value, _) -> Self:
         """
         Pydantic validator with correct signature for pydantic v2.x
         """
         return cls._validate_monty(__input_value)
 
     @classmethod
-    def __get_validators__(cls):
+    def __get_validators__(cls) -> Generator:
         """Return validators for use in pydantic"""
         yield cls.validate_monty_v1
 
@@ -333,7 +344,7 @@ class MSONable:
         return core_schema.json_or_python_schema(json_schema=s, python_schema=s)
 
     @classmethod
-    def _generic_json_schema(cls):
+    def _generic_json_schema(cls) -> dict:
         return {
             "type": "object",
             "properties": {
@@ -350,7 +361,7 @@ class MSONable:
         return cls._generic_json_schema()
 
     @classmethod
-    def __modify_schema__(cls, field_schema):
+    def __modify_schema__(cls, field_schema) -> None:
         """JSON schema for MSONable pattern"""
         custom_schema = cls._generic_json_schema()
         field_schema.update(custom_schema)
