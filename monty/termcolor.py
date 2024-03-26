@@ -21,6 +21,8 @@ Copyright (c) 2008-2011 Volvox Development Team
 ANSII Color formatting for output in terminal.
 """
 
+from __future__ import annotations
+
 import os
 
 try:
@@ -30,6 +32,7 @@ try:
     import termios
 except Exception:
     pass
+
 
 __all__ = ["colored", "cprint"]
 
@@ -57,18 +60,18 @@ RESET = "\033[0m"
 __ISON = True
 
 
-def enable(true_false):
+def enable(true_false: bool) -> None:
     """Enable/Disable ANSII Color formatting"""
     global __ISON
     __ISON = true_false
 
 
-def ison():
+def ison() -> bool:
     """True if ANSII Color formatting is activated."""
     return __ISON
 
 
-def stream_has_colours(stream):
+def stream_has_colours(stream: object) -> bool:
     """
     True if stream supports colours. Python cookbook, #475186
     """
@@ -84,7 +87,7 @@ def stream_has_colours(stream):
         return False  # guess false in case of error
 
 
-def colored(text, color=None, on_color=None, attrs=None):
+def colored(text: str, color: str = "", on_color: str = "", attrs: str = "") -> str:
     """Colorize text.
 
     Available text colors:
@@ -103,13 +106,13 @@ def colored(text, color=None, on_color=None, attrs=None):
 
     if __ISON and os.getenv("ANSI_COLORS_DISABLED") is None:
         fmt_str = "\033[%dm%s"
-        if color is not None:
+        if color:
             text = fmt_str % (COLORS[color], text)
 
-        if on_color is not None:
+        if on_color:
             text = fmt_str % (HIGHLIGHTS[on_color], text)
 
-        if attrs is not None:
+        if attrs:
             for attr in attrs:
                 text = fmt_str % (ATTRIBUTES[attr], text)
 
@@ -117,7 +120,9 @@ def colored(text, color=None, on_color=None, attrs=None):
     return text
 
 
-def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
+def cprint(
+    text: str, color: str = "", on_color: str = "", attrs: str = "", **kwargs
+) -> None:
     """Print colorize text.
 
     It accepts arguments of print function.
@@ -130,7 +135,7 @@ def cprint(text, color=None, on_color=None, attrs=None, **kwargs):
         print((colored(text, color, on_color, attrs)), **kwargs)
 
 
-def colored_map(text, cmap):
+def colored_map(text: str, cmap: dict) -> str:
     """
     Return colorized text. cmap is a dict mapping tokens to color options.
 
@@ -147,7 +152,7 @@ def colored_map(text, cmap):
     return text
 
 
-def cprint_map(text, cmap, **kwargs):
+def cprint_map(text: str, cmap: dict, **kwargs) -> None:
     """
     Print colorize text.
     cmap is a dict mapping keys to color options.

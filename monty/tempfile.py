@@ -2,17 +2,22 @@
 Temporary directory and file creation utilities.
 """
 
+from __future__ import annotations
+
 import os
 import tempfile
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from monty.shutil import copy_r, gzip_dir, remove
+
+if TYPE_CHECKING:
+    from typing import Union
 
 
 class ScratchDir:
     """
-    .. note::
-
+    Notes:
         With effect from Python 3.2, tempfile.TemporaryDirectory already
         implements much of the functionality of ScratchDir. However, it does
         not provide options for copying of files to and from (though it is
@@ -37,12 +42,12 @@ class ScratchDir:
 
     def __init__(
         self,
-        rootpath,
-        create_symbolic_link=False,
-        copy_from_current_on_enter=False,
-        copy_to_current_on_exit=False,
-        gzip_on_exit=False,
-        delete_removed_files=True,
+        rootpath: Union[str, Path],
+        create_symbolic_link: bool = False,
+        copy_from_current_on_enter: bool = False,
+        copy_to_current_on_exit: bool = False,
+        gzip_on_exit: bool = False,
+        delete_removed_files: bool = True,
     ):
         """
         Initializes scratch directory given a **root** path. There is no need
