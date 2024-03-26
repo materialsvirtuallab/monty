@@ -202,7 +202,7 @@ class timeout:
         do_something_else()
     """
 
-    def __init__(self, seconds=1, error_message="Timeout"):
+    def __init__(self, seconds: int = 1, error_message: str = "Timeout"):
         """
         Args:
             seconds (int): Allowed time for function in seconds.
@@ -233,7 +233,7 @@ class TimeoutError(Exception):
     Exception class for timeouts.
     """
 
-    def __init__(self, message):
+    def __init__(self, message: str):
         """
         Args:
             message: Error message
