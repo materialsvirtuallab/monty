@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
-    r"""
+    """
     This function wraps around the bz2, gzip, lzma, xz and standard python's open
     function to deal intelligently with bzipped, gzipped or standard text
     files.

@@ -654,13 +654,13 @@ def jsanitize(
 
     Args:
         obj: input json-like object.
-        strict (bool): This parameters sets the behavior when jsanitize
+        strict (bool): This parameter sets the behavior when jsanitize
             encounters an object it does not understand. If strict is True,
             jsanitize will try to get the as_dict() attribute of the object. If
             no such attribute is found, an attribute error will be thrown. If
             strict is False, jsanitize will simply call str(object) to convert
             the object to a string representation.
-        allow_bson (bool): This parameters sets the behavior when jsanitize
+        allow_bson (bool): This parameter sets the behavior when jsanitize
             encounters a bson supported type such as objectid and datetime. If
             True, such bson types will be ignored, allowing for proper
             insertion into MongoDB databases.
@@ -671,8 +671,12 @@ def jsanitize(
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if isinstance(obj, Enum) and enum_values:
-        return obj.value
+    if isinstance(obj, Enum):
+        if enum_values:
+            return obj.value
+        elif hasattr(obj, "as_dict"):
+            return obj.as_dict()
+        return MontyEncoder().default(obj)
 
     if allow_bson and (
         isinstance(obj, (datetime.datetime, bytes))
