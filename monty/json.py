@@ -60,7 +60,7 @@ except ImportError:
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Union, Generator
+    from typing import Any, Union, Generator
 
     from typing_extensions import Self
 
@@ -94,7 +94,7 @@ def _load_redirect(redirect_file: Union[str, Path]) -> dict:
     return dict(redirect_dict)
 
 
-def _check_type(obj: object, type_str: Union[str, tuple[str]]) -> bool:
+def _check_type(obj: object, type_str: Union[str, tuple[str, ...]]) -> bool:
     """Alternative to isinstance that avoids imports.
 
     Checks whether obj is an instance of the type defined by type_str. This
@@ -122,7 +122,7 @@ def _check_type(obj: object, type_str: Union[str, tuple[str]]) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any([o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str])
+    return any(f"{o.__module__}.{o.__name__}" == ts for o in mro for ts in type_str)
 
 
 class MSONable:
@@ -207,7 +207,7 @@ class MSONable:
                     a = getattr(self, c)
                 except AttributeError:
                     try:
-                        a = getattr(self, "_" + c)
+                        a = getattr(self, f"_{c}")
                     except AttributeError:
                         raise NotImplementedError(
                             "Unable to automatically determine as_dict "
@@ -356,7 +356,7 @@ class MSONable:
         }
 
     @classmethod
-    def __get_pydantic_json_schema__(cls, core_schema, handler):
+    def __get_pydantic_json_schema__(cls, core_schema, handler) -> dict:
         """JSON schema for MSONable pattern"""
         return cls._generic_json_schema()
 
@@ -376,7 +376,7 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def default(self, o) -> dict:  # pylint: disable=E0202
+    def default(self, o) -> dict:
         """
         Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
@@ -437,9 +437,8 @@ class MontyEncoder(json.JSONEncoder):
                 "data": o.to_json(default_handler=MontyEncoder().encode),
             }
 
-        if bson is not None:
-            if isinstance(o, bson.objectid.ObjectId):
-                return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
+        if bson is not None and isinstance(o, bson.objectid.ObjectId):
+            return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
         if callable(o) and not isinstance(o, MSONable):
             return _serialize_callable(o)
@@ -494,7 +493,7 @@ class MontyDecoder(json.JSONDecoder):
         json.loads(json_string, cls=MontyDecoder)
     """
 
-    def process_decoded(self, d):
+    def process_decoded(self, d: Any):
         """
         Recursive method to support decoding dicts and lists containing
         pymatgen objects.
@@ -620,21 +619,24 @@ class MontyDecoder(json.JSONDecoder):
 
         return d
 
-    def decode(self, s):
+    def decode(self, s: str) -> object:  # type: ignore[override]
         """
         Overrides decode from JSONDecoder.
 
-        :param s: string
-        :return: Object.
+        Args:
+            s: string
+
+        Returns:
+            Object.
         """
         if orjson is not None:
             try:
-                d = orjson.loads(s)  # pylint: disable=E1101
+                _d = orjson.loads(s)  # pylint: disable=E1101
             except orjson.JSONDecodeError:  # pylint: disable=E1101
-                d = json.loads(s)
+                _d = json.loads(s)
         else:
-            d = json.loads(s)
-        return self.process_decoded(d)
+            _d = json.loads(s)
+        return self.process_decoded(_d)
 
 
 class MSONError(Exception):
@@ -644,8 +646,12 @@ class MSONError(Exception):
 
 
 def jsanitize(
-    obj, strict=False, allow_bson=False, enum_values=False, recursive_msonable=False
-):
+    obj: Any,
+    strict: bool = False,
+    allow_bson: bool = False,
+    enum_values: bool = False,
+    recursive_msonable: bool = False,
+) -> Any:
     """
     This method cleans an input json-like object, either a list or a dict or
     some sequence, nested or otherwise, by converting all non-string
@@ -683,18 +689,22 @@ def jsanitize(
         or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
     ):
         return obj
+
     if isinstance(obj, (list, tuple)):
         return [
             jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
             for i in obj
         ]
+
     if np is not None and isinstance(obj, np.ndarray):
         return [
             jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
             for i in obj.tolist()
         ]
+
     if np is not None and isinstance(obj, np.generic):
         return obj.item()
+
     if _check_type(
         obj,
         (
@@ -704,6 +714,7 @@ def jsanitize(
         ),
     ):
         return obj.to_dict()
+
     if isinstance(obj, dict):
         return {
             str(k): jsanitize(
@@ -715,11 +726,14 @@ def jsanitize(
             )
             for k, v in obj.items()
         }
+
     if isinstance(obj, (int, float)):
         return obj
+
     if obj is None:
         return None
-    if isinstance(obj, pathlib.Path) or isinstance(obj, datetime.datetime):
+
+    if isinstance(obj, (pathlib.Path, datetime.datetime)):
         return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
@@ -758,7 +772,7 @@ def jsanitize(
     )
 
 
-def _serialize_callable(o):
+def _serialize_callable(o: Any) -> dict:
     if isinstance(o, types.BuiltinFunctionType):
         # don't care about what builtin functions (sum, open, etc) are bound to
         bound = None
