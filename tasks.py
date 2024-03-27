@@ -33,7 +33,7 @@ NEW_VER = datetime.datetime.today().strftime("%Y.%-m.%-d")
 
 
 @task
-def make_doc(ctx:Context) -> None:
+def make_doc(ctx: Context) -> None:
     with cd("docs"):
         ctx.run("rm monty.*.rst", warn=True)
         ctx.run("sphinx-apidoc --separate -P -M -d 6 -o . -f ../monty")
@@ -101,7 +101,7 @@ def test(ctx: Context) -> None:
 
 
 @task
-def setver(ctx:Context) -> None:
+def setver(ctx: Context) -> None:
     ctx.run(f'sed s/version=.*,/version=\\"{ver}\\",/ setup.py > newsetup')
     ctx.run("mv newsetup setup.py")
 
@@ -155,7 +155,7 @@ def set_ver(ctx: Context) -> None:
 
 
 @task
-def release(ctx: Context, notest: bool=False) -> None:
+def release(ctx: Context, notest: bool = False) -> None:
     set_ver(ctx)
     if not notest:
         test(ctx)
