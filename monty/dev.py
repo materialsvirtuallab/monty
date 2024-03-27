@@ -8,8 +8,8 @@ from __future__ import annotations
 import functools
 import logging
 import os
-import sys
 import subprocess
+import sys
 import warnings
 from datetime import datetime
 from typing import TYPE_CHECKING

@@ -7,11 +7,10 @@ from __future__ import annotations
 import inspect
 import os
 from inspect import currentframe, getframeinfo
-
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Type, Literal
+    from typing import Literal, Type
 
 
 def all_subclasses(cls: Type) -> list[Type]:

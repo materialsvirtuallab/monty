@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from monty.pprint import draw_tree, pprint_table
 
 

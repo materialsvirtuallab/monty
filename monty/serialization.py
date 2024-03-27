@@ -24,9 +24,8 @@ except ImportError:
     msgpack = None
 
 if TYPE_CHECKING:
-    from typing import Any, Optional, Union
-
     from pathlib import Path
+    from typing import Any, Optional, Union
 
 
 def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> Any:

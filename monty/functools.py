@@ -2,6 +2,8 @@
 functools, especially backported from Python 3.
 """
 
+from __future__ import annotations
+
 import cProfile
 import pstats
 import signal
@@ -9,8 +11,7 @@ import sys
 import tempfile
 from collections import namedtuple
 from functools import partial, wraps
-
-from typing import Callable, Any, Union
+from typing import Any, Callable, Union
 
 _CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 

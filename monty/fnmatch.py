@@ -2,6 +2,8 @@
 This module provides support for Unix shell-style wildcards
 """
 
+from __future__ import annotations
+
 import fnmatch
 
 from monty.string import list_strings

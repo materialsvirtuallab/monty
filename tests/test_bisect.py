@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from monty.bisect import find_ge, find_gt, find_le, find_lt, index
 
 
