@@ -2,10 +2,17 @@
 Useful additional functions for operators
 """
 
+from __future__ import annotations
+
+import contextlib
 import operator
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Callable
 
 
-def operator_from_str(op):
+def operator_from_str(op: str) -> Callable:
     """
     Return the operator associated to the given string `op`.
 
@@ -26,9 +33,7 @@ def operator_from_str(op):
         "^": operator.xor,
     }
 
-    try:
+    with contextlib.suppress(AttributeError):
         d["/"] = operator.truediv
-    except AttributeError:
-        pass
 
     return d[op]

@@ -2,12 +2,14 @@
 Addition math functions.
 """
 
+from __future__ import annotations
+
 import math
 
 
-def nCr(n, r):
+def nCr(n: int, r: int) -> int:
     """
-    Calculates nCr.
+    Calculates nCr (binomial coefficient or "n choose r").
 
     Args:
         n (int): total number of items.
@@ -20,7 +22,7 @@ def nCr(n, r):
     return int(f(n) / f(r) / f(n - r))
 
 
-def nPr(n, r):
+def nPr(n: int, r: int) -> int:
     """
     Calculates nPr.
 

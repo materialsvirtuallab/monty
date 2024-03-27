@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from math import sqrt
 
 from monty.multiprocessing import imap_tqdm

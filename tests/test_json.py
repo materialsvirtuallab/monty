@@ -183,8 +183,7 @@ class TestMSONable:
                 self.b = b
 
             def as_dict(self):
-                d = {"init": {"a": self.a, "b": self.b}}
-                return d
+                return {"init": {"a": self.a, "b": self.b}}
 
         self.bad_cls = BadMSONClass
 

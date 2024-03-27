@@ -2,8 +2,15 @@
 Useful additional string functions.
 """
 
+from __future__ import annotations
 
-def remove_non_ascii(s):
+from typing import TYPE_CHECKING, cast
+
+if TYPE_CHECKING:
+    from typing import Any, Union
+
+
+def remove_non_ascii(s: str) -> str:
     """
     Remove non-ascii characters in a file. Needed when support for non-ASCII
     is not available.
@@ -17,7 +24,7 @@ def remove_non_ascii(s):
     return "".join(i for i in s if ord(i) < 128)
 
 
-def is_string(s):
+def is_string(s: Any) -> bool:
     """True if s behaves like a string (duck typing test)."""
     try:
         s + " "
@@ -27,29 +34,32 @@ def is_string(s):
         return False
 
 
-def list_strings(arg):
+def list_strings(arg: Union[str, list[str]]) -> list[str]:
     """
     Always return a list of strings, given a string or list of strings as
     input.
 
-    :Examples:
+    Examples:
+        >>> list_strings('A single string')
+        ['A single string']
 
-    >>> list_strings('A single string')
-    ['A single string']
+        >>> list_strings(['A single string in a list'])
+        ['A single string in a list']
 
-    >>> list_strings(['A single string in a list'])
-    ['A single string in a list']
-
-    >>> list_strings(['A','list','of','strings'])
-    ['A', 'list', 'of', 'strings']
+        >>> list_strings(['A','list','of','strings'])
+        ['A', 'list', 'of', 'strings']
     """
     if is_string(arg):
-        return [arg]
+        return [cast(str, arg)]
 
-    return arg
+    elif isinstance(arg, list):
+        return arg
+
+    else:
+        raise TypeError("Wrong type, expect str or list[str].")
 
 
-def marquee(text="", width=78, mark="*"):
+def marquee(text: str = "", width: int = 78, mark: str = "*") -> str:
     """
     Return the input string centered in a 'marquee'.
 
@@ -58,16 +68,15 @@ def marquee(text="", width=78, mark="*"):
         width (int): Width of final output string.
         mark (str): Character used to fill string.
 
-    :Examples:
+    Examples:
+        >>> marquee('A test', width=40)
+        '**************** A test ****************'
 
-    >>> marquee('A test', width=40)
-    '**************** A test ****************'
+        >>> marquee('A test', width=40, mark='-')
+        '---------------- A test ----------------'
 
-    >>> marquee('A test', width=40, mark='-')
-    '---------------- A test ----------------'
-
-    marquee('A test',40, ' ')
-    '                 A test                 '
+        marquee('A test',40, ' ')
+        '                 A test                 '
     """
     if not text:
         return (mark * width)[:width]
@@ -79,7 +88,7 @@ def marquee(text="", width=78, mark="*"):
     return f"{marks} {text} {marks}"
 
 
-def boxed(msg, ch="=", pad=5):
+def boxed(msg: str, ch: str = "=", pad: int = 5) -> str:
     """
     Returns a string in a box
 
@@ -88,10 +97,11 @@ def boxed(msg, ch="=", pad=5):
         ch: Character used to form the box.
         pad: Number of characters ch added before and after msg.
 
-    >>> print(boxed("hello", ch="*", pad=2))
-    ***********
-    ** hello **
-    ***********
+    Examples:
+        >>> print(boxed("hello", ch="*", pad=2))
+        ***********
+        ** hello **
+        ***********
     """
     if pad > 0:
         msg = pad * ch + " " + msg.strip() + " " + pad * ch
@@ -105,18 +115,21 @@ def boxed(msg, ch="=", pad=5):
     )
 
 
-def make_banner(s, width=78, mark="*"):
+def make_banner(s: str, width: int = 78, mark: str = "*") -> str:
     """
-    :param s: String
-    :param width: Width of banner. Defaults to 78.
-    :param mark: The mark used to create the banner.
-    :return: Banner string.
+    Args:
+        s: String
+        width: Width of banner. Defaults to 78.
+        mark: The mark used to create the banner.
+
+    Returns:
+        Banner string.
     """
     banner = marquee(s, width=width, mark=mark)
     return "\n" + len(banner) * mark + "\n" + banner + "\n" + len(banner) * mark
 
 
-def indent(lines, amount, ch=" "):
+def indent(lines: str, amount: int, ch: str = " ") -> str:
     """
     Indent the lines in a string by padding each one with proper number of pad
     characters

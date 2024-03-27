@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from monty.design_patterns import cached_class, singleton
 
 
