@@ -42,7 +42,7 @@ class ScratchDir:
 
     def __init__(
         self,
-        rootpath: Union[str, Path],
+        rootpath: Union[str, Path, None],
         create_symbolic_link: bool = False,
         copy_from_current_on_enter: bool = False,
         copy_to_current_on_exit: bool = False,
