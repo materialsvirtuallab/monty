@@ -85,7 +85,7 @@ def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> 
 
 
 def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None:
-    r"""
+    """
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
     compressed file.
