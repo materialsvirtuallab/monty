@@ -11,7 +11,7 @@ from monty.fnmatch import WildCard
 from monty.string import list_strings
 
 if TYPE_CHECKING:
-    from typing import Literal, Optional, Union
+    from typing import Callable, Literal, Optional, Union
 
 
 def zpath(filename: str) -> str:
@@ -85,7 +85,11 @@ def find_exts(
     if include_dirs is not None:
         _include_dirs: WildCard = WildCard(include_dirs)
 
-    mangle = dict(basename=os.path.basename, abspath=os.path.abspath)[match_mode]
+    mangle_functions: dict[str, Callable[..., str]] = {
+        "basename": os.path.basename,
+        "abspath": os.path.abspath,
+    }
+    mangle: Callable[..., str] = mangle_functions[match_mode]
 
     # Assume directory
     paths = []
