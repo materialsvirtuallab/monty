@@ -3,6 +3,7 @@
 """
 Deployment file to facilitate releases of monty.
 """
+from __future__ import annotations
 
 import datetime
 import glob
