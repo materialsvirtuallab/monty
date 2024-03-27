@@ -72,3 +72,6 @@ exclude_also = [
 
 [tool.mypy]
 ignore_missing_imports = true
+
+[tool.ruff]
+lint.isort.required-imports = ["from __future__ import annotations"]
