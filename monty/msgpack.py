@@ -15,7 +15,7 @@ def default(obj: object) -> dict:
     return MontyEncoder().default(obj)
 
 
-def object_hook(d: dict):
+def object_hook(d: dict) -> object:
     """
     For use with msgpack.unpackb(dict, object_hook=object_hook.).  Supports
     Monty's as_dict protocol, numpy arrays and datetime.
