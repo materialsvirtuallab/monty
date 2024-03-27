@@ -163,8 +163,8 @@ class MSONable:
     fully qualified path and new fully qualified path into .monty.yaml in the
     home folder
 
-    Example:
-    old_module.old_class: new_module.new_class
+    Examples:
+        old_module.old_class: new_module.new_class
     """
 
     REDIRECT = _load_redirect(os.path.join(os.path.expanduser("~"), ".monty.yaml"))

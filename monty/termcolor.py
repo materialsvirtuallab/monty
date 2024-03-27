@@ -98,7 +98,7 @@ def colored(text: str, color: str = "", on_color: str = "", attrs: str = "") -> 
     Available attributes:
         bold, dark, underline, blink, reverse, concealed.
 
-    Example:
+    Examples:
         colored('Hello, World!', 'red', 'on_grey', ['blue', 'blink'])
         colored('Hello, World!', 'green')
     """
@@ -157,7 +157,7 @@ def cprint_map(text: str, cmap: dict, **kwargs) -> None:
     cmap is a dict mapping keys to color options.
     kwargs are passed to print function
 
-    Example:
+    Examples:
         cprint_map("Hello world", {"Hello": "red"})
     """
     try:

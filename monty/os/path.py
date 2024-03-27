@@ -60,7 +60,6 @@ def find_exts(
         list[str]: Absolute paths of the files.
 
     Examples:
-
         # Find all pdf and ps files starting from the current directory.
         find_exts(".", ("pdf", "ps"))
 

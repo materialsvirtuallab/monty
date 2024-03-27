@@ -42,7 +42,7 @@ class Command:
         output: stdout of the subprocess
         error: stderr of the subprocess
 
-    Example:
+    Examples:
         com = Command("sleep 1").run(timeout=2)
         print(com.retcode, com.killed, com.output, com.output)
     """

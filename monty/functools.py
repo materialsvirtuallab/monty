@@ -139,8 +139,7 @@ def return_if_raise(
     Setting disabled to True disables the try except block (useful for
     debugging purposes). One can use this decorator to define properties.
 
-    Example::
-
+    Examples:
         @return_if_raise(ValueError, None)
         def return_none_if_value_error(self):
             pass
@@ -193,13 +192,14 @@ This decorator returns None if one of the exceptions is raised.
 class timeout:
     """
     Timeout function. Use to limit matching to a certain time limit. Note that
-    this works only on Unix-based systems as it uses signal. Usage:
+    this works only on Unix-based systems as it uses signal.
 
-    try:
-        with timeout(3):
-            do_stuff()
-    except TimeoutError:
-        do_something_else()
+    Usage:
+        try:
+            with timeout(3):
+                do_stuff()
+        except TimeoutError:
+            do_something_else()
     """
 
     def __init__(self, seconds: int = 1, error_message: str = "Timeout"):
@@ -247,20 +247,21 @@ def prof_main(main):
 
     Profiling is activated by prepending the command line options
     supported by the original main program with the keyword `prof`.
-    Example:
 
-        $ script.py arg --foo=1
+    Examples:
 
-    becomes
+            $ script.py arg --foo=1
 
-        $ script.py prof arg --foo=1
+        becomes
 
-    The decorated main accepts two new arguments:
+            $ script.py prof arg --foo=1
 
-        prof_file: Name of the output file with profiling data
-            If not given, a temporary file is created.
-        sortby: Profiling data are sorted according to this value.
-            default is "time". See sort_stats.
+        The decorated main accepts two new arguments:
+
+            prof_file: Name of the output file with profiling data
+                If not given, a temporary file is created.
+            sortby: Profiling data are sorted according to this value.
+                default is "time". See sort_stats.
     """
 
     @wraps(main)

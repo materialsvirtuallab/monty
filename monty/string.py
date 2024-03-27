@@ -40,7 +40,6 @@ def list_strings(arg: Union[str, list[str]]) -> list[str]:
     input.
 
     Examples:
-
         >>> list_strings('A single string')
         ['A single string']
 
@@ -70,7 +69,6 @@ def marquee(text: str = "", width: int = 78, mark: str = "*") -> str:
         mark (str): Character used to fill string.
 
     Examples:
-
         >>> marquee('A test', width=40)
         '**************** A test ****************'
 
@@ -99,10 +97,11 @@ def boxed(msg: str, ch: str = "=", pad: int = 5) -> str:
         ch: Character used to form the box.
         pad: Number of characters ch added before and after msg.
 
-    >>> print(boxed("hello", ch="*", pad=2))
-    ***********
-    ** hello **
-    ***********
+    Examples:
+        >>> print(boxed("hello", ch="*", pad=2))
+        ***********
+        ** hello **
+        ***********
     """
     if pad > 0:
         msg = pad * ch + " " + msg.strip() + " " + pad * ch
