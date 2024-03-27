@@ -29,9 +29,7 @@ class WildCard:
                 represents a pattern.
             sep (str): Separator for shell patterns.
         """
-        self.pats = ["*"]
-        if wildcard:
-            self.pats = wildcard.split(sep)
+        self.pats = wildcard.split(sep) if wildcard else ["*"]
 
     def __str__(self) -> str:
         return f"<{self.__class__.__name__}, patterns = {self.pats}>"
@@ -54,8 +52,4 @@ class WildCard:
         """
         Returns True if name matches one of the patterns.
         """
-        for pat in self.pats:
-            if fnmatch.fnmatch(name, pat):
-                return True
-
-        return False
+        return any(fnmatch.fnmatch(name, pat) for pat in self.pats)

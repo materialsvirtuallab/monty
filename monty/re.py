@@ -5,6 +5,7 @@ Helpful regex based functions. E.g., grepping.
 from __future__ import annotations
 
 import collections
+import contextlib
 import re
 from typing import TYPE_CHECKING
 
@@ -48,16 +49,14 @@ def regrep(
     gen = reverse_readfile(filename) if reverse else zopen(filename, "rt")
     for i, line in enumerate(gen):
         for k, p in compiled.items():
-            m = p.search(line)
-            if m:
+            if m := p.search(line):
                 matches[k].append(
                     [[postprocess(g) for g in m.groups()], -i if reverse else i]
                 )
-        if terminate_on_match and all(len(matches.get(k, [])) for k in compiled.keys()):
+        if terminate_on_match and all(len(matches.get(k, [])) for k in compiled):
             break
-    try:
+
+    with contextlib.suppress(Exception):
         # Try to close open file handle. Pass if it is a generator.
         gen.close()  # type: ignore[attr-defined]
-    except Exception:
-        pass
     return matches

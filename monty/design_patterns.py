@@ -66,7 +66,7 @@ def cached_class(klass: type[Klass]) -> type[Klass]:
             """
             key = (cls,) + args + tuple(kwargs.items())
             try:
-                inst = cache.get(key, None)
+                inst = cache.get(key)
             except TypeError:
                 # Can't cache this set of arguments
                 inst = key = None

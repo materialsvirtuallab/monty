@@ -58,10 +58,10 @@ def caller_name(skip: Literal[1, 2] = 2) -> str:
     parentframe = stack[start][0]
 
     name = []
-    module = inspect.getmodule(parentframe)
+
     # `modname` can be None when frame is executed directly in console
     # TODO(techtonik): consider using __main__
-    if module:
+    if module := inspect.getmodule(parentframe):
         name.append(module.__name__)
 
     # detect classname

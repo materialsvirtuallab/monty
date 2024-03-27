@@ -31,24 +31,21 @@ def index(a: list[float], x: float, atol: Optional[float] = None) -> int:
         if atol is None:
             if a[i] == x:
                 return i
-        else:
-            if abs(a[i] - x) < atol:
-                return i
+        elif abs(a[i] - x) < atol:
+            return i
     raise ValueError
 
 
 def find_lt(a: list[float], x: float) -> int:
     """Find rightmost value less than x."""
-    i = bs.bisect_left(a, x)
-    if i:
+    if i := bs.bisect_left(a, x):
         return i - 1
     raise ValueError
 
 
 def find_le(a: list[float], x: float) -> int:
     """Find rightmost value less than or equal to x."""
-    i = bs.bisect_right(a, x)
-    if i:
+    if i := bs.bisect_right(a, x):
         return i - 1
     raise ValueError
 

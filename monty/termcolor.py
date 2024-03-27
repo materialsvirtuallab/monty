@@ -23,15 +23,14 @@ ANSII Color formatting for output in terminal.
 
 from __future__ import annotations
 
+import contextlib
 import os
 
-try:
+with contextlib.suppress(Exception):
     import curses
     import fcntl
     import struct
     import termios
-except Exception:
-    pass
 
 
 __all__ = ["colored", "cprint"]
@@ -178,11 +177,9 @@ def get_terminal_size():
         http://stackoverflow.com/questions/566746/how-to-get-console-window-
         width-in-python
     """
-    try:
+    with contextlib.suppress(Exception):
         rc = os.popen("stty size", "r").read().split()
         return int(rc[0]), int(rc[1])
-    except Exception:
-        pass
 
     env = os.environ
 
@@ -196,12 +193,10 @@ def get_terminal_size():
     rc = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
 
     if not rc:
-        try:
+        with contextlib.suppress(Exception):
             fd = os.open(os.ctermid(), os.O_RDONLY)
             rc = ioctl_GWINSZ(fd)
             os.close(fd)
-        except Exception:
-            pass
 
     if not rc:
         rc = (env.get("LINES", 25), env.get("COLUMNS", 80))

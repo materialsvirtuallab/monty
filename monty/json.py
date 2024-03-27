@@ -4,6 +4,7 @@ JSON serialization and deserialization utilities.
 
 from __future__ import annotations
 
+import contextlib
 import datetime
 import json
 import os
@@ -737,16 +738,12 @@ def jsanitize(
         return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
-        try:
+        with contextlib.suppress(TypeError):
             return _serialize_callable(obj)
-        except TypeError:
-            pass
 
     if recursive_msonable:
-        try:
+        with contextlib.suppress(AttributeError):
             return obj.as_dict()
-        except AttributeError:
-            pass
 
     if not strict:
         return str(obj)

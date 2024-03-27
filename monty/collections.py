@@ -210,7 +210,7 @@ class MongoDict:
         For Ipython tab completion.
         See http://ipython.org/ipython-doc/dev/config/integrating.html
         """
-        return sorted(list(k for k in self._mongo_dict_ if not callable(k)))
+        return sorted([k for k in self._mongo_dict_ if not callable(k)])
 
 
 def dict2namedtuple(*args, **kwargs) -> tuple:

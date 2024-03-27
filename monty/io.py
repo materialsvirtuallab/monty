@@ -183,7 +183,7 @@ class FileLock:
 
     Error = FileLockException
 
-    def __init__(self, file_name: str, timeout: int = 10, delay: float = 0.05):
+    def __init__(self, file_name: str, timeout: float = 10, delay: float = 0.05):
         """
         Prepare the file locker. Specify the file to lock and optionally
         the maximum timeout and the delay between each attempt to lock.
@@ -194,9 +194,9 @@ class FileLock:
             delay: Delay between each attempt to lock. Defaults to 0.05.
         """
         self.file_name = os.path.abspath(file_name)
-        self.lockfile = os.path.abspath(file_name) + ".lock"
-        self.timeout = float(timeout)
-        self.delay = float(delay)
+        self.lockfile = f"{os.path.abspath(file_name)}.lock"
+        self.timeout = timeout
+        self.delay = delay
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
@@ -216,7 +216,7 @@ class FileLock:
             try:
                 self.fd = os.open(self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
                 break
-            except (OSError,) as e:
+            except OSError as e:
                 if e.errno != errno.EEXIST:
                     raise
                 if (time.time() - start_time) >= self.timeout:

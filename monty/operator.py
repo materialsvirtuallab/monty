@@ -4,6 +4,7 @@ Useful additional functions for operators
 
 from __future__ import annotations
 
+import contextlib
 import operator
 
 from typing import TYPE_CHECKING
@@ -33,9 +34,7 @@ def operator_from_str(op: str) -> Callable:
         "^": operator.xor,
     }
 
-    try:
+    with contextlib.suppress(AttributeError):
         d["/"] = operator.truediv
-    except AttributeError:
-        pass
 
     return d[op]
