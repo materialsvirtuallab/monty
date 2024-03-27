@@ -86,7 +86,9 @@ def stream_has_colours(stream: object) -> bool:
         return False  # guess false in case of error
 
 
-def colored(text: str, color: str = "", on_color: str = "", attrs: str = "") -> str:
+def colored(
+    text: str, color: str = "", on_color: str = "", attrs: list[str] = []
+) -> str:
     """Colorize text.
 
     Available text colors:
@@ -120,7 +122,7 @@ def colored(text: str, color: str = "", on_color: str = "", attrs: str = "") -> 
 
 
 def cprint(
-    text: str, color: str = "", on_color: str = "", attrs: str = "", **kwargs
+    text: str, color: str = "", on_color: str = "", attrs: list[str] = [], **kwargs
 ) -> None:
     """Print colorize text.
 
