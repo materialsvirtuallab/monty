@@ -384,9 +384,11 @@ class MontyEncoder(json.JSONEncoder):
         output. (b) If the @module and @class keys are not in the to_dict,
         add them to the output automatically. If the object has no to_dict
         property, the default Python json encoder default method is called.
+
         Args:
             o: Python object.
-        Return:
+
+        Returns:
             Python dict representation.
         """
         if isinstance(o, datetime.datetime):
