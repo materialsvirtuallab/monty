@@ -492,9 +492,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
-                if classname in MSONable.REDIRECT.get(modname, {}):
-                    modname = MSONable.REDIRECT[modname][classname]["@module"]
-                    classname = MSONable.REDIRECT[modname][classname]["@class"]
+                if cls_redirect := MSONable.REDIRECT.get(modname, {}).get(classname):
+                    classname = cls_redirect["@class"]
+                    modname = cls_redirect["@module"]
             elif "@module" in d and "@callable" in d:
                 modname = d["@module"]
                 objname = d["@callable"]
