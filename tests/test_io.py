@@ -32,9 +32,7 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f)):
                 assert (
                     int(line) == self.NUMLINES - idx
-                ), "read_backwards read {} whereas it should "(
-                    "have read {" "}"
-                ).format(int(line), self.NUMLINES - idx)
+                ), f"read_backwards read {int(line)} whereas it should have read {self.NUMLINES - idx}"
 
     def test_reverse_readline_fake_big(self):
         """
@@ -44,9 +42,7 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert (
                     int(line) == self.NUMLINES - idx
-                ), "read_backwards read {} whereas it should "(
-                    "have read {" "}"
-                ).format(int(line), self.NUMLINES - idx)
+                ), f"read_backwards read {int(line)} whereas it should have read {self.NUMLINES - idx}"
 
     def test_reverse_readline_bz2(self):
         """

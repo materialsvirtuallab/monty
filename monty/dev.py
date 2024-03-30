@@ -72,12 +72,13 @@ def deprecated(
         # Only raise warning in code owner's repo CI
         if (
             _deadline is not None
-            and os.getenv("CI")
+            and os.getenv("CI") is not None
             and datetime.now() > _deadline
             and _is_in_owner_repo()
         ):
-            raise DeprecationWarning(
-                "This function should have been removed on {deadline:%Y-%m-%d}."
+            warnings.warn(
+                f"This function should have been removed on {_deadline:%Y-%m-%d}.",
+                DeprecationWarning,
             )
 
     def craft_message(
@@ -89,7 +90,7 @@ def deprecated(
         msg = f"{old.__name__} is deprecated"
 
         if deadline is not None:
-            msg += f", and will be removed on {deadline:%Y-%m-%d}\n"
+            msg += f", and will be removed on {_deadline:%Y-%m-%d}\n"
 
         if replacement is not None:
             if isinstance(replacement, property):
@@ -108,15 +109,16 @@ def deprecated(
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
+
+            # Raise a CI warning after removal deadline
+            raise_deadline_warning()
+
             return old(*args, **kwargs)
 
         return wrapped
 
     # Convert deadline to datetime type
     _deadline = datetime(*deadline) if deadline is not None else None
-
-    # Raise a CI warning after removal deadline
-    raise_deadline_warning()
 
     return deprecated_decorator
 
