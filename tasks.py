@@ -1,9 +1,4 @@
-#!/usr/bin/env python
-
-"""
-Deployment file to facilitate releases of monty.
-"""
-
+"""Deployment file to facilitate releases of monty."""
 
 import datetime
 import glob
