@@ -1,6 +1,7 @@
 """
 Additional tools for iteration.
 """
+
 import itertools
 
 try:
