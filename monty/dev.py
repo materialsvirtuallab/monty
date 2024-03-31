@@ -76,9 +76,8 @@ def deprecated(
             and datetime.now() > _deadline
             and _is_in_owner_repo()
         ):
-            warnings.warn(
-                f"This function should have been removed on {_deadline:%Y-%m-%d}.",
-                DeprecationWarning,
+            raise DeprecationWarning(
+                f"This function should have been removed on {_deadline:%Y-%m-%d}."
             )
 
     def craft_message(
