@@ -109,16 +109,15 @@ def deprecated(
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
-
-            # Raise a CI warning after removal deadline
-            raise_deadline_warning()
-
             return old(*args, **kwargs)
 
         return wrapped
 
     # Convert deadline to datetime type
     _deadline = datetime(*deadline) if deadline is not None else None
+
+    # Raise CI warning after removal deadline
+    raise_deadline_warning()
 
     return deprecated_decorator
 

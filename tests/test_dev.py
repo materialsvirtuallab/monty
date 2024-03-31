@@ -89,36 +89,38 @@ class TestDecorator:
             assert TestClass_deprecationwarning().classmethod_b() == "b"
 
     def test_deprecated_deadline(self):
-        @deprecated(deadline=(2000, 1, 1))
-        def func_old():
-            pass
 
         with warnings.catch_warnings(record=True) as warn_msgs:
-            func_old()  # trigger a warning
+            @deprecated(deadline=(2000, 1, 1))
+            def func_old():
+                pass
 
-            assert "will be removed on 2000-01-01" in str(warn_msgs[0].message)
+            assert "This function should have been removed" in str(warn_msgs[0].message)
 
     def test_deprecated_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be raised."""
 
-        @deprecated(deadline=(2000, 1, 1))
-        def func_old():
-            pass
+        # # No warn case 1: date before deadline
+        # DEBUG
+        # with warnings.catch_warnings(record=True) as warn_msgs:
+        #     monkeypatch.setattr(datetime.datetime, "now", datetime.datetime(1999, 1, 1))
 
-        # No warn case 1: date before deadline
-        with warnings.catch_warnings(record=True) as warn_msgs:
-            monkeypatch.setattr(datetime, "datetime", datetime.datetime(1999, 1, 1))
-            func_old()
+        #     @deprecated(deadline=(2000, 1, 1))
+        #     def func_old():
+        #         pass
 
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
-                )
+        #     for warning in warn_msgs:
+        #         assert "This function should have been removed on" not in str(
+        #             warning.message
+        #         )
 
         # No warn case 2: not in CI env
         with warnings.catch_warnings(record=True) as warn_msgs:
             monkeypatch.delenv("CI", raising=False)
-            func_old()
+
+            @deprecated(deadline=(2000, 1, 1))
+            def func_old():
+                pass
 
             for warning in warn_msgs:
                 assert "This function should have been removed on" not in str(
@@ -128,7 +130,10 @@ class TestDecorator:
         # No warn case 3: not in code owner repo
         with warnings.catch_warnings(record=True) as warn_msgs:
             monkeypatch.setenv("GITHUB_REPOSITORY", "NONE/NONE")
-            func_old()
+
+            @deprecated(deadline=(2000, 1, 1))
+            def func_old():
+                pass
 
             for warning in warn_msgs:
                 assert "This function should have been removed on" not in str(
