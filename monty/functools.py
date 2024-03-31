@@ -34,9 +34,7 @@ class _HashedSeq(list):  # pylint: disable=C0205
         return self.hashvalue
 
 
-def _make_key(
-    args, kwds, typed, kwd_mark=(object(),), fasttypes=None
-):
+def _make_key(args, kwds, typed, kwd_mark=(object(),), fasttypes=None):
     """
     Make a cache key from optionally typed positional and keyword arguments
 

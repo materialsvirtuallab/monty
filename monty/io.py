@@ -192,9 +192,7 @@ class FileLock:
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
-            raise ValueError(
-                "delay and timeout must be positive with delay <= timeout"
-            )
+            raise ValueError("delay and timeout must be positive with delay <= timeout")
 
     def acquire(self):
         """
