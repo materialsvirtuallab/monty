@@ -722,7 +722,11 @@ class TestJson:
 
     def test_redirect(self):
         MSONable.REDIRECT["tests.test_json"] = {
-            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
+            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"},
+            "another_test_class": {
+                "@class": "AnotherClass",
+                "@module": "tests.test_json2",
+            },
         }
 
         d = {
@@ -736,9 +740,18 @@ class TestJson:
         obj = json.loads(json.dumps(d), cls=MontyDecoder)
         assert isinstance(obj, GoodMSONClass)
 
-        d["@class"] = "not_there"
-        obj = json.loads(json.dumps(d), cls=MontyDecoder)
-        assert isinstance(obj, dict)
+        d2 = {
+            "@class": "another_test_class",
+            "@module": "tests.test_json",
+            "a": 2,
+            "b": 2,
+            "c": 2,
+        }
+
+        with pytest.raises(ImportError, match="No module named 'tests.test_json2'"):
+            # This should raise ImportError because it's trying to load
+            # AnotherClass from tests.test_json instead of tests.test_json2
+            json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
