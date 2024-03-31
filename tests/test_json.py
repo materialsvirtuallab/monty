@@ -73,7 +73,7 @@ class GoodNestedMSONClass(MSONable):
         assert isinstance(b_dict, dict)
         assert isinstance(c_list_dict_list, list)
         assert isinstance(c_list_dict_list[0], dict)
-        first_key = list(c_list_dict_list[0].keys())[0]
+        first_key = next(iter(c_list_dict_list[0]))
         assert isinstance(c_list_dict_list[0][first_key], list)
         self.a_list = a_list
         self.b_dict = b_dict
@@ -183,8 +183,7 @@ class TestMSONable:
                 self.b = b
 
             def as_dict(self):
-                d = {"init": {"a": self.a, "b": self.b}}
-                return d
+                return {"init": {"a": self.a, "b": self.b}}
 
         self.bad_cls = BadMSONClass
 

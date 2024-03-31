@@ -34,7 +34,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     if Path is not None and isinstance(filename, Path):
         filename = str(filename)
 
-    name, ext = os.path.splitext(filename)
+    _name, ext = os.path.splitext(filename)
     ext = ext.upper()
     if ext == ".BZ2":
         return bz2.open(filename, *args, **kwargs)
@@ -130,10 +130,7 @@ def reverse_readline(
 
         buf = ""
         m_file.seek(0, 2)
-        if is_text:
-            lastchar = m_file.read(1)
-        else:
-            lastchar = m_file.read(1).decode("utf-8")
+        lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
 
         trailing_newline = lastchar == "\n"
 
@@ -195,9 +192,7 @@ class FileLock:
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
-            raise ValueError(
-                "delay and timeout must be positive with delay " "<= timeout"
-            )
+            raise ValueError("delay and timeout must be positive with delay <= timeout")
 
     def acquire(self):
         """
@@ -211,7 +206,7 @@ class FileLock:
             try:
                 self.fd = os.open(self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
                 break
-            except (OSError,) as e:
+            except OSError as e:
                 if e.errno != errno.EEXIST:
                     raise
                 if (time.time() - start_time) >= self.timeout:

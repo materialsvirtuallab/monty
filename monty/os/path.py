@@ -77,7 +77,7 @@ def find_exts(top, exts, exclude_dirs=None, include_dirs=None, match_mode="basen
 
     # Assume directory
     paths = []
-    for dirpath, dirnames, filenames in os.walk(top):
+    for dirpath, _dirnames, filenames in os.walk(top):
         dirpath = os.path.abspath(dirpath)
 
         if exclude_dirs and exclude_dirs.match(mangle(dirpath)):

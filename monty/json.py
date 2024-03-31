@@ -113,7 +113,7 @@ def _check_type(obj, type_str) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any([o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str])
+    return any(o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str)
 
 
 class MSONable:
@@ -212,11 +212,11 @@ class MSONable:
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
-            d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
+            d.update(**self.kwargs)  # pylint: disable=E1101
         if spec.varargs is not None and getattr(self, spec.varargs, None) is not None:
             d.update({spec.varargs: getattr(self, spec.varargs)})
         if hasattr(self, "_kwargs"):
-            d.update(**getattr(self, "_kwargs"))  # pylint: disable=E1101
+            d.update(**self._kwargs)  # pylint: disable=E1101
         if isinstance(self, Enum):
             d.update({"value": self.value})  # pylint: disable=E1101
         return d
@@ -289,8 +289,7 @@ class MSONable:
                 new_obj = MontyDecoder().process_decoded(__input_value)
                 if isinstance(new_obj, cls):
                     return new_obj
-                new_obj = cls(**__input_value)
-                return new_obj
+                return cls(**__input_value)
             except Exception:
                 raise ValueError(
                     f"Error while deserializing {cls.__name__} "
@@ -426,9 +425,8 @@ class MontyEncoder(json.JSONEncoder):
                 "data": o.to_json(default_handler=MontyEncoder().encode),
             }
 
-        if bson is not None:
-            if isinstance(o, bson.objectid.ObjectId):
-                return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
+        if bson is not None and isinstance(o, bson.objectid.ObjectId):
+            return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
         if callable(o) and not isinstance(o, MSONable):
             return _serialize_callable(o)
@@ -708,7 +706,7 @@ def jsanitize(
         return obj
     if obj is None:
         return None
-    if isinstance(obj, pathlib.Path) or isinstance(obj, datetime.datetime):
+    if isinstance(obj, (pathlib.Path, datetime.datetime)):
         return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
