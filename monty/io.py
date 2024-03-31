@@ -7,7 +7,11 @@ import bz2
 import errno
 import gzip
 import io
-import lzma
+
+try:
+    import lzma
+except ImportError:
+    lzma = None  # type: ignore
 import mmap
 import os
 import subprocess
@@ -40,7 +44,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
         return bz2.open(filename, *args, **kwargs)
     if ext in (".GZ", ".Z"):
         return gzip.open(filename, *args, **kwargs)
-    if ext in (".XZ", ".LZMA"):
+    if (lzma is not None) and (ext in (".XZ", ".LZMA")):
         return lzma.open(filename, *args, **kwargs)
     return open(filename, *args, **kwargs)  # pylint: disable=R1732
 
