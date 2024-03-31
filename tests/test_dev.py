@@ -89,9 +89,8 @@ class TestDecorator:
         with pytest.warns(DeprecationWarning):
             assert TestClass_deprecationwarning().classmethod_b() == "b"
 
-    @pytest.mark.skip()
     def test_deprecated_deadline(self, monkeypatch):
-        with warnings.catch_warnings(record=True) as warn_msgs:
+        with pytest.raises(DeprecationWarning):
             monkeypatch.setenv("CI", "true")
             monkeypatch.setenv("GITHUB_REPOSITORY", "materialsvirtuallab/monty")
 
@@ -99,13 +98,11 @@ class TestDecorator:
             def func_old():
                 pass
 
-            assert "This function should have been removed" in str(warn_msgs[0].message)
-
     def test_deprecated_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be raised."""
 
         # No warn case 1: date before deadline
-        with warnings.catch_warnings(record=True) as warn_msgs:
+        with warnings.catch_warnings():
             # Mock date to 1999-01-01
             datetime_mock = MagicMock(wrap=datetime.datetime)
             datetime_mock.now.return_value = datetime.datetime(1999, 1, 1)
@@ -115,36 +112,21 @@ class TestDecorator:
             def func_old_0():
                 pass
 
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
-                )
-
         # No warn case 2: not in CI env
-        with warnings.catch_warnings(record=True) as warn_msgs:
+        with warnings.catch_warnings():
             monkeypatch.delenv("CI", raising=False)
 
             @deprecated(deadline=(2000, 1, 1))
             def func_old_1():
                 pass
 
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
-                )
-
         # No warn case 3: not in code owner repo
-        with warnings.catch_warnings(record=True) as warn_msgs:
-            monkeypatch.setenv("GITHUB_REPOSITORY", "NONE/NONE")
+        with warnings.catch_warnings():
+            monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
 
             @deprecated(deadline=(2000, 1, 1))
             def func_old_2():
                 pass
-
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
-                )
 
     def test_requires(self):
         try:
