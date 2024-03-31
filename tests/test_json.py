@@ -433,6 +433,15 @@ class TestJson:
         d = json.loads(jsonstr, cls=MontyDecoder)
         assert isinstance(d["uuid"], UUID)
 
+    def test_path(self):
+        from pathlib import Path
+
+        p = Path("/home/user/")
+        jsonstr = json.dumps(p, cls=MontyEncoder)
+        d = json.loads(jsonstr, cls=MontyDecoder)
+        assert isinstance(d, Path)
+        assert d == p
+
     def test_nan(self):
         x = [float("NaN")]
         djson = json.dumps(x, cls=MontyEncoder)

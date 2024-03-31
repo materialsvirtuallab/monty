@@ -13,6 +13,7 @@ from enum import Enum
 from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
+from pathlib import Path
 from uuid import UUID
 
 try:
@@ -380,6 +381,8 @@ class MontyEncoder(json.JSONEncoder):
             return {"@module": "datetime", "@class": "datetime", "string": str(o)}
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": str(o)}
+        if isinstance(o, Path):
+            return {"@module": "pathlib", "@class": "Path", "string": str(o)}
 
         if torch is not None and isinstance(o, torch.Tensor):
             # Support for Pytorch Tensors.
@@ -542,6 +545,9 @@ class MontyDecoder(json.JSONDecoder):
 
                     if modname == "uuid" and classname == "UUID":
                         return UUID(d["string"])
+
+                    if modname == "pathlib" and classname == "Path":
+                        return Path(d["string"])
 
                     mod = __import__(modname, globals(), locals(), [classname], 0)
                     if hasattr(mod, classname):
