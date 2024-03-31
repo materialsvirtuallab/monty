@@ -1,5 +1,13 @@
 # Change log
 
+## 2024.3.31
+- Fix MSONable.REDIRECT when module name changed (@janosh)
+- Add native support for enums in jsanitize (@FabiPi3)
+- Make jsanitize(recursive_msonable=True) respect duck typing (@Andrew-S-Rosen)
+- Add optional arg target_dir in compress_file and decompress_file to allow specify target path (@DanielYang59)
+- Add MontyEncoder/MontyDecoder support for pathlib.Path (@Andrew-S-Rosen)
+- Add an optional arg deadline to dev.deprecated to raise warning after deadline (@DanielYang59)
+
 ## 2024.2.26
 - Bug fix for symlinks when using copy_r (@Andrew-S-Rosen)
 
