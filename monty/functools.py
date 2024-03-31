@@ -35,7 +35,7 @@ class _HashedSeq(list):  # pylint: disable=C0205
 
 
 def _make_key(
-    args, kwds, typed, kwd_mark=(object(),), fasttypes={int, str, frozenset, type(None)}
+    args, kwds, typed, kwd_mark=(object(),), fasttypes=None
 ):
     """
     Make a cache key from optionally typed positional and keyword arguments
@@ -48,6 +48,8 @@ def _make_key(
     saves space and improves lookup speed.
 
     """
+    if fasttypes is None:
+        fasttypes = {int, str, frozenset, type(None)}
     key = args
     if kwds:
         sorted_items = sorted(kwds.items())

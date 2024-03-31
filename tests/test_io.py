@@ -32,9 +32,7 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f)):
                 assert (
                     int(line) == self.NUMLINES - idx
-                ), "read_backwards read {} whereas it should "(
-                    "have read {" "}"
-                ).format(int(line), self.NUMLINES - idx)
+                ), f"read_backwards read {line} whereas it should have read {self.NUMLINES - idx}"
 
     def test_reverse_readline_fake_big(self):
         """
@@ -44,9 +42,7 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert (
                     int(line) == self.NUMLINES - idx
-                ), "read_backwards read {} whereas it should "(
-                    "have read {" "}"
-                ).format(int(line), self.NUMLINES - idx)
+                ), f"read_backwards read {line} whereas it should have read {self.NUMLINES - idx}"
 
     def test_reverse_readline_bz2(self):
         """
@@ -66,7 +62,7 @@ class TestReverseReadline:
         is called this was a problem with an earlier implementation
         """
         with open(os.path.join(test_dir, "empty_file.txt")) as f:
-            for idx, line in enumerate(reverse_readline(f)):
+            for _line in reverse_readline(f):
                 raise ValueError("an empty file is being read!")
 
 
@@ -108,9 +104,7 @@ class TestReverseReadfile:
         make sure an empty file does not throw an error when reverse_readline
         is called this was a problem with an earlier implementation
         """
-        for idx, line in enumerate(
-            reverse_readfile(os.path.join(test_dir, "empty_file.txt"))
-        ):
+        for _line in reverse_readfile(os.path.join(test_dir, "empty_file.txt")):
             raise ValueError("an empty file is being read!")
 
 

@@ -75,12 +75,12 @@ class TestDecorator:
                 pass
 
             @classmethod
-            def classmethod_a(self):
+            def classmethod_a(cls):
                 pass
 
             @classmethod
             @deprecated(classmethod_a)
-            def classmethod_b(self):
+            def classmethod_b(cls):
                 return "b"
 
         with warnings.catch_warnings(record=True) as w:
@@ -96,12 +96,12 @@ class TestDecorator:
                 pass
 
             @classmethod
-            def classmethod_a(self):
+            def classmethod_a(cls):
                 pass
 
             @classmethod
             @deprecated(classmethod_a, category=DeprecationWarning)
-            def classmethod_b(self):
+            def classmethod_b(cls):
                 return "b"
 
         with pytest.warns(DeprecationWarning):

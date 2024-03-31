@@ -3,6 +3,8 @@ This module implements several useful functions and decorators that can be
 particularly useful for developers. E.g., deprecating methods / classes, etc.
 """
 
+from __future__ import annotations
+
 import functools
 import logging
 import sys

@@ -42,20 +42,16 @@ class WildCard:
         """
         names = list_strings(names)
 
-        fnames = []
-        for f in names:
+        filenames = []
+        for filename in names:
             for pat in self.pats:
-                if fnmatch.fnmatch(f, pat):
-                    fnames.append(f)
+                if fnmatch.fnmatch(filename, pat):
+                    filenames.append(filename)
 
-        return fnames
+        return filenames
 
     def match(self, name):
         """
         Returns True if name matches one of the patterns.
         """
-        for pat in self.pats:
-            if fnmatch.fnmatch(name, pat):
-                return True
-
-        return False
+        return any(fnmatch.fnmatch(name, pat) for pat in self.pats)

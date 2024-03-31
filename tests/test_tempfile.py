@@ -54,9 +54,8 @@ class TestScratchDir:
             copy_from_current_on_enter=True,
             copy_to_current_on_exit=True,
             gzip_on_exit=True,
-        ):
-            with open("scratch_text", "w") as f:
-                f.write("write")
+        ), open("scratch_text", "w") as f:
+            f.write("write")
         files = os.listdir(os.getcwd())
 
         # Make sure the stratch_text.gz exists
