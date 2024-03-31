@@ -1,12 +1,9 @@
 pytest
 pytest-cov
 coverage
-coveralls
 pycodestyle
 mypy
-pydocstyle
 pydantic
-flake8
 black
 pylint
 torch

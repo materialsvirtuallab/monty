@@ -114,7 +114,7 @@ def _check_type(obj, type_str) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any([o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str])
+    return any(o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str)
 
 
 class MSONable:
@@ -213,11 +213,11 @@ class MSONable:
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
-            d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
+            d.update(**self.kwargs)  # pylint: disable=E1101
         if spec.varargs is not None and getattr(self, spec.varargs, None) is not None:
             d.update({spec.varargs: getattr(self, spec.varargs)})
         if hasattr(self, "_kwargs"):
-            d.update(**getattr(self, "_kwargs"))  # pylint: disable=E1101
+            d.update(**self._kwargs)  # pylint: disable=E1101
         if isinstance(self, Enum):
             d.update({"value": self.value})  # pylint: disable=E1101
         return d
@@ -290,8 +290,7 @@ class MSONable:
                 new_obj = MontyDecoder().process_decoded(__input_value)
                 if isinstance(new_obj, cls):
                     return new_obj
-                new_obj = cls(**__input_value)
-                return new_obj
+                return cls(**__input_value)
             except Exception:
                 raise ValueError(
                     f"Error while deserializing {cls.__name__} "
@@ -329,7 +328,7 @@ class MSONable:
         if core_schema is None:
             raise RuntimeError("Pydantic >= 2.0 is required for validation")
 
-        s = core_schema.general_plain_validator_function(cls.validate_monty_v2)
+        s = core_schema.with_info_plain_validator_function(cls.validate_monty_v2)
 
         return core_schema.json_or_python_schema(json_schema=s, python_schema=s)
 
@@ -429,9 +428,8 @@ class MontyEncoder(json.JSONEncoder):
                 "data": o.to_json(default_handler=MontyEncoder().encode),
             }
 
-        if bson is not None:
-            if isinstance(o, bson.objectid.ObjectId):
-                return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
+        if bson is not None and isinstance(o, bson.objectid.ObjectId):
+            return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
         if callable(o) and not isinstance(o, MSONable):
             return _serialize_callable(o)
@@ -495,9 +493,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
-                if classname in MSONable.REDIRECT.get(modname, {}):
-                    modname = MSONable.REDIRECT[modname][classname]["@module"]
-                    classname = MSONable.REDIRECT[modname][classname]["@class"]
+                if cls_redirect := MSONable.REDIRECT.get(modname, {}).get(classname):
+                    classname = cls_redirect["@class"]
+                    modname = cls_redirect["@module"]
             elif "@module" in d and "@callable" in d:
                 modname = d["@module"]
                 objname = d["@callable"]
@@ -649,13 +647,13 @@ def jsanitize(
 
     Args:
         obj: input json-like object.
-        strict (bool): This parameters sets the behavior when jsanitize
+        strict (bool): This parameter sets the behavior when jsanitize
             encounters an object it does not understand. If strict is True,
             jsanitize will try to get the as_dict() attribute of the object. If
             no such attribute is found, an attribute error will be thrown. If
             strict is False, jsanitize will simply call str(object) to convert
             the object to a string representation.
-        allow_bson (bool): This parameters sets the behavior when jsanitize
+        allow_bson (bool): This parameter sets the behavior when jsanitize
             encounters a bson supported type such as objectid and datetime. If
             True, such bson types will be ignored, allowing for proper
             insertion into MongoDB databases.
@@ -666,8 +664,12 @@ def jsanitize(
     Returns:
         Sanitized dict that can be json serialized.
     """
-    if isinstance(obj, Enum) and enum_values:
-        return obj.value
+    if isinstance(obj, Enum):
+        if enum_values:
+            return obj.value
+        elif hasattr(obj, "as_dict"):
+            return obj.as_dict()
+        return MontyEncoder().default(obj)
 
     if allow_bson and (
         isinstance(obj, (datetime.datetime, bytes))
@@ -710,7 +712,7 @@ def jsanitize(
         return obj
     if obj is None:
         return None
-    if isinstance(obj, pathlib.Path) or isinstance(obj, datetime.datetime):
+    if isinstance(obj, (pathlib.Path, datetime.datetime)):
         return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
@@ -719,8 +721,11 @@ def jsanitize(
         except TypeError:
             pass
 
-    if recursive_msonable and isinstance(obj, MSONable):
-        return obj.as_dict()
+    if recursive_msonable:
+        try:
+            return obj.as_dict()
+        except AttributeError:
+            pass
 
     if not strict:
         return str(obj)

@@ -6,6 +6,7 @@ import json
 import os
 import pathlib
 from enum import Enum
+from typing import Union
 
 try:
     import numpy as np
@@ -72,7 +73,7 @@ class GoodNestedMSONClass(MSONable):
         assert isinstance(b_dict, dict)
         assert isinstance(c_list_dict_list, list)
         assert isinstance(c_list_dict_list[0], dict)
-        first_key = list(c_list_dict_list[0].keys())[0]
+        first_key = next(iter(c_list_dict_list[0]))
         assert isinstance(c_list_dict_list[0][first_key], list)
         self.a_list = a_list
         self.b_dict = b_dict
@@ -182,8 +183,7 @@ class TestMSONable:
                 self.b = b
 
             def as_dict(self):
-                d = {"init": {"a": self.a, "b": self.b}}
-                return d
+                return {"init": {"a": self.a, "b": self.b}}
 
         self.bad_cls = BadMSONClass
 
@@ -334,7 +334,9 @@ class TestMSONable:
 
         d = {"123": EnumTest.a}
         f = jsanitize(d)
-        assert f["123"] == "EnumTest.a"
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumTest"
+        assert f["123"]["value"] == 1
 
         f = jsanitize(d, strict=True)
         assert f["123"]["@module"] == "tests.test_json"
@@ -346,6 +348,24 @@ class TestMSONable:
 
         f = jsanitize(d, enum_values=True)
         assert f["123"] == 1
+
+    def test_enum_serialization_no_msonable(self):
+        d = {"123": EnumNoAsDict.name_a}
+        f = jsanitize(d)
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumNoAsDict"
+        assert f["123"]["value"] == "value_a"
+
+        f = jsanitize(d, strict=True)
+        assert f["123"]["@module"] == "tests.test_json"
+        assert f["123"]["@class"] == "EnumNoAsDict"
+        assert f["123"]["value"] == "value_a"
+
+        f = jsanitize(d, strict=True, enum_values=True)
+        assert f["123"] == "value_a"
+
+        f = jsanitize(d, enum_values=True)
+        assert f["123"] == "value_a"
 
 
 class TestJson:
@@ -609,7 +629,7 @@ class TestJson:
         assert clean["world"] is None
         assert json.loads(json.dumps(d)) == json.loads(json.dumps(clean))
 
-        d = {"hello": GoodMSONClass(1, 2, 3)}
+        d = {"hello": GoodMSONClass(1, 2, 3), "test": "hi"}
         with pytest.raises(TypeError):
             json.dumps(d)
         clean = jsanitize(d)
@@ -617,9 +637,11 @@ class TestJson:
         clean_strict = jsanitize(d, strict=True)
         assert clean_strict["hello"]["a"] == 1
         assert clean_strict["hello"]["b"] == 2
+        assert clean_strict["test"] == "hi"
         clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
         assert clean_recursive_msonable["hello"]["a"] == 1
         assert clean_recursive_msonable["hello"]["b"] == 2
+        assert clean_recursive_msonable["test"] == "hi"
 
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
@@ -709,7 +731,11 @@ class TestJson:
 
     def test_redirect(self):
         MSONable.REDIRECT["tests.test_json"] = {
-            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
+            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"},
+            "another_test_class": {
+                "@class": "AnotherClass",
+                "@module": "tests.test_json2",
+            },
         }
 
         d = {
@@ -723,9 +749,18 @@ class TestJson:
         obj = json.loads(json.dumps(d), cls=MontyDecoder)
         assert isinstance(obj, GoodMSONClass)
 
-        d["@class"] = "not_there"
-        obj = json.loads(json.dumps(d), cls=MontyDecoder)
-        assert isinstance(obj, dict)
+        d2 = {
+            "@class": "another_test_class",
+            "@module": "tests.test_json",
+            "a": 2,
+            "b": 2,
+            "c": 2,
+        }
+
+        with pytest.raises(ImportError, match="No module named 'tests.test_json2'"):
+            # This should raise ImportError because it's trying to load
+            # AnotherClass from tests.test_json instead of tests.test_json2
+            json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
@@ -834,7 +869,7 @@ class TestJson:
             a: LimitedMSONClass
 
         class ModelWithUnion(BaseModel):
-            a: LimitedMSONClass | dict
+            a: Union[LimitedMSONClass, dict]
 
         limited_dict = jsanitize(ModelWithLimited(a=LimitedMSONClass(1)), strict=True)
         assert ModelWithLimited.model_validate(limited_dict)
