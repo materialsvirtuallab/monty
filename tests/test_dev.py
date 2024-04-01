@@ -1,7 +1,7 @@
 import unittest
 import warnings
 import datetime
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import pytest
 from monty.dev import deprecated, install_excepthook, requires
@@ -91,12 +91,18 @@ class TestDecorator:
 
     def test_deprecated_deadline(self, monkeypatch):
         with pytest.raises(DeprecationWarning):
-            monkeypatch.setenv("CI", "true")
-            monkeypatch.setenv("GITHUB_REPOSITORY", "materialsvirtuallab/monty")
+            monkeypatch.setenv("CI", "true")  # mock CI env
 
-            @deprecated(deadline=(2000, 1, 1))
-            def func_old():
-                pass
+            with patch("subprocess.run") as mock_run:
+                # Mock "GITHUB_REPOSITORY"
+                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+                mock_run.return_value.stdout.decode.return_value = (
+                    "git@github.com:TESTOWNER/TESTREPO.git"
+                )
+
+                @deprecated(deadline=(2000, 1, 1))
+                def func_old():
+                    pass
 
     def test_deprecated_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be raised."""
