@@ -4,7 +4,6 @@ TODO: Modify unittest doc.
 
 import os
 import sys
-import unittest
 
 from monty.termcolor import (
     cprint,
@@ -75,7 +74,3 @@ class TestFunc:
     def test_stream_has_colors(self):
         # TODO: not a real test. Need to do a proper test.
         stream_has_colours(sys.stdout)
-
-
-if __name__ == "__main__":
-    unittest.main()
