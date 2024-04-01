@@ -64,7 +64,7 @@ def cached_class(klass: type[Klass]) -> type[Klass]:
             """
             Pass through.
             """
-            key = (cls,) + args + tuple(kwargs.items())
+            key = (cls, *args, *tuple(kwargs.items()))
             try:
                 inst = cache.get(key)
             except TypeError:

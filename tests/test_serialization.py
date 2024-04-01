@@ -73,7 +73,7 @@ class TestSerial:
         # Test automatic format detection
         dumpfn(d, "monte_test.mpk")
         d2 = loadfn("monte_test.mpk")
-        assert d, {k: v for k, v in d2.items()}
+        assert d == d2
         os.remove("monte_test.mpk")
 
         # Test to ensure basename is respected, and not directory

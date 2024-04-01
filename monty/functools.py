@@ -55,6 +55,8 @@ def _make_key(
     its hash value, then that argument is returned without a wrapper.  This
     saves space and improves lookup speed.
     """
+    if fasttypes is None:
+        fasttypes = {int, str, frozenset, type(None)}
     key = args
     if kwds:
         sorted_items = sorted(kwds.items())

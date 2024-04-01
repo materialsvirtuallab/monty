@@ -9,7 +9,11 @@ import bz2
 import errno
 import gzip
 import io
-import lzma
+
+try:
+    import lzma
+except ImportError:
+    lzma = None  # type: ignore
 import mmap
 import os
 import subprocess
@@ -45,7 +49,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
         return bz2.open(filename, *args, **kwargs)
     if ext in (".GZ", ".Z"):
         return gzip.open(filename, *args, **kwargs)
-    if ext in (".XZ", ".LZMA"):
+    if (lzma is not None) and (ext in (".XZ", ".LZMA")):
         return lzma.open(filename, *args, **kwargs)
     return open(filename, *args, **kwargs)  # pylint: disable=R1732
 
@@ -135,10 +139,7 @@ def reverse_readline(
 
         buf = ""
         m_file.seek(0, 2)
-        if is_text:
-            lastchar = m_file.read(1)
-        else:
-            lastchar = m_file.read(1).decode("utf-8")
+        lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
 
         trailing_newline = lastchar == "\n"
 
@@ -200,9 +201,7 @@ class FileLock:
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
-            raise ValueError(
-                "delay and timeout must be positive with delay " "<= timeout"
-            )
+            raise ValueError("delay and timeout must be positive with delay <= timeout")
 
     def acquire(self) -> None:
         """

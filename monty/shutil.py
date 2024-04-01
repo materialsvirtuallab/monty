@@ -30,14 +30,14 @@ def copy_r(src: str | Path, dst: str | Path) -> None:
     abssrc = src.resolve()
     absdst = dst.resolve()
     os.makedirs(absdst, exist_ok=True)
-    for f in os.listdir(abssrc):
-        fpath = Path(abssrc, f)
+    for filepath in os.listdir(abssrc):
+        fpath = Path(abssrc, filepath)
         if fpath.is_symlink():
             continue
-        elif fpath.is_file():
+        if fpath.is_file():
             shutil.copy(fpath, absdst)
         elif str(fpath) not in str(absdst):
-            copy_r(fpath, Path(absdst, f))
+            copy_r(fpath, Path(absdst, filepath))
         else:
             warnings.warn(f"Cannot copy {fpath} to itself")
 
@@ -123,7 +123,7 @@ def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> 
         for f in files:
             compress_file(Path(parent, f), compression=compression)
 
-    return None
+    return
 
 
 def decompress_file(

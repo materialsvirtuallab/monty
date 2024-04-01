@@ -67,7 +67,7 @@ class Namespace(dict):
 
     def __setitem__(self, key: Any, val: Any) -> None:
         if key in self:
-            raise KeyError(f"Cannot overwrite existent key: {str(key)}")
+            raise KeyError(f"Cannot overwrite existent key: {key!s}")
 
         dict.__setitem__(self, key, val)
 
@@ -209,7 +209,7 @@ class MongoDict:
         For Ipython tab completion.
         See http://ipython.org/ipython-doc/dev/config/integrating.html
         """
-        return sorted([k for k in self._mongo_dict_ if not callable(k)])
+        return sorted(k for k in self._mongo_dict_ if not callable(k))
 
 
 def dict2namedtuple(*args, **kwargs) -> tuple:

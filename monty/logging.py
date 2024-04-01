@@ -80,7 +80,6 @@ def enable_logging(main: Callable) -> Callable:
             raise ValueError(f"Invalid log level: {options.loglevel}")
         logging.basicConfig(level=numeric_level)
 
-        retcode = main(*args, **kwargs)
-        return retcode
+        return main(*args, **kwargs)
 
     return wrapper
