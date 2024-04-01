@@ -43,7 +43,7 @@ def pprint_table(table, out=sys.stdout, rstrip=False):
         out.write("\n")
 
 
-def draw_tree(node, child_iter=lambda n: n.children, text_str=lambda n: str(n)):
+def draw_tree(node, child_iter=lambda n: n.children, text_str=str):
     """
     Args:
         node: the root of the tree to be drawn,
@@ -73,10 +73,7 @@ def _draw_tree(node, prefix, child_iter, text_str):
     buf.write("\n")
 
     for index, child in enumerate(children):
-        if index + 1 == len(children):
-            sub_prefix = prefix + "   "
-        else:
-            sub_prefix = prefix + "  |"
+        sub_prefix = prefix + "   " if index + 1 == len(children) else prefix + "  |"
 
         buf.write(_draw_tree(child, sub_prefix, child_iter, text_str))
 

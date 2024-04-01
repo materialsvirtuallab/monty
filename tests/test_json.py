@@ -73,7 +73,7 @@ class GoodNestedMSONClass(MSONable):
         assert isinstance(b_dict, dict)
         assert isinstance(c_list_dict_list, list)
         assert isinstance(c_list_dict_list[0], dict)
-        first_key = list(c_list_dict_list[0].keys())[0]
+        first_key = next(iter(c_list_dict_list[0]))
         assert isinstance(c_list_dict_list[0][first_key], list)
         self.a_list = a_list
         self.b_dict = b_dict
@@ -183,8 +183,7 @@ class TestMSONable:
                 self.b = b
 
             def as_dict(self):
-                d = {"init": {"a": self.a, "b": self.b}}
-                return d
+                return {"init": {"a": self.a, "b": self.b}}
 
         self.bad_cls = BadMSONClass
 
@@ -433,6 +432,15 @@ class TestJson:
         jsonstr = json.dumps(a, cls=MontyEncoder)
         d = json.loads(jsonstr, cls=MontyDecoder)
         assert isinstance(d["uuid"], UUID)
+
+    def test_path(self):
+        from pathlib import Path
+
+        p = Path("/home/user/")
+        jsonstr = json.dumps(p, cls=MontyEncoder)
+        d = json.loads(jsonstr, cls=MontyDecoder)
+        assert isinstance(d, Path)
+        assert d == p
 
     def test_nan(self):
         x = [float("NaN")]
@@ -723,7 +731,11 @@ class TestJson:
 
     def test_redirect(self):
         MSONable.REDIRECT["tests.test_json"] = {
-            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"}
+            "test_class": {"@class": "GoodMSONClass", "@module": "tests.test_json"},
+            "another_test_class": {
+                "@class": "AnotherClass",
+                "@module": "tests.test_json2",
+            },
         }
 
         d = {
@@ -737,9 +749,18 @@ class TestJson:
         obj = json.loads(json.dumps(d), cls=MontyDecoder)
         assert isinstance(obj, GoodMSONClass)
 
-        d["@class"] = "not_there"
-        obj = json.loads(json.dumps(d), cls=MontyDecoder)
-        assert isinstance(obj, dict)
+        d2 = {
+            "@class": "another_test_class",
+            "@module": "tests.test_json",
+            "a": 2,
+            "b": 2,
+            "c": 2,
+        }
+
+        with pytest.raises(ImportError, match="No module named 'tests.test_json2'"):
+            # This should raise ImportError because it's trying to load
+            # AnotherClass from tests.test_json instead of tests.test_json2
+            json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
         data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))

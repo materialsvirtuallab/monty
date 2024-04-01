@@ -7,7 +7,11 @@ import bz2
 import errno
 import gzip
 import io
-import lzma
+
+try:
+    import lzma
+except ImportError:
+    lzma = None  # type: ignore
 import mmap
 import os
 import subprocess
@@ -34,13 +38,13 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     if Path is not None and isinstance(filename, Path):
         filename = str(filename)
 
-    name, ext = os.path.splitext(filename)
+    _name, ext = os.path.splitext(filename)
     ext = ext.upper()
     if ext == ".BZ2":
         return bz2.open(filename, *args, **kwargs)
     if ext in (".GZ", ".Z"):
         return gzip.open(filename, *args, **kwargs)
-    if ext in (".XZ", ".LZMA"):
+    if (lzma is not None) and (ext in (".XZ", ".LZMA")):
         return lzma.open(filename, *args, **kwargs)
     return open(filename, *args, **kwargs)  # pylint: disable=R1732
 
@@ -130,10 +134,7 @@ def reverse_readline(
 
         buf = ""
         m_file.seek(0, 2)
-        if is_text:
-            lastchar = m_file.read(1)
-        else:
-            lastchar = m_file.read(1).decode("utf-8")
+        lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
 
         trailing_newline = lastchar == "\n"
 
@@ -195,9 +196,7 @@ class FileLock:
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
-            raise ValueError(
-                "delay and timeout must be positive with delay " "<= timeout"
-            )
+            raise ValueError("delay and timeout must be positive with delay <= timeout")
 
     def acquire(self):
         """
@@ -211,7 +210,7 @@ class FileLock:
             try:
                 self.fd = os.open(self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
                 break
-            except (OSError,) as e:
+            except OSError as e:
                 if e.errno != errno.EEXIST:
                     raise
                 if (time.time() - start_time) >= self.timeout:

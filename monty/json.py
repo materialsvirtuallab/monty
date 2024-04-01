@@ -13,6 +13,7 @@ from enum import Enum
 from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
+from pathlib import Path
 from uuid import UUID
 
 try:
@@ -113,7 +114,7 @@ def _check_type(obj, type_str) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any([o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str])
+    return any(o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str)
 
 
 class MSONable:
@@ -212,11 +213,11 @@ class MSONable:
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
             # type: ignore
-            d.update(**getattr(self, "kwargs"))  # pylint: disable=E1101
+            d.update(**self.kwargs)  # pylint: disable=E1101
         if spec.varargs is not None and getattr(self, spec.varargs, None) is not None:
             d.update({spec.varargs: getattr(self, spec.varargs)})
         if hasattr(self, "_kwargs"):
-            d.update(**getattr(self, "_kwargs"))  # pylint: disable=E1101
+            d.update(**self._kwargs)  # pylint: disable=E1101
         if isinstance(self, Enum):
             d.update({"value": self.value})  # pylint: disable=E1101
         return d
@@ -289,8 +290,7 @@ class MSONable:
                 new_obj = MontyDecoder().process_decoded(__input_value)
                 if isinstance(new_obj, cls):
                     return new_obj
-                new_obj = cls(**__input_value)
-                return new_obj
+                return cls(**__input_value)
             except Exception:
                 raise ValueError(
                     f"Error while deserializing {cls.__name__} "
@@ -381,6 +381,8 @@ class MontyEncoder(json.JSONEncoder):
             return {"@module": "datetime", "@class": "datetime", "string": str(o)}
         if isinstance(o, UUID):
             return {"@module": "uuid", "@class": "UUID", "string": str(o)}
+        if isinstance(o, Path):
+            return {"@module": "pathlib", "@class": "Path", "string": str(o)}
 
         if torch is not None and isinstance(o, torch.Tensor):
             # Support for Pytorch Tensors.
@@ -426,9 +428,8 @@ class MontyEncoder(json.JSONEncoder):
                 "data": o.to_json(default_handler=MontyEncoder().encode),
             }
 
-        if bson is not None:
-            if isinstance(o, bson.objectid.ObjectId):
-                return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
+        if bson is not None and isinstance(o, bson.objectid.ObjectId):
+            return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
         if callable(o) and not isinstance(o, MSONable):
             return _serialize_callable(o)
@@ -492,9 +493,9 @@ class MontyDecoder(json.JSONDecoder):
             if "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
-                if classname in MSONable.REDIRECT.get(modname, {}):
-                    modname = MSONable.REDIRECT[modname][classname]["@module"]
-                    classname = MSONable.REDIRECT[modname][classname]["@class"]
+                if cls_redirect := MSONable.REDIRECT.get(modname, {}).get(classname):
+                    classname = cls_redirect["@class"]
+                    modname = cls_redirect["@module"]
             elif "@module" in d and "@callable" in d:
                 modname = d["@module"]
                 objname = d["@callable"]
@@ -544,6 +545,9 @@ class MontyDecoder(json.JSONDecoder):
 
                     if modname == "uuid" and classname == "UUID":
                         return UUID(d["string"])
+
+                    if modname == "pathlib" and classname == "Path":
+                        return Path(d["string"])
 
                     mod = __import__(modname, globals(), locals(), [classname], 0)
                     if hasattr(mod, classname):
@@ -708,7 +712,7 @@ def jsanitize(
         return obj
     if obj is None:
         return None
-    if isinstance(obj, pathlib.Path) or isinstance(obj, datetime.datetime):
+    if isinstance(obj, (pathlib.Path, datetime.datetime)):
         return str(obj)
 
     if callable(obj) and not isinstance(obj, MSONable):
