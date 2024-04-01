@@ -16,6 +16,7 @@ from enum import Enum
 from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
+from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import UUID
 
@@ -60,7 +61,6 @@ except ImportError:
     torch = None  # type: ignore
 
 if TYPE_CHECKING:
-    from pathlib import Path
     from typing import Any, Generator, Union
 
     from typing_extensions import Self
