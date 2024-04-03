@@ -6,4 +6,4 @@ pymongo==4.6.3
 pandas==2.2.1
 orjson==3.10.0
 types-orjson==3.6.2
-types-requests==2.31.0.20240311
+types-requests==2.31.0.20240403
