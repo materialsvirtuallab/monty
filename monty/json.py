@@ -139,12 +139,12 @@ class MSONable:
 
         class MSONClass(MSONable):
 
-        def __init__(self, a, b, c, d=1, **kwargs):
-            self.a = a
-            self.b = b
-            self._c = c
-            self._d = d
-            self.kwargs = kwargs
+            def __init__(self, a, b, c, d=1, **kwargs):
+                self.a = a
+                self.b = b
+                self._c = c
+                self._d = d
+                self.kwargs = kwargs
 
     For such classes, you merely need to inherit from MSONable and you do not
     need to implement your own as_dict or from_dict protocol.
