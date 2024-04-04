@@ -270,6 +270,18 @@ class MSONable:
         mkdir : bool
             If True, makes the provided directory, including all parent
             directories.
+        pickle_kwargs : dict
+            Keyword arguments to pass to pickle.dump.
+        json_kwargs : dict
+            Keyword arguments to pass to json.dump.
+        return_results : bool
+            If true, also returns the dictionary to save to disk, as well
+            as the mapping between the object_references and the objects
+            themselves.
+
+        Returns
+        -------
+        None or tuple
         """
 
         save_dir = Path(save_dir)
