@@ -318,6 +318,19 @@ class MSONable:
         if return_results:
             return encoded, encoder._name_object_map
 
+    @classmethod
+    def load(cls, load_dir):
+        load_dir = Path(load_dir)
+
+        json_path = load_dir / "class.json"
+        pickle_path = load_dir / "class.pkl"
+
+        with open(json_path, "r") as infile:
+            d = json.load(infile)
+        name_object_map = pickle.load(open(pickle_path, "rb"))
+        klass = cls.from_dict(d)
+        return klass
+
     def unsafe_hash(self):
         """
         Returns an hash of the current object. This uses a generic but low
