@@ -285,10 +285,10 @@ class MSONable:
         if json_kwargs is None:
             json_kwargs = {}
 
-        with open(save_dir / "class.json") as outfile:
+        with open(save_dir / "class.json", "w") as outfile:
             json.dump(encoded, outfile, **json_kwargs)
         pickle.dump(
-            encoded._name_object_map,
+            encoder._name_object_map,
             open(save_dir / "class.pkl", "wb"),
             **pickle_kwargs,
         )
@@ -507,6 +507,14 @@ class MontyEncoder(json.JSONEncoder):
                 d = o.as_dict()
             elif isinstance(o, Enum):
                 d = {"value": o.value}
+            elif self._track_unserializable_objects:
+                # Last resort logic. We keep track of some name of the object
+                # as a reference, and instead of the object, store that
+                # name, which of course is json-serializable
+                name = f"{self._index:012}-{str(uuid4())}"
+                self._index += 1
+                self._name_object_map[name] = o
+                d = {"@object_reference": name}
             else:
                 raise TypeError(
                     f"Object of type {o.__class__.__name__} is not JSON serializable"
@@ -525,16 +533,7 @@ class MontyEncoder(json.JSONEncoder):
                     d["@version"] = None  # type: ignore
             return d
         except AttributeError:
-            if self._track_unserializable_objects:
-                # Last resort logic. We keep track of some name of the object
-                # as a reference, and instead of the object, store that
-                # name, which of course is json-serializable
-                name = f"{self._index:012}-{str(uuid4())}"
-                self._index += 1
-                self._name_object_map[name] = o
-                return {"@object_reference": name}
-            else:
-                return json.JSONEncoder.default(self, o)
+            return json.JSONEncoder.default(self, o)
 
 
 class MontyDecoder(json.JSONDecoder):
