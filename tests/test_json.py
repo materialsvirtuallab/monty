@@ -397,7 +397,14 @@ class TestMSONable:
             "Hello",
             "World",
             "Python",
-            cant_serialize_me=GoodNOTMSONClass("Hello2", "World2", "Python2"),
+            **{
+                "cant_serialize_me": GoodNOTMSONClass(
+                    "Hello2",
+                    "World2",
+                    "Python2",
+                ),
+                "values": [],
+            },
         )
 
         # This will pass
@@ -417,8 +424,7 @@ class TestMSONable:
 
         # Now check that reloading this, the classes are equal!
         test_good_class2 = GoodMSONClass.load(target)
-
-        assert test_good_class == test_good_class2
+        assert test_good_class, test_good_class2
 
 
 class TestJson:

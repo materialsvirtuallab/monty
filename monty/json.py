@@ -223,17 +223,22 @@ class MSONable:
             d.update({"value": self.value})  # pylint: disable=E1101
         return d
 
+    @staticmethod
+    def decoded_from_dict(d, name_object_map):
+        decoder = MontyDecoder()
+        decoder._name_object_map = name_object_map
+        decoded = {
+            k: decoder.process_decoded(v) for k, v in d.items() if not k.startswith("@")
+        }
+        return decoded
+
     @classmethod
     def from_dict(cls, d):
         """
         :param d: Dict representation.
         :return: MSONable class.
         """
-        decoded = {
-            k: MontyDecoder().process_decoded(v)
-            for k, v in d.items()
-            if not k.startswith("@")
-        }
+        decoded = MSONable.decoded_from_dict(d, name_object_map=None)
         return cls(**decoded)
 
     def to_json(self) -> str:
@@ -326,9 +331,10 @@ class MSONable:
         pickle_path = load_dir / "class.pkl"
 
         with open(json_path, "r") as infile:
-            d = json.load(infile)
+            d = json.loads(json.load(infile))
         name_object_map = pickle.load(open(pickle_path, "rb"))
-        klass = cls.from_dict(d)
+        decoded = MSONable.decoded_from_dict(d, name_object_map)
+        klass = cls(**decoded)
         return klass
 
     def unsafe_hash(self):
@@ -586,13 +592,18 @@ class MontyDecoder(json.JSONDecoder):
         json.loads(json_string, cls=MontyDecoder)
     """
 
+    _name_object_map = None
+
     def process_decoded(self, d):
         """
         Recursive method to support decoding dicts and lists containing
         pymatgen objects.
         """
         if isinstance(d, dict):
-            if "@module" in d and "@class" in d:
+            if "@object_reference" in d and self._name_object_map is not None:
+                name = d["@object_reference"]
+                return self._name_object_map.pop(name)
+            elif "@module" in d and "@class" in d:
                 modname = d["@module"]
                 classname = d["@class"]
                 if cls_redirect := MSONable.REDIRECT.get(modname, {}).get(classname):
