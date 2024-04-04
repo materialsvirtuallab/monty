@@ -6,6 +6,7 @@ import datetime
 import json
 import os
 import pathlib
+import pickle
 import traceback
 import types
 from collections import OrderedDict, defaultdict
@@ -14,7 +15,7 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
-from uuid import UUID
+from uuid import UUID, uuid4
 
 try:
     import numpy as np
@@ -241,6 +242,60 @@ class MSONable:
         """
         return json.dumps(self, cls=MontyEncoder)
 
+    def save(
+        self,
+        save_dir,
+        mkdir=True,
+        pickle_kwargs=None,
+        json_kwargs=None,
+        return_results=False,
+    ):
+        """Utility that uses the standard tools of MSONable to convert the
+        class to json format, but also save it to disk. In addition, this
+        method intelligently uses pickle to individually pickle class objects
+        that are not serializable, saving them separately. This maximizes the
+        readability of the saved class information while allowing _any_
+        class to be at least partially serializable to disk.
+
+        For a fully MSONable class, only a class.json file will be saved to
+        the location {save_dir}/class.json. For a partially MSONable class,
+        additional information will be saved to the save directory at
+        {save_dir}. This includes a pickled object for each attribute that
+        e serialized.
+
+        Parameters
+        ----------
+        save_dir : os.PathLike
+            The directory to which to save the class information.
+        mkdir : bool
+            If True, makes the provided directory, including all parent
+            directories.
+        """
+
+        save_dir = Path(save_dir)
+        if mkdir:
+            save_dir.mkdir(exist_ok=True, parents=True)
+
+        encoder = MontyEncoder()
+        encoder._track_unserializable_objects = True
+        encoded = encoder.encode(self)
+
+        if pickle_kwargs is None:
+            pickle_kwargs = {}
+        if json_kwargs is None:
+            json_kwargs = {}
+
+        with open(save_dir / "class.json") as outfile:
+            json.dump(encoded, outfile, **json_kwargs)
+        pickle.dump(
+            encoded._name_object_map,
+            open(save_dir / "class.pkl", "wb"),
+            **pickle_kwargs,
+        )
+
+        if return_results:
+            return encoded, encoder._name_object_map
+
     def unsafe_hash(self):
         """
         Returns an hash of the current object. This uses a generic but low
@@ -365,6 +420,10 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
+    _track_unserializable_objects = False
+    _name_object_map = {}
+    _index = 0
+
     def default(self, o) -> dict:  # pylint: disable=E0202
         """
         Overriding default method for JSON encoding. This method does two
@@ -466,7 +525,16 @@ class MontyEncoder(json.JSONEncoder):
                     d["@version"] = None  # type: ignore
             return d
         except AttributeError:
-            return json.JSONEncoder.default(self, o)
+            if self._track_unserializable_objects:
+                # Last resort logic. We keep track of some name of the object
+                # as a reference, and instead of the object, store that
+                # name, which of course is json-serializable
+                name = f"{self._index:012}-{str(uuid4())}"
+                self._index += 1
+                self._name_object_map[name] = o
+                return {"@object_reference": name}
+            else:
+                return json.JSONEncoder.default(self, o)
 
 
 class MontyDecoder(json.JSONDecoder):
