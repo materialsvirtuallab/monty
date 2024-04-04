@@ -57,6 +57,29 @@ class GoodMSONClass(MSONable):
         )
 
 
+class GoodNOTMSONClass:
+    """Literally the same as the GoodMSONClass, except it does not have
+    the MSONable inheritance!"""
+
+    def __init__(self, a, b, c, d=1, *values, **kwargs):
+        self.a = a
+        self.b = b
+        self._c = c
+        self._d = d
+        self.values = values
+        self.kwargs = kwargs
+
+    def __eq__(self, other):
+        return (
+            self.a == other.a
+            and self.b == other.b
+            and self._c == other._c
+            and self._d == other._d
+            and self.kwargs == other.kwargs
+            and self.values == other.values
+        )
+
+
 class LimitedMSONClass(MSONable):
     """An MSONable class that only accepts a limited number of options"""
 
@@ -366,6 +389,36 @@ class TestMSONable:
 
         f = jsanitize(d, enum_values=True)
         assert f["123"] == "value_a"
+
+    def test_save_load(self, tmp_path):
+        """Tests the save and load serialization methods."""
+
+        test_good_class = GoodMSONClass(
+            "Hello",
+            "World",
+            "Python",
+            cant_serialize_me=GoodNOTMSONClass("Hello2", "World2", "Python2"),
+        )
+
+        # This will pass
+        test_good_class.as_dict()
+
+        # This will fail
+        with pytest.raises(TypeError):
+            test_good_class.to_json()
+
+        # This should also pass though
+        target = tmp_path / "test_dir123"
+        test_good_class.save(target)
+
+        # This will fail
+        with pytest.raises(FileExistsError):
+            test_good_class.save(target, strict=True)
+
+        # Now check that reloading this, the classes are equal!
+        test_good_class2 = GoodMSONClass.load(target)
+
+        assert test_good_class == test_good_class2
 
 
 class TestJson:
