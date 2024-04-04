@@ -249,6 +249,7 @@ class MSONable:
         pickle_kwargs=None,
         json_kwargs=None,
         return_results=False,
+        strict=True,
     ):
         """Utility that uses the standard tools of MSONable to convert the
         class to json format, but also save it to disk. In addition, this
@@ -275,9 +276,11 @@ class MSONable:
         json_kwargs : dict
             Keyword arguments to pass to json.dump.
         return_results : bool
-            If true, also returns the dictionary to save to disk, as well
+            If True, also returns the dictionary to save to disk, as well
             as the mapping between the object_references and the objects
             themselves.
+        strict : bool
+            If True, will not allow you to overwrite existing files.
 
         Returns
         -------
@@ -297,11 +300,18 @@ class MSONable:
         if json_kwargs is None:
             json_kwargs = {}
 
-        with open(save_dir / "class.json", "w") as outfile:
+        json_path = save_dir / "class.json"
+        pickle_path = save_dir / "class.pkl"
+        if strict and json_path.exists():
+            raise FileExistsError(f"strict is true and file {json_path} exists")
+        if strict and pickle_path.exists():
+            raise FileExistsError(f"strict is true and file {pickle_path} exists")
+
+        with open(json_path, "w") as outfile:
             json.dump(encoded, outfile, **json_kwargs)
         pickle.dump(
             encoder._name_object_map,
-            open(save_dir / "class.pkl", "wb"),
+            open(pickle_path, "wb"),
             **pickle_kwargs,
         )
 
