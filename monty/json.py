@@ -250,7 +250,7 @@ class MSONable:
 
     def save(
         self,
-        save_dir,
+        save_dir=None,
         mkdir=True,
         pickle_kwargs=None,
         json_kwargs=None,
@@ -280,7 +280,7 @@ class MSONable:
         pickle_kwargs : dict
             Keyword arguments to pass to pickle.dump.
         json_kwargs : dict
-            Keyword arguments to pass to json.dump.
+            Keyword arguments to pass to the serializer.
         return_results : bool
             If True, also returns the dictionary to save to disk, as well
             as the mapping between the object_references and the objects
@@ -293,33 +293,34 @@ class MSONable:
         None or tuple
         """
 
-        save_dir = Path(save_dir)
-        if mkdir:
-            save_dir.mkdir(exist_ok=True, parents=True)
-
-        encoder = MontyEncoder()
-        encoder._track_unserializable_objects = True
-        encoded = encoder.encode(self)
+        if save_dir is None and not return_results:
+            raise ValueError("save_dir must be set and/or return_results must be True")
 
         if pickle_kwargs is None:
             pickle_kwargs = {}
         if json_kwargs is None:
             json_kwargs = {}
+        encoder = MontyEncoder(allow_unserializable_objects=True, **json_kwargs)
+        encoded = encoder.encode(self)
 
-        json_path = save_dir / "class.json"
-        pickle_path = save_dir / "class.pkl"
-        if strict and json_path.exists():
-            raise FileExistsError(f"strict is true and file {json_path} exists")
-        if strict and pickle_path.exists():
-            raise FileExistsError(f"strict is true and file {pickle_path} exists")
+        if save_dir is not None:
+            save_dir = Path(save_dir)
+            if mkdir:
+                save_dir.mkdir(exist_ok=True, parents=True)
+            json_path = save_dir / "class.json"
+            pickle_path = save_dir / "class.pkl"
+            if strict and json_path.exists():
+                raise FileExistsError(f"strict is true and file {json_path} exists")
+            if strict and pickle_path.exists():
+                raise FileExistsError(f"strict is true and file {pickle_path} exists")
 
-        with open(json_path, "w") as outfile:
-            json.dump(encoded, outfile, **json_kwargs)
-        pickle.dump(
-            encoder._name_object_map,
-            open(pickle_path, "wb"),
-            **pickle_kwargs,
-        )
+            with open(json_path, "w") as outfile:
+                outfile.write(encoded)
+            pickle.dump(
+                encoder._name_object_map,
+                open(pickle_path, "wb"),
+                **pickle_kwargs,
+            )
 
         if return_results:
             return encoded, encoder._name_object_map
@@ -346,7 +347,7 @@ class MSONable:
         pickle_path = load_dir / "class.pkl"
 
         with open(json_path, "r") as infile:
-            d = json.loads(json.load(infile))
+            d = json.loads(infile.read())
         name_object_map = pickle.load(open(pickle_path, "rb"))
         decoded = MSONable.decoded_from_dict(d, name_object_map)
         klass = cls(**decoded)
@@ -476,9 +477,11 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    _track_unserializable_objects = False
-    _name_object_map: Dict[str, Any] = {}
-    _index = 0
+    def __init__(self, *args, allow_unserializable_objects=False, **kwargs):
+        super().__init__(*args, **kwargs)
+        self._track_unserializable_objects = allow_unserializable_objects
+        self._name_object_map: Dict[str, Any] = {}
+        self._index = 0
 
     def _update_name_object_map(self, o):
         name = f"{self._index:012}-{str(uuid4())}"
