@@ -15,6 +15,7 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
+from typing import Any, Dict
 from uuid import UUID, uuid4
 
 try:
@@ -325,6 +326,20 @@ class MSONable:
 
     @classmethod
     def load(cls, load_dir):
+        """Loads a class from a provided {load_dir}/class.json and
+        {load_dir}/class.pkl file (if necessary).
+
+        Parameters
+        ----------
+        load_dir : os.PathLike
+            The directory from which to reload the class from.
+
+        Returns
+        -------
+        MSONable
+            An instance of the class being reloaded.
+        """
+
         load_dir = Path(load_dir)
 
         json_path = load_dir / "class.json"
@@ -462,7 +477,7 @@ class MontyEncoder(json.JSONEncoder):
     """
 
     _track_unserializable_objects = False
-    _name_object_map = {}
+    _name_object_map: Dict[str, Any] = {}
     _index = 0
 
     def default(self, o) -> dict:  # pylint: disable=E0202
