@@ -558,9 +558,11 @@ class MontyEncoder(json.JSONEncoder):
         if callable(o) and not isinstance(o, MSONable):
             try:
                 return _serialize_callable(o)
-            except AttributeError:
+            except AttributeError as e:
                 # Some callables may not have instance __name__
-                return self._update_name_object_map(o)
+                if self._track_unserializable_objects:
+                    return self._update_name_object_map(o)
+                raise AttributeError(e)
 
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
