@@ -434,6 +434,9 @@ class TestMSONable:
                         "tmp2": 5,
                         "tmp3": {"test": "test123"},
                     },
+                    # Gotta check that if I hide an MSONable class somewhere
+                    # it still gets correctly serialized.
+                    {"actually_good": GoodMSONClass("1", "2", "3")},
                 ],
                 "values": [],
             },
@@ -456,7 +459,7 @@ class TestMSONable:
 
         # Now check that reloading this, the classes are equal!
         test_good_class2 = GoodMSONClass.load(target)
-        assert test_good_class, test_good_class2
+        assert test_good_class == test_good_class2
 
 
 class TestJson:
