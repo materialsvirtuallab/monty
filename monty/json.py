@@ -234,6 +234,11 @@ class MSONable:
         return decoded
 
     @classmethod
+    def _from_dict(cls, d, name_object_map):
+        decoded = MSONable.decoded_from_dict(d, name_object_map=name_object_map)
+        return cls(**decoded)
+
+    @classmethod
     def from_dict(cls, d):
         """
         :param d: Dict representation.
@@ -626,6 +631,7 @@ class MontyDecoder(json.JSONDecoder):
         Recursive method to support decoding dicts and lists containing
         pymatgen objects.
         """
+
         if isinstance(d, dict):
             if "@object_reference" in d and self._name_object_map is not None:
                 name = d["@object_reference"]
@@ -693,6 +699,11 @@ class MontyDecoder(json.JSONDecoder):
                     if hasattr(mod, classname):
                         cls_ = getattr(mod, classname)
                         data = {k: v for k, v in d.items() if not k.startswith("@")}
+                        if hasattr(cls_, "_from_dict"):
+                            # New functionality with save/load requires this
+                            return cls_._from_dict(
+                                data, name_object_map=self._name_object_map
+                            )
                         if hasattr(cls_, "from_dict"):
                             return cls_.from_dict(data)
                         if issubclass(cls_, Enum):

@@ -399,44 +399,30 @@ class TestMSONable:
             "Python",
             **{
                 "cant_serialize_me": GoodNOTMSONClass(
-                    "Hello2",
-                    "World2",
-                    "Python2",
+                    "Hello2", "World2", "Python2", **{"values": []}
                 ),
                 "cant_serialize_me2": [
-                    GoodNOTMSONClass(
-                        "Hello4",
-                        "World4",
-                        "Python4",
-                    ),
-                    GoodNOTMSONClass(
-                        "Hello4",
-                        "World4",
-                        "Python4",
-                    ),
+                    GoodNOTMSONClass("Hello4", "World4", "Python4", **{"values": []}),
+                    GoodNOTMSONClass("Hello4", "World4", "Python4", **{"values": []}),
                 ],
                 "cant_serialize_me3": [
                     {
-                        "tmp": GoodNOTMSONClass(
-                            "Hello5",
-                            "World5",
-                            "Python5",
+                        "tmp": GoodMSONClass(
+                            "Hello5", "World5", "Python5", **{"values": []}
                         ),
                         "tmp2": 2,
                         "tmp3": [1, 2, 3],
                     },
                     {
                         "tmp5": GoodNOTMSONClass(
-                            "aHello5",
-                            "aWorld5",
-                            "aPython5",
+                            "aHello5", "aWorld5", "aPython5", **{"values": []}
                         ),
                         "tmp2": 5,
                         "tmp3": {"test": "test123"},
                     },
                     # Gotta check that if I hide an MSONable class somewhere
                     # it still gets correctly serialized.
-                    {"actually_good": GoodMSONClass("1", "2", "3")},
+                    {"actually_good": GoodMSONClass("1", "2", "3", **{"values": []})},
                 ],
                 "values": [],
             },
@@ -451,7 +437,7 @@ class TestMSONable:
 
         # This should also pass though
         target = tmp_path / "test_dir123"
-        test_good_class.save(target)
+        test_good_class.save(target, json_kwargs={"indent": 4, "sort_keys": True})
 
         # This will fail
         with pytest.raises(FileExistsError):
@@ -459,6 +445,7 @@ class TestMSONable:
 
         # Now check that reloading this, the classes are equal!
         test_good_class2 = GoodMSONClass.load(target)
+
         assert test_good_class == test_good_class2
 
 
