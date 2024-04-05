@@ -403,6 +403,38 @@ class TestMSONable:
                     "World2",
                     "Python2",
                 ),
+                "cant_serialize_me2": [
+                    GoodNOTMSONClass(
+                        "Hello4",
+                        "World4",
+                        "Python4",
+                    ),
+                    GoodNOTMSONClass(
+                        "Hello4",
+                        "World4",
+                        "Python4",
+                    ),
+                ],
+                "cant_serialize_me3": [
+                    {
+                        "tmp": GoodNOTMSONClass(
+                            "Hello5",
+                            "World5",
+                            "Python5",
+                        ),
+                        "tmp2": 2,
+                        "tmp3": [1, 2, 3],
+                    },
+                    {
+                        "tmp5": GoodNOTMSONClass(
+                            "aHello5",
+                            "aWorld5",
+                            "aPython5",
+                        ),
+                        "tmp2": 5,
+                        "tmp3": {"test": "test123"},
+                    },
+                ],
                 "values": [],
             },
         )
