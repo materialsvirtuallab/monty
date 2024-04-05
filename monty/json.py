@@ -480,6 +480,12 @@ class MontyEncoder(json.JSONEncoder):
     _name_object_map: Dict[str, Any] = {}
     _index = 0
 
+    def _update_name_object_map(self, o):
+        name = f"{self._index:012}-{str(uuid4())}"
+        self._index += 1
+        self._name_object_map[name] = o
+        return {"@object_reference": name}
+
     def default(self, o) -> dict:  # pylint: disable=E0202
         """
         Overriding default method for JSON encoding. This method does two
@@ -547,7 +553,11 @@ class MontyEncoder(json.JSONEncoder):
             return {"@module": "bson.objectid", "@class": "ObjectId", "oid": str(o)}
 
         if callable(o) and not isinstance(o, MSONable):
-            return _serialize_callable(o)
+            try:
+                return _serialize_callable(o)
+            except AttributeError:
+                # Some callables may not have instance __name__
+                return self._update_name_object_map(o)
 
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
@@ -567,10 +577,7 @@ class MontyEncoder(json.JSONEncoder):
                 # Last resort logic. We keep track of some name of the object
                 # as a reference, and instead of the object, store that
                 # name, which of course is json-serializable
-                name = f"{self._index:012}-{str(uuid4())}"
-                self._index += 1
-                self._name_object_map[name] = o
-                d = {"@object_reference": name}
+                d = self._update_name_object_map(o)
             else:
                 raise TypeError(
                     f"Object of type {o.__class__.__name__} is not JSON serializable"
