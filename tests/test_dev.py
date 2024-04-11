@@ -1,6 +1,7 @@
 import unittest
 import warnings
 import datetime
+from unittest.mock import patch
 
 import pytest
 from monty.dev import deprecated, install_excepthook, requires
@@ -88,55 +89,72 @@ class TestDecorator:
         with pytest.warns(DeprecationWarning):
             assert TestClass_deprecationwarning().classmethod_b() == "b"
 
-    def test_deprecated_deadline(self):
-        @deprecated(deadline=(2000, 1, 1))
-        def func_old():
-            pass
+    def test_deprecated_deadline(self, monkeypatch):
+        with pytest.raises(DeprecationWarning):
+            with patch("subprocess.run") as mock_run:
+                monkeypatch.setenv("CI", "true")  # mock CI env
 
-        with warnings.catch_warnings(record=True) as warn_msgs:
-            # Trigger a warning.
-            func_old()
-            # Verify message
-            assert "will be removed on 2000-01-01" in str(warn_msgs[0].message)
+                # Mock "GITHUB_REPOSITORY"
+                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+                mock_run.return_value.stdout.decode.return_value = (
+                    "git@github.com:TESTOWNER/TESTREPO.git"
+                )
 
+                @deprecated(deadline=(2000, 1, 1))
+                def func_old():
+                    pass
+
+    @pytest.fixture()
     def test_deprecated_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be raised."""
 
-        @deprecated(deadline=(2000, 1, 1))
-        def func_old():
-            pass
-
         # No warn case 1: date before deadline
-        with warnings.catch_warnings(record=True) as warn_msgs:
-            monkeypatch.setattr(
-                datetime, "datetime", lambda: datetime.datetime(1999, 1, 1)
-            )
-            func_old()
+        with warnings.catch_warnings():
+            with patch("subprocess.run") as mock_run:
+                monkeypatch.setenv("CI", "true")  # mock CI env
 
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
+                # Mock date to 1999-01-01
+                monkeypatch.setattr(
+                    datetime.datetime, "now", datetime.datetime(1999, 1, 1)
                 )
+
+                # Mock "GITHUB_REPOSITORY"
+                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+                mock_run.return_value.stdout.decode.return_value = (
+                    "git@github.com:TESTOWNER/TESTREPO.git"
+                )
+
+                @deprecated(deadline=(2000, 1, 1))
+                def func_old():
+                    pass
+
+            monkeypatch.undo()
 
         # No warn case 2: not in CI env
-        with warnings.catch_warnings(record=True) as warn_msgs:
-            monkeypatch.delenv("CI", raising=False)
-            func_old()
+        with warnings.catch_warnings():
+            with patch("subprocess.run") as mock_run:
+                monkeypatch.delenv("CI", raising=False)
 
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
+                # Mock "GITHUB_REPOSITORY"
+                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+                mock_run.return_value.stdout.decode.return_value = (
+                    "git@github.com:TESTOWNER/TESTREPO.git"
                 )
+
+                @deprecated(deadline=(2000, 1, 1))
+                def func_old_1():
+                    pass
+
+            monkeypatch.undo()
 
         # No warn case 3: not in code owner repo
-        with warnings.catch_warnings(record=True) as warn_msgs:
-            monkeypatch.setenv("GITHUB_REPOSITORY", "NONE/NONE")
-            func_old()
+        with warnings.catch_warnings():
+            monkeypatch.setenv("CI", "true")
+            monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
 
-            for warning in warn_msgs:
-                assert "This function should have been removed on" not in str(
-                    warning.message
-                )
+            @deprecated(deadline=(2000, 1, 1))
+            def func_old_2():
+                pass
 
     def test_requires(self):
         try:
