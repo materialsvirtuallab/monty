@@ -1,9 +1,12 @@
+from __future__ import annotations
+
+import datetime
 import unittest
 import warnings
-import datetime
 from unittest.mock import patch
 
 import pytest
+
 from monty.dev import deprecated, install_excepthook, requires
 
 # Set all warnings to always be triggered.

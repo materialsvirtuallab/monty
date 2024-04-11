@@ -1,16 +1,22 @@
 """Deployment file to facilitate releases of monty."""
 
+from __future__ import annotations
+
 import datetime
 import glob
 import json
 import os
 import re
+from typing import TYPE_CHECKING
 
 import requests
 from invoke import task
 
 from monty import __version__ as ver
 from monty.os import cd
+
+if TYPE_CHECKING:
+    from invoke import Context
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2012, The Materials Project"
@@ -23,7 +29,7 @@ NEW_VER = datetime.datetime.today().strftime("%Y.%-m.%-d")
 
 
 @task
-def make_doc(ctx):
+def make_doc(ctx: Context) -> None:
     with cd("docs"):
         ctx.run("rm monty.*.rst", warn=True)
         ctx.run("sphinx-apidoc --separate -P -M -d 6 -o . -f ../monty")
@@ -48,7 +54,7 @@ def make_doc(ctx):
                 preamble = [
                     "---",
                     "layout: default",
-                    "title: " + fn,
+                    f"title: {fn}",
                     "nav_exclude: true",
                     "---",
                     "",
@@ -77,7 +83,7 @@ def make_doc(ctx):
 
 
 @task
-def update_doc(ctx):
+def update_doc(ctx: Context) -> None:
     ctx.run("git pull", warn=True)
     make_doc(ctx)
     ctx.run("git add .", warn=True)
@@ -86,26 +92,26 @@ def update_doc(ctx):
 
 
 @task
-def test(ctx):
+def test(ctx: Context) -> None:
     ctx.run("pytest")
 
 
 @task
-def setver(ctx):
+def setver(ctx: Context) -> None:
     ctx.run(f'sed s/version=.*,/version=\\"{ver}\\",/ setup.py > newsetup')
     ctx.run("mv newsetup setup.py")
 
 
 @task
-def release_github(ctx):
+def release_github(ctx: Context) -> None:
     with open("docs/changelog.md") as f:
         contents = f.read()
     toks = re.split("##", contents)
     desc = toks[1].strip()
     payload = {
-        "tag_name": "v" + NEW_VER,
+        "tag_name": f"v{NEW_VER}",
         "target_commitish": "master",
-        "name": "v" + NEW_VER,
+        "name": f"v{NEW_VER}",
         "body": desc,
         "draft": False,
         "prerelease": False,
@@ -120,34 +126,32 @@ def release_github(ctx):
 
 
 @task
-def commit(ctx):
-    ctx.run('git commit -a -m "v%s release"' % NEW_VER, warn=True)
+def commit(ctx: Context) -> None:
+    ctx.run(f'git commit -a -m "v{NEW_VER} release"', warn=True)
     ctx.run("git push", warn=True)
 
 
 @task
-def set_ver(ctx):
-    with open("monty/__init__.py") as f:
+def set_ver(ctx: Context) -> None:
+    with open("monty/__init__.py", encoding="utf-8") as f:
         contents = f.read()
         contents = re.sub(
             r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents
         )
 
-    with open("monty/__init__.py", "w") as f:
+    with open("monty/__init__.py", "w", encoding="utf-8") as f:
         f.write(contents)
 
-    with open("pyproject.toml") as f:
+    with open("pyproject.toml", encoding="utf-8") as f:
         contents = f.read()
-        contents = re.sub(
-            r"version = ([\.\d\"]+)", 'version = "%s"' % NEW_VER, contents
-        )
+        contents = re.sub(r"version = ([\.\d\"]+)", f'version = "{NEW_VER}"', contents)
 
-    with open("pyproject.toml", "w") as f:
+    with open("pyproject.toml", "w", encoding="utf-8") as f:
         f.write(contents)
 
 
 @task
-def release(ctx, notest=False):
+def release(ctx: Context, notest: bool = False) -> None:
     set_ver(ctx)
     if not notest:
         test(ctx)

@@ -5,6 +5,8 @@ Examples include useful utilities like transparent support for zipped files,
 useful design patterns such as singleton and cached_class, and many more.
 """
 
+from __future__ import annotations
+
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
 __version__ = "2024.3.31"

@@ -2,6 +2,8 @@
 functools, especially backported from Python 3.
 """
 
+from __future__ import annotations
+
 import cProfile
 import pstats
 import signal
@@ -9,6 +11,7 @@ import sys
 import tempfile
 from collections import namedtuple
 from functools import partial, wraps
+from typing import Any, Callable, Union
 
 _CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
 
@@ -22,19 +25,26 @@ class _HashedSeq(list):  # pylint: disable=C0205
 
     __slots__ = "hashvalue"
 
-    def __init__(self, tup, hashfunc=hash):
+    def __init__(self, tup: tuple, hashfunc: Callable = hash) -> None:
         """
-        :param tup: Tuple.
-        :param hashfunc: Hash function.
+        Args:
+            tup: Tuple.
+            hashfunc: Hash function.
         """
         self[:] = tup
-        self.hashvalue = hashfunc(tup)
+        self.hashvalue: int = hashfunc(tup)
 
-    def __hash__(self):
+    def __hash__(self) -> int:  # type: ignore[override]
         return self.hashvalue
 
 
-def _make_key(args, kwds, typed, kwd_mark=(object(),), fasttypes=None):
+def _make_key(
+    args: tuple,
+    kwds: dict,
+    typed: bool,
+    kwd_mark: tuple[object] = (object(),),
+    fasttypes=None,
+) -> Any:
     """
     Make a cache key from optionally typed positional and keyword arguments
 
@@ -44,10 +54,7 @@ def _make_key(args, kwds, typed, kwd_mark=(object(),), fasttypes=None):
     If there is only a single argument and its data type is known to cache
     its hash value, then that argument is returned without a wrapper.  This
     saves space and improves lookup speed.
-
     """
-    if fasttypes is None:
-        fasttypes = {int, str, frozenset, type(None)}
     key = args
     if kwds:
         sorted_items = sorted(kwds.items())
@@ -71,14 +78,15 @@ class lazy_property:
     are evaluated on first use.
     """
 
-    def __init__(self, func):
+    def __init__(self, func: Callable) -> None:
         """
-        :param func: Function to decorate.
+        Args:
+            func: Function to decorate.
         """
         self.__func = func
         wraps(self.__func)(self)
 
-    def __get__(self, inst, inst_cls):
+    def __get__(self, inst: Any, inst_cls) -> Any:
         if inst is None:
             return self
 
@@ -87,7 +95,7 @@ class lazy_property:
                 f"'{inst_cls.__name__}' object has no attribute '__dict__'"
             )
 
-        name = self.__name__  # pylint: disable=E1101
+        name = self.__name__  # type: ignore  # pylint: disable=E1101
         if name.startswith("__") and not name.endswith("__"):
             name = f"_{inst_cls.__name__}{name}"
 
@@ -96,7 +104,7 @@ class lazy_property:
         return value
 
     @classmethod
-    def invalidate(cls, inst, name):
+    def invalidate(cls, inst: object, name: str) -> None:
         """Invalidate a lazy attribute.
 
         This obviously violates the lazy contract. A subclass of lazy
@@ -121,7 +129,9 @@ class lazy_property:
             del inst.__dict__[name]
 
 
-def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
+def return_if_raise(
+    exception_tuple: Union[list, tuple], retval_if_exc: Any, disabled: bool = False
+) -> Any:
     """
     Decorator for functions, methods or properties. Execute the callable in a
     try block, and return retval_if_exc if one of the exceptions listed in
@@ -130,8 +140,7 @@ def return_if_raise(exception_tuple, retval_if_exc, disabled=False):
     Setting disabled to True disables the try except block (useful for
     debugging purposes). One can use this decorator to define properties.
 
-    Example::
-
+    Examples:
         @return_if_raise(ValueError, None)
         def return_none_if_value_error(self):
             pass
@@ -184,16 +193,17 @@ This decorator returns None if one of the exceptions is raised.
 class timeout:
     """
     Timeout function. Use to limit matching to a certain time limit. Note that
-    this works only on Unix-based systems as it uses signal. Usage:
+    this works only on Unix-based systems as it uses signal.
 
-    try:
-        with timeout(3):
-            do_stuff()
-    except TimeoutError:
-        do_something_else()
+    Usage:
+        try:
+            with timeout(3):
+                do_stuff()
+        except TimeoutError:
+            do_something_else()
     """
 
-    def __init__(self, seconds=1, error_message="Timeout"):
+    def __init__(self, seconds: int = 1, error_message: str = "Timeout"):
         """
         Args:
             seconds (int): Allowed time for function in seconds.
@@ -205,8 +215,9 @@ class timeout:
 
     def handle_timeout(self, signum, frame):
         """
-        :param signum: Return signal from call.
-        :param frame:
+        Args:
+            signum: Return signal from call.
+            frame:
         """
         raise TimeoutError(self.error_message)
 
@@ -223,9 +234,10 @@ class TimeoutError(Exception):
     Exception class for timeouts.
     """
 
-    def __init__(self, message):
+    def __init__(self, message: str):
         """
-        :param message: Error message
+        Args:
+            message: Error message
         """
         self.message = message
 
@@ -236,20 +248,21 @@ def prof_main(main):
 
     Profiling is activated by prepending the command line options
     supported by the original main program with the keyword `prof`.
-    Example:
 
-        $ script.py arg --foo=1
+    Examples:
 
-    becomes
+            $ script.py arg --foo=1
 
-        $ script.py prof arg --foo=1
+        becomes
 
-    The decorated main accepts two new arguments:
+            $ script.py prof arg --foo=1
 
-        prof_file: Name of the output file with profiling data
-            If not given, a temporary file is created.
-        sortby: Profiling data are sorted according to this value.
-            default is "time". See sort_stats.
+        The decorated main accepts two new arguments:
+
+            prof_file: Name of the output file with profiling data
+                If not given, a temporary file is created.
+            sortby: Profiling data are sorted according to this value.
+                default is "time". See sort_stats.
     """
 
     @wraps(main)

@@ -13,8 +13,7 @@ def singleton(cls):
     """
     This decorator can be used to create a singleton out of a class.
 
-    Usage::
-
+    Usage:
         @singleton
         class MySingleton():
 
@@ -63,10 +62,7 @@ def cached_class(klass: type[Klass]) -> type[Klass]:
 
         def __new__(cls, *args, **kwargs):
             """
-            Pass through...
-            :param args:
-            :param kwargs:
-            :return:
+            Pass through.
             """
             key = (cls, *args, *tuple(kwargs.items()))
             try:
@@ -107,7 +103,7 @@ class NullFile:
 
     def __new__(cls):
         """
-        Pass through
+        Pass through.
         """
         return open(os.devnull, "w")  # pylint: disable=R1732
 
@@ -121,5 +117,4 @@ class NullStream:
     def write(self, *args):  # pylint: disable=E0211
         """
         Does nothing...
-        :param args:
         """

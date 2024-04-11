@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from monty.fractions import gcd, gcd_float, lcm

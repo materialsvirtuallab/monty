@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from monty.operator import operator_from_str
 
 

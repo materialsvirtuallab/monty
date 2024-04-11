@@ -3,6 +3,8 @@ Augments Python's suite of IO functions with useful transparent support for
 compressed files.
 """
 
+from __future__ import annotations
+
 import bz2
 import errno
 import gzip
@@ -17,7 +19,10 @@ import os
 import subprocess
 import time
 from pathlib import Path
-from typing import IO, Generator, Union
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import IO, Generator, Union
 
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
@@ -35,7 +40,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     Returns:
         File-like object. Supports with context.
     """
-    if Path is not None and isinstance(filename, Path):
+    if filename is not None and isinstance(filename, Path):
         filename = str(filename)
 
     _name, ext = os.path.splitext(filename)
@@ -80,7 +85,7 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
 
 
 def reverse_readline(
-    m_file, blk_size=4096, max_mem=4000000
+    m_file, blk_size: int = 4096, max_mem: int = 4000000
 ) -> Generator[str, str, None]:
     """
     Generator method to read a file line-by-line, but backwards. This allows
@@ -179,7 +184,7 @@ class FileLock:
 
     Error = FileLockException
 
-    def __init__(self, file_name, timeout=10, delay=0.05):
+    def __init__(self, file_name: str, timeout: float = 10, delay: float = 0.05):
         """
         Prepare the file locker. Specify the file to lock and optionally
         the maximum timeout and the delay between each attempt to lock.
@@ -190,15 +195,15 @@ class FileLock:
             delay: Delay between each attempt to lock. Defaults to 0.05.
         """
         self.file_name = os.path.abspath(file_name)
-        self.lockfile = os.path.abspath(file_name) + ".lock"
-        self.timeout = float(timeout)
-        self.delay = float(delay)
+        self.lockfile = f"{os.path.abspath(file_name)}.lock"
+        self.timeout = timeout
+        self.delay = delay
         self.is_locked = False
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
             raise ValueError("delay and timeout must be positive with delay <= timeout")
 
-    def acquire(self):
+    def acquire(self) -> None:
         """
         Acquire the lock, if possible. If the lock is in use, it check again
         every `delay` seconds. It does this until it either gets the lock or
@@ -219,7 +224,7 @@ class FileLock:
 
         self.is_locked = True
 
-    def release(self):
+    def release(self) -> None:
         """
         Get rid of the lock by deleting the lockfile.
         When working in a `with` statement, this gets automatically
@@ -255,14 +260,15 @@ class FileLock:
         self.release()
 
 
-def get_open_fds():
+def get_open_fds() -> int:
     """
     Return the number of open file descriptors for current process
 
-    .. warning: will only work on UNIX-like OS-es.
+    Warnings:
+        Will only work on UNIX-like OS-es.
     """
-    pid = os.getpid()
-    procs = subprocess.check_output(["lsof", "-w", "-Ff", "-p", str(pid)])
-    procs = procs.decode("utf-8")
+    pid: int = os.getpid()
+    procs: bytes = subprocess.check_output(["lsof", "-w", "-Ff", "-p", str(pid)])
+    _procs: str = procs.decode("utf-8")
 
-    return len([s for s in procs.split("\n") if s and s[0] == "f" and s[1:].isdigit()])
+    return len([s for s in _procs.split("\n") if s and s[0] == "f" and s[1:].isdigit()])
