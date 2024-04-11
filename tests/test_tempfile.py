@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import shutil
-import unittest
 
 from monty.tempfile import ScratchDir
 
@@ -147,7 +146,3 @@ class TestScratchDir:
     def teardown_method(self):
         os.chdir(self.cwd)
         shutil.rmtree(self.scratch_root)
-
-
-if __name__ == "__main__":
-    unittest.main()
