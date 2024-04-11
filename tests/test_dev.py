@@ -3,7 +3,6 @@ from __future__ import annotations
 import datetime
 import unittest
 import warnings
-import datetime
 from unittest.mock import patch
 
 import pytest

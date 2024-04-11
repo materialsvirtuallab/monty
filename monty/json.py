@@ -18,8 +18,7 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
-from typing import TYPE_CHECKING
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any, Dict
 from uuid import UUID, uuid4
 
 try:
