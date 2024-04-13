@@ -849,13 +849,25 @@ def jsanitize(
 
     if isinstance(obj, (list, tuple)):
         return [
-            jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            jsanitize(
+                i,
+                strict=strict,
+                allow_bson=allow_bson,
+                enum_values=enum_values,
+                recursive_msonable=recursive_msonable,
+            )
             for i in obj
         ]
 
     if np is not None and isinstance(obj, np.ndarray):
         return [
-            jsanitize(i, strict=strict, allow_bson=allow_bson, enum_values=enum_values)
+            jsanitize(
+                i,
+                strict=strict,
+                allow_bson=allow_bson,
+                enum_values=enum_values,
+                recursive_msonable=recursive_msonable,
+            )
             for i in obj.tolist()
         ]
 
