@@ -1,5 +1,8 @@
 # Change log
 
+## 2024.4.16
+- Misc bug fixes for jsanitize (@Andrew-S-Rosen).
+
 ## 2024.3.31
 - Fix MSONable.REDIRECT when module name changed (@janosh)
 - Add native support for enums in jsanitize (@FabiPi3)
