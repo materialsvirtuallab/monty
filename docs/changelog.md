@@ -1,6 +1,9 @@
 # Change log
 
-## 2024.4.16
+## 2024.4.17
+- Revert changes to json.py for now.
+
+## 2024.4.16 (yanked)
 - Misc bug fixes for jsanitize (@Andrew-S-Rosen).
 
 ## 2024.3.31
