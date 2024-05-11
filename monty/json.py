@@ -690,7 +690,7 @@ def jsanitize(
             for i in obj
         ]
     if np is not None and isinstance(obj, np.ndarray):
-        try:       
+        try:
             return [
                 jsanitize(
                     i,
