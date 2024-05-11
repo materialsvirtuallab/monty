@@ -576,7 +576,7 @@ class TestJson:
         d = jsanitize(x, strict=True)
         assert isinstance(d["energies"][0], float)
 
-        x = {"energy": [np.array(-1.0)]}
+        x = {"energy": np.array(-1.0)}
         d = jsanitize(x, strict=True)
         assert isinstance(d["energy"], float)
 
