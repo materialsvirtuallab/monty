@@ -30,7 +30,8 @@ except ImportError:
 
 import pytest
 
-from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
+from monty.json import (MontyDecoder, MontyEncoder, MSONable, _load_redirect,
+                        jsanitize, load)
 
 from . import __version__ as tests_version
 
@@ -436,7 +437,7 @@ class TestMSONable:
             test_good_class.to_json()
 
         # This should also pass though
-        target = tmp_path / "test_dir123"
+        target = tmp_path / "test.json"
         test_good_class.save(target, json_kwargs={"indent": 4, "sort_keys": True})
 
         # This will fail
@@ -446,7 +447,11 @@ class TestMSONable:
         # Now check that reloading this, the classes are equal!
         test_good_class2 = GoodMSONClass.load(target)
 
+        # Final check using load
+        test_good_class3 = load(target)
+
         assert test_good_class == test_good_class2
+        assert test_good_class == test_good_class3
 
 
 class TestJson:

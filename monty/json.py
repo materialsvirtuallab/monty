@@ -472,8 +472,7 @@ class MSONable:
 
     @classmethod
     def load(cls, file_path):
-        """Loads a class from a provided {load_dir}/class.json and
-        {load_dir}/class.pkl file (if necessary).
+        """Loads a class from a provided json file.
 
         Parameters
         ----------
@@ -490,16 +489,24 @@ class MSONable:
         return cls.from_dict(d)
 
 
-def load_anything(path):
-    """Loads a json file into a class, rehydrating from MSONable."""
+def load(path):
+    """Loads a json file that was saved using MSONable.save.
+
+    Parameters
+    ----------
+    path : os.PathLike
+        Path to the json file to load.
+
+    Returns
+    -------
+    MSONable
+    """
 
     d = _d_from_path(path)
     module = d["@module"]
     klass = d["@class"]
-    signature = f"{module}:{klass}"
-    module, function = signature.split(":")
     module = import_module(module)
-    klass = getattr(module, function)
+    klass = getattr(module, klass)
     return klass.from_dict(d)
 
 
