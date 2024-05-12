@@ -30,8 +30,14 @@ except ImportError:
 
 import pytest
 
-from monty.json import (MontyDecoder, MontyEncoder, MSONable, _load_redirect,
-                        jsanitize, load)
+from monty.json import (
+    MontyDecoder,
+    MontyEncoder,
+    MSONable,
+    _load_redirect,
+    jsanitize,
+    load,
+)
 
 from . import __version__ as tests_version
 
