@@ -2,7 +2,7 @@ numpy==1.26.4
 ruamel.yaml==0.18.6
 msgpack==1.0.8
 tqdm==4.66.4
-pymongo==4.6.3
+pymongo==4.7.2
 pandas==2.2.2
 orjson==3.10.0
 types-orjson==3.6.2
