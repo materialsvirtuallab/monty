@@ -590,7 +590,7 @@ class TestJson:
         x = {"energy": np.array(-1.0)}
         d = jsanitize(x, strict=True)
         assert isinstance(d["energy"], float)
-        
+
         # Test data nested in a class
         x = np.array([[1 + 1j, 2 + 1j], [3 + 1j, 4 + 1j]], dtype="complex64")
         cls = ClassContainingNumpyArray(np_a={"a": [{"b": x}]})
