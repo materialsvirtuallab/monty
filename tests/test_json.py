@@ -758,6 +758,7 @@ class TestJson:
         assert clean_recursive_msonable["hello"][0]["a"] == 1
         assert clean_recursive_msonable["hello"][0]["b"] == 2
         assert clean_recursive_msonable["hello"][0]["c"] == 3
+        assert clean_recursive_msonable["hello"][1] == "test"
         assert clean_recursive_msonable["test"] == "hi"
 
         d = {"dt": datetime.datetime.now()}
