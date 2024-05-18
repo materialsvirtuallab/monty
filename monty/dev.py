@@ -64,9 +64,9 @@ def deprecated(
                 owner_repo = (
                     result.stdout.decode("utf-8")
                     .strip()
-                    .lstrip("https://github.com/")  # https clone
-                    .lstrip("git@github.com:")  # ssh clone
-                    .rstrip(".git")  # ssh clone
+                    .lstrip("https://github.com/")  # HTTPS clone
+                    .lstrip("git@github.com:")  # SSH clone
+                    .rstrip(".git")  # SSH clone
                 )
 
                 return owner_repo == os.getenv("GITHUB_REPOSITORY")
