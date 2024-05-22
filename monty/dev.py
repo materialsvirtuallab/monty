@@ -106,9 +106,10 @@ def deprecated(
                 r = replacement
 
             if deadline is None:
-                msg += f"; use {r.__name__} in {r.__module__} instead."
+                msg += "; use "  # for better formatting
             else:
-                msg += f"Use {r.__name__} in {r.__module__} instead."
+                msg += "Use "
+            msg += f"{r.__name__} in {r.__module__} instead."
 
         if message:
             msg += "\n" + message
