@@ -103,7 +103,11 @@ def deprecated(
                 r = replacement.__func__
             else:
                 r = replacement
-            msg += f"; use {r.__name__} in {r.__module__} instead."
+
+            if deadline is None:
+                msg += f"; use {r.__name__} in {r.__module__} instead."
+            else:
+                msg += f"Use {r.__name__} in {r.__module__} instead."
 
         if message:
             msg += "\n" + message
