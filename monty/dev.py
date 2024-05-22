@@ -6,6 +6,7 @@ particularly useful for developers. E.g., deprecating methods / classes, etc.
 from __future__ import annotations
 
 import functools
+import inspect
 import logging
 import os
 import subprocess
@@ -113,7 +114,7 @@ def deprecated(
             msg += "\n" + message
         return msg
 
-    def deprecated_decorator(old: Callable) -> Callable:
+    def deprecated_function_decorator(old: Callable) -> Callable:
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
@@ -121,13 +122,32 @@ def deprecated(
 
         return wrapped
 
+    def deprecated_class_decorator(cls: Type) -> Type:
+        original_init = cls.__init__
+
+        def new_init(self, *args, **kwargs):
+            msg = craft_message(cls, replacement, message, _deadline)
+            warnings.warn(msg, category=category, stacklevel=2)
+            original_init(self, *args, **kwargs)
+
+        cls.__init__ = new_init
+        return cls
+
     # Convert deadline to datetime type
     _deadline = datetime(*deadline) if deadline is not None else None
 
     # Raise CI warning after removal deadline
     raise_deadline_warning()
 
-    return deprecated_decorator
+    def decorator(target: Callable) -> Callable:
+        if inspect.isfunction(target):
+            return deprecated_function_decorator(target)
+        elif inspect.isclass(target):
+            return deprecated_class_decorator(target)
+        else:
+            raise TypeError("The @deprecated decorator can only be applied to classes or functions")
+
+    return decorator
 
 
 class requires:

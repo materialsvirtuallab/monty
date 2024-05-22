@@ -92,6 +92,23 @@ class TestDecorator:
         with pytest.warns(DeprecationWarning):
             assert TestClass_deprecationwarning().classmethod_b() == "b"
 
+    def test_deprecated_class(self):
+        class TestClassNew:
+            """A dummy class for tests."""
+
+            def method_a(self):
+                pass
+
+        @deprecated(replacement=TestClassNew)
+        class TestClassOld:
+            """A dummy class for tests."""
+
+            def method_b(self):
+                pass
+
+        with pytest.warns(FutureWarning, match="TestClassOld is deprecated"):
+            TestClassOld()
+
     def test_deprecated_deadline(self, monkeypatch):
         with pytest.raises(DeprecationWarning):
             with patch("subprocess.run") as mock_run:
