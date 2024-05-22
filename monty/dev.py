@@ -145,7 +145,9 @@ def deprecated(
         elif inspect.isclass(target):
             return deprecated_class_decorator(target)
         else:
-            raise TypeError("The @deprecated decorator can only be applied to classes or functions")
+            raise TypeError(
+                "The @deprecated decorator can only be applied to classes or functions"
+            )
 
     return decorator
 
