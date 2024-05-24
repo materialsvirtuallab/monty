@@ -4,7 +4,7 @@ Useful additional string functions.
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, Iterable, cast
 
 if TYPE_CHECKING:
     from typing import Any, Union
@@ -34,7 +34,7 @@ def is_string(s: Any) -> bool:
         return False
 
 
-def list_strings(arg: Union[str, list[str]]) -> list[str]:
+def list_strings(arg: Union[str, Iterable[str]]) -> list[str]:
     """
     Always return a list of strings, given a string or list of strings as
     input.
@@ -48,15 +48,17 @@ def list_strings(arg: Union[str, list[str]]) -> list[str]:
 
         >>> list_strings(['A','list','of','strings'])
         ['A', 'list', 'of', 'strings']
+
+        >>> list_strings(('A','list','of','strings'))
+        ['A', 'list', 'of', 'strings']
+
+        >>> list_strings({"a": 1, "b": 2}.keys())
+        ['a', 'b']
     """
     if is_string(arg):
         return [cast(str, arg)]
 
-    elif isinstance(arg, list):
-        return arg
-
-    else:
-        raise TypeError("Wrong type, expect str or list[str].")
+    return [cast(str, s) for s in arg]
 
 
 def marquee(text: str = "", width: int = 78, mark: str = "*") -> str:
