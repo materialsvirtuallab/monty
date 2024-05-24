@@ -21,7 +21,7 @@ classifiers = [
 dependencies = [
 
 ]
-version = "2024.5.15"
+version = "2024.5.24"
 
 [tool.setuptools]
 packages = ["monty"]

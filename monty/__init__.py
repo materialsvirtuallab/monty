@@ -9,7 +9,7 @@ from __future__ import annotations
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2014, The Materials Virtual Lab"
-__version__ = "2024.5.15"
+__version__ = "2024.5.24"
 __maintainer__ = "Shyue Ping Ong"
 __email__ = "ongsp@ucsd.edu"
 __date__ = "Oct 12 2020"

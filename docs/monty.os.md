@@ -15,6 +15,7 @@ performing some tasks, and returns to the original working directory
 afterwards. E.g.,
 
 > with cd(“/my/path/”):
+
 > ```none
 > do_something()
 > ```
