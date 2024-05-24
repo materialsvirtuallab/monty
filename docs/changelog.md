@@ -1,5 +1,9 @@
 # Change log
 
+## 2024.5.24
+- Fix serious regression introduced in list_strings (@gmatteo)
+- Extend dev.deprecated to decorate classes and improve message (@DanielYang59)
+
 ## 2024.5.15
 - Reimplemented support for pickle in MSONAble. (@matthewcarbone)
 
