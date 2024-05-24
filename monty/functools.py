@@ -84,7 +84,7 @@ class lazy_property:
             func: Function to decorate.
         """
         self.__func = func
-        wraps(self.__func)(self)
+        wraps(self.__func)(self)  # type: ignore
 
     def __get__(self, inst: Any, inst_cls) -> Any:
         if inst is None:

@@ -24,13 +24,25 @@ except ImportError:
     torch = None
 
 try:
+    import pydantic
+except ImportError:
+    pydantic = None
+
+try:
     from bson.objectid import ObjectId
 except ImportError:
     ObjectId = None
 
 import pytest
 
-from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
+from monty.json import (
+    MontyDecoder,
+    MontyEncoder,
+    MSONable,
+    _load_redirect,
+    jsanitize,
+    load,
+)
 
 from . import __version__ as tests_version
 
@@ -390,63 +402,67 @@ class TestMSONable:
         f = jsanitize(d, enum_values=True)
         assert f["123"] == "value_a"
 
-    # def test_save_load(self, tmp_path):
-    #     """Tests the save and load serialization methods."""
-    #
-    #     test_good_class = GoodMSONClass(
-    #         "Hello",
-    #         "World",
-    #         "Python",
-    #         **{
-    #             "cant_serialize_me": GoodNOTMSONClass(
-    #                 "Hello2", "World2", "Python2", **{"values": []}
-    #             ),
-    #             "cant_serialize_me2": [
-    #                 GoodNOTMSONClass("Hello4", "World4", "Python4", **{"values": []}),
-    #                 GoodNOTMSONClass("Hello4", "World4", "Python4", **{"values": []}),
-    #             ],
-    #             "cant_serialize_me3": [
-    #                 {
-    #                     "tmp": GoodMSONClass(
-    #                         "Hello5", "World5", "Python5", **{"values": []}
-    #                     ),
-    #                     "tmp2": 2,
-    #                     "tmp3": [1, 2, 3],
-    #                 },
-    #                 {
-    #                     "tmp5": GoodNOTMSONClass(
-    #                         "aHello5", "aWorld5", "aPython5", **{"values": []}
-    #                     ),
-    #                     "tmp2": 5,
-    #                     "tmp3": {"test": "test123"},
-    #                 },
-    #                 # Gotta check that if I hide an MSONable class somewhere
-    #                 # it still gets correctly serialized.
-    #                 {"actually_good": GoodMSONClass("1", "2", "3", **{"values": []})},
-    #             ],
-    #             "values": [],
-    #         },
-    #     )
-    #
-    #     # This will pass
-    #     test_good_class.as_dict()
-    #
-    #     # This will fail
-    #     with pytest.raises(TypeError):
-    #         test_good_class.to_json()
-    #
-    #     # This should also pass though
-    #     target = tmp_path / "test_dir123"
-    #     test_good_class.save(target, json_kwargs={"indent": 4, "sort_keys": True})
-    #
-    #     # This will fail
-    #     with pytest.raises(FileExistsError):
-    #         test_good_class.save(target, strict=True)
-    #
-    #     # Now check that reloading this, the classes are equal!
-    #     test_good_class2 = GoodMSONClass.load(target)
-    #
-    #     assert test_good_class == test_good_class2
+    def test_save_load(self, tmp_path):
+        """Tests the save and load serialization methods."""
+
+        test_good_class = GoodMSONClass(
+            "Hello",
+            "World",
+            "Python",
+            **{
+                "cant_serialize_me": GoodNOTMSONClass(
+                    "Hello2", "World2", "Python2", **{"values": []}
+                ),
+                "cant_serialize_me2": [
+                    GoodNOTMSONClass("Hello4", "World4", "Python4", **{"values": []}),
+                    GoodNOTMSONClass("Hello4", "World4", "Python4", **{"values": []}),
+                ],
+                "cant_serialize_me3": [
+                    {
+                        "tmp": GoodMSONClass(
+                            "Hello5", "World5", "Python5", **{"values": []}
+                        ),
+                        "tmp2": 2,
+                        "tmp3": [1, 2, 3],
+                    },
+                    {
+                        "tmp5": GoodNOTMSONClass(
+                            "aHello5", "aWorld5", "aPython5", **{"values": []}
+                        ),
+                        "tmp2": 5,
+                        "tmp3": {"test": "test123"},
+                    },
+                    # Gotta check that if I hide an MSONable class somewhere
+                    # it still gets correctly serialized.
+                    {"actually_good": GoodMSONClass("1", "2", "3", **{"values": []})},
+                ],
+                "values": [],
+            },
+        )
+
+        # This will pass
+        test_good_class.as_dict()
+
+        # This will fail
+        with pytest.raises(TypeError):
+            test_good_class.to_json()
+
+        # This should also pass though
+        target = tmp_path / "test.json"
+        test_good_class.save(target, json_kwargs={"indent": 4, "sort_keys": True})
+
+        # This will fail
+        with pytest.raises(FileExistsError):
+            test_good_class.save(target, strict=True)
+
+        # Now check that reloading this, the classes are equal!
+        test_good_class2 = GoodMSONClass.load(target)
+
+        # Final check using load
+        test_good_class3 = load(target)
+
+        assert test_good_class == test_good_class2
+        assert test_good_class == test_good_class3
 
 
 class TestJson:
@@ -575,6 +591,10 @@ class TestJson:
         x = {"energies": [np.float64(1234.5)]}
         d = jsanitize(x, strict=True)
         assert isinstance(d["energies"][0], float)
+
+        x = {"energy": np.array(-1.0)}
+        d = jsanitize(x, strict=True)
+        assert isinstance(d["energy"], float)
 
         # Test data nested in a class
         x = np.array([[1 + 1j, 2 + 1j], [3 + 1j, 4 + 1j]], dtype="complex64")
@@ -722,6 +742,23 @@ class TestJson:
         clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
         assert clean_recursive_msonable["hello"]["a"] == 1
         assert clean_recursive_msonable["hello"]["b"] == 2
+        assert clean_recursive_msonable["hello"]["c"] == 3
+        assert clean_recursive_msonable["test"] == "hi"
+
+        d = {"hello": [GoodMSONClass(1, 2, 3), "test"], "test": "hi"}
+        clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
+        assert clean_recursive_msonable["hello"][0]["a"] == 1
+        assert clean_recursive_msonable["hello"][0]["b"] == 2
+        assert clean_recursive_msonable["hello"][0]["c"] == 3
+        assert clean_recursive_msonable["hello"][1] == "test"
+        assert clean_recursive_msonable["test"] == "hi"
+
+        d = {"hello": (GoodMSONClass(1, 2, 3), "test"), "test": "hi"}
+        clean_recursive_msonable = jsanitize(d, recursive_msonable=True)
+        assert clean_recursive_msonable["hello"][0]["a"] == 1
+        assert clean_recursive_msonable["hello"][0]["b"] == 2
+        assert clean_recursive_msonable["hello"][0]["c"] == 3
+        assert clean_recursive_msonable["hello"][1] == "test"
         assert clean_recursive_msonable["test"] == "hi"
 
         d = {"dt": datetime.datetime.now()}
@@ -851,6 +888,7 @@ class TestJson:
             }
         }
 
+    @pytest.mark.skipif(pydantic is None, reason="pydantic not present")
     def test_pydantic_integrations(self):
         from pydantic import BaseModel, ValidationError
 

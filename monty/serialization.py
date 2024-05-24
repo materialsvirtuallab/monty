@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 try:
     from ruamel.yaml import YAML
 except ImportError:
-    YAML = None
+    YAML = None  # type: ignore
 
 from monty.io import zopen
 from monty.json import MontyDecoder, MontyEncoder

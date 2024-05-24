@@ -1,5 +1,8 @@
 # Change log
 
+## 2024.5.15
+- Reimplemented support for pickle in MSONAble. (@matthewcarbone)
+
 ## 2024.4.17
 - Revert changes to json.py for now.
 
