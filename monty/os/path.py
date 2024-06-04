@@ -27,7 +27,11 @@ def zpath(filename: str) -> str:
         exists). If filename is not found, the same filename is returned
         unchanged.
     """
-    for ext in ["", ".gz", ".GZ", ".bz2", ".BZ2", ".z", ".Z"]:
+    exts = ("", ".gz", ".GZ", ".bz2", ".BZ2", ".z", ".Z")
+    for ext in exts:
+        filename = filename.removesuffix(ext)
+
+    for ext in exts:
         zfilename = f"{filename}{ext}"
         if os.path.exists(zfilename):
             return zfilename
