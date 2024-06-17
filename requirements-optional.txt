@@ -7,3 +7,4 @@ pandas==2.2.2
 orjson==3.10.5
 types-orjson==3.6.2
 types-requests==2.32.0.20240602
+torch==2.3.1

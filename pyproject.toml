@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "monty"
-authors = [
+maintainers = [
     { name = "Shyue Ping Ong", email = "ongsp@ucsd.edu" },
 ]
 description = "Monty is the missing complement to Python."

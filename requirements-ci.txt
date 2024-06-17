@@ -1,9 +1,5 @@
 pytest
 pytest-cov
 coverage
-pycodestyle
 mypy
-pydantic
-black
-pylint
-torch
+ruff
