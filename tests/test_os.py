@@ -1,31 +1,38 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import pytest
 
+from monty.io import zopen
 from monty.os import cd, makedirs_p
 from monty.os.path import find_exts, zpath
 
-test_dir = os.path.join(os.path.dirname(__file__), "test_files")
+module_dir = os.path.dirname(__file__)
+test_dir = os.path.join(module_dir, "test_files")
 
 
 class TestPath:
-    def test_zpath(self):
-        fullzpath = zpath(os.path.join(test_dir, "myfile_gz"))
-        assert os.path.join(test_dir, "myfile_gz.gz") == fullzpath
+    def test_zpath(self, tmp_path: Path):
+        tmp_gz = tmp_path / "tmp.gz"
+        tmp_gz.touch()
+        ret_path = zpath(str(tmp_gz))
+        assert ret_path == str(tmp_gz)
+
+        tmp_not_bz2 = tmp_path / "tmp_not_bz2"
+        tmp_not_bz2.touch()
+
+        ret_path = zpath(f"{tmp_not_bz2}.bz2")
+        assert ret_path == str(tmp_not_bz2)
 
     def test_find_exts(self):
-        assert len(find_exts(os.path.dirname(__file__), "py")) >= 18
-        assert len(find_exts(os.path.dirname(__file__), "bz2")) == 2
-        assert (
-            len(find_exts(os.path.dirname(__file__), "bz2", exclude_dirs="test_files"))
-            == 0
-        )
-        assert (
-            len(find_exts(os.path.dirname(__file__), "bz2", include_dirs="test_files"))
-            == 2
-        )
+        assert len(find_exts(module_dir, "py")) >= 18
+        assert len(find_exts(module_dir, "bz2")) == 2
+        n_bz2_excl_tests = len(find_exts(module_dir, "bz2", exclude_dirs="test_files"))
+        assert n_bz2_excl_tests == 0
+        n_bz2_w_tests = find_exts(module_dir, "bz2", include_dirs="test_files")
+        assert len(n_bz2_w_tests) == 2
 
 
 class TestCd:
