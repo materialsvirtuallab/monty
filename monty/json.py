@@ -766,22 +766,22 @@ class MontyDecoder(json.JSONDecoder):
                     mod = __import__(modname, globals(), locals(), [classname], 0)
                     if hasattr(mod, classname):
                         cls_ = getattr(mod, classname)
-                        d = {k: v for k, v in d.items() if not k.startswith("@")}
+                        data = {k: v for k, v in d.items() if not k.startswith("@")}
                         if hasattr(cls_, "from_dict"):
-                            return cls_.from_dict(d)
+                            return cls_.from_dict(data)
                         if issubclass(cls_, Enum):
                             return cls_(d["value"])
                         if pydantic is not None and issubclass(
                             cls_, pydantic.BaseModel
                         ):  # pylint: disable=E1101
-                            d = {k: self.process_decoded(v) for k, v in d.items()}
+                            d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
                         if (
                             dataclasses is not None
                             and (not issubclass(cls_, MSONable))
                             and dataclasses.is_dataclass(cls_)
                         ):
-                            d = {k: self.process_decoded(v) for k, v in d.items()}
+                            d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
 
                 elif torch is not None and modname == "torch" and classname == "Tensor":
