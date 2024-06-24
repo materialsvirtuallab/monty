@@ -644,7 +644,7 @@ class MontyEncoder(json.JSONEncoder):
 
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
-                d = o.dict()
+                d = o.model_dump()
             elif (
                 dataclasses is not None
                 and (not issubclass(o.__class__, MSONable))
