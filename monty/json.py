@@ -709,6 +709,7 @@ class MontyDecoder(json.JSONDecoder):
                 if cls_redirect := MSONable.REDIRECT.get(modname, {}).get(classname):
                     classname = cls_redirect["@class"]
                     modname = cls_redirect["@module"]
+
             elif "@module" in d and "@callable" in d:
                 modname = d["@module"]
                 objname = d["@callable"]
@@ -739,12 +740,12 @@ class MontyDecoder(json.JSONDecoder):
                 classname = None
 
             if classname:
-                if modname and modname not in [
+                if modname and modname not in {
                     "bson.objectid",
                     "numpy",
                     "pandas",
                     "torch",
-                ]:
+                }:
                     if modname == "datetime" and classname == "datetime":
                         try:
                             dt = datetime.datetime.strptime(
@@ -756,32 +757,33 @@ class MontyDecoder(json.JSONDecoder):
                             )
                         return dt
 
-                    if modname == "uuid" and classname == "UUID":
+                    elif modname == "uuid" and classname == "UUID":
                         return UUID(d["string"])
 
-                    if modname == "pathlib" and classname == "Path":
+                    elif modname == "pathlib" and classname == "Path":
                         return Path(d["string"])
 
                     mod = __import__(modname, globals(), locals(), [classname], 0)
                     if hasattr(mod, classname):
                         cls_ = getattr(mod, classname)
-                        data = {k: v for k, v in d.items() if not k.startswith("@")}
+                        d = {k: v for k, v in d.items() if not k.startswith("@")}
                         if hasattr(cls_, "from_dict"):
-                            return cls_.from_dict(data)
+                            return cls_.from_dict(d)
                         if issubclass(cls_, Enum):
                             return cls_(d["value"])
                         if pydantic is not None and issubclass(
                             cls_, pydantic.BaseModel
                         ):  # pylint: disable=E1101
-                            d = {k: self.process_decoded(v) for k, v in data.items()}
+                            d = {k: self.process_decoded(v) for k, v in d.items()}
                             return cls_(**d)
                         if (
                             dataclasses is not None
                             and (not issubclass(cls_, MSONable))
                             and dataclasses.is_dataclass(cls_)
                         ):
-                            d = {k: self.process_decoded(v) for k, v in data.items()}
+                            d = {k: self.process_decoded(v) for k, v in d.items()}
                             return cls_(**d)
+
                 elif torch is not None and modname == "torch" and classname == "Tensor":
                     if "Complex" in d["dtype"]:
                         return torch.tensor(  # pylint: disable=E1101
@@ -791,6 +793,7 @@ class MontyDecoder(json.JSONDecoder):
                             ],
                         ).type(d["dtype"])
                     return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
+
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
@@ -801,6 +804,7 @@ class MontyDecoder(json.JSONDecoder):
                             dtype=d["dtype"],
                         )
                     return np.array(d["data"], dtype=d["dtype"])
+
                 elif modname == "pandas":
                     import pandas as pd
 
@@ -810,6 +814,7 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
+
                 elif (
                     (bson is not None)
                     and modname == "bson.objectid"
