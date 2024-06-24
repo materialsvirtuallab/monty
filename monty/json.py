@@ -749,11 +749,11 @@ class MontyDecoder(json.JSONDecoder):
                     if modname == "datetime" and classname == "datetime":
                         try:
                             dt = datetime.datetime.strptime(
-                                d["string"], "%Y-%m-%d %H:%M:%S.%f"
+                                d["string"].rstrip("+00:00"), "%Y-%m-%d %H:%M:%S.%f"
                             )
                         except ValueError:
                             dt = datetime.datetime.strptime(
-                                d["string"], "%Y-%m-%d %H:%M:%S"
+                                d["string"].rstrip("+00:00"), "%Y-%m-%d %H:%M:%S"
                             )
                         return dt
 
