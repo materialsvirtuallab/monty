@@ -748,6 +748,7 @@ class MontyDecoder(json.JSONDecoder):
                 }:
                     if modname == "datetime" and classname == "datetime":
                         try:
+                            # Remove timezone info in the form of "+xx:00"
                             dt = datetime.datetime.strptime(
                                 d["string"].split("+")[0], "%Y-%m-%d %H:%M:%S.%f"
                             )
