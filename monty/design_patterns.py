@@ -102,9 +102,9 @@ def cached_class(cls: type[Klass]) -> type[Klass]:
                 return (cls, args, {})
         raise ValueError("Instance not found in cache")
 
-    cls.__new__ = new_new
-    cls.__init__ = new_init
-    cls.__reduce__ = reduce
+    cls.__new__ = new_new  # type: ignore[method-assign]
+    cls.__init__ = new_init  # type: ignore[method-assign]
+    cls.__reduce__ = reduce  # type: ignore[method-assign]
 
     return cls
 
