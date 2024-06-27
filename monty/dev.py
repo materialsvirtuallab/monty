@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 def deprecated(
-    replacement: Optional[Callable] = None,
+    replacement: Optional[Callable | str] = None,
     message: str = "",
     deadline: Optional[tuple[int, int, int]] = None,
     category: Type[Warning] = FutureWarning,
@@ -31,7 +31,7 @@ def deprecated(
     Decorator to mark classes or functions as deprecated, with a possible replacement.
 
     Args:
-        replacement (callable): A replacement class or method.
+        replacement (Callable | str): A replacement class or function.
         message (str): A warning message to be displayed.
         deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
             of the old function/class, in format (yyyy, MM, dd). A CI warning would
@@ -44,7 +44,7 @@ def deprecated(
             the choice accordingly.
 
     Returns:
-        Original function, but with a warning to use the updated class.
+        Original function, but with a warning to use the updated function.
     """
 
     def raise_deadline_warning() -> None:
@@ -88,7 +88,7 @@ def deprecated(
 
     def craft_message(
         old: Callable,
-        replacement: Callable,
+        replacement: Callable | str,
         message: str,
         deadline: datetime,
     ) -> str:
@@ -98,18 +98,23 @@ def deprecated(
             msg += f", and will be removed on {_deadline:%Y-%m-%d}\n"
 
         if replacement is not None:
-            if isinstance(replacement, property):
-                r = replacement.fget
-            elif isinstance(replacement, (classmethod, staticmethod)):
-                r = replacement.__func__
-            else:
-                r = replacement
-
             if deadline is None:
                 msg += "; use "  # for better formatting
             else:
                 msg += "Use "
-            msg += f"{r.__name__} in {r.__module__} instead."
+
+            if isinstance(replacement, str):
+                msg += f"{replacement} instead."
+
+            else:
+                if isinstance(replacement, property):
+                    r = replacement.fget
+                elif isinstance(replacement, (classmethod, staticmethod)):
+                    r = replacement.__func__
+                else:
+                    r = replacement
+
+                msg += f"{r.__name__} in {r.__module__} instead."
 
         if message:
             msg += "\n" + message

@@ -29,6 +29,18 @@ class TestDecorator:
             assert issubclass(w[0].category, FutureWarning)
             assert "Use func_replace instead" in str(w[0].message)
 
+    def test_deprecated_str_replacement(self):
+        @deprecated("func_replace")
+        def func_old():
+            pass
+
+        with warnings.catch_warnings(record=True) as w:
+            # Trigger a warning.
+            func_old()
+            # Verify Warning and message
+            assert issubclass(w[0].category, FutureWarning)
+            assert "use func_replace instead" in str(w[0].message)
+
     def test_deprecated_property(self):
         class TestClass:
             """A dummy class for tests."""
