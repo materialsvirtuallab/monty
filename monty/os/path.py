@@ -11,10 +11,11 @@ from monty.fnmatch import WildCard
 from monty.string import list_strings
 
 if TYPE_CHECKING:
+    from pathlib import Path
     from typing import Callable, Literal, Optional, Union
 
 
-def zpath(filename: str) -> str:
+def zpath(filename: Union[str, Path]) -> str:
     """
     Returns an existing (zipped or unzipped) file path given the unzipped
     version. If no path exists, returns the filename unmodified.
