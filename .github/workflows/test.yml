@@ -26,7 +26,7 @@ jobs:
           pip install -e '.[ci]'
 
       - name: pytest
-        run: pytest --cov=monty --cov-report html:coverage_reports monty tests
+        run: pytest --cov=monty --cov-report html:coverage_reports tests
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
