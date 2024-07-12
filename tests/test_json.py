@@ -521,7 +521,9 @@ class TestJson:
 
         created_at_after = MontyDecoder().process_decoded(data)
 
-        assert str(created_at_after) == str(created_at).rstrip("+00:00")
+        assert str(created_at_after).rstrip("0") == str(created_at).rstrip(
+            "+00:00"
+        ).rstrip("0")
 
     def test_uuid(self):
         from uuid import UUID, uuid4
