@@ -23,8 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements-optional.txt -r requirements-ci.txt
-          pip install -e .
+          pip install -e '.[ci]'
 
       - name: pytest
         run: pytest --cov=monty --cov-report html:coverage_reports monty tests

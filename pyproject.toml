@@ -23,6 +23,27 @@ dependencies = [
 ]
 version = "2024.7.12"
 
+[project.optional-dependencies]
+ci = [
+    "pytest>=8",
+    "pytest-cov>=4",
+    "coverage",
+    "numpy",
+    "ruamel.yaml",
+    "msgpack",
+    "tqdm",
+    "pymongo",
+    "pandas",
+    "orjson",
+    "types-orjson",
+    "types-requests",
+    "torch"
+]
+docs = [
+    "sphinx",
+    "sphinx_rtd_theme",
+]
+
 [tool.setuptools]
 packages = ["monty"]
 
