@@ -644,7 +644,7 @@ class MontyEncoder(json.JSONEncoder):
 
         try:
             if pydantic is not None and isinstance(o, pydantic.BaseModel):
-                d = o.dict()
+                d = o.model_dump()
             elif (
                 dataclasses is not None
                 and (not issubclass(o.__class__, MSONable))
@@ -709,6 +709,7 @@ class MontyDecoder(json.JSONDecoder):
                 if cls_redirect := MSONable.REDIRECT.get(modname, {}).get(classname):
                     classname = cls_redirect["@class"]
                     modname = cls_redirect["@module"]
+
             elif "@module" in d and "@callable" in d:
                 modname = d["@module"]
                 objname = d["@callable"]
@@ -739,27 +740,28 @@ class MontyDecoder(json.JSONDecoder):
                 classname = None
 
             if classname:
-                if modname and modname not in [
+                if modname and modname not in {
                     "bson.objectid",
                     "numpy",
                     "pandas",
                     "torch",
-                ]:
+                }:
                     if modname == "datetime" and classname == "datetime":
                         try:
+                            # Remove timezone info in the form of "+xx:00"
                             dt = datetime.datetime.strptime(
-                                d["string"], "%Y-%m-%d %H:%M:%S.%f"
+                                d["string"].split("+")[0], "%Y-%m-%d %H:%M:%S.%f"
                             )
                         except ValueError:
                             dt = datetime.datetime.strptime(
-                                d["string"], "%Y-%m-%d %H:%M:%S"
+                                d["string"].split("+")[0], "%Y-%m-%d %H:%M:%S"
                             )
                         return dt
 
-                    if modname == "uuid" and classname == "UUID":
+                    elif modname == "uuid" and classname == "UUID":
                         return UUID(d["string"])
 
-                    if modname == "pathlib" and classname == "Path":
+                    elif modname == "pathlib" and classname == "Path":
                         return Path(d["string"])
 
                     mod = __import__(modname, globals(), locals(), [classname], 0)
@@ -782,6 +784,7 @@ class MontyDecoder(json.JSONDecoder):
                         ):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
+
                 elif torch is not None and modname == "torch" and classname == "Tensor":
                     if "Complex" in d["dtype"]:
                         return torch.tensor(  # pylint: disable=E1101
@@ -791,6 +794,7 @@ class MontyDecoder(json.JSONDecoder):
                             ],
                         ).type(d["dtype"])
                     return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
+
                 elif np is not None and modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
@@ -801,6 +805,7 @@ class MontyDecoder(json.JSONDecoder):
                             dtype=d["dtype"],
                         )
                     return np.array(d["data"], dtype=d["dtype"])
+
                 elif modname == "pandas":
                     import pandas as pd
 
@@ -810,6 +815,7 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
+
                 elif (
                     (bson is not None)
                     and modname == "bson.objectid"

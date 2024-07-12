@@ -516,6 +516,14 @@ class TestJson:
 
         jsanitize(dt, strict=True)
 
+        # test timezone aware datetime API
+        created_at = datetime.datetime.now(tz=datetime.timezone.utc)
+        data = json.loads(json.dumps(created_at, cls=MontyEncoder))
+
+        created_at_after = MontyDecoder().process_decoded(data)
+
+        assert str(created_at_after) == str(created_at).rstrip("+00:00")
+
     def test_uuid(self):
         from uuid import UUID, uuid4
 
