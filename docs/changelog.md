@@ -1,6 +1,6 @@
 # Change log
 
-## 2024.6.12
+## 2024.7.12
 - Make cached_class decorated classes picklable  (@janosh)
 - deprecated decorator allow replacement as string (@DanielYang59)
 - Fix (de)serialization datetime with timezone information (@DanielYang59)
