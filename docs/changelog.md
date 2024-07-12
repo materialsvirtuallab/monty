@@ -1,5 +1,10 @@
 # Change log
 
+## 2024.6.12
+- Make cached_class decorated classes picklable  (@janosh)
+- deprecated decorator allow replacement as string (@DanielYang59)
+- Fix (de)serialization datetime with timezone information (@DanielYang59)
+
 ## 2024.5.24
 - Fix serious regression introduced in list_strings (@gmatteo)
 - Extend dev.deprecated to decorate classes and improve message (@DanielYang59)
