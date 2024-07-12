@@ -28,7 +28,7 @@ ci = [
     "pytest>=8",
     "pytest-cov>=4",
     "coverage",
-    "numpy",
+    "numpy<2.0.0",
     "ruamel.yaml",
     "msgpack",
     "tqdm",
@@ -44,8 +44,9 @@ docs = [
     "sphinx_rtd_theme",
 ]
 
-[tool.setuptools]
-packages = ["monty"]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["monty"]
 
 [tool.black]
 line-length = 120
