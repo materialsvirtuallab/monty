@@ -4,9 +4,11 @@ Some common design patterns such as singleton and cached classes.
 
 from __future__ import annotations
 
+import inspect
 import os
 from functools import wraps
-from typing import Hashable, TypeVar
+from typing import Any, Dict, Hashable, Tuple, TypeVar
+from weakref import WeakValueDictionary
 
 
 def singleton(cls):
@@ -35,7 +37,7 @@ def singleton(cls):
 Klass = TypeVar("Klass")
 
 
-def cached_class(klass: type[Klass]) -> type[Klass]:
+def cached_class(cls: type[Klass]) -> type[Klass]:
     """
     Decorator to cache class instances by constructor arguments.
     This results in a class that behaves like a singleton for each
@@ -46,56 +48,65 @@ def cached_class(klass: type[Klass]) -> type[Klass]:
     avoid using this decorator for situations where there are many
     constructor arguments permutations.
 
-    The keywords argument dictionary is converted to a tuple because
-    dicts are mutable; keywords themselves are strings and
-    so are always hashable, but if any arguments (keyword
-    or positional) are non-hashable, that set of arguments
+    If any arguments are non-hashable, that set of arguments
     is not cached.
     """
-    cache: dict[tuple[Hashable, ...], type[Klass]] = {}
+    orig_new = cls.__new__
+    orig_init = cls.__init__
+    cache: WeakValueDictionary = WeakValueDictionary()
 
-    @wraps(klass, assigned=("__name__", "__module__"), updated=())
-    class _decorated(klass):  # type: ignore
-        # The wraps decorator can't do this because __doc__
-        # isn't writable once the class is created
-        __doc__ = klass.__doc__
+    @wraps(orig_new)
+    def new_new(cls, *args: Any, **kwargs: Any) -> Any:
+        # Normalize arguments
+        sig = inspect.signature(orig_init)
+        bound_args = sig.bind(None, *args, **kwargs)
+        bound_args.apply_defaults()
 
-        def __new__(cls, *args, **kwargs):
-            """
-            Pass through.
-            """
-            key = (cls, *args, *tuple(kwargs.items()))
-            try:
-                inst = cache.get(key)
-            except TypeError:
-                # Can't cache this set of arguments
-                inst = key = None
-            if inst is None:
-                # Technically this is cheating, but it works,
-                # and takes care of initializing the instance
-                # (so we can override __init__ below safely);
-                # calling up to klass.__new__ would be the
-                # "official" way to create the instance, but
-                # that raises DeprecationWarning if there are
-                # args or kwargs and klass does not override
-                # __new__ (which most classes don't), because
-                # object.__new__ takes no parameters (and in
-                # Python 3 the warning will become an error)
-                inst = klass(*args, **kwargs)
-                # This makes isinstance and issubclass work
-                # properly
-                inst.__class__ = cls
-                if key is not None:
-                    cache[key] = inst
-            return inst
+        # Remove 'self' from the arguments
+        normalized_args = tuple(bound_args.arguments.values())[1:]
 
-        def __init__(self, *args, **kwargs):
-            # This will be called every time __new__ is
-            # called, so we skip initializing here and do
-            # it only when the instance is created above
-            pass
+        try:
+            key = (cls, normalized_args)
+            if key in cache:
+                return cache[key]
 
-    return _decorated
+            if orig_new is object.__new__:
+                instance = orig_new(cls)
+            else:
+                instance = orig_new(cls, *args, **kwargs)
+
+            orig_init(instance, *args, **kwargs)
+            instance._initialized = True
+            cache[key] = instance
+            return instance
+        except TypeError:
+            # Can't cache this set of arguments
+            if orig_new is object.__new__:
+                instance = orig_new(cls)
+            else:
+                instance = orig_new(cls, *args, **kwargs)
+            orig_init(instance, *args, **kwargs)
+            instance._initialized = True
+            return instance
+
+    @wraps(orig_init)
+    def new_init(self: Any, *args: Any, **kwargs: Any) -> None:
+        if not hasattr(self, "_initialized"):
+            orig_init(self, *args, **kwargs)
+            self._initialized = True
+
+    def reduce(self: Any) -> Tuple[type, Tuple, Dict[str, Any]]:
+        for key, value in cache.items():
+            if value is self:
+                cls, args = key
+                return (cls, args, {})
+        raise ValueError("Instance not found in cache")
+
+    cls.__new__ = new_new  # type: ignore[method-assign]
+    cls.__init__ = new_init  # type: ignore[method-assign]
+    cls.__reduce__ = reduce  # type: ignore[method-assign]
+
+    return cls
 
 
 class NullFile:
