@@ -626,6 +626,19 @@ class MontyEncoder(json.JSONEncoder):
                 "data": o.to_json(default_handler=MontyEncoder().encode),
             }
 
+        if _check_type(o, "pint.Quantity"):
+            d = {
+                "@module": "pint",
+                "@class": "Quantity",
+                "data": str(o),
+            }
+            try:
+                module_version = import_module("pint").__version__  # type: ignore
+                d["@version"] = str(module_version)
+            except (AttributeError, ImportError):
+                d["@version"] = None  # type: ignore
+            return d
+
         if bson is not None and isinstance(o, bson.objectid.ObjectId):
             return {
                 "@module": "bson.objectid",
@@ -744,6 +757,7 @@ class MontyDecoder(json.JSONDecoder):
                     "bson.objectid",
                     "numpy",
                     "pandas",
+                    "pint",
                     "torch",
                 }:
                     if modname == "datetime" and classname == "datetime":
@@ -815,6 +829,14 @@ class MontyDecoder(json.JSONDecoder):
                     if classname == "Series":
                         decoded_data = MontyDecoder().decode(d["data"])
                         return pd.Series(decoded_data)
+
+                elif modname == "pint":
+                    from pint import UnitRegistry
+
+                    ureg = UnitRegistry()
+
+                    if classname == "Quantity":
+                        return ureg.Quantity(d["data"])
 
                 elif (
                     (bson is not None)
