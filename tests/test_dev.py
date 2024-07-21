@@ -6,7 +6,6 @@ import warnings
 from unittest.mock import patch
 
 import pytest
-
 from monty.dev import deprecated, install_excepthook, requires
 
 # Set all warnings to always be triggered.
