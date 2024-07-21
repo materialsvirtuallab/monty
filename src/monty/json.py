@@ -23,22 +23,22 @@ from uuid import UUID, uuid4
 try:
     import numpy as np
 except ImportError:
-    np = None  # type: ignore
+    np = None
 
 try:
     import pydantic
 except ImportError:
-    pydantic = None  # type: ignore
+    pydantic = None
 
 try:
     from pydantic_core import core_schema
 except ImportError:
-    core_schema = None  # type: ignore
+    core_schema = None
 
 try:
     import bson
 except ImportError:
-    bson = None  # type: ignore
+    bson = None
 
 try:
     from ruamel.yaml import YAML
