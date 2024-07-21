@@ -17,8 +17,10 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, cast
 from uuid import UUID, uuid4
+
+from _typeshed import DataclassInstance
 
 try:
     import numpy as np
@@ -174,17 +176,17 @@ class MSONable:
         """
         A JSON serializable dict representation of an object.
         """
-        d = {
+        d: dict[str, Any] = {
             "@module": self.__class__.__module__,
             "@class": self.__class__.__name__,
         }
 
         try:
             parent_module = self.__class__.__module__.split(".", maxsplit=1)[0]
-            module_version = import_module(parent_module).__version__  # type: ignore
+            module_version = import_module(parent_module).__version__
             d["@version"] = str(module_version)
         except (AttributeError, ImportError):
-            d["@version"] = None  # type: ignore
+            d["@version"] = None
 
         spec = getfullargspec(self.__class__.__init__)
 
@@ -225,21 +227,24 @@ class MSONable:
                         )
                 d[c] = recursive_as_dict(a)
         if hasattr(self, "kwargs"):
-            # type: ignore
-            d.update(**self.kwargs)  # pylint: disable=E1101
+            d.update(**self.kwargs)
         if spec.varargs is not None and getattr(self, spec.varargs, None) is not None:
             d.update({spec.varargs: getattr(self, spec.varargs)})
         if hasattr(self, "_kwargs"):
-            d.update(**self._kwargs)  # pylint: disable=E1101
+            d.update(**self._kwargs)
         if isinstance(self, Enum):
-            d.update({"value": self.value})  # pylint: disable=E1101
+            d.update({"value": self.value})
         return d
 
     @classmethod
     def from_dict(cls, d):
         """
-        :param d: Dict representation.
-        :return: MSONable class.
+
+        Args:
+            d: Dict representation.
+
+        Returns:
+            MSONable class.
         """
         decoded = {
             k: MontyDecoder().process_decoded(v)
@@ -547,11 +552,13 @@ class MontyEncoder(json.JSONEncoder):
         json.dumps(object, cls=MontyEncoder)
     """
 
-    def __init__(self, *args, allow_unserializable_objects=False, **kwargs):
+    def __init__(
+        self, *args, allow_unserializable_objects: bool = False, **kwargs
+    ) -> None:
         super().__init__(*args, **kwargs)
         self._allow_unserializable_objects = allow_unserializable_objects
-        self._name_object_map: Dict[str, Any] = {}
-        self._index = 0
+        self._name_object_map: dict[str, Any] = {}
+        self._index: int = 0
 
     def _update_name_object_map(self, o):
         name = f"{self._index:012}-{str(uuid4())}"
@@ -559,15 +566,17 @@ class MontyEncoder(json.JSONEncoder):
         self._name_object_map[name] = o
         return {"@object_reference": name}
 
-    def default(self, o) -> dict:  # pylint: disable=E0202
+    def default(self, o) -> dict:
         """
         Overriding default method for JSON encoding. This method does two
         things: (a) If an object has a to_dict property, return the to_dict
         output. (b) If the @module and @class keys are not in the to_dict,
         add them to the output automatically. If the object has no to_dict
         property, the default Python json encoder default method is called.
+
         Args:
             o: Python object.
+
         Return:
             Python dict representation.
         """
@@ -584,13 +593,13 @@ class MontyEncoder(json.JSONEncoder):
 
         if torch is not None and isinstance(o, torch.Tensor):
             # Support for Pytorch Tensors.
-            d = {
+            d: dict[str, Any] = {
                 "@module": "torch",
                 "@class": "Tensor",
                 "dtype": o.type(),
             }
             if "Complex" in o.type():
-                d["data"] = [o.real.tolist(), o.imag.tolist()]  # type: ignore
+                d["data"] = [o.real.tolist(), o.imag.tolist()]
             else:
                 d["data"] = o.numpy().tolist()
             return d
@@ -651,7 +660,8 @@ class MontyEncoder(json.JSONEncoder):
                 and dataclasses.is_dataclass(o)
             ):
                 # This handles dataclasses that are not subclasses of MSONAble.
-                d = dataclasses.asdict(o)
+
+                d = dataclasses.asdict(cast(o, DataclassInstance))
             elif hasattr(o, "as_dict"):
                 d = o.as_dict()
             elif isinstance(o, Enum):
@@ -673,10 +683,10 @@ class MontyEncoder(json.JSONEncoder):
             if "@version" not in d:
                 try:
                     parent_module = o.__class__.__module__.split(".")[0]
-                    module_version = import_module(parent_module).__version__  # type: ignore
+                    module_version = import_module(parent_module).__version__
                     d["@version"] = str(module_version)
                 except (AttributeError, ImportError):
-                    d["@version"] = None  # type: ignore
+                    d["@version"] = None
             return d
         except AttributeError:
             return json.JSONEncoder.default(self, o)
