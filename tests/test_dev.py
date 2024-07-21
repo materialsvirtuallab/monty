@@ -3,9 +3,11 @@ from __future__ import annotations
 import datetime
 import unittest
 import warnings
+from dataclasses import dataclass
 from unittest.mock import patch
 
 import pytest
+
 from monty.dev import deprecated, install_excepthook, requires
 
 # Set all warnings to always be triggered.
@@ -134,6 +136,32 @@ class TestDecorator:
         assert old_class.__module__ == __name__
 
         assert old_class.method_b.__doc__ == "This is method_b."
+
+    def test_deprecated_dataclass(self):
+        @dataclass
+        class TestClassNew:
+            """A dummy class for tests."""
+
+            def method_a(self):
+                pass
+
+        @deprecated(replacement=TestClassNew)
+        @dataclass
+        class TestClassOld:
+            """A dummy old class for tests."""
+
+            class_attrib_old = "OLD_ATTRIB"
+
+            def method_b(self):
+                """This is method_b."""
+                pass
+
+        with pytest.warns(FutureWarning, match="TestClassOld is deprecated"):
+            old_class = TestClassOld()
+
+        # Check metadata preservation
+        assert old_class.__doc__ == "A dummy old class for tests."
+        assert old_class.class_attrib_old == "OLD_ATTRIB"
 
     def test_deprecated_deadline(self, monkeypatch):
         with pytest.raises(DeprecationWarning):
