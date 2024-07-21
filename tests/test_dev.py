@@ -6,6 +6,7 @@ import warnings
 from unittest.mock import patch
 
 import pytest
+
 from monty.dev import deprecated, install_excepthook, requires
 
 # Set all warnings to always be triggered.
@@ -19,6 +20,7 @@ class TestDecorator:
 
         @deprecated(func_replace, "Use func_replace instead")
         def func_old():
+            """This is the old function."""
             pass
 
         with warnings.catch_warnings(record=True) as w:
@@ -27,6 +29,10 @@ class TestDecorator:
             # Verify Warning and message
             assert issubclass(w[0].category, FutureWarning)
             assert "Use func_replace instead" in str(w[0].message)
+
+        # Check metadata preservation
+        assert func_old.__name__ == "func_old"
+        assert func_old.__doc__ == "This is the old function."
 
     def test_deprecated_str_replacement(self):
         @deprecated("func_replace")
@@ -112,13 +118,23 @@ class TestDecorator:
 
         @deprecated(replacement=TestClassNew)
         class TestClassOld:
-            """A dummy class for tests."""
+            """A dummy old class for tests."""
+
+            class_attrib_old = "OLD_ATTRIB"
 
             def method_b(self):
+                """This is method_b."""
                 pass
 
         with pytest.warns(FutureWarning, match="TestClassOld is deprecated"):
-            TestClassOld()
+            old_class = TestClassOld()
+
+        # Check metadata preservation
+        assert TestClassOld.__doc__ == "A dummy old class for tests."
+        assert old_class.class_attrib_old == "OLD_ATTRIB"
+        assert TestClassOld.__module__ == __name__
+
+        assert TestClassOld.method_b.__doc__ == "This is method_b."
 
     def test_deprecated_deadline(self, monkeypatch):
         with pytest.raises(DeprecationWarning):
