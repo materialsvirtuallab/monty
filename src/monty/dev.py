@@ -121,6 +121,7 @@ def deprecated(
         return msg
 
     def deprecated_function_decorator(old: Callable) -> Callable:
+        @functools.wraps(old)
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
@@ -131,6 +132,7 @@ def deprecated(
     def deprecated_class_decorator(cls: Type) -> Type:
         original_init = cls.__init__
 
+        @functools.wraps(original_init)
         def new_init(self, *args, **kwargs):
             msg = craft_message(cls, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
