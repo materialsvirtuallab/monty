@@ -17,10 +17,8 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
-from typing import Any, cast
+from typing import Any
 from uuid import UUID, uuid4
-
-from _typeshed import DataclassInstance
 
 try:
     import numpy as np
@@ -660,8 +658,7 @@ class MontyEncoder(json.JSONEncoder):
                 and dataclasses.is_dataclass(o)
             ):
                 # This handles dataclasses that are not subclasses of MSONAble.
-
-                d = dataclasses.asdict(cast(o, DataclassInstance))
+                d = dataclasses.asdict(o)  # type: ignore[call-overload]
             elif hasattr(o, "as_dict"):
                 d = o.as_dict()
             elif isinstance(o, Enum):
