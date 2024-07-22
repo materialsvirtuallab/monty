@@ -132,8 +132,8 @@ def deprecated(
 
     def deprecated_class_decorator(cls: Type) -> Type:
         # Modify __post_init__ for dataclass
-        if is_dataclass(cls):
-            original_init = cls.__post_init__  # type: ignore[attr-defined]
+        if is_dataclass(cls) and hasattr(cls, "__post_init__"):
+            original_init = cls.__post_init__
         else:
             original_init = cls.__init__
 
@@ -143,8 +143,8 @@ def deprecated(
             warnings.warn(msg, category=category, stacklevel=2)
             original_init(self, *args, **kwargs)
 
-        if is_dataclass(cls):
-            cls.__post_init__ = new_init  # type: ignore[attr-defined]
+        if is_dataclass(cls) and hasattr(cls, "__post_init__"):
+            cls.__post_init__ = new_init
         else:
             cls.__init__ = new_init
 
