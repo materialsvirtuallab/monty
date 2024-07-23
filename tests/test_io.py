@@ -113,10 +113,10 @@ class TestReverseReadfile:
 
         # Test Windows (line ends with "\r\n")
         with ScratchDir("./test_files"):
-            with open("sample_unix_mac.txt", "w", newline="\r\n") as file:
+            with open("sample_windows.txt", "w", newline="\r\n") as file:
                 file.write("\r\n".join(contents))
 
-            for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
+            for idx, line in enumerate(reverse_readfile("sample_windows.txt")):
                 assert line == contents[len(contents) - idx - 1]
 
 
