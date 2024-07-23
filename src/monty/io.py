@@ -47,9 +47,9 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     ext = ext.upper()
     if ext == ".BZ2":
         return bz2.open(filename, *args, **kwargs)
-    if ext in (".GZ", ".Z"):
+    if ext in {".GZ", ".Z"}:
         return gzip.open(filename, *args, **kwargs)
-    if (lzma is not None) and (ext in (".XZ", ".LZMA")):
+    if (lzma is not None) and (ext in {".XZ", ".LZMA"}):
         return lzma.open(filename, *args, **kwargs)
     return open(filename, *args, **kwargs)  # pylint: disable=R1732
 
@@ -59,27 +59,27 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
     reverse_readline, but at least 2x faster for large files (the primary use
-    of such a method).
+    of such a function).
 
     Args:
-        filename (str):
-            Name of file to read.
+        filename (str | Path): File to read.
 
     Yields:
         Lines from the file in reverse order.
     """
     try:
-        with zopen(filename, "rb") as f:
-            if isinstance(f, (gzip.GzipFile, bz2.BZ2File)):
-                for line in reversed(f.readlines()):
+        with zopen(filename, "rb") as file:
+            if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
+                for line in reversed(file.readlines()):
                     yield line.decode("utf-8").rstrip()
             else:
-                fm = mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ)
-                n = len(fm)
+                filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
+                n = len(filemap)
                 while n > 0:
-                    i = fm.rfind(b"\n", 0, n)
-                    yield fm[i + 1 : n].decode("utf-8").strip("\n")
+                    i = filemap.rfind(b"\n", 0, n)
+                    yield filemap[i + 1 : n].decode("utf-8").strip("\n")
                     n = i
+
     except ValueError:
         return
 
@@ -88,7 +88,7 @@ def reverse_readline(
     m_file, blk_size: int = 4096, max_mem: int = 4000000
 ) -> Generator[str, str, None]:
     """
-    Generator method to read a file line-by-line, but backwards. This allows
+    Read a file line-by-line, but backwards. This allows
     one to efficiently get data at the end of a file.
 
     Based on code by Peter Astrand <astrand@cendio.se>, using modifications by
@@ -110,8 +110,8 @@ def reverse_readline(
             this sets the maximum block size.
 
     Returns:
-        Generator that returns lines from the file. Similar behavior to the
-        file.readline() method, except the lines are returned from the back
+        Generator that yield lines from the file. Behave similarly to the
+        file.readline() function, except the lines are returned from the end
         of the file.
     """
     # Check if the file stream is a bit stream or not
