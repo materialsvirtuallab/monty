@@ -6,6 +6,7 @@ import weakref
 from typing import Any
 
 import pytest
+
 from monty.design_patterns import cached_class, singleton
 
 
