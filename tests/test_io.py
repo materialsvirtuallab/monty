@@ -82,7 +82,7 @@ class TestReverseReadline:
         # Mock Windows
         with patch("os.name", "nt"):
             windows_line_end = os.linesep
-            assert linux_line_end == "\r\n"
+            assert windows_line_end == "\r\n"
 
             with ScratchDir("./test_files"):
                 with open("sample_windows.txt", "w", newline=windows_line_end) as file:
@@ -150,7 +150,7 @@ class TestReverseReadfile:
         # Mock Windows
         with patch("os.name", "nt"):
             windows_line_end = os.linesep
-            assert linux_line_end == "\r\n"
+            assert windows_line_end == "\r\n"
 
             with ScratchDir("./test_files"):
                 with open("sample_windows.txt", "w", newline=windows_line_end) as file:
