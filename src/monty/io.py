@@ -91,15 +91,16 @@ def reverse_readline(
     Generator function to read a file line-by-line, but backwards.
     This allows one to efficiently get data at the end of a file.
 
-    Based on code by Peter Astrand <astrand@cendio.se>, using modifications by
-    Raymond Hettinger and Kevin German.
-    http://code.activestate.com/recipes/439045-read-a-text-file-backwards
-    -yet-another-implementat/
-
     Read file forwards and reverse in memory for files smaller than the
     max_mem parameter, or for gzip files where reverse seeks are not supported.
 
     Files larger than max_mem are dynamically read backwards.
+
+    Reference:
+        Based on code by Peter Astrand <astrand@cendio.se>, using modifications
+        by Raymond Hettinger and Kevin German.
+        http://code.activestate.com/recipes/439045-read-a-text-file-backwards
+        -yet-another-implementat/
 
     Args:
         m_file (File): File stream to read (backwards)
@@ -141,17 +142,17 @@ def reverse_readline(
         m_file.seek(0, 2)
         lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
 
-        trailing_newline = lastchar == "\n"
+        trailing_newline = lastchar == os.linesep
 
         while True:
-            newline_pos = buf.rfind("\n")
+            newline_pos = buf.rfind(os.linesep)
             pos = m_file.tell()
             if newline_pos != -1:
                 # Found a newline
                 line = buf[newline_pos + 1 :]
                 buf = buf[:newline_pos]
                 if pos or newline_pos or trailing_newline:
-                    line += "\n"
+                    line += os.linesep
                 yield line
 
             elif pos:
@@ -164,7 +165,7 @@ def reverse_readline(
                     buf = m_file.read(toread).decode("utf-8") + buf
                 m_file.seek(pos - toread, 0)
                 if pos == toread:
-                    buf = "\n" + buf
+                    buf = os.linesep + buf
 
             else:
                 # Start-of-file

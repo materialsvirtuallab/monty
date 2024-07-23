@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
-from unittest.mock import patch
 
 from monty.io import (
     FileLock,
@@ -63,29 +63,35 @@ class TestReverseReadline:
             for _line in reverse_readline(f):
                 raise ValueError("an empty file is being read!")
 
-    @pytest.mark.skip()  # TODO: WIP
+    @pytest.fixture()
     def test_line_ending(self):
         contents = ("Line1", "Line2", "Line3")
-        linux_line_end = "\n"
-        windows_line_end = "\r\n"
 
-        # Test Linux/MacOS (line ends with "\n")
-        with ScratchDir("./test_files"):
-            with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
-                file.write(linux_line_end.join(contents))
+        # Mock Linux/MacOS
+        with patch("os.name", "posix"):
+            linux_line_end = os.linesep
+            assert linux_line_end == "\n"
 
-            with open("sample_unix_mac.txt") as file:
-                for idx, line in enumerate(reverse_readline(file)):
-                    assert line == contents[len(contents) - idx - 1]
+            with ScratchDir("./test_files"):
+                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                    file.write(linux_line_end.join(contents))
 
-        # Test Windows (line ends with "\r\n")
-        with ScratchDir("./test_files"):
-            with open("sample_windows.txt", "w", newline=windows_line_end) as file:
-                file.write(windows_line_end.join(contents))
+                with open("sample_unix_mac.txt") as file:
+                    for idx, line in enumerate(reverse_readfile(file)):
+                        assert line == contents[len(contents) - idx - 1]
 
-            with open("sample_windows.txt") as file:
-                for idx, line in enumerate(reverse_readline(file)):
-                    assert line == contents[len(contents) - idx - 1]
+        # Mock Windows
+        with patch("os.name", "nt"):
+            windows_line_end = os.linesep
+            assert linux_line_end == "\r\n"
+
+            with ScratchDir("./test_files"):
+                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                    file.write(windows_line_end.join(contents))
+
+                with open("sample_windows.txt") as file:
+                    for idx, line in enumerate(reverse_readfile(file)):
+                        assert line == contents[len(contents) - idx - 1]
 
 
 class TestReverseReadfile:
@@ -131,7 +137,7 @@ class TestReverseReadfile:
         contents = ("Line1", "Line2", "Line3")
 
         # Mock Linux/MacOS
-        with patch('os.name', 'posix'):
+        with patch("os.name", "posix"):
             linux_line_end = os.linesep
             assert linux_line_end == "\n"
 
@@ -143,7 +149,7 @@ class TestReverseReadfile:
                     assert line == contents[len(contents) - idx - 1]
 
         # Mock Windows
-        with patch('os.name', 'nt'):
+        with patch("os.name", "nt"):
             windows_line_end = os.linesep
             assert linux_line_end == "\r\n"
 
