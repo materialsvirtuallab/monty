@@ -4,6 +4,7 @@ JSON serialization and deserialization utilities.
 
 from __future__ import annotations
 
+import dataclasses
 import datetime
 import json
 import os
@@ -50,7 +51,6 @@ try:
 except ImportError:
     orjson = None
 
-import dataclasses
 
 try:
     import torch
