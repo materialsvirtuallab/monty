@@ -43,22 +43,19 @@ except ImportError:
 try:
     from ruamel.yaml import YAML
 except ImportError:
-    YAML = None  # type: ignore
+    YAML = None
 
 try:
     import orjson
 except ImportError:
-    orjson = None  # type: ignore
+    orjson = None
 
-try:
-    import dataclasses
-except ImportError:
-    dataclasses = None  # type: ignore
+import dataclasses
 
 try:
     import torch
 except ImportError:
-    torch = None  # type: ignore
+    torch = None
 
 __version__ = "3.0.0"
 
