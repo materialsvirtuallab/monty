@@ -77,7 +77,7 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
                 n = len(filemap)
                 while n > 0:
                     i = filemap.rfind(b"\n", 0, n)
-                    yield filemap[i + 1 : n].decode("utf-8").strip("\n")
+                    yield filemap[i + 1 : n].decode("utf-8").rstrip()
                     n = i
 
     except ValueError:
