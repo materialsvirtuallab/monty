@@ -13,7 +13,7 @@ import io
 try:
     import lzma
 except ImportError:
-    lzma = None  # type: ignore
+    lzma = None  # type: ignore[assignment]
 import mmap
 import os
 import subprocess
@@ -27,15 +27,15 @@ if TYPE_CHECKING:
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     """
-    This function wraps around the bz2, gzip, lzma, xz and standard python's open
+    This function wraps around the bz2, gzip, lzma, xz and standard Python's open
     function to deal intelligently with bzipped, gzipped or standard text
     files.
 
     Args:
         filename (str/Path): filename or pathlib.Path.
-        *args: Standard args for python open(..). E.g., 'r' for read, 'w' for
+        *args: Standard args for Python open(..). E.g., 'r' for read, 'w' for
             write.
-        **kwargs: Standard kwargs for python open(..).
+        **kwargs: Standard kwargs for Python open(..).
 
     Returns:
         File-like object. Supports with context.
@@ -49,9 +49,9 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
         return bz2.open(filename, *args, **kwargs)
     if ext in {".GZ", ".Z"}:
         return gzip.open(filename, *args, **kwargs)
-    if (lzma is not None) and (ext in {".XZ", ".LZMA"}):
+    if lzma is not None and ext in {".XZ", ".LZMA"}:
         return lzma.open(filename, *args, **kwargs)
-    return open(filename, *args, **kwargs)  # pylint: disable=R1732
+    return open(filename, *args, **kwargs)
 
 
 def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
@@ -96,7 +96,7 @@ def reverse_readline(
     http://code.activestate.com/recipes/439045-read-a-text-file-backwards
     -yet-another-implementat/
 
-    Reads file forwards and reverses in memory for files smaller than the
+    Read file forwards and reverse in memory for files smaller than the
     max_mem parameter, or for gzip files where reverse seeks are not supported.
 
     Files larger than max_mem are dynamically read backwards.
@@ -143,7 +143,7 @@ def reverse_readline(
 
         trailing_newline = lastchar == "\n"
 
-        while 1:
+        while True:
             newline_pos = buf.rfind("\n")
             pos = m_file.tell()
             if newline_pos != -1:
@@ -153,6 +153,7 @@ def reverse_readline(
                 if pos or newline_pos or trailing_newline:
                     line += "\n"
                 yield line
+
             elif pos:
                 # Need to fill buffer
                 toread = min(blk_size, pos)
@@ -164,6 +165,7 @@ def reverse_readline(
                 m_file.seek(pos - toread, 0)
                 if pos == toread:
                     buf = "\n" + buf
+
             else:
                 # Start-of-file
                 return
@@ -178,21 +180,24 @@ class FileLock:
     A file locking mechanism that has context-manager support so you can use
     it in a with statement. This should be relatively cross-compatible as it
     doesn't rely on msvcrt or fcntl for the locking.
+
     Taken from http://www.evanfosmark.com/2009/01/cross-platform-file-locking
     -support-in-python/
     """
 
     Error = FileLockException
 
-    def __init__(self, file_name: str, timeout: float = 10, delay: float = 0.05):
+    def __init__(
+        self, file_name: str, timeout: float = 10, delay: float = 0.05
+    ) -> None:
         """
         Prepare the file locker. Specify the file to lock and optionally
         the maximum timeout and the delay between each attempt to lock.
 
         Args:
-            file_name: Name of file to lock.
-            timeout: Maximum timeout for locking. Defaults to 10.
-            delay: Delay between each attempt to lock. Defaults to 0.05.
+            file_name (str): Name of file to lock.
+            timeout (float): Maximum timeout in second for locking. Defaults to 10.
+            delay (float): Delay in second between each attempt to lock. Defaults to 0.05.
         """
         self.file_name = os.path.abspath(file_name)
         self.lockfile = f"{os.path.abspath(file_name)}.lock"
@@ -202,38 +207,6 @@ class FileLock:
 
         if self.delay > self.timeout or self.delay <= 0 or self.timeout <= 0:
             raise ValueError("delay and timeout must be positive with delay <= timeout")
-
-    def acquire(self) -> None:
-        """
-        Acquire the lock, if possible. If the lock is in use, it check again
-        every `delay` seconds. It does this until it either gets the lock or
-        exceeds `timeout` number of seconds, in which case it throws
-        an exception.
-        """
-        start_time = time.time()
-        while True:
-            try:
-                self.fd = os.open(self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
-                break
-            except OSError as e:
-                if e.errno != errno.EEXIST:
-                    raise
-                if (time.time() - start_time) >= self.timeout:
-                    raise FileLockException(f"{self.lockfile}: Timeout occurred.")
-                time.sleep(self.delay)
-
-        self.is_locked = True
-
-    def release(self) -> None:
-        """
-        Get rid of the lock by deleting the lockfile.
-        When working in a `with` statement, this gets automatically
-        called at the end.
-        """
-        if self.is_locked:
-            os.close(self.fd)
-            os.unlink(self.lockfile)
-            self.is_locked = False
 
     def __enter__(self):
         """
@@ -259,13 +232,48 @@ class FileLock:
         """
         self.release()
 
+    def acquire(self) -> None:
+        """
+        Acquire the lock, if possible. If the lock is in use, it check again
+        every `delay` seconds. It does this until it either gets the lock or
+        exceeds `timeout` number of seconds, in which case it throws
+        an exception.
+        """
+        start_time = time.time()
+        while True:
+            try:
+                self.fd = os.open(self.lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
+                break
+            except OSError as exc:
+                if exc.errno != errno.EEXIST:
+                    raise
+                if (time.time() - start_time) >= self.timeout:
+                    raise FileLockException(f"{self.lockfile}: Timeout occurred.")
+                time.sleep(self.delay)
+
+        self.is_locked = True
+
+    def release(self) -> None:
+        """
+        Get rid of the lock by deleting the lockfile.
+        When working in a `with` statement, this gets automatically
+        called at the end.
+        """
+        if self.is_locked:
+            os.close(self.fd)
+            os.unlink(self.lockfile)
+            self.is_locked = False
+
 
 def get_open_fds() -> int:
     """
-    Return the number of open file descriptors for current process
+    Get the number of open file descriptors for current process.
 
     Warnings:
         Will only work on UNIX-like OS-es.
+
+    Returns:
+        int: The number of open file descriptors for current process.
     """
     pid: int = os.getpid()
     procs: bytes = subprocess.check_output(["lsof", "-w", "-Ff", "-p", str(pid)])
