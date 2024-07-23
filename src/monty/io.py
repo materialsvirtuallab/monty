@@ -71,13 +71,13 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
         with zopen(filename, "rb") as file:
             if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
                 for line in reversed(file.readlines()):
-                    yield line.decode("utf-8").rstrip()
+                    yield line.decode("utf-8").rstrip(os.linesep)
             else:
                 filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
                 n = len(filemap)
                 while n > 0:
-                    i = filemap.rfind(b"\n", 0, n)
-                    yield filemap[i + 1 : n].decode("utf-8").rstrip()
+                    i = filemap.rfind(os.linesep.encode(), 0, n)
+                    yield filemap[i + 1 : n].decode("utf-8").rstrip(os.linesep)
                     n = i
 
     except ValueError:
