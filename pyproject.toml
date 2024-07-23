@@ -34,6 +34,7 @@ ci = [
     "tqdm",
     "pymongo",
     "pandas",
+    "pint",
     "orjson",
     "types-orjson",
     "types-requests",
