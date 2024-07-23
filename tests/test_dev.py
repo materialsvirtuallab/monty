@@ -54,7 +54,7 @@ class TestDecorator:
             def property_a(self):
                 pass
 
-            @property  # type: ignore
+            @property
             @deprecated(property_a)
             def property_b(self):
                 return "b"
@@ -237,9 +237,9 @@ class TestDecorator:
 
     def test_requires(self):
         try:
-            import fictitious_mod  # type: ignore
+            import fictitious_mod
         except ImportError:
-            fictitious_mod = None  # type: ignore
+            fictitious_mod = None
 
         err_msg = "fictitious_mod is not present."
 
