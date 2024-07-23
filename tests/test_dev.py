@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime
 import unittest
 import warnings
+from dataclasses import dataclass
 from unittest.mock import patch
 
 import pytest
@@ -19,6 +20,7 @@ class TestDecorator:
 
         @deprecated(func_replace, "Use func_replace instead")
         def func_old():
+            """This is the old function."""
             pass
 
         with warnings.catch_warnings(record=True) as w:
@@ -27,6 +29,10 @@ class TestDecorator:
             # Verify Warning and message
             assert issubclass(w[0].category, FutureWarning)
             assert "Use func_replace instead" in str(w[0].message)
+
+        # Check metadata preservation
+        assert func_old.__name__ == "func_old"
+        assert func_old.__doc__ == "This is the old function."
 
     def test_deprecated_str_replacement(self):
         @deprecated("func_replace")
@@ -48,7 +54,7 @@ class TestDecorator:
             def property_a(self):
                 pass
 
-            @property  # type: ignore
+            @property
             @deprecated(property_a)
             def property_b(self):
                 return "b"
@@ -112,13 +118,55 @@ class TestDecorator:
 
         @deprecated(replacement=TestClassNew)
         class TestClassOld:
-            """A dummy class for tests."""
+            """A dummy old class for tests."""
+
+            class_attrib_old = "OLD_ATTRIB"
 
             def method_b(self):
+                """This is method_b."""
                 pass
 
         with pytest.warns(FutureWarning, match="TestClassOld is deprecated"):
-            TestClassOld()
+            old_class = TestClassOld()
+
+        # Check metadata preservation
+        assert old_class.__doc__ == "A dummy old class for tests."
+        assert old_class.class_attrib_old == "OLD_ATTRIB"
+        assert old_class.__module__ == __name__
+
+        assert old_class.method_b.__doc__ == "This is method_b."
+
+    def test_deprecated_dataclass(self):
+        @dataclass
+        class TestClassNew:
+            """A dummy class for tests."""
+
+            def __post_init__(self):
+                print("Hello.")
+
+            def method_a(self):
+                pass
+
+        @deprecated(replacement=TestClassNew)
+        @dataclass
+        class TestClassOld:
+            """A dummy old class for tests."""
+
+            class_attrib_old = "OLD_ATTRIB"
+
+            def __post_init__(self):
+                print("Hello.")
+
+            def method_b(self):
+                """This is method_b."""
+                pass
+
+        with pytest.warns(FutureWarning, match="TestClassOld is deprecated"):
+            old_class = TestClassOld()
+
+        # Check metadata preservation
+        assert old_class.__doc__ == "A dummy old class for tests."
+        assert old_class.class_attrib_old == "OLD_ATTRIB"
 
     def test_deprecated_deadline(self, monkeypatch):
         with pytest.raises(DeprecationWarning):
@@ -189,9 +237,9 @@ class TestDecorator:
 
     def test_requires(self):
         try:
-            import fictitious_mod  # type: ignore
+            import fictitious_mod
         except ImportError:
-            fictitious_mod = None  # type: ignore
+            fictitious_mod = None
 
         err_msg = "fictitious_mod is not present."
 
