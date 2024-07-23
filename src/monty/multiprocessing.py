@@ -33,9 +33,9 @@ def imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, *args, **kwargs) 
     data = []
     with Pool(nprocs) as pool:
         try:
-            n = len(iterable)  # type: ignore
+            n = len(iterable)  # type: ignore[arg-type]
         except TypeError:
-            n = None  # type: ignore
+            n = None  # type: ignore[arg-type]
         with tqdm(total=n) as prog_bar:
             for d in pool.imap(func, iterable, *args, **kwargs):
                 prog_bar.update()

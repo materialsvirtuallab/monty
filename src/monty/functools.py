@@ -84,7 +84,7 @@ class lazy_property:
             func: Function to decorate.
         """
         self.__func = func
-        wraps(self.__func)(self)  # type: ignore
+        wraps(self.__func)(self)  # type: ignore[arg-type]
 
     def __get__(self, inst: Any, inst_cls) -> Any:
         if inst is None:
@@ -95,7 +95,7 @@ class lazy_property:
                 f"'{inst_cls.__name__}' object has no attribute '__dict__'"
             )
 
-        name = self.__name__  # type: ignore  # pylint: disable=E1101
+        name = self.__name__  # type: ignore[attr-defined]  # pylint: disable=E1101
         if name.startswith("__") and not name.endswith("__"):
             name = f"_{inst_cls.__name__}{name}"
 

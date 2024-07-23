@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING
 try:
     import numpy as np
 except ImportError:
-    np = None  # type: ignore
+    np = None
 
 if TYPE_CHECKING:
     from typing import Iterable
