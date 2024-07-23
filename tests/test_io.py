@@ -1,14 +1,9 @@
 from __future__ import annotations
 
 import os
-import unittest
+from pathlib import Path
 
 import pytest
-
-try:
-    from pathlib import Path
-except ImportError:
-    Path = None  # type: ignore
 
 from monty.io import (
     FileLock,
@@ -125,7 +120,6 @@ class TestZopen:
         with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
 
-    @unittest.skipIf(Path is None, "Not Py3k")
     def test_Path_objects(self):
         p = Path(test_dir) / "myfile_gz.gz"
 
