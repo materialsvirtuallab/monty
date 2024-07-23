@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from unittest.mock import patch
 
 import pytest
+
 from monty.dev import deprecated, install_excepthook, requires
 
 # Set all warnings to always be triggered.
@@ -141,6 +142,9 @@ class TestDecorator:
         class TestClassNew:
             """A dummy class for tests."""
 
+            def __post_init__(self):
+                print("Hello.")
+
             def method_a(self):
                 pass
 
@@ -150,6 +154,9 @@ class TestDecorator:
             """A dummy old class for tests."""
 
             class_attrib_old = "OLD_ATTRIB"
+
+            def __post_init__(self):
+                print("Hello.")
 
             def method_b(self):
                 """This is method_b."""
