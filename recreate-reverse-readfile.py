@@ -1,5 +1,6 @@
-from monty.io import reverse_readfile
+from __future__ import annotations
 
+from monty.io import reverse_readfile
 
 with open("sample_windows.txt", "w", newline="\r\n") as f:
     f.write("\r\n".join(["Line1", "Line2", "Line3"]))
