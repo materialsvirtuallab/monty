@@ -2,10 +2,9 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-
-import pytest
 from unittest.mock import patch
 
+import pytest
 from monty.io import (
     FileLock,
     FileLockException,
@@ -131,7 +130,7 @@ class TestReverseReadfile:
         contents = ("Line1", "Line2", "Line3")
 
         # Mock Linux/MacOS
-        with patch('os.name', 'posix'):
+        with patch("os.name", "posix"):
             linux_line_end = os.linesep
             assert linux_line_end == "\n"
 
@@ -143,7 +142,7 @@ class TestReverseReadfile:
                     assert line == contents[len(contents) - idx - 1]
 
         # Mock Windows
-        with patch('os.name', 'nt'):
+        with patch("os.name", "nt"):
             windows_line_end = os.linesep
             assert linux_line_end == "\r\n"
 
