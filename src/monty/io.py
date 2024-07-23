@@ -88,8 +88,8 @@ def reverse_readline(
     m_file, blk_size: int = 4096, max_mem: int = 4000000
 ) -> Generator[str, str, None]:
     """
-    Read a file line-by-line, but backwards. This allows
-    one to efficiently get data at the end of a file.
+    Generator function to read a file line-by-line, but backwards.
+    This allows one to efficiently get data at the end of a file.
 
     Based on code by Peter Astrand <astrand@cendio.se>, using modifications by
     Raymond Hettinger and Kevin German.
@@ -110,8 +110,8 @@ def reverse_readline(
             this sets the maximum block size.
 
     Returns:
-        Generator that yield lines from the file. Behave similarly to the
-        file.readline() function, except the lines are returned from the end
+        Generator that yields lines from the file. Behave similarly to the
+        file.readline() function, except the lines are returned from the back
         of the file.
     """
     # Check if the file stream is a bit stream or not
