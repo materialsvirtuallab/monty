@@ -12,6 +12,7 @@ from monty.io import (
     reverse_readline,
     zopen,
 )
+from monty.tempfile import ScratchDir
 
 TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 
@@ -99,6 +100,25 @@ class TestReverseReadfile:
         """
         for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
             raise ValueError("an empty file is being read!")
+
+    def test_line_ending(self):
+        contents = ("Line1", "Line2", "Line3")
+
+        # Test Linux/MacOS (line ends with "\n")
+        with ScratchDir("./test_files"):
+            with open("sample_unix_mac.txt", "w", newline="\n") as file:
+                file.write("\n".join(contents))
+
+            for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
+                assert line == contents[len(contents) - idx - 1]
+
+        # Test Windows (line ends with "\r\n")
+        with ScratchDir("./test_files"):
+            with open("sample_unix_mac.txt", "w", newline="\r\n") as file:
+                file.write("\r\n".join(contents))
+
+            for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
+                assert line == contents[len(contents) - idx - 1]
 
 
 class TestZopen:
