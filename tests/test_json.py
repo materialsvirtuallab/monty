@@ -50,7 +50,7 @@ from monty.json import (
 
 from . import __version__ as tests_version
 
-test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
+TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
 class GoodMSONClass(MSONable):
@@ -918,7 +918,7 @@ class TestJson:
             json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
-        data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
+        data = _load_redirect(os.path.join(TEST_DIR, "test_settings.yaml"))
         assert data == {
             "old_module": {
                 "old_class": {"@class": "new_class", "@module": "new_module"}

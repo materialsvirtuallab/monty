@@ -1,15 +1,10 @@
 from __future__ import annotations
 
 import os
-import unittest
+from pathlib import Path
+from unittest.mock import patch
 
 import pytest
-
-try:
-    from pathlib import Path
-except ImportError:
-    Path = None  # type: ignore
-
 from monty.io import (
     FileLock,
     FileLockException,
@@ -17,8 +12,9 @@ from monty.io import (
     reverse_readline,
     zopen,
 )
+from monty.tempfile import ScratchDir
 
-test_dir = os.path.join(os.path.dirname(__file__), "test_files")
+TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class TestReverseReadline:
@@ -30,7 +26,7 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -38,9 +34,9 @@ class TestReverseReadline:
 
     def test_reverse_readline_fake_big(self):
         """
-        Make sure that large textfiles are read properly
+        Make sure that large text files are read properly.
         """
-        with open(os.path.join(test_dir, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -48,24 +44,53 @@ class TestReverseReadline:
 
     def test_reverse_readline_bz2(self):
         """
-        We are making sure a file containing line numbers is read in reverse
-        order, i.e. the first line that is read corresponds to the last line.
-        number
+        Make sure a file containing line numbers is read in reverse order,
+        i.e. the first line that is read corresponds to the last line number.
         """
         lines = []
-        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rb") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line.strip())
         assert lines[-1].strip(), ["HelloWorld." in b"HelloWorld."]
 
     def test_empty_file(self):
         """
-        make sure an empty file does not throw an error when reverse_readline
-        is called this was a problem with an earlier implementation
+        Make sure an empty file does not throw an error when reverse_readline
+        is called, which was a problem with an earlier implementation.
         """
-        with open(os.path.join(test_dir, "empty_file.txt")) as f:
+        with open(os.path.join(TEST_DIR, "empty_file.txt")) as f:
             for _line in reverse_readline(f):
                 raise ValueError("an empty file is being read!")
+
+    @pytest.fixture()
+    def test_line_ending(self):
+        contents = ("Line1", "Line2", "Line3")
+
+        # Mock Linux/MacOS
+        with patch("os.name", "posix"):
+            linux_line_end = os.linesep
+            assert linux_line_end == "\n"
+
+            with ScratchDir("./test_files"):
+                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                    file.write(linux_line_end.join(contents))
+
+                with open("sample_unix_mac.txt") as file:
+                    for idx, line in enumerate(reverse_readfile(file)):
+                        assert line == contents[len(contents) - idx - 1]
+
+        # Mock Windows
+        with patch("os.name", "nt"):
+            windows_line_end = os.linesep
+            assert windows_line_end == "\r\n"
+
+            with ScratchDir("./test_files"):
+                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                    file.write(windows_line_end.join(contents))
+
+                with open("sample_windows.txt") as file:
+                    for idx, line in enumerate(reverse_readfile(file)):
+                        assert line == contents[len(contents) - idx - 1]
 
 
 class TestReverseReadfile:
@@ -73,61 +98,85 @@ class TestReverseReadfile:
 
     def test_reverse_readfile(self):
         """
-        We are making sure a file containing line numbers is read in reverse
-        order, i.e. the first line that is read corresponds to the last line.
-        number
+        Make sure a file containing line numbers is read in reverse order,
+        i.e. the first line that is read corresponds to the last line number.
         """
-        fname = os.path.join(test_dir, "3000_lines.txt")
+        fname = os.path.join(TEST_DIR, "3000_lines.txt")
         for idx, line in enumerate(reverse_readfile(fname)):
             assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_gz(self):
         """
-        We are making sure a file containing line numbers is read in reverse
-        order, i.e. the first line that is read corresponds to the last line.
-        number
+        Make sure a file containing line numbers is read in reverse order,
+        i.e. the first line that is read corresponds to the last line number.
         """
-        fname = os.path.join(test_dir, "3000_lines.txt.gz")
+        fname = os.path.join(TEST_DIR, "3000_lines.txt.gz")
         for idx, line in enumerate(reverse_readfile(fname)):
             assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_bz2(self):
         """
-        We are making sure a file containing line numbers is read in reverse
-        order, i.e. the first line that is read corresponds to the last line.
-        number
+        Make sure a file containing line numbers is read in reverse order,
+        i.e. the first line that is read corresponds to the last line number.
         """
-        fname = os.path.join(test_dir, "3000_lines.txt.bz2")
+        fname = os.path.join(TEST_DIR, "3000_lines.txt.bz2")
         for idx, line in enumerate(reverse_readfile(fname)):
             assert int(line) == self.NUMLINES - idx
 
     def test_empty_file(self):
         """
-        make sure an empty file does not throw an error when reverse_readline
-        is called this was a problem with an earlier implementation
+        Make sure an empty file does not throw an error when reverse_readline
+        is called, which was a problem with an earlier implementation.
         """
-        for _line in reverse_readfile(os.path.join(test_dir, "empty_file.txt")):
+        for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
             raise ValueError("an empty file is being read!")
+
+    @pytest.fixture
+    def test_line_ending(self):
+        contents = ("Line1", "Line2", "Line3")
+
+        # Mock Linux/MacOS
+        with patch("os.name", "posix"):
+            linux_line_end = os.linesep
+            assert linux_line_end == "\n"
+
+            with ScratchDir("./test_files"):
+                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                    file.write(linux_line_end.join(contents))
+
+                for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
+                    assert line == contents[len(contents) - idx - 1]
+
+        # Mock Windows
+        with patch("os.name", "nt"):
+            windows_line_end = os.linesep
+            assert windows_line_end == "\r\n"
+
+            with ScratchDir("./test_files"):
+                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                    file.write(windows_line_end.join(contents))
+
+                for idx, line in enumerate(reverse_readfile("sample_windows.txt")):
+                    assert line == contents[len(contents) - idx - 1]
 
 
 class TestZopen:
     def test_zopen(self):
-        with zopen(os.path.join(test_dir, "myfile_gz.gz"), mode="rt") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile_gz.gz"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), mode="rt") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(test_dir, "myfile_bz2.bz2"), "rt") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rt") as f:
             assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(test_dir, "myfile_xz.xz"), "rt") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile_xz.xz"), "rt") as f:
             assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(test_dir, "myfile_lzma.lzma"), "rt") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile_lzma.lzma"), "rt") as f:
             assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(test_dir, "myfile"), mode="rt") as f:
+        with zopen(os.path.join(TEST_DIR, "myfile"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
 
-    @unittest.skipIf(Path is None, "Not Py3k")
     def test_Path_objects(self):
-        p = Path(test_dir) / "myfile_gz.gz"
+        p = Path(TEST_DIR) / "myfile_gz.gz"
 
         with zopen(p, mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"

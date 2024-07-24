@@ -5,14 +5,14 @@ import shutil
 
 from monty.tempfile import ScratchDir
 
-test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
+TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
 class TestScratchDir:
     def setup_method(self):
         self.cwd = os.getcwd()
-        os.chdir(test_dir)
-        self.scratch_root = os.path.join(test_dir, "..", "..", "tempscratch")
+        os.chdir(TEST_DIR)
+        self.scratch_root = os.path.join(TEST_DIR, "..", "..", "tempscratch")
         os.mkdir(self.scratch_root)
 
     def test_with_copy(self):
@@ -141,7 +141,7 @@ class TestScratchDir:
 
     def test_bad_root(self):
         with ScratchDir("bad_groot") as d:
-            assert d == test_dir
+            assert d == TEST_DIR
 
     def teardown_method(self):
         os.chdir(self.cwd)
