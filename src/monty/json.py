@@ -637,10 +637,10 @@ class MontyEncoder(json.JSONEncoder):
                 "data": str(o),
             }
             try:
-                module_version = import_module("pint").__version__  # type: ignore
+                module_version = import_module("pint").__version__
                 d["@version"] = str(module_version)
             except (AttributeError, ImportError):
-                d["@version"] = None  # type: ignore
+                d["@version"] = None
             return d
 
         if bson is not None and isinstance(o, bson.objectid.ObjectId):
