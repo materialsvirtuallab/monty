@@ -19,6 +19,11 @@ except ImportError:
     pd = None
 
 try:
+    import pint
+except ImportError:
+    pint = None
+
+try:
     import torch
 except ImportError:
     torch = None
@@ -181,6 +186,11 @@ class ClassContainingDataFrame(MSONable):
 class ClassContainingSeries(MSONable):
     def __init__(self, s):
         self.s = s
+
+
+class ClassContainingQuantity(MSONable):
+    def __init__(self, qty):
+        self.qty = qty
 
 
 class ClassContainingNumpyArray(MSONable):
@@ -665,6 +675,24 @@ class TestJson:
         assert isinstance(obj, ClassContainingSeries)
         assert isinstance(obj.s["df"][0], pd.Series)
         assert list(obj.s["df"][0].a), [1, 2 == 3]
+
+    @pytest.mark.skipif(pint is None, reason="pint not present")
+    def test_pint_quantity(self):
+        ureg = pint.UnitRegistry()
+        cls = ClassContainingQuantity(qty=pint.Quantity("9.81 m/s**2"))
+
+        d = json.loads(MontyEncoder().encode(cls))
+        print(d)
+
+        assert d["qty"]["@module"] == "pint"
+        assert d["qty"]["@class"] == "Quantity"
+        assert d["qty"].get("@version") is not None
+
+        obj = ClassContainingQuantity.from_dict(d)
+        assert isinstance(obj, ClassContainingQuantity)
+        assert isinstance(obj.qty, pint.Quantity)
+        assert obj.qty.magnitude == 9.81
+        assert str(obj.qty.units) == "meter / second ** 2"
 
     def test_callable(self):
         instance = MethodSerializationClass(a=1)
