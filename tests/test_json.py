@@ -873,7 +873,7 @@ class TestJson:
         assert clean == s.to_dict()
 
     @pytest.mark.skipif(
-        np is None or ObjectId is None, reason="numpy and bson not present"
+        np is None or ObjectId is None, reason="numpy or bson not present"
     )
     def test_jsanitize_numpy_bson(self):
         d = {
