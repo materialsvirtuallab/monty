@@ -8,7 +8,7 @@ def test_command():
     sleep05 = Command("sleep 0.5")
 
     sleep05.run(timeout=1)
-    print(sleep05, sleep05.error, sleep05.output)
+    print(sleep05, sleep05.error, sleep05.output)  # DEBUG
     assert sleep05.retcode == 0, sleep05
     assert not sleep05.killed
 

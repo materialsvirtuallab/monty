@@ -682,7 +682,7 @@ class TestJson:
         cls = ClassContainingQuantity(qty=pint.Quantity("9.81 m/s**2"))
 
         d = json.loads(MontyEncoder().encode(cls))
-        print(d)
+        assert isinstance(d, dict)
 
         assert d["qty"]["@module"] == "pint"
         assert d["qty"]["@class"] == "Quantity"
