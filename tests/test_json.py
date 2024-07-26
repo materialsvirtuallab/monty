@@ -18,7 +18,7 @@ from monty.json import (
     load,
 )
 
-from . import __version__ as tests_version
+from . import __version__ as TESTS_VERSION
 
 try:
     import numpy as np
@@ -320,7 +320,7 @@ class TestMSONable:
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
-        assert d["@version"] == tests_version
+        assert d["@version"] == TESTS_VERSION
 
     def test_nested_to_from_dict(self):
         GMC = GoodMSONClass
