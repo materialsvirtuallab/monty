@@ -40,7 +40,7 @@ ci = [
     "types-requests",
     "torch",
     "ipython",
-    "bson",
+    "pydantic",
 ]
 docs = [
     "sphinx",
