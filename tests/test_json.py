@@ -8,6 +8,18 @@ import pathlib
 from enum import Enum
 from typing import Union
 
+import pytest
+from monty.json import (
+    MontyDecoder,
+    MontyEncoder,
+    MSONable,
+    _load_redirect,
+    jsanitize,
+    load,
+)
+
+from . import __version__ as tests_version
+
 try:
     import numpy as np
 except ImportError:
@@ -37,18 +49,6 @@ try:
     from bson.objectid import ObjectId
 except ImportError:
     ObjectId = None
-
-import pytest
-from monty.json import (
-    MontyDecoder,
-    MontyEncoder,
-    MSONable,
-    _load_redirect,
-    jsanitize,
-    load,
-)
-
-from . import __version__ as tests_version
 
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
