@@ -131,19 +131,19 @@ def commit(ctx: Context) -> None:
 
 
 @task
-def set_ver(ctx: Context) -> None:
+def set_ver(ctx: Context, version: str=NEW_VER) -> None:
 
     with open("pyproject.toml", encoding="utf-8") as f:
         contents = f.read()
-        contents = re.sub(r"version = ([\.\d\"]+)", f'version = "{NEW_VER}"', contents)
+        contents = re.sub(r"version = ([\.\d\"]+)", f'version = "{version}"', contents)
 
     with open("pyproject.toml", "w", encoding="utf-8") as f:
         f.write(contents)
 
 
 @task
-def release(ctx: Context, notest: bool = False) -> None:
-    set_ver(ctx)
+def release(ctx: Context, notest: bool = False, version: str=NEW_VER) -> None:
+    set_ver(ctx, version)
     if not notest:
         test(ctx)
     update_doc(ctx)
