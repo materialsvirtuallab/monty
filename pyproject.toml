@@ -21,7 +21,7 @@ classifiers = [
 dependencies = [
 
 ]
-version = "2024.7.12"
+version = "2024.7.29"
 
 [project.optional-dependencies]
 ci = [

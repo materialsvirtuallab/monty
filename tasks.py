@@ -31,7 +31,7 @@ NEW_VER = datetime.datetime.today().strftime("%Y.%-m.%-d")
 def make_doc(ctx: Context) -> None:
     with cd("docs"):
         ctx.run("rm monty.*.rst", warn=True)
-        ctx.run("sphinx-apidoc --separate -P -M -d 6 -o . -f ../monty")
+        ctx.run("sphinx-apidoc --separate -P -M -d 6 -o . -f ../src/monty")
         # ctx.run("rm monty*.html", warn=True)
         # ctx.run("sphinx-build -b html . ../docs")  # HTML building.
         ctx.run("sphinx-build -M markdown . .")
