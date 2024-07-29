@@ -1,5 +1,10 @@
 # Change log
 
+## 2024.7.29
+- Fix line ending in reverse_readfile/readline in Windows (@DanielYang59)
+- Add missing functools.wraps decorator to deprecated decorator and handle dataclass properly (@DanielYang59)
+- Add pint Quantity support to JSON (@rkingsbury)
+
 ## 2024.7.12
 - Make cached_class decorated classes picklable  (@janosh)
 - deprecated decorator allow replacement as string (@DanielYang59)
