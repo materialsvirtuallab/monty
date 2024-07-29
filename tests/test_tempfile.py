@@ -49,7 +49,7 @@ class TestScratchDir:
         # We write a pre-scratch file.
         with open("pre_scratch_text", "w") as f:
             f.write("write")
-        init_gz = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
+        init_gz_files = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
         with (
             ScratchDir(
                 self.scratch_root,
@@ -62,10 +62,10 @@ class TestScratchDir:
             f.write("write")
         files = os.listdir(os.getcwd())
 
-        # Make sure the stratch_text.gz exists
+        # Make sure the scratch_text.gz exists
         assert "scratch_text.gz" in files
         for f in files:
-            if f.endswith(".gz") and f not in init_gz:
+            if f.endswith(".gz") and f not in init_gz_files:
                 os.remove(f)
         os.remove("pre_scratch_text")
 
