@@ -132,14 +132,6 @@ def commit(ctx: Context) -> None:
 
 @task
 def set_ver(ctx: Context) -> None:
-    with open("monty/__init__.py", encoding="utf-8") as f:
-        contents = f.read()
-        contents = re.sub(
-            r"__version__ = .*\n", '__version__ = "%s"\n' % NEW_VER, contents
-        )
-
-    with open("monty/__init__.py", "w", encoding="utf-8") as f:
-        f.write(contents)
 
     with open("pyproject.toml", encoding="utf-8") as f:
         contents = f.read()
