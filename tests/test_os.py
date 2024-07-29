@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import pytest
+
 from monty.os import cd, makedirs_p
 from monty.os.path import find_exts, zpath
 
@@ -12,10 +13,11 @@ TEST_DIR = os.path.join(MODULE_DIR, "test_files")
 
 
 class TestPath:
-    def test_zpath(self, tmp_path: Path):
+    def test_zpath_str(self, tmp_path: Path):
         tmp_gz = tmp_path / "tmp.gz"
         tmp_gz.touch()
         ret_path = zpath(str(tmp_gz))
+        assert isinstance(ret_path, str)
         assert ret_path == str(tmp_gz)
 
         tmp_not_bz2 = tmp_path / "tmp_not_bz2"
@@ -23,6 +25,39 @@ class TestPath:
 
         ret_path = zpath(f"{tmp_not_bz2}.bz2")
         assert ret_path == str(tmp_not_bz2)
+        assert isinstance(ret_path, str)
+
+    def test_zpath_path(self, tmp_path: Path):
+        # Test with Path input
+        tmp_gz = tmp_path / "tmp.gz"
+        tmp_gz.touch()
+        ret_path = zpath(tmp_gz)
+        assert ret_path == str(tmp_gz)
+        assert isinstance(ret_path, str)
+
+    def test_zpath_multiple_extensions(self, tmp_path: Path):
+        exts = ["", ".gz", ".GZ", ".bz2", ".BZ2", ".z", ".Z"]
+        for ext in exts:
+            tmp_file = tmp_path / f"tmp{ext}"
+            # create files with all supported compression extensions
+            tmp_file.touch()
+
+        # zpath should return the file without compression extension
+        ret_path = zpath(tmp_path / "tmp")
+        assert ret_path == str(tmp_path / "tmp")
+        assert isinstance(ret_path, str)
+
+        (tmp_path / "tmp").unlink()  # Remove the uncompressed file
+        ret_path = zpath(tmp_path / "tmp")
+        assert ret_path == str(tmp_path / "tmp.gz")  # should find .gz first now
+
+    def test_zpath_nonexistent_file(self, tmp_path: Path):
+        # should return path as is for non-existent file
+        nonexistent = tmp_path / "nonexistent.txt"
+        ret_path = zpath(nonexistent)
+        assert ret_path == str(nonexistent)
+        ret_path = zpath(f"{nonexistent}.bz2")
+        assert ret_path == str(nonexistent)
 
     def test_find_exts(self):
         assert len(find_exts(MODULE_DIR, "py")) >= 18
