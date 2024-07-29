@@ -74,9 +74,7 @@ def make_doc(ctx: Context) -> None:
                 "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
                 contents,
             )
-            contents = (
-                "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
-            )
+            contents = "---\nlayout: default\ntitle: Home\nnav_order: 1\n---\n\n" + contents
 
             f.write(contents)
 
@@ -131,8 +129,7 @@ def commit(ctx: Context) -> None:
 
 
 @task
-def set_ver(ctx: Context, version: str=NEW_VER) -> None:
-
+def set_ver(ctx: Context, version: str = NEW_VER) -> None:
     with open("pyproject.toml", encoding="utf-8") as f:
         contents = f.read()
         contents = re.sub(r"version = ([\.\d\"]+)", f'version = "{version}"', contents)
@@ -142,7 +139,7 @@ def set_ver(ctx: Context, version: str=NEW_VER) -> None:
 
 
 @task
-def release(ctx: Context, notest: bool = False, version: str=NEW_VER) -> None:
+def release(ctx: Context, notest: bool = False, version: str = NEW_VER) -> None:
     set_ver(ctx, version)
     if not notest:
         test(ctx)
