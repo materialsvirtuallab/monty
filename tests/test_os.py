@@ -4,7 +4,6 @@ import os
 from pathlib import Path
 
 import pytest
-
 from monty.os import cd, makedirs_p
 from monty.os.path import find_exts, zpath
 
