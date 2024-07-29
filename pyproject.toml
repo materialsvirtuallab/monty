@@ -38,7 +38,9 @@ ci = [
     "orjson",
     "types-orjson",
     "types-requests",
-    "torch"
+    "torch",
+    "ipython",
+    "pydantic",
 ]
 docs = [
     "sphinx",

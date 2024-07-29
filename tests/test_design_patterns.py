@@ -52,24 +52,24 @@ class TestCachedClass:
 
 
 @cached_class
-class TestClass:
+class ClassForTest:
     def __init__(self, value: Any) -> None:
         self.value = value
 
 
 def test_caching():
     # Test that instances are cached
-    inst1 = TestClass(1)
-    inst2 = TestClass(1)
+    inst1 = ClassForTest(1)
+    inst2 = ClassForTest(1)
     assert inst1 is inst2
 
-    inst3 = TestClass(2)
+    inst3 = ClassForTest(2)
     assert inst1 is not inst3
 
 
 def test_picklability():
     # Test that instances can be pickled and unpickled
-    original = TestClass(42)
+    original = ClassForTest(42)
     pickled = pickle.dumps(original)
     unpickled = pickle.loads(pickled)
 
@@ -77,7 +77,7 @@ def test_picklability():
     assert original.value == unpickled.value
 
     # Check that the unpickled instance is the same as a newly created instance
-    new_instance = TestClass(42)
+    new_instance = ClassForTest(42)
     assert unpickled is new_instance
 
 
@@ -97,8 +97,8 @@ def test_initialization():
 
 def test_class_identity():
     # Ensure the decorated class is still recognized as the original class
-    assert isinstance(TestClass(1), TestClass)
-    assert type(TestClass(1)) is TestClass
+    assert isinstance(ClassForTest(1), ClassForTest)
+    assert type(ClassForTest(1)) is ClassForTest
 
 
 def test_multiple_arguments():
