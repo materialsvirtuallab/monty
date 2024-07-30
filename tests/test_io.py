@@ -110,7 +110,7 @@ class TestReverseReadfile:
         Make sure a file containing line numbers is read in reverse order,
         i.e. the first line that is read corresponds to the last line number.
         """
-        fname = os.path.join(TEST_DIR, "3000_lines_gz.txt.gz")
+        fname = os.path.join(TEST_DIR, "3000_lines.txt.gz")
         for idx, line in enumerate(reverse_readfile(fname)):
             assert int(line) == self.NUMLINES - idx
 
