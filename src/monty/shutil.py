@@ -59,6 +59,10 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
         for f in files:
             full_f = Path(root, f).resolve()
             if Path(f).suffix.lower() != ".gz" and not full_f.is_dir():
+                if full_f.with_suffix(".gz").exists():
+                    warnings.warn(f"Both {f} and {f}.gz exist.", stacklevel=2)
+                    continue
+
                 with (
                     open(full_f, "rb") as f_in,
                     GzipFile(
