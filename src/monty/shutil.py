@@ -54,12 +54,11 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
         compresslevel (int): Level of compression, 1-9. 9 is default for
             GzipFile, 6 is default for gzip.
     """
-    path = Path(path)
-    for root, _, files in os.walk(path):
+    for root, _, files in os.walk(Path(path)):
         for f in files:
             full_f = Path(root, f).resolve()
             if Path(f).suffix.lower() != ".gz" and not full_f.is_dir():
-                if full_f.with_suffix(".gz").exists():
+                if os.path.exists(f"{full_f}.gz"):
                     warnings.warn(f"Both {f} and {f}.gz exist.", stacklevel=2)
                     continue
 
