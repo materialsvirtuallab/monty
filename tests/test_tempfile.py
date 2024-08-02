@@ -64,7 +64,7 @@ class TestScratchDir:
                 f.write("write")
         files = os.listdir(os.getcwd())
 
-        # Make sure the stratch_text.gz exists
+        # Make sure the scratch_text.gz exists
         assert "scratch_text.gz" in files
         for f in files:
             if f.endswith(".gz") and f not in init_gz_files:
