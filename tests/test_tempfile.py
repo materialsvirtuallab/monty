@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import shutil
 
+import pytest
 from monty.tempfile import ScratchDir
 
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
@@ -50,16 +51,17 @@ class TestScratchDir:
         with open("pre_scratch_text", "w") as f:
             f.write("write")
         init_gz_files = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
-        with (
-            ScratchDir(
-                self.scratch_root,
-                copy_from_current_on_enter=True,
-                copy_to_current_on_exit=True,
-                gzip_on_exit=True,
-            ),
-            open("scratch_text", "w") as f,
-        ):
-            f.write("write")
+        with pytest.warns(match="Both 3000_lines.txt and 3000_lines.txt.gz exist."):
+            with (
+                ScratchDir(
+                    self.scratch_root,
+                    copy_from_current_on_enter=True,
+                    copy_to_current_on_exit=True,
+                    gzip_on_exit=True,
+                ),
+                open("scratch_text", "w") as f,
+            ):
+                f.write("write")
         files = os.listdir(os.getcwd())
 
         # Make sure the stratch_text.gz exists
