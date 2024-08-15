@@ -5,6 +5,7 @@ Path based methods, e.g., which, zpath, etc.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from monty.fnmatch import WildCard
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
     from typing import Callable, Literal, Optional, Union
 
 
-def zpath(filename: str) -> str:
+def zpath(filename: str | Path) -> str:
     """
     Returns an existing (zipped or unzipped) file path given the unzipped
     version. If no path exists, returns the filename unmodified.
@@ -23,10 +24,10 @@ def zpath(filename: str) -> str:
         filename: filename without zip extension
 
     Returns:
-        filename with a zip extension (unless an unzipped version
-        exists). If filename is not found, the same filename is returned
-        unchanged.
+        str: filename with a zip extension (unless an unzipped version exists).
+            If filename is not found, the same filename is returned unchanged.
     """
+    filename = str(filename)  # ensure we work with strings
     exts = ("", ".gz", ".GZ", ".bz2", ".BZ2", ".z", ".Z")
     for ext in exts:
         filename = filename.removesuffix(ext)
