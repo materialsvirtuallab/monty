@@ -51,10 +51,9 @@ include = ["monty"]
 
 [tool.black]
 line-length = 120
-target-version = ['py310']
+target-version = ["py310"]
 include = '\.pyi?$'
 exclude = '''
-
 (
   /(
       \.eggs         # exclude a few common directories in the
@@ -97,7 +96,7 @@ ignore_missing_imports = true
 
 [tool.ruff]
 lint.select = [
-  "I",  #isort
+  "I",  # isort
 ]
 
 lint.isort.required-imports = ["from __future__ import annotations"]
