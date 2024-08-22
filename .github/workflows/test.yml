@@ -5,10 +5,11 @@ on: [push, pull_request, workflow_call]
 jobs:
   build:
     strategy:
+      fail-fast: false
       max-parallel: 20
       matrix:
         os: [ubuntu-latest, macos-14, windows-latest]
-        python-version: ["3.9", "3.x"]
+        python-version: ["3.10", "3.x"]
 
     runs-on: ${{ matrix.os }}
 
@@ -29,6 +30,6 @@ jobs:
         run: pytest --cov=monty --cov-report html:coverage_reports tests
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

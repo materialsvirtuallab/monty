@@ -5,6 +5,7 @@ import time
 import unittest
 
 import pytest
+
 from monty.functools import (
     TimeoutError,
     lazy_property,

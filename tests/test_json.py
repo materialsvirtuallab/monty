@@ -39,6 +39,7 @@ except ImportError:
     ObjectId = None
 
 import pytest
+
 from monty.json import (
     MontyDecoder,
     MontyEncoder,
