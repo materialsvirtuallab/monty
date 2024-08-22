@@ -51,7 +51,6 @@ try:
 except ImportError:
     orjson = None
 
-
 try:
     import torch
 except ImportError:

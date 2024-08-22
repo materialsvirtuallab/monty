@@ -9,14 +9,14 @@ import json
 import os
 from typing import TYPE_CHECKING
 
+from monty.io import zopen
+from monty.json import MontyDecoder, MontyEncoder
+from monty.msgpack import default, object_hook
+
 try:
     from ruamel.yaml import YAML
 except ImportError:
     YAML = None  # type: ignore[arg-type]
-
-from monty.io import zopen
-from monty.json import MontyDecoder, MontyEncoder
-from monty.msgpack import default, object_hook
 
 try:
     import msgpack

@@ -9,6 +9,7 @@ from gzip import GzipFile
 from pathlib import Path
 
 import pytest
+
 from monty.shutil import (
     compress_dir,
     compress_file,

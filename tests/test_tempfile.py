@@ -4,6 +4,7 @@ import os
 import shutil
 
 import pytest
+
 from monty.tempfile import ScratchDir
 
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
