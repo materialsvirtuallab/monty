@@ -79,6 +79,7 @@ exclude_also = [
     "def __repr__",
     "if self.debug:",
     "if settings.DEBUG",
+    "pragma: no cover",
     "raise AssertionError",
     "raise NotImplementedError",
     "show_plot",
