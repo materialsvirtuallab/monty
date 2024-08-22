@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm"]
+requires = ["setuptools", "setuptools-scm", "numpy>=2.1.0",]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -9,7 +9,7 @@ maintainers = [
 ]
 description = "Monty is the missing complement to Python."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 4 - Beta",
@@ -51,7 +51,7 @@ include = ["monty"]
 
 [tool.black]
 line-length = 120
-target-version = ['py39']
+target-version = ['py310']
 include = '\.pyi?$'
 exclude = '''
 
