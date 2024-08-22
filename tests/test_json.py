@@ -9,6 +9,7 @@ from enum import Enum
 from typing import Union
 
 import pytest
+
 from monty.json import (
     MontyDecoder,
     MontyEncoder,
