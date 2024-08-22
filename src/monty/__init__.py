@@ -17,6 +17,6 @@ __date__ = "Oct 12 2020"
 
 try:
     __version__ = version("monty")
-except PackageNotFoundError:  # pragma: no cover
+except PackageNotFoundError:
     # package is not installed
     pass

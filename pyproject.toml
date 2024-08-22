@@ -19,7 +19,6 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
-
 ]
 version = "2024.7.30"
 
@@ -82,7 +81,6 @@ exclude_also = [
     "if __name__ == .__main__.:",
     "if self.debug:",
     "if settings.DEBUG",
-    "pragma: no cover",
     "raise AssertionError",
     "raise NotImplementedError",
     "show_plot",
@@ -98,5 +96,7 @@ ignore_missing_imports = true
 select = [
   "I",  # isort
 ]
-isort.required-imports = ["from __future__ import annotations"]
-isort.known-first-party = ["monty"]
+
+[tool.ruff.isort]
+required-imports = ["from __future__ import annotations"]
+known-first-party = ["monty"]
