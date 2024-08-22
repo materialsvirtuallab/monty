@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "setuptools-scm", "numpy>=2.1.0",]
+requires = ["setuptools", "setuptools-scm",]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -28,7 +28,7 @@ ci = [
     "pytest>=8",
     "pytest-cov>=4",
     "coverage",
-    "numpy<2.0.0",
+    "numpy<3",
     "ruamel.yaml",
     "msgpack",
     "tqdm",
