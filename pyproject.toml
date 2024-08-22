@@ -34,6 +34,7 @@ ci = [
     "pymongo",
     "pandas",
     "pint",
+    "pydantic",
     "orjson",
     "types-orjson",
     "types-requests",
