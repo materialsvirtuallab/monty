@@ -27,7 +27,7 @@ ci = [
     "pytest>=8",
     "pytest-cov>=4",
     "coverage",
-    "numpy<3",
+    "numpy<2",
     "ruamel.yaml",
     "msgpack",
     "tqdm",
