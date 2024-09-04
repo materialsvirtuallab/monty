@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import IO, Generator, Union
+    from typing import IO, Generator, Literal, Union
 
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
@@ -54,7 +54,10 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     return open(filename, *args, **kwargs)
 
 
-def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
+def reverse_readfile(
+    filename: Union[str, Path],
+    l_end: Literal["AUTO", "\n", "\r\n"],
+) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
@@ -63,6 +66,8 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
 
     Args:
         filename (str | Path): File to read.
+        l_end ("AUTO", "\n", "\r\n"): Line ending. Use "AUTO" to
+            automatically decide line ending based on OS.
 
     Yields:
         Lines from the file in reverse order.
@@ -72,11 +77,12 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
             if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
                 for line in reversed(file.readlines()):
                     yield line.decode("utf-8").rstrip(os.linesep)
+
             else:
                 filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
                 n = len(filemap)
                 while n > 0:
-                    i = filemap.rfind(os.linesep.encode(), 0, n)
+                    i = filemap.rfind(l_end.encode(), 0, n)
                     yield filemap[i + 1 : n].decode("utf-8").rstrip(os.linesep)
                     n = i
 
