@@ -76,14 +76,14 @@ def reverse_readfile(
         with zopen(filename, "rb") as file:
             if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
                 for line in reversed(file.readlines()):
-                    yield line.decode("utf-8").rstrip(os.linesep)
+                    yield line.decode("utf-8").rstrip()
 
             else:
                 filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
                 n = len(filemap)
                 while n > 0:
                     i = filemap.rfind(l_end.encode(), 0, n)
-                    yield filemap[i + 1 : n].decode("utf-8").rstrip(os.linesep)
+                    yield filemap[i + 1 : n].decode("utf-8").rstrip()
                     n = i
 
     except ValueError:
