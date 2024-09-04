@@ -56,7 +56,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
 
 def reverse_readfile(
     filename: Union[str, Path],
-    l_end: Literal["AUTO", "\n", "\r\n"],
+    l_end: Literal["AUTO", "\n", "\r\n"] = "AUTO",
 ) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
