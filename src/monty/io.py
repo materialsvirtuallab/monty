@@ -94,7 +94,7 @@ def reverse_readfile(
 
 
 def reverse_readline(
-    m_file,
+    m_file,  # TODO: add type
     blk_size: int = 4096,
     max_mem: int = 4000000,
     l_end: Literal["AUTO"] | str = "AUTO",
@@ -131,34 +131,35 @@ def reverse_readline(
     # Generate line ending
     l_end = os.linesep if "AUTO" else l_end
 
-    # Check if the file stream is a bit stream or not
+    # Check if the file stream is a buffered text stream
     is_text = isinstance(m_file, io.TextIOWrapper)
 
     try:
         file_size = os.path.getsize(m_file.name)
     except AttributeError:
-        # Bz2 files do not have name attribute. Just set file_size to above
-        # max_mem for now.
+        # Bz2 files do not have name attribute.
+        # Just set file_size to max_mem for now.
         file_size = max_mem + 1
 
-    # If the file size is within our desired RAM use, just reverse it in memory
-    # GZip files must use this method because there is no way to negative seek
+    # If the file size is within desired RAM limit, just reverse it in memory.
+    # GZip files must use this method because there is no way to negative seek.
     # For windows, we also read the whole file.
     if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == "nt":
         for line in reversed(m_file.readlines()):
             yield line.rstrip()
+
     else:
         if isinstance(m_file, bz2.BZ2File):
-            # for bz2 files, seeks are expensive. It is therefore in our best
+            # For bz2 files, seeks are expensive. It is therefore in our best
             # interest to maximize the blk_size within limits of desired RAM
             # use.
             blk_size = min(max_mem, file_size)
 
         buf = ""
         m_file.seek(0, 2)
-        lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
+        last_char = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
 
-        trailing_newline = lastchar == l_end
+        trailing_newline = last_char == l_end
 
         while True:
             newline_pos = buf.rfind(l_end)
@@ -173,14 +174,14 @@ def reverse_readline(
 
             elif pos:
                 # Need to fill buffer
-                toread = min(blk_size, pos)
-                m_file.seek(pos - toread, 0)
+                to_read = min(blk_size, pos)
+                m_file.seek(pos - to_read, 0)
                 if is_text:
-                    buf = m_file.read(toread) + buf
+                    buf = m_file.read(to_read) + buf
                 else:
-                    buf = m_file.read(toread).decode("utf-8") + buf
-                m_file.seek(pos - toread, 0)
-                if pos == toread:
+                    buf = m_file.read(to_read).decode("utf-8") + buf
+                m_file.seek(pos - to_read, 0)
+                if pos == to_read:
                     buf = l_end + buf
 
             else:
