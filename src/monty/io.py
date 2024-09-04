@@ -56,7 +56,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
 
 def reverse_readfile(
     filename: Union[str, Path],
-    l_end: Literal["AUTO", "\n", "\r\n"] = "AUTO",
+    l_end: Literal["AUTO"] | str = "AUTO",
 ) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
@@ -66,12 +66,15 @@ def reverse_readfile(
 
     Args:
         filename (str | Path): File to read.
-        l_end ("AUTO", "\n", "\r\n"): Line ending. Use "AUTO" to
+        l_end ("AUTO" | str): Line ending. Use "AUTO" to
             automatically decide line ending based on OS.
 
     Yields:
         Lines from the file in reverse order.
     """
+    # Generate line ending
+    l_end = os.linesep if "AUTO" else l_end
+
     try:
         with zopen(filename, "rb") as file:
             if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
@@ -91,7 +94,10 @@ def reverse_readfile(
 
 
 def reverse_readline(
-    m_file, blk_size: int = 4096, max_mem: int = 4000000
+    m_file,
+    blk_size: int = 4096,
+    max_mem: int = 4000000,
+    l_end: Literal["AUTO"] | str = "AUTO",
 ) -> Generator[str, str, None]:
     """
     Generator function to read a file line-by-line, but backwards.
@@ -115,12 +121,17 @@ def reverse_readline(
             operation. This is used to determine when to reverse a file
             in-memory versus seeking portions of a file. For bz2 files,
             this sets the maximum block size.
+        l_end ("AUTO" | str): Line ending. Use "AUTO" to
+            automatically decide line ending based on OS.
 
     Returns:
         Generator that yields lines from the file. Behave similarly to the
         file.readline() function, except the lines are returned from the back
         of the file.
     """
+    # Generate line ending
+    l_end = os.linesep if "AUTO" else l_end
+
     # Check if the file stream is a bit stream or not
     is_text = isinstance(m_file, io.TextIOWrapper)
 
@@ -148,17 +159,17 @@ def reverse_readline(
         m_file.seek(0, 2)
         lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
 
-        trailing_newline = lastchar == os.linesep
+        trailing_newline = lastchar == l_end
 
         while True:
-            newline_pos = buf.rfind(os.linesep)
+            newline_pos = buf.rfind(l_end)
             pos = m_file.tell()
             if newline_pos != -1:
                 # Found a newline
                 line = buf[newline_pos + 1 :]
                 buf = buf[:newline_pos]
                 if pos or newline_pos or trailing_newline:
-                    line += os.linesep
+                    line += l_end
                 yield line
 
             elif pos:
@@ -171,7 +182,7 @@ def reverse_readline(
                     buf = m_file.read(toread).decode("utf-8") + buf
                 m_file.seek(pos - toread, 0)
                 if pos == toread:
-                    buf = os.linesep + buf
+                    buf = l_end + buf
 
             else:
                 # Start-of-file
