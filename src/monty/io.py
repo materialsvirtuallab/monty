@@ -116,7 +116,7 @@ def reverse_readline(
 
     Args:
         m_file (File): File stream to read (backwards)
-        blk_size (int): The buffer size. Defaults to 4096.
+        blk_size (int): The buffer size in bytes. Defaults to 4096.
         max_mem (int): The maximum amount of memory to involve in this
             operation. This is used to determine when to reverse a file
             in-memory versus seeking portions of a file. For bz2 files,
@@ -124,10 +124,9 @@ def reverse_readline(
         l_end ("AUTO" | str): Line ending. Use "AUTO" to
             automatically decide line ending based on OS.
 
-    Returns:
-        Generator that yields lines from the file. Behave similarly to the
-        file.readline() function, except the lines are returned from the back
-        of the file.
+    Yields:
+        Lines from the file. Behave similarly to the file.readline function,
+        except the lines are returned from the back of the file.
     """
     # Generate line ending
     l_end = os.linesep if "AUTO" else l_end
