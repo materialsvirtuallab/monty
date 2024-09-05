@@ -83,18 +83,19 @@ def _get_line_ending(
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
+    # Return Unix "\n" line ending as default if file is empty
     if not first_line:
         warnings.warn("File empty, use default line ending \n.", stacklevel=2)
         return "\n"
 
     if first_line.endswith(b"\r\n"):
         return "\r\n"
-    elif first_line.endswith(b"\n"):
+    if first_line.endswith(b"\n"):
         return "\n"
-    elif first_line.endswith(b"\r"):
+    if first_line.endswith(b"\r"):
         return "\r"
-    else:
-        raise ValueError(f"Unknown line ending in file {repr(first_line)}.")
+
+    raise ValueError(f"Unknown line ending in line {repr(first_line)}.")
 
 
 def reverse_readfile(
