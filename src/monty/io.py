@@ -70,7 +70,7 @@ def _get_line_ending(
     Raises:
         ValueError: If line ending is unknown.
 
-    Warns:
+    Warnings:
         If file is empty, "\n" would be used as default.
     """
     if isinstance(file, (str, Path)):
