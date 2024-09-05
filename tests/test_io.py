@@ -131,7 +131,7 @@ class TestReverseReadline:
             with open("test_file.txt", "wb") as file:
                 file.write((l_end.join(contents) + l_end).encode())
 
-            with open("test_file.txt", "r") as file:  #
+            with open("test_file.txt", "r") as file:
                 for idx, line in enumerate(reverse_readline(file)):
                     assert line.strip() == contents[len(contents) - idx - 1]
 
@@ -183,7 +183,7 @@ class TestReverseReadfile:
             with open("test_file.txt", "wb") as file:
                 file.write((l_end.join(contents) + l_end).encode())
 
-            with open("test_file.txt", "r") as file:  #
+            with open("test_file.txt", "r") as file:
                 for idx, line in enumerate(reverse_readline(file)):
                     assert line.strip() == contents[len(contents) - idx - 1]
 
