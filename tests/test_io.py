@@ -8,6 +8,7 @@ import pytest
 from monty.io import (
     FileLock,
     FileLockException,
+    _get_line_ending,
     reverse_readfile,
     reverse_readline,
     zopen,
@@ -15,6 +16,43 @@ from monty.io import (
 from monty.tempfile import ScratchDir
 
 TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
+
+
+class TestGetLineEnding:
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
+    def test_get_line_ending(self, l_end):
+        """Test file with:
+        Unix line ending (\n)
+        Windows line ending (\r\n)
+        Classic MacOS line ending (\r)
+        """
+        with ScratchDir("."):
+            test_file = "test_file.txt"
+            with open(test_file, "wb") as f:
+                f.write(f"This is a test{l_end}Second line{l_end}".encode())
+
+            assert _get_line_ending(test_file) == l_end
+            assert _get_line_ending(Path(test_file)) == l_end
+
+            with open(test_file, "r") as f:
+                assert _get_line_ending(f) == l_end
+
+    def test_empty_file(self):
+        with ScratchDir("."):
+            test_file = "empty_file.txt"
+            open(test_file, "w").close()
+
+            with pytest.raises(ValueError, match="empty file"):
+                _get_line_ending(test_file)
+
+    def test_unknown_line_ending(self):
+        with ScratchDir("."):
+            test_file = "test_unknown.txt"
+            with open(test_file, "wb") as f:
+                f.write(b"This is a test\036")
+
+            with pytest.raises(ValueError, match="Unknown line ending"):
+                _get_line_ending(test_file)
 
 
 class TestReverseReadline:

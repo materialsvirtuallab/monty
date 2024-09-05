@@ -54,6 +54,40 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     return open(filename, *args, **kwargs)
 
 
+def _get_line_ending(
+    file: str | Path | io.TextIOWrapper,
+) -> Literal["\r\n", "\n", "\r"]:
+    """Helper function to get line ending of a file.
+
+    This function assumes the file has a single consistent line ending.
+
+    Returns:
+        "\n": Unix line ending.
+        "\r\n": Windows line ending.
+        "\r": Classic MacOS line ending.
+
+    Raises:
+        ValueError: If file is empty or line ending is unknown.
+    """
+    if isinstance(file, (str, Path)):
+        with open(file, "rb") as f:
+            first_line = f.readline()
+    elif isinstance(file, io.TextIOWrapper):
+        first_line = file.buffer.readline()
+
+    if not first_line:
+        raise ValueError("empty file.")
+
+    if first_line.endswith(b"\r\n"):
+        return "\r\n"
+    elif first_line.endswith(b"\n"):
+        return "\n"
+    elif first_line.endswith(b"\r"):
+        return "\r"
+    else:
+        raise ValueError(f"Unknown line ending in file {repr(first_line)}.")
+
+
 def reverse_readfile(
     filename: Union[str, Path],
     l_end: Literal["AUTO"] | str = "AUTO",
