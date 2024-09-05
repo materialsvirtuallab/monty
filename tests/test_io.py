@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import bz2
+import gzip
 import os
 from pathlib import Path
 from unittest.mock import patch
@@ -28,14 +30,35 @@ class TestGetLineEnding:
         """
         with ScratchDir("."):
             test_file = "test_file.txt"
+            test_line = f"This is a test{l_end}Second line{l_end}".encode()
             with open(test_file, "wb") as f:
-                f.write(f"This is a test{l_end}Second line{l_end}".encode())
+                f.write(test_line)
 
             assert _get_line_ending(test_file) == l_end
             assert _get_line_ending(Path(test_file)) == l_end
 
             with open(test_file, "r") as f:
                 assert _get_line_ending(f) == l_end
+
+            # Test gzip file
+            with gzip.open(f"{test_file}.gz", "wb") as f:
+                f.write(test_line)
+
+            with gzip.open(f"{test_file}.gz", "rb") as f:
+                assert _get_line_ending(f) == l_end
+
+            # Test bzip2 file
+            with bz2.open(f"{test_file}.bz2", "wb") as f:
+                f.write(test_line)
+
+            with bz2.open(f"{test_file}.bz2", "rb") as f:
+                assert _get_line_ending(f) == l_end
+
+    def test_unknown_file_type(self):
+        unknown_file = 123
+
+        with pytest.raises(TypeError, match="Unknown file type int"):
+            _get_line_ending(unknown_file)
 
     def test_empty_file(self):
         with ScratchDir("."):

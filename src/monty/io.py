@@ -74,6 +74,10 @@ def _get_line_ending(
             first_line = f.readline()
     elif isinstance(file, io.TextIOWrapper):
         first_line = file.buffer.readline()
+    elif isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
+        first_line = file.readline()
+    else:
+        raise TypeError(f"Unknown file type {type(file).__name__}")
 
     if not first_line:
         raise ValueError("empty file.")
@@ -90,7 +94,6 @@ def _get_line_ending(
 
 def reverse_readfile(
     filename: Union[str, Path],
-    l_end: Literal["AUTO"] | str = "AUTO",
 ) -> Generator[str, str, None]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
@@ -100,14 +103,12 @@ def reverse_readfile(
 
     Args:
         filename (str | Path): File to read.
-        l_end ("AUTO" | str): Line ending. Use "AUTO" to
-            automatically decide line ending based on OS.
 
     Yields:
         Lines from the file in reverse order.
     """
     # Generate line ending
-    l_end = os.linesep if "AUTO" else l_end
+    l_end = _get_line_ending(filename)
 
     try:
         with zopen(filename, "rb") as file:
@@ -128,10 +129,9 @@ def reverse_readfile(
 
 
 def reverse_readline(
-    m_file,  # TODO: add type
+    m_file,
     blk_size: int = 4096,
     max_mem: int = 4000000,
-    l_end: Literal["AUTO"] | str = "AUTO",
 ) -> Generator[str, str, None]:
     """
     Generator function to read a file line-by-line, but backwards.
@@ -155,15 +155,13 @@ def reverse_readline(
             operation. This is used to determine when to reverse a file
             in-memory versus seeking portions of a file. For bz2 files,
             this sets the maximum block size.
-        l_end ("AUTO" | str): Line ending. Use "AUTO" to
-            automatically decide line ending based on OS.
 
     Yields:
         Lines from the file. Behave similarly to the file.readline function,
         except the lines are returned from the back of the file.
     """
     # Generate line ending
-    l_end = os.linesep if "AUTO" else l_end
+    l_end = _get_line_ending(m_file)
 
     # Check if the file stream is a buffered text stream
     is_text = isinstance(m_file, io.TextIOWrapper)
