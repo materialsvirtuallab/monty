@@ -68,7 +68,10 @@ def _get_line_ending(
         "\r": Classic MacOS line ending.
 
     Raises:
-        ValueError: If file is empty or line ending is unknown.
+        ValueError: If line ending is unknown.
+
+    Warns:
+        If file is empty, "\n" would be used as default.
     """
     if isinstance(file, (str, Path)):
         with open(file, "rb") as f:
