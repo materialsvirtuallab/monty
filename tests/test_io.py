@@ -23,7 +23,7 @@ TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 class TestGetLineEnding:
     @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
     def test_get_line_ending(self, l_end):
-        """Test file with:
+        """Test files with:
         Unix line ending (\n)
         Windows line ending (\r\n)
         Classic MacOS line ending (\r)

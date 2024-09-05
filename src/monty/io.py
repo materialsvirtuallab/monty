@@ -9,17 +9,17 @@ import bz2
 import errno
 import gzip
 import io
-
-try:
-    import lzma
-except ImportError:
-    lzma = None  # type: ignore[assignment]
 import mmap
 import os
 import subprocess
 import time
 from pathlib import Path
 from typing import TYPE_CHECKING
+
+try:
+    import lzma
+except ImportError:
+    lzma = None  # type: ignore[assignment]
 
 if TYPE_CHECKING:
     from typing import IO, Generator, Literal, Union
