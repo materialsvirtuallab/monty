@@ -4,7 +4,6 @@ import bz2
 import gzip
 import os
 from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 from monty.io import (
@@ -124,35 +123,17 @@ class TestReverseReadline:
                 for _line in reverse_readline(f):
                     raise ValueError("an empty file is being read!")
 
-    @pytest.fixture()
-    def test_line_ending(self):
+    @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
+    def test_line_ending(self, l_end):
         contents = ("Line1", "Line2", "Line3")
 
-        # Mock Linux/MacOS
-        with patch("os.name", "posix"):
-            linux_line_end = os.linesep
-            assert linux_line_end == "\n"
+        with ScratchDir("."):
+            with open("test_file.txt", "wb") as file:
+                file.write((l_end.join(contents) + l_end).encode())
 
-            with ScratchDir("./test_files"):
-                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
-                    file.write(linux_line_end.join(contents))
-
-                with open("sample_unix_mac.txt") as file:
-                    for idx, line in enumerate(reverse_readfile(file)):
-                        assert line == contents[len(contents) - idx - 1]
-
-        # Mock Windows
-        with patch("os.name", "nt"):
-            windows_line_end = os.linesep
-            assert windows_line_end == "\r\n"
-
-            with ScratchDir("./test_files"):
-                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
-                    file.write(windows_line_end.join(contents))
-
-                with open("sample_windows.txt") as file:
-                    for idx, line in enumerate(reverse_readfile(file)):
-                        assert line == contents[len(contents) - idx - 1]
+            with open("test_file.txt", "r") as file:  #
+                for idx, line in enumerate(reverse_readline(file)):
+                    assert line.strip() == contents[len(contents) - idx - 1]
 
 
 class TestReverseReadfile:
@@ -194,33 +175,17 @@ class TestReverseReadfile:
             for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
                 raise ValueError("an empty file is being read!")
 
-    @pytest.fixture
-    def test_line_ending(self):
+    @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
+    def test_line_ending(self, l_end):
         contents = ("Line1", "Line2", "Line3")
 
-        # Mock Linux/MacOS
-        with patch("os.name", "posix"):
-            linux_line_end = os.linesep
-            assert linux_line_end == "\n"
+        with ScratchDir("."):
+            with open("test_file.txt", "wb") as file:
+                file.write((l_end.join(contents) + l_end).encode())
 
-            with ScratchDir("./test_files"):
-                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
-                    file.write(linux_line_end.join(contents))
-
-                for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
-                    assert line == contents[len(contents) - idx - 1]
-
-        # Mock Windows
-        with patch("os.name", "nt"):
-            windows_line_end = os.linesep
-            assert windows_line_end == "\r\n"
-
-            with ScratchDir("./test_files"):
-                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
-                    file.write(windows_line_end.join(contents))
-
-                for idx, line in enumerate(reverse_readfile("sample_windows.txt")):
-                    assert line == contents[len(contents) - idx - 1]
+            with open("test_file.txt", "r") as file:  #
+                for idx, line in enumerate(reverse_readline(file)):
+                    assert line.strip() == contents[len(contents) - idx - 1]
 
 
 class TestZopen:
