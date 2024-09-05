@@ -65,8 +65,8 @@ class TestGetLineEnding:
             test_file = "empty_file.txt"
             open(test_file, "w").close()
 
-            with pytest.raises(ValueError, match="empty file"):
-                _get_line_ending(test_file)
+            with pytest.warns(match="File empty, use default line ending \n"):
+                assert _get_line_ending(test_file) == "\n"
 
     def test_unknown_line_ending(self):
         with ScratchDir("."):
@@ -119,9 +119,10 @@ class TestReverseReadline:
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
         """
-        with open(os.path.join(TEST_DIR, "empty_file.txt")) as f:
-            for _line in reverse_readline(f):
-                raise ValueError("an empty file is being read!")
+        with pytest.warns(match="File empty, use default line ending \n."):
+            with open(os.path.join(TEST_DIR, "empty_file.txt")) as f:
+                for _line in reverse_readline(f):
+                    raise ValueError("an empty file is being read!")
 
     @pytest.fixture()
     def test_line_ending(self):
@@ -189,8 +190,9 @@ class TestReverseReadfile:
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
         """
-        for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
-            raise ValueError("an empty file is being read!")
+        with pytest.warns(match="File empty, use default line ending \n."):
+            for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
+                raise ValueError("an empty file is being read!")
 
     @pytest.fixture
     def test_line_ending(self):

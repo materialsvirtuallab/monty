@@ -13,6 +13,7 @@ import mmap
 import os
 import subprocess
 import time
+import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -80,7 +81,8 @@ def _get_line_ending(
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
     if not first_line:
-        raise ValueError("empty file.")
+        warnings.warn("File empty, use default line ending \n.", stacklevel=2)
+        return "\n"
 
     if first_line.endswith(b"\r\n"):
         return "\r\n"
