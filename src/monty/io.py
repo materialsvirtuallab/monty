@@ -176,19 +176,19 @@ def reverse_readline(
     try:
         file_size = os.path.getsize(m_file.name)
     except AttributeError:
-        # Bz2 files do not have name attribute.
+        # Bz2 files do not have "name" attribute.
         # Just set file_size to max_mem for now.
         file_size = max_mem + 1
 
     # If the file size is within desired RAM limit, just reverse it in memory.
     # GZip files must use this method because there is no way to negative seek.
     # For windows, we also read the whole file.
-    if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == "nt":
+    if os.name == "nt" or file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
             yield (
                 line.rstrip(l_end)
                 if isinstance(line, str)
-                else line.rstrip(l_end).decode()
+                else line.decode().rstrip(l_end)
             )
 
     else:
