@@ -126,6 +126,11 @@ class TestReverseReadline:
                 for _line in reverse_readline(f):
                     pytest.fail("No error should be thrown.")
 
+    @pytest.mark.skip("TODO: WIP")
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
+    def test_file_with_empty_lines(self, l_end):
+        """Empty lines should not be skipped."""
+
     @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
     def test_line_ending(self, l_end):
         contents = ("Line1", "Line2", "Line3")
@@ -181,6 +186,32 @@ class TestReverseReadfile:
         with pytest.warns(match="File empty, use default line ending \n."):
             for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
                 pytest.fail("No error should be thrown.")
+
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
+    def test_file_with_empty_lines(self, l_end):
+        """Empty lines should not be skipped.
+
+        TODO: not working for "\r\n" for some reason.
+        """
+        expected_contents = ("line1", "", "line3")
+        filename = "test_empty_line.txt"
+
+        with ScratchDir("."):
+            # Test text file
+            with open(filename, "w", newline="", encoding="utf-8") as file:
+                for line in expected_contents:
+                    file.write(line + l_end)
+
+            # Sanity check: ensure the text file is correctly written
+            with open(filename, "rb") as file:
+                raw_content = file.read()
+            expected_raw_content = (l_end.join(expected_contents) + l_end).encode(
+                "utf-8"
+            )
+            assert raw_content == expected_raw_content
+
+            revert_contents = tuple(reverse_readfile(filename))
+            assert revert_contents[::-1] == (*expected_contents, "")
 
     @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
     def test_line_ending(self, l_end):
