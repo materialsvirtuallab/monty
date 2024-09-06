@@ -80,8 +80,7 @@ def _get_line_ending(
         first_line = file.buffer.readline()
     elif isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
         first_line = file.readline()
-        if os.name == "nt":
-            file.seek(0)  # reset pointer
+        file.seek(0)  # reset pointer
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
@@ -186,7 +185,7 @@ def reverse_readline(
     # For windows, we also read the whole file.
     if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == "nt":
         for line in reversed(m_file.readlines()):
-            yield line.rstrip()
+            yield line.rstrip() if isinstance(line, str) else line.rstrip().decode()
 
     else:
         if isinstance(m_file, bz2.BZ2File):
