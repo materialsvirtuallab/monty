@@ -124,7 +124,7 @@ class TestReverseReadline:
         with pytest.warns(match="File empty, use default line ending \n."):
             with open(os.path.join(TEST_DIR, "empty_file.txt"), encoding="utf-8") as f:
                 for _line in reverse_readline(f):
-                    raise ValueError("an empty file is being read!")
+                    pytest.fail("No error should be thrown.")
 
     @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
     def test_line_ending(self, l_end):
@@ -180,7 +180,7 @@ class TestReverseReadfile:
         """
         with pytest.warns(match="File empty, use default line ending \n."):
             for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
-                raise ValueError("an empty file is being read!")
+                pytest.fail("No error should be thrown.")
 
     @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
     def test_line_ending(self, l_end):
