@@ -88,6 +88,7 @@ class TestReverseReadline:
         """
         with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f)):
+                assert isinstance(line, str)
                 assert (
                     int(line) == self.NUMLINES - idx
                 ), f"read_backwards read {line} whereas it should have read {self.NUMLINES - idx}"
@@ -98,6 +99,7 @@ class TestReverseReadline:
         """
         with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
+                assert isinstance(line, str)
                 assert (
                     int(line) == self.NUMLINES - idx
                 ), f"read_backwards read {line} whereas it should have read {self.NUMLINES - idx}"
@@ -110,8 +112,9 @@ class TestReverseReadline:
         lines = []
         with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
-                lines.append(line.strip())
-        assert lines[-1].strip() == "HelloWorld."
+                lines.append(line)
+        assert lines == ["\n", "\n", "HelloWorld."]  # test file has two empty lines
+        assert all(isinstance(line, str) for line in lines)
 
     def test_empty_file(self):
         """
@@ -133,7 +136,8 @@ class TestReverseReadline:
 
             with open("test_file.txt", "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
-                    assert line.strip() == contents[len(contents) - idx - 1]
+                    assert line == contents[len(contents) - idx - 1]
+                    assert isinstance(line, str)
 
 
 class TestReverseReadfile:
@@ -146,6 +150,7 @@ class TestReverseReadfile:
         """
         fname = os.path.join(TEST_DIR, "3000_lines.txt")
         for idx, line in enumerate(reverse_readfile(fname)):
+            assert isinstance(line, str)
             assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_gz(self):
@@ -155,6 +160,7 @@ class TestReverseReadfile:
         """
         fname = os.path.join(TEST_DIR, "3000_lines.txt.gz")
         for idx, line in enumerate(reverse_readfile(fname)):
+            assert isinstance(line, str)
             assert int(line) == self.NUMLINES - idx
 
     def test_reverse_readfile_bz2(self):
@@ -164,6 +170,7 @@ class TestReverseReadfile:
         """
         fname = os.path.join(TEST_DIR, "3000_lines.txt.bz2")
         for idx, line in enumerate(reverse_readfile(fname)):
+            assert isinstance(line, str)
             assert int(line) == self.NUMLINES - idx
 
     def test_empty_file(self):
@@ -185,7 +192,8 @@ class TestReverseReadfile:
 
             with open("test_file.txt", "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
-                    assert line.strip() == contents[len(contents) - idx - 1]
+                    assert isinstance(line, str)
+                    assert line == contents[len(contents) - idx - 1]
 
 
 class TestZopen:
