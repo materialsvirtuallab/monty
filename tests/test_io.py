@@ -28,7 +28,7 @@ class TestGetLineEnding:
         Classic MacOS line ending (\r)
         """
         with ScratchDir("."):
-            test_file = "test_file.txt"
+            test_file = "test_l_end.txt"
             test_line = f"This is a test{l_end}Second line{l_end}".encode()
             with open(test_file, "wb") as f:
                 f.write(test_line)
@@ -36,7 +36,7 @@ class TestGetLineEnding:
             assert _get_line_ending(test_file) == l_end
             assert _get_line_ending(Path(test_file)) == l_end
 
-            with open(test_file, "r") as f:
+            with open(test_file, "r", encoding="utf-8") as f:
                 assert _get_line_ending(f) == l_end
 
             # Test gzip file
@@ -86,7 +86,7 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -96,7 +96,7 @@ class TestReverseReadline:
         """
         Make sure that large text files are read properly.
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -111,7 +111,7 @@ class TestReverseReadline:
         with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line.strip())
-        assert lines[-1].strip(), ["HelloWorld." in b"HelloWorld."]
+        assert lines[-1].strip() == b"HelloWorld."
 
     def test_empty_file(self):
         """
@@ -119,7 +119,7 @@ class TestReverseReadline:
         is called, which was a problem with an earlier implementation.
         """
         with pytest.warns(match="File empty, use default line ending \n."):
-            with open(os.path.join(TEST_DIR, "empty_file.txt")) as f:
+            with open(os.path.join(TEST_DIR, "empty_file.txt"), encoding="utf-8") as f:
                 for _line in reverse_readline(f):
                     raise ValueError("an empty file is being read!")
 
@@ -131,7 +131,7 @@ class TestReverseReadline:
             with open("test_file.txt", "wb") as file:
                 file.write((l_end.join(contents) + l_end).encode())
 
-            with open("test_file.txt", "r") as file:
+            with open("test_file.txt", "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
                     assert line.strip() == contents[len(contents) - idx - 1]
 
@@ -183,7 +183,7 @@ class TestReverseReadfile:
             with open("test_file.txt", "wb") as file:
                 file.write((l_end.join(contents) + l_end).encode())
 
-            with open("test_file.txt", "r") as file:
+            with open("test_file.txt", "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
                     assert line.strip() == contents[len(contents) - idx - 1]
 

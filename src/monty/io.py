@@ -80,6 +80,7 @@ def _get_line_ending(
         first_line = file.buffer.readline()
     elif isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
         first_line = file.readline()
+        file.seek(0)  # reset pointer
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
