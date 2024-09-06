@@ -23,7 +23,7 @@ except ImportError:
     lzma = None  # type: ignore[assignment]
 
 if TYPE_CHECKING:
-    from typing import IO, Generator, Literal, Union
+    from typing import IO, Iterator, Literal, Union
 
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
@@ -101,7 +101,7 @@ def _get_line_ending(
 
 def reverse_readfile(
     filename: Union[str, Path],
-) -> Generator[str, str, None]:
+) -> Iterator[str]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
@@ -139,7 +139,7 @@ def reverse_readline(
     m_file,
     blk_size: int = 4096,
     max_mem: int = 4000000,
-) -> Generator[str, str, None]:
+) -> Iterator[str]:
     """
     Generator function to read a file line-by-line, but backwards.
     This allows one to efficiently get data at the end of a file.
