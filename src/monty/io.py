@@ -74,7 +74,7 @@ def _get_line_ending(
         If file is empty, "\n" would be used as default.
     """
     if isinstance(file, (str, Path)):
-        with open(file, "rb") as f:
+        with zopen(file, "rb") as f:
             first_line = f.readline()
     elif isinstance(file, io.TextIOWrapper):
         first_line = file.buffer.readline()
@@ -114,7 +114,7 @@ def reverse_readfile(
     Yields:
         Lines from the file in reverse order.
     """
-    # Generate line ending
+    # Get line ending
     l_end = _get_line_ending(filename)
 
     try:
@@ -125,11 +125,20 @@ def reverse_readfile(
 
             else:
                 filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
-                n = len(filemap)
-                while n > 0:
-                    i = filemap.rfind(l_end.encode(), 0, n)
-                    yield filemap[i + 1 : n].decode("utf-8")
-                    n = i
+                file_size = len(filemap)
+                while file_size > 0:
+                    line_end_pos = filemap.rfind(l_end.encode(), 0, file_size)
+                    # The last line doesn't have a line ending
+                    if line_end_pos == -1:
+                        yield filemap[:file_size].decode("utf-8").rstrip(l_end)
+                        break
+
+                    yield (
+                        filemap[line_end_pos + len(l_end) : file_size]
+                        .decode("utf-8")
+                        .rstrip(l_end)
+                    )
+                    file_size = line_end_pos
 
     except ValueError:
         return

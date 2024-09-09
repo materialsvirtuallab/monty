@@ -40,18 +40,28 @@ class TestGetLineEnding:
                 assert _get_line_ending(f) == l_end
 
             # Test gzip file
-            with gzip.open(f"{test_file}.gz", "wb") as f:
+            gzip_filename = f"{test_file}.gz"
+            with gzip.open(gzip_filename, "wb") as f:
                 f.write(test_line)
 
-            with gzip.open(f"{test_file}.gz", "rb") as f:
+            # Opened file
+            with gzip.open(gzip_filename, "rb") as f:
                 assert _get_line_ending(f) == l_end
 
-            # Test bzip2 file
-            with bz2.open(f"{test_file}.bz2", "wb") as f:
+            # Filename directly
+            assert _get_line_ending(gzip_filename) == l_end
+
+            # Test opened bzip2 file
+            bz2_filename = f"{test_file}.bz2"
+            with bz2.open(bz2_filename, "wb") as f:
                 f.write(test_line)
 
-            with bz2.open(f"{test_file}.bz2", "rb") as f:
+            # Opened file
+            with bz2.open(bz2_filename, "rb") as f:
                 assert _get_line_ending(f) == l_end
+
+            # Filename directly
+            assert _get_line_ending(bz2_filename) == l_end
 
     def test_unknown_file_type(self):
         unknown_file = 123
@@ -189,29 +199,40 @@ class TestReverseReadfile:
 
     @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
     def test_file_with_empty_lines(self, l_end):
-        """Empty lines should not be skipped.
-
-        TODO: not working for "\r\n" for some reason.
-        """
-        expected_contents = ("line1", "", "line3")
+        """Empty lines should not be skipped."""
+        contents = ("line1", "", "line3")
         filename = "test_empty_line.txt"
 
         with ScratchDir("."):
             # Test text file
-            with open(filename, "w", newline="", encoding="utf-8") as file:
-                for line in expected_contents:
+            with open(filename, "w", newline=l_end, encoding="utf-8") as file:
+                for line in contents:
                     file.write(line + l_end)
 
-            # Sanity check: ensure the text file is correctly written
-            with open(filename, "rb") as file:
-                raw_content = file.read()
-            expected_raw_content = (l_end.join(expected_contents) + l_end).encode(
-                "utf-8"
-            )
-            assert raw_content == expected_raw_content
-
             revert_contents = tuple(reverse_readfile(filename))
-            assert revert_contents[::-1] == (*expected_contents, "")
+            assert revert_contents[::-1] == (*contents, "")
+
+            # Test bzip2 file
+            bz2_filename = f"{filename}.bz2"
+            with bz2.open(
+                bz2_filename, "wt", newline=l_end, encoding="utf-8"
+            ) as file_out:
+                for line in contents:
+                    file_out.write(line + l_end)
+
+            revert_contents_bz2 = tuple(reverse_readfile(bz2_filename))
+            assert revert_contents_bz2[::-1] == (*contents, "")
+
+            # Test gzip file
+            gzip_filename = f"{filename}.gz"
+            with gzip.open(
+                gzip_filename, "wt", newline=l_end, encoding="utf-8"
+            ) as file_out:
+                for line in contents:
+                    file_out.write(line + l_end)
+
+            revert_contents_gzip = tuple(reverse_readfile(gzip_filename))
+            assert revert_contents_gzip[::-1] == (*contents, "")
 
     @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
     def test_line_ending(self, l_end):
