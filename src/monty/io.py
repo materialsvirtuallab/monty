@@ -210,13 +210,12 @@ def reverse_readline(
         or isinstance(m_file, gzip.GzipFile)
     ):
         for line in reversed(m_file.readlines()):
-            yield (line if isinstance(line, str) else line.decode())
+            yield (line if isinstance(line, str) else line.decode("utf-8"))
 
     else:
         if isinstance(m_file, bz2.BZ2File):
-            # For bz2 files, seeks are expensive. It is therefore in our best
-            # interest to maximize the blk_size within limits of desired RAM
-            # use.
+            # For bz2 files, seeking is expensive. It is therefore in our best
+            # interest to maximize the blk_size within RAM usage limit.
             blk_size = min(max_mem, file_size)
 
         buf = ""
@@ -228,9 +227,10 @@ def reverse_readline(
         while True:
             newline_pos = buf.rfind(l_end)
             pos = m_file.tell()
+
+            # Found a newline
             if newline_pos != -1:
-                # Found a newline
-                line = buf[newline_pos + 1 :]
+                line = buf[newline_pos + len(l_end) :]
                 buf = buf[:newline_pos]
                 if pos or newline_pos or trailing_newline:
                     line += l_end

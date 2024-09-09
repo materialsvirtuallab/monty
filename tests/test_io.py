@@ -99,20 +99,17 @@ class TestReverseReadline:
         with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f)):
                 assert isinstance(line, str)
-                assert (
-                    int(line) == self.NUMLINES - idx
-                ), f"read_backwards read {line} whereas it should have read {self.NUMLINES - idx}"
+                assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
     def test_reverse_readline_fake_big(self):
         """
-        Make sure that large text files are read properly.
+        Make sure that large text files are read properly,
+        by setting max_mem to 0.
         """
         with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert isinstance(line, str)
-                assert (
-                    int(line) == self.NUMLINES - idx
-                ), f"read_backwards read {line} whereas it should have read {self.NUMLINES - idx}"
+                assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
     def test_reverse_readline_bz2(self):
         """
@@ -136,20 +133,51 @@ class TestReverseReadline:
                 for _line in reverse_readline(f):
                     pytest.fail("No error should be thrown.")
 
-    @pytest.mark.skip("TODO: WIP")
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_file_with_empty_lines(self, l_end):
         """Empty lines should not be skipped."""
+        contents = (f"line1{l_end}", f"{l_end}", f"line3{l_end}")
+        filename = "test_empty_line.txt"
+
+        with ScratchDir("."):
+            # Test text file
+            with open(filename, "w", newline="", encoding="utf-8") as file:
+                for line in contents:
+                    file.write(line)
+
+            with zopen(filename) as file:
+                revert_contents = tuple(reverse_readline(file))
+            assert revert_contents[::-1] == contents
+
+            # Test gzip file
+            gzip_filename = f"{filename}.gz"
+            with gzip.open(gzip_filename, "w") as file_out:
+                for line in contents:
+                    file_out.write(line.encode())
+
+            revert_contents_gzip = tuple(reverse_readline(gzip_filename))
+            assert revert_contents_gzip[::-1] == contents
+
+            # Test bzip2 file
+            bz2_filename = f"{filename}.bz2"
+            with bz2.open(bz2_filename, "w") as file_out:
+                for line in contents:
+                    file_out.write(line.encode())
+
+            revert_contents_bz2 = tuple(reverse_readline(bz2_filename))
+            assert revert_contents_bz2[::-1] == contents
 
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_line_ending(self, l_end):
-        contents = ("Line1", "Line2", "Line3")
+        contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
+        file_name = "test_file.txt"
 
         with ScratchDir("."):
-            with open("test_file.txt", "wb") as file:
-                file.write((l_end.join(contents) + l_end).encode())
+            with open(file_name, "w", newline="", encoding="utf-8") as file:
+                for line in contents:
+                    file.write(line)
 
-            with open("test_file.txt", "r", encoding="utf-8") as file:
+            with open(file_name, "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
                     assert line == contents[len(contents) - idx - 1]
                     assert isinstance(line, str)
