@@ -123,34 +123,31 @@ def reverse_readfile(
     # Get line ending
     l_end = _get_line_ending(filename)
 
-    try:
-        with zopen(filename, "rb") as file:
-            if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
-                for line in reversed(file.readlines()):
-                    # "readlines" would keep the line end character
-                    yield line.decode("utf-8")
+    with zopen(filename, "rb") as file:
+        if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
+            for line in reversed(file.readlines()):
+                # "readlines" would keep the line end character
+                yield line.decode("utf-8")
 
-            else:
+        else:
+            try:
                 filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
-                file_size = len(filemap)
-                count = 0  # TODO: more elegant way to skip first match
-                while file_size > 0:
-                    line_end_pos = filemap.rfind(l_end.encode(), 0, file_size)
-                    # The first match is the not the last line
-                    if count > 0:
-                        yield (
-                            filemap[line_end_pos + len(l_end) : file_size].decode(
-                                "utf-8"
-                            )
-                            + l_end
-                        )
-                    count += 1
-                    file_size = line_end_pos
+            except ValueError:
+                warnings.warn("trying to mmap an empty file.", stacklevel=2)
+                return
 
-    # Cannot mmap an empty file
-    # TODO: check file size instead, at least
-    except ValueError:
-        return
+            file_size = len(filemap)
+            count = 0  # TODO: more elegant way to skip first match
+            while file_size > 0:
+                line_end_pos = filemap.rfind(l_end.encode(), 0, file_size)
+                # The first match is the not the last line
+                if count > 0:
+                    yield (
+                        filemap[line_end_pos + len(l_end) : file_size].decode("utf-8")
+                        + l_end
+                    )
+                count += 1
+                file_size = line_end_pos
 
 
 def reverse_readline(

@@ -25,7 +25,7 @@ class TestGetLineEnding:
         """Test files with:
         Unix line ending (\n).
         Windows line ending (\r\n).
-        Classic MacOS line ending (\r)
+        Classic MacOS line ending (\r).
         """
         test_file = "test_l_end.txt"
         test_line = f"This is a test{l_end}Second line{l_end}".encode()
