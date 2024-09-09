@@ -20,12 +20,11 @@ TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class TestGetLineEnding:
-    @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_get_line_ending(self, l_end):
         """Test files with:
         Unix line ending (\n).
         Windows line ending (\r\n).
-        Classic MacOS line ending (\r).
         """
         test_file = "test_l_end.txt"
         test_line = f"This is a test{l_end}Second line{l_end}".encode()
@@ -88,7 +87,6 @@ class TestGetLineEnding:
                 _get_line_ending(test_file)
 
 
-@pytest.mark.skip("TODO: WIP")
 class TestReverseReadline:
     NUMLINES = 3000
 
@@ -139,11 +137,11 @@ class TestReverseReadline:
                     pytest.fail("No error should be thrown.")
 
     @pytest.mark.skip("TODO: WIP")
-    @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_file_with_empty_lines(self, l_end):
         """Empty lines should not be skipped."""
 
-    @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_line_ending(self, l_end):
         contents = ("Line1", "Line2", "Line3")
 

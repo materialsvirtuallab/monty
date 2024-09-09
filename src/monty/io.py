@@ -59,19 +59,19 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
 
 def _get_line_ending(
     file: str | Path | io.TextIOWrapper,
-) -> Literal["\r\n", "\n", "\r"]:
+) -> Literal["\r\n", "\n"]:
     """Helper function to get line ending of a file.
 
     This function assumes the file has a single consistent line ending.
 
     WARNING: as per the POSIX standard, a line is:
         A sequence of zero or more non- characters plus a terminating character.
-    as such this would fail if the last line is missing a terminating character.
+    as such this func would fail if the last line misses a terminating character.
+    https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html
 
     Returns:
         "\n": Unix line ending.
         "\r\n": Windows line ending.
-        "\r": Classic MacOS line ending.
 
     Raises:
         ValueError: If line ending is unknown.
@@ -100,9 +100,8 @@ def _get_line_ending(
         return "\r\n"
     if first_line.endswith(b"\n"):
         return "\n"
-    if first_line.endswith(b"\r"):
-        return "\r"
 
+    # It's likely the line is missing a line ending for its last line
     raise ValueError(f"Unknown line ending in line {repr(first_line)}.")
 
 
@@ -144,11 +143,11 @@ def reverse_readfile(
                 seg_start_pos = filemap.rfind(l_end.encode(), 0, file_size)
                 sec_end_pos = file_size + len(l_end)
 
-                # The first line doesn't have an ending character at its start
+                # The first line (original) doesn't have an ending character at its start
                 if seg_start_pos == -1:
                     yield (filemap[:sec_end_pos].decode("utf-8"))
 
-                # Skip the first match (the last line ending character)
+                # Skip the first match (the original last line ending character)
                 elif count > 0:
                     yield (
                         filemap[seg_start_pos + len(l_end) : sec_end_pos].decode(
