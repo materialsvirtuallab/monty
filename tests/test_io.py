@@ -235,14 +235,16 @@ class TestReverseReadfile:
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_line_ending(self, l_end):
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
-        file_name = "test_file.txt"
+        filename = "test_file.txt"
 
         with ScratchDir("."):
-            with open(file_name, "w", newline=l_end, encoding="utf-8") as file:
+            with open(filename, "w", newline=l_end, encoding="utf-8") as file:
                 for line in contents:
                     file.write(line)
 
-            assert tuple(reverse_readfile(file_name))[::-1] == contents
+            revert_contents = tuple(reverse_readfile(filename))
+            print(revert_contents)
+            assert revert_contents[::-1] == contents
 
 
 class TestZopen:

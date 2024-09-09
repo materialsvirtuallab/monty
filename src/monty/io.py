@@ -140,14 +140,24 @@ def reverse_readfile(
             file_size = len(filemap)
             count = 0  # TODO: more elegant way to skip first match
             while file_size > 0:
-                line_end_pos = filemap.rfind(l_end.encode(), 0, file_size)
-                # The first match is the not the last line
-                if count > 0:
+                # Find line segment start and end positions
+                seg_start_pos = filemap.rfind(l_end.encode(), 0, file_size)
+                sec_end_pos = file_size - len(l_end) + 1
+
+                # The first line doesn't have an ending character at its head
+                if seg_start_pos == -1:
+                    yield (filemap[:sec_end_pos].decode("utf-8") + l_end)
+
+                # Skip the first match (the last line ending character)
+                elif count > 0:
                     yield (
-                        filemap[line_end_pos + 1 : file_size].decode("utf-8") + l_end
+                        filemap[seg_start_pos + len(l_end) : sec_end_pos].decode(
+                            "utf-8"
+                        )
+                        + l_end
                     )
                 count += 1
-                file_size = line_end_pos
+                file_size = seg_start_pos
 
 
 def reverse_readline(
