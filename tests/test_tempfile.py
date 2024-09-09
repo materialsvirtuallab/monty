@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import platform
 import shutil
 
 import pytest
@@ -120,7 +121,7 @@ class TestScratchDir:
         assert "scratch_text" not in files
 
     def test_symlink(self):
-        if os.name != "nt":
+        if platform.system() != "Windows":
             with ScratchDir(
                 self.scratch_root,
                 copy_from_current_on_enter=False,

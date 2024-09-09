@@ -11,6 +11,7 @@ import gzip
 import io
 import mmap
 import os
+import platform
 import subprocess
 import time
 import warnings
@@ -198,13 +199,13 @@ def reverse_readline(
     # If the file size is within desired RAM limit, just reverse it in memory.
     # GZip files must use this method because there is no way to negative seek.
     # For windows, we also read the whole file.
-    if os.name == "nt" or file_size < max_mem or isinstance(m_file, gzip.GzipFile):
+    if (
+        platform.system() == "Windows"
+        or file_size < max_mem
+        or isinstance(m_file, gzip.GzipFile)
+    ):
         for line in reversed(m_file.readlines()):
-            yield (
-                line.rstrip(l_end)  # TODO: remove rstrip
-                if isinstance(line, str)
-                else line.decode().rstrip(l_end)  # TODO: remove rstrip
-            )
+            yield (line if isinstance(line, str) else line.decode())
 
     else:
         if isinstance(m_file, bz2.BZ2File):
