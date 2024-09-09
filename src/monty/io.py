@@ -144,8 +144,7 @@ def reverse_readfile(
                 # The first match is the not the last line
                 if count > 0:
                     yield (
-                        filemap[line_end_pos + len(l_end) : file_size].decode("utf-8")
-                        + l_end
+                        filemap[line_end_pos + 1 : file_size].decode("utf-8") + l_end
                     )
                 count += 1
                 file_size = line_end_pos

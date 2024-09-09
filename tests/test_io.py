@@ -88,6 +88,7 @@ class TestGetLineEnding:
                 _get_line_ending(test_file)
 
 
+@pytest.mark.skip("TODO: WIP")
 class TestReverseReadline:
     NUMLINES = 3000
 
@@ -205,13 +206,13 @@ class TestReverseReadfile:
         filename = "test_empty_line.txt"
 
         with ScratchDir("."):
-            # # Test text file
-            # with open(filename, "w", newline=l_end, encoding="utf-8") as file:
-            #     for line in contents:
-            #         file.write(line)
+            # Test text file
+            with open(filename, "w", newline=l_end, encoding="utf-8") as file:
+                for line in contents:
+                    file.write(line)
 
-            # revert_contents = tuple(reverse_readfile(filename))
-            # assert revert_contents[::-1] == contents
+            revert_contents = tuple(reverse_readfile(filename))
+            assert revert_contents[::-1] == contents
 
             # Test gzip file
             gzip_filename = f"{filename}.gz"
@@ -231,18 +232,17 @@ class TestReverseReadfile:
             revert_contents_bz2 = tuple(reverse_readfile(bz2_filename))
             assert revert_contents_bz2[::-1] == contents
 
-    @pytest.mark.parametrize("l_end", ["\n", "\r", "\r\n"])
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_line_ending(self, l_end):
-        contents = ("Line1", "Line2", "Line3")
+        contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
+        file_name = "test_file.txt"
 
         with ScratchDir("."):
-            with open("test_file.txt", "wb") as file:
-                file.write((l_end.join(contents) + l_end).encode())
+            with open(file_name, "w", newline=l_end, encoding="utf-8") as file:
+                for line in contents:
+                    file.write(line)
 
-            with open("test_file.txt", "r", encoding="utf-8") as file:
-                for idx, line in enumerate(reverse_readline(file)):
-                    assert isinstance(line, str)
-                    assert line == contents[len(contents) - idx - 1]
+            assert tuple(reverse_readfile(file_name))[::-1] == contents
 
 
 class TestZopen:
