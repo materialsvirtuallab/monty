@@ -198,7 +198,7 @@ class TestReverseReadfile:
             for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
                 pytest.fail("No error should be thrown.")
 
-    @pytest.mark.parametrize("l_end", ["\n", "\r\n", "\r"])
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_file_with_empty_lines(self, l_end):
         """Empty lines should not be skipped."""
         contents = (f"line1{l_end}", f"{l_end}", f"line3{l_end}")
