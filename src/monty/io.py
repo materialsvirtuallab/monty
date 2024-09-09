@@ -62,6 +62,10 @@ def _get_line_ending(
 
     This function assumes the file has a single consistent line ending.
 
+    WARNING: as per the POSIX standard, a line is:
+        A sequence of zero or more non- characters plus a terminating character.
+    as such this would fail if the last line is missing a terminating character.
+
     Returns:
         "\n": Unix line ending.
         "\r\n": Windows line ending.
@@ -73,6 +77,7 @@ def _get_line_ending(
     Warnings:
         If file is empty, "\n" would be used as default.
     """
+    # TODO: critical, read the last N (~2) chars instead of everything
     if isinstance(file, (str, Path)):
         with zopen(file, "rb") as f:
             first_line = f.readline()
@@ -121,23 +126,24 @@ def reverse_readfile(
         with zopen(filename, "rb") as file:
             if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
                 for line in reversed(file.readlines()):
-                    yield line.decode("utf-8").rstrip(l_end)
+                    # "readlines" would keep the line end character
+                    yield line.decode("utf-8")
 
             else:
                 filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
                 file_size = len(filemap)
+                count = 0  # TODO: more elegant way to skip first match
                 while file_size > 0:
                     line_end_pos = filemap.rfind(l_end.encode(), 0, file_size)
-                    # The last line doesn't have a line ending
-                    if line_end_pos == -1:
-                        yield filemap[:file_size].decode("utf-8").rstrip(l_end)
-                        break
-
-                    yield (
-                        filemap[line_end_pos + len(l_end) : file_size]
-                        .decode("utf-8")
-                        .rstrip(l_end)
-                    )
+                    # The first match is the not the last line
+                    if count > 0:
+                        yield (
+                            filemap[line_end_pos + len(l_end) : file_size].decode(
+                                "utf-8"
+                            )
+                            + l_end
+                        )
+                    count += 1
                     file_size = line_end_pos
 
     except ValueError:
@@ -195,9 +201,9 @@ def reverse_readline(
     if os.name == "nt" or file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
             yield (
-                line.rstrip(l_end)
+                line.rstrip(l_end)  # TODO: remove rstrip
                 if isinstance(line, str)
-                else line.decode().rstrip(l_end)
+                else line.decode().rstrip(l_end)  # TODO: remove rstrip
             )
 
     else:
