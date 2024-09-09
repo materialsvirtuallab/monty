@@ -143,8 +143,10 @@ def reverse_readfile(
                 # Find line segment start and end positions
                 seg_start_pos = filemap.rfind(l_end.encode(), 0, file_size)
                 sec_end_pos = file_size - len(l_end) + 1
+                # TODO: -len(l_end) and then + l_end looks silly,
+                # but otherwise get "\r\r" at the end of each line
 
-                # The first line doesn't have an ending character at its head
+                # The first line doesn't have an ending character at its start
                 if seg_start_pos == -1:
                     yield (filemap[:sec_end_pos].decode("utf-8") + l_end)
 
