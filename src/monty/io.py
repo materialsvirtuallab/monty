@@ -46,6 +46,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
 
     _name, ext = os.path.splitext(filename)
     ext = ext.upper()
+
     if ext == ".BZ2":
         return bz2.open(filename, *args, **kwargs)
     if ext in {".GZ", ".Z"}:
@@ -146,6 +147,8 @@ def reverse_readfile(
                     count += 1
                     file_size = line_end_pos
 
+    # Cannot mmap an empty file
+    # TODO: check file size instead, at least
     except ValueError:
         return
 
