@@ -207,7 +207,7 @@ class TestReverseReadfile:
 
         with ScratchDir("."):
             # Test text file
-            with open(filename, "w", newline=l_end, encoding="utf-8") as file:
+            with open(filename, "w", newline="", encoding="utf-8") as file:
                 for line in contents:
                     file.write(line)
 
@@ -238,12 +238,11 @@ class TestReverseReadfile:
         filename = "test_file.txt"
 
         with ScratchDir("."):
-            with open(filename, "w", newline=l_end, encoding="utf-8") as file:
+            with open(filename, "w", newline="", encoding="utf-8") as file:
                 for line in contents:
                     file.write(line)
 
             revert_contents = tuple(reverse_readfile(filename))
-            print(revert_contents)
             assert revert_contents[::-1] == contents
 
 
