@@ -168,7 +168,8 @@ class TestReverseReadfile:
         fname = os.path.join(TEST_DIR, "3000_lines.txt")
         for idx, line in enumerate(reverse_readfile(fname)):
             assert isinstance(line, str)
-            assert line == f"{str(self.NUM_LINES - idx)}\n"
+            # OS would automatically convert line ending in text mode
+            assert line == f"{str(self.NUM_LINES - idx)}{os.linesep}"
 
     def test_reverse_readfile_gz(self):
         """
