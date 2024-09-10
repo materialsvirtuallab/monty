@@ -74,7 +74,8 @@ def _get_line_ending(
         "\r\n": Windows line ending.
 
     Raises:
-        ValueError: If line ending is unknown.
+        ValueError: If line ending is unknown, likely the file is
+            missing a terminating character.
 
     Warnings:
         If file is empty, "\n" would be used as default.
@@ -93,7 +94,7 @@ def _get_line_ending(
 
     # Return Unix "\n" line ending as default if file is empty
     if not first_line:
-        warnings.warn("File empty, use default line ending \n.", stacklevel=2)
+        warnings.warn("File is empty, return Unix line ending \n.", stacklevel=2)
         return "\n"
 
     if first_line.endswith(b"\r\n"):
@@ -162,22 +163,22 @@ def reverse_readline(
     max_mem: int = 4000000,
 ) -> Iterator[str]:
     """
-    Generator function to read a file line-by-line, but backwards.
-    This allows one to efficiently get data at the end of a file.
+    Read a file line-by-line, but backwards. This allows one to
+    efficiently get data from the end of a file.
 
     Read file forwards and reverse in memory for files smaller than the
-    max_mem parameter, or for gzip files where reverse seeks are not supported.
+    max_mem parameter, or for Gzip files where reverse seeks are not supported.
 
     Files larger than max_mem are dynamically read backwards.
 
     Reference:
-        Based on code by Peter Astrand <astrand@cendio.se>, using modifications
-        by Raymond Hettinger and Kevin German.
-        http://code.activestate.com/recipes/439045-read-a-text-file-backwards
-        -yet-another-implementat/
+        Based on code by Peter Astrand <astrand@cendio.se>, using
+        modifications by Raymond Hettinger and Kevin German.
+        http://code.activestate.com/recipes/439045-read-a-text-
+        file-backwards-yet-another-implementat/
 
     Args:
-        m_file (File): File stream to read (backwards)
+        m_file (File): File stream to read (backwards).
         blk_size (int): The buffer size in bytes. Defaults to 4096.
         max_mem (int): The maximum amount of memory to involve in this
             operation. This is used to determine when to reverse a file
@@ -202,7 +203,7 @@ def reverse_readline(
         file_size = max_mem + 1
 
     # If the file size is within desired RAM limit, just reverse it in memory.
-    # GZip files must use this method because there is no way to negative seek.
+    # Gzip files must use this method because there is no way to negative seek.
     # For windows, we also read the whole file.
     if (
         platform.system() == "Windows"
