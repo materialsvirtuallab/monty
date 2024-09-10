@@ -170,9 +170,9 @@ def reverse_readline(
     Cases where file would be read forwards and reversed in RAM:
     - If file size is smaller than RAM usage limit (max_mem).
     - In Windows. TODO: explain reason.
-    - For Gzip files, as reverse seeks are not supported.
+    - For Gzip files, as reverse seeks are not supported.  # TODO: now supported
 
-    Files larger than max_mem are read one segment each time.
+    Files larger than max_mem are read one block each time.
 
     Reference:
         Based on code by Peter Astrand <astrand@cendio.se>, using
@@ -185,17 +185,18 @@ def reverse_readline(
         blk_size (int): The buffer size in bytes. Defaults to 4096.
         max_mem (int): The maximum amount of RAM to use in bytes,
             which determines when to reverse a file in-memory versus
-            seeking segments of a file. For bz2 files, this sets
+            seeking blocks of a file. For bz2 files, this sets
             the block size.
 
     Yields:
         Lines from the back of the file.
     """
     # Generate line ending
-    l_end = _get_line_ending(m_file)
+    l_end: Literal["\r\n", "\n"] = _get_line_ending(m_file)
+    len_l_end: Literal[1, 2] = len(l_end)
 
-    # Check if the file stream is a buffered text stream
-    is_text = isinstance(m_file, io.TextIOWrapper)
+    # Check if the file stream is a buffered text stream (text instead of binary)
+    is_text: bool = isinstance(m_file, io.TextIOWrapper)
 
     try:
         file_size = os.path.getsize(m_file.name)
@@ -208,7 +209,10 @@ def reverse_readline(
     # Gzip files must use this method because there is no way to negative seek.
     # For windows, we also read the whole file.
     if (
-        platform.system() == "Windows"
+        platform.system() == "Windows"  # TODO: platform is not important, len_l_end is
+        or (
+            len_l_end != 1
+        )  # TODO: the following code wouldn't work for "\r\n" as its len is 2
         or file_size < max_mem
         or isinstance(m_file, gzip.GzipFile)
     ):
@@ -216,43 +220,49 @@ def reverse_readline(
             yield (line if isinstance(line, str) else line.decode("utf-8"))
 
     else:
+        # For bz2 files, seek is expensive. It is therefore in our best
+        # interest to maximize the block size within RAM usage limit.
+
+        # TODO: not sure if bzip2 has any improvement on seek, need test
+        # https://stackoverflow.com/questions/25734252/why-is-seeking-from-the-end-of-a-file-allowed-for-bzip2-files-and-not-gzip-files
         if isinstance(m_file, bz2.BZ2File):
-            # For bz2 files, seeking is expensive. It is therefore in our best
-            # interest to maximize the blk_size within RAM usage limit.
             blk_size = min(max_mem, file_size)
 
-        buf = ""
+        buffer: str = ""
         m_file.seek(0, 2)
-        last_char = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
-
-        trailing_newline = last_char == l_end
 
         while True:
-            newline_pos = buf.rfind(l_end)
-            pos = m_file.tell()
+            l_end_pos: int = buffer.rfind(l_end)
+            pt_pos: int = (
+                m_file.tell()
+            )  # pointer position (also size of remaining file to read)
 
-            # Found a newline
-            if newline_pos != -1:
-                line = buf[newline_pos + len(l_end) :]
-                buf = buf[:newline_pos]
-                if pos or newline_pos or trailing_newline:
+            # Line ending found within buffer
+            if l_end_pos != -1:
+                line = buffer[l_end_pos + len_l_end :]
+                buffer = buffer[:l_end_pos]  # buffer doesn't include l_end
+                if pt_pos != 0 or l_end_pos != 0:  # TODO: why is this condition needed?
                     line += l_end
                 yield line
 
-            elif pos:
-                # Need to fill buffer
-                to_read = min(blk_size, pos)
-                m_file.seek(pos - to_read, 0)
+            # Line ending not in current buffer, load next block into the buffer
+            elif pt_pos > 0:
+                to_read: int = min(blk_size, pt_pos)
+                m_file.seek(pt_pos - to_read)
                 if is_text:
-                    buf = m_file.read(to_read) + buf
+                    buffer += m_file.read(to_read)
                 else:
-                    buf = m_file.read(to_read).decode("utf-8") + buf
-                m_file.seek(pos - to_read, 0)
-                if pos == to_read:
-                    buf = l_end + buf
+                    buffer += m_file.read(to_read).decode("utf-8")
 
+                # Move pointer forward  # TODO: why pointer is moved forward again?
+                m_file.seek(pt_pos - to_read)
+
+                # Add a l_end to the start of file
+                if pt_pos == to_read:
+                    buffer = l_end + buffer
+
+            # Start of file (no more l_end found, and pt_pos at the start)
             else:
-                # Start-of-file
                 return
 
 

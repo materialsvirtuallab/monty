@@ -106,7 +106,9 @@ class TestReverseReadline:
         Make sure that large text files are read properly,
         by setting max_mem to 0.
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
+        with open(
+            os.path.join(TEST_DIR, "3000_lines.txt"), mode="r", encoding="utf-8"
+        ) as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert isinstance(line, str)
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
@@ -145,7 +147,7 @@ class TestReverseReadline:
                 for line in contents:
                     file.write(line)
 
-            with zopen(filename) as file:
+            with zopen(filename, mode="r") as file:
                 revert_contents = tuple(reverse_readline(file))
             assert revert_contents[::-1] == contents
 
@@ -177,10 +179,17 @@ class TestReverseReadline:
                 for line in contents:
                     file.write(line)
 
+            # Test text mode
             with open(file_name, "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
                     assert line == contents[len(contents) - idx - 1]
                     assert isinstance(line, str)
+
+            # # TODO: Test binary mode
+            # with open(file_name, "rb") as file:
+            #     for idx, line in enumerate(reverse_readline(file)):
+            #         assert line == contents[len(contents) - idx - 1]
+            #         assert isinstance(line, str)
 
 
 class TestReverseReadfile:
