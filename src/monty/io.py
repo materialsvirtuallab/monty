@@ -160,16 +160,19 @@ def reverse_readfile(
 def reverse_readline(
     m_file,
     blk_size: int = 4096,
-    max_mem: int = 4000000,
+    max_mem: int = 4_000_000,
 ) -> Iterator[str]:
     """
-    Read a file line-by-line, but backwards. This allows one to
-    efficiently get data from the end of a file.
+    Read a file backwards line-by-line, and behave similarly to
+    the file.readline function. This allows one to efficiently
+    get data from the end of a file.
 
-    Read file forwards and reverse in memory for files smaller than the
-    max_mem parameter, or for Gzip files where reverse seeks are not supported.
+    Cases where file would be read forwards and reversed in RAM:
+    - If file size is smaller than RAM usage limit (max_mem).
+    - In Windows. TODO: explain reason.
+    - For Gzip files, as reverse seeks are not supported.
 
-    Files larger than max_mem are dynamically read backwards.
+    Files larger than max_mem are read one segment each time.
 
     Reference:
         Based on code by Peter Astrand <astrand@cendio.se>, using
@@ -180,14 +183,13 @@ def reverse_readline(
     Args:
         m_file (File): File stream to read (backwards).
         blk_size (int): The buffer size in bytes. Defaults to 4096.
-        max_mem (int): The maximum amount of memory to involve in this
-            operation. This is used to determine when to reverse a file
-            in-memory versus seeking portions of a file. For bz2 files,
-            this sets the maximum block size.
+        max_mem (int): The maximum amount of RAM to use in bytes,
+            which determines when to reverse a file in-memory versus
+            seeking segments of a file. For bz2 files, this sets
+            the block size.
 
     Yields:
-        Lines from the file. Behave similarly to the file.readline function,
-        except the lines are returned from the back of the file.
+        Lines from the back of the file.
     """
     # Generate line ending
     l_end = _get_line_ending(m_file)
