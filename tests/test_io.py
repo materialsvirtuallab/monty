@@ -113,6 +113,9 @@ class TestReverseReadline:
         """
         Make sure that large text files are read properly,
         by setting max_mem to a very small value.
+
+        TODO: when max_mem = 0, the first item generated is "\n",
+        but the sequential items are correct.
         """
         with (
             open(
@@ -123,7 +126,9 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
-    @pytest.mark.skip("DEBUG: TODO")
+    def test_small_blk_size(self):
+        """TODO: test small block size."""
+
     def test_reverse_readline_bz2(self):
         """
         Make sure a file containing line numbers is read in reverse order,
@@ -133,7 +138,7 @@ class TestReverseReadline:
         with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line)
-        assert lines == ["\n", "\n", "HelloWorld."]  # test file has two empty lines
+        assert lines == ["\n", "HelloWorld.\n"]  # test file has one empty line
         assert all(isinstance(line, str) for line in lines)
 
     def test_empty_file(self):
@@ -146,10 +151,12 @@ class TestReverseReadline:
                 for _line in reverse_readline(f):
                     pytest.fail("No error should be thrown.")
 
-    @pytest.mark.parametrize("ram", [4_096, 4_0000_000])
+    @pytest.mark.parametrize("ram", [4, 4_096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_file_with_empty_lines(self, l_end, ram):
-        """Empty lines should not be skipped."""
+        """Empty lines should not be skipped.
+        Using a very small RAM size to force non in-RAM mode.
+        """
         contents = (f"line1{l_end}", f"{l_end}", f"line3{l_end}")
         filename = "test_empty_line.txt"
 
@@ -182,9 +189,10 @@ class TestReverseReadline:
             # revert_contents_bz2 = tuple(reverse_readline(bz2_filename))
             # assert revert_contents_bz2[::-1] == contents
 
-    @pytest.mark.parametrize("ram", [4096, 4_0000_000])
+    @pytest.mark.parametrize("ram", [4, 4096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_line_ending(self, l_end, ram):
+        """Using a very small RAM size to force non in-RAM mode."""
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
         file_name = "test_file.txt"
 
