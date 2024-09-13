@@ -129,6 +129,7 @@ def reverse_readfile(
     """
     # Get line ending
     l_end = _get_line_ending(filename)
+    len_l_end = len(l_end)
 
     with zopen(filename, "rb") as file:
         if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
@@ -147,7 +148,7 @@ def reverse_readfile(
             while file_size > 0:
                 # Find line segment start and end positions
                 seg_start_pos = filemap.rfind(l_end.encode(), 0, file_size)
-                sec_end_pos = file_size + len(l_end)
+                sec_end_pos = file_size + len_l_end
 
                 # The first line (original) doesn't have an ending character at its start
                 if seg_start_pos == -1:
@@ -156,9 +157,7 @@ def reverse_readfile(
                 # Skip the first match (the original last line ending character)
                 elif file_size != len(filemap):
                     yield (
-                        filemap[seg_start_pos + len(l_end) : sec_end_pos].decode(
-                            "utf-8"
-                        )
+                        filemap[seg_start_pos + len_l_end : sec_end_pos].decode("utf-8")
                     )
                 file_size = seg_start_pos
 
@@ -185,7 +184,7 @@ def reverse_readline(
     TODO:
     - is it possible to support binary file stream
     - Test gzip seek speed (not supported previously)
-    - Test bzip2 seek speed (any improvement)
+    - Test bzip2 seek speed (for any improvement?)
          https://stackoverflow.com/questions/25734252/
          why-is-seeking-from-the-end-of-a-file-allowed-for-
          bzip2-files-and-not-gzip-files

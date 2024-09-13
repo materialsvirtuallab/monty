@@ -88,7 +88,7 @@ class TestGetLineEnding:
 
 
 class TestReverseReadline:
-    """WARNING to future code:
+    """WARNING for future coder:
     "reverse_readline" has two branches, one is the in-RAM
     reverse reading for un-supported file types or small files.
     As the default RAM threshold is "big" at around 4 MB (usually
