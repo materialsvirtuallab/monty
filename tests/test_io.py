@@ -104,7 +104,7 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8", newline="") as f:
             for idx, line in enumerate(reverse_readline(f)):
                 assert isinstance(line, str)
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
