@@ -164,7 +164,7 @@ def reverse_readfile(
 
 
 def reverse_readline(
-    m_file,
+    m_file,  # TODO: expected type is unclear
     blk_size: int = 4096,
     max_mem: int = 4_000_000,
 ) -> Iterator[str]:
@@ -179,6 +179,17 @@ def reverse_readline(
 
     Files larger than max_mem are read one block each time.
 
+    NOTE: this function expect a file stream, and m_file
+        should NOT be the name of the file.
+
+    TODO:
+    - is it possible to support binary file stream
+    - Test gzip seek speed (not supported previously)
+    - Test bzip2 seek speed (any improvement)
+         https://stackoverflow.com/questions/25734252/
+         why-is-seeking-from-the-end-of-a-file-allowed-for-
+         bzip2-files-and-not-gzip-files
+
     Reference:
         Based on code by Peter Astrand <astrand@cendio.se>, using
         modifications by Raymond Hettinger and Kevin German.
@@ -186,7 +197,7 @@ def reverse_readline(
         file-backwards-yet-another-implementat/
 
     Args:
-        m_file (File): File stream to read (backwards).
+        m_file: File stream to read (backwards).
         blk_size (int): The buffer size in bytes. Defaults to 4096.
         max_mem (int): The maximum amount of RAM to use in bytes,
             which determines when to reverse a file in-memory versus
@@ -196,6 +207,10 @@ def reverse_readline(
     Yields:
         Lines from the back of the file.
     """
+    # Check for illegal usage
+    if isinstance(m_file, str | Path):
+        raise TypeError("expect a file stream, not file name")
+
     # Generate line ending
     l_end: Literal["\r\n", "\n"] = _get_line_ending(m_file)
     len_l_end: Literal[1, 2] = cast(Literal[1, 2], len(l_end))
@@ -224,9 +239,6 @@ def reverse_readline(
 
         # For bz2 files, seek is expensive. It is therefore in our best
         # interest to maximize the block size within RAM usage limit.
-
-        # TODO: not sure if bzip2 has any improvement on seek, need test
-        # https://stackoverflow.com/questions/25734252/why-is-seeking-from-the-end-of-a-file-allowed-for-bzip2-files-and-not-gzip-files
         if isinstance(m_file, bz2.BZ2File):
             blk_size = min(max_mem, file_size)
 

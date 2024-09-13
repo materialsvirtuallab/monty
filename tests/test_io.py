@@ -151,7 +151,7 @@ class TestReverseReadline:
                 for _line in reverse_readline(f):
                     pytest.fail("No error should be thrown.")
 
-    @pytest.mark.parametrize("ram", [4, 4_096, 4_0000_000])
+    @pytest.mark.parametrize("ram", [4, 4096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_file_with_empty_lines(self, l_end, ram):
         """Empty lines should not be skipped.
@@ -170,24 +170,25 @@ class TestReverseReadline:
                 revert_contents = tuple(reverse_readline(file, max_mem=ram))
             assert revert_contents[::-1] == contents
 
-            # TODO: finish following tests
-            # # Test gzip file
-            # gzip_filename = f"{filename}.gz"
-            # with gzip.open(gzip_filename, "w") as file_out:
-            #     for line in contents:
-            #         file_out.write(line.encode())
+            # Test gzip file
+            gzip_filename = f"{filename}.gz"
+            with gzip.open(gzip_filename, "w") as file_out:
+                for line in contents:
+                    file_out.write(line.encode())
 
-            # revert_contents_gzip = tuple(reverse_readline(gzip_filename))
-            # assert revert_contents_gzip[::-1] == contents
+            with gzip.open(gzip_filename) as g_file:
+                revert_contents_gzip = tuple(reverse_readline(g_file))
+            assert revert_contents_gzip[::-1] == contents
 
-            # # Test bzip2 file
-            # bz2_filename = f"{filename}.bz2"
-            # with bz2.open(bz2_filename, "w") as file_out:
-            #     for line in contents:
-            #         file_out.write(line.encode())
+            # Test bzip2 file
+            bz2_filename = f"{filename}.bz2"
+            with bz2.open(bz2_filename, "w") as file_out:
+                for line in contents:
+                    file_out.write(line.encode())
 
-            # revert_contents_bz2 = tuple(reverse_readline(bz2_filename))
-            # assert revert_contents_bz2[::-1] == contents
+            with bz2.open(bz2_filename) as b_file:
+                revert_contents_bz2 = tuple(reverse_readline(b_file))
+            assert revert_contents_bz2[::-1] == contents
 
     @pytest.mark.parametrize("ram", [4, 4096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
@@ -216,6 +217,12 @@ class TestReverseReadline:
             #     for idx, line in enumerate(reverse_readline(file)):
             #         assert line == contents[len(contents) - idx - 1]
             #         assert isinstance(line, str)
+
+    @pytest.mark.parametrize("file", ["./file", Path("./file")])
+    def test_illegal_usage(self, file):
+        with pytest.raises(TypeError, match="expect a file stream, not file name"):
+            for _ in reverse_readline(file):
+                pass
 
 
 class TestReverseReadfile:
