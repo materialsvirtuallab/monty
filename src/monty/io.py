@@ -87,9 +87,16 @@ def _get_line_ending(
         first_line = file.buffer.readline()
     elif isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
         first_line = file.readline()
-        file.seek(0)  # reset pointer
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
+
+    # TODO: more critical: make a copy of file, otherwise pointer of a
+    # iterator could change
+    # Reset pointer
+    try:
+        file.seek(0)  # type: ignore[union-attr]
+    except AttributeError:
+        pass
 
     # Return Unix "\n" line ending as default if file is empty
     if not first_line:
@@ -207,7 +214,7 @@ def reverse_readline(
     # Gzip files must use this method because there is no way to negative seek.
     if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
-            yield (line if isinstance(line, str) else line.decode("utf-8"))
+            yield line if isinstance(line, str) else line.decode("utf-8")
 
     else:
         # For bz2 files, seek is expensive. It is therefore in our best
@@ -220,7 +227,7 @@ def reverse_readline(
 
         buffer: str = ""
         m_file.seek(0, 2)
-        eof_pos = m_file.tell()  # need end of file to skip first empty line
+        eof_pos = m_file.tell()  # Needed to skip first match
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
@@ -232,8 +239,8 @@ def reverse_readline(
                 line = buffer[l_end_pos + len_l_end :]
                 buffer = buffer[:l_end_pos]  # buffer doesn't include l_end
 
-                # Skip first match (the last line ending)
-                if l_end_pos != eof_pos:
+                # Skip first match (which is the last line ending)
+                if eof_pos != l_end_pos:
                     yield line + l_end
 
             # Line ending not in current buffer, load next block into the buffer
