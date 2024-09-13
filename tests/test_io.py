@@ -143,11 +143,11 @@ class TestReverseReadline:
 
         with ScratchDir("."):
             # Test text file
-            with open(filename, "w", newline="", encoding="utf-8") as file:
+            with open(filename, "wb") as file:
                 for line in contents:
-                    file.write(line)
+                    file.write(line.encode())
 
-            with zopen(filename, mode="r") as file:
+            with open(filename, mode="r", newline="") as file:
                 revert_contents = tuple(reverse_readline(file))
             assert revert_contents[::-1] == contents
 
@@ -175,14 +175,19 @@ class TestReverseReadline:
         file_name = "test_file.txt"
 
         with ScratchDir("."):
-            with open(file_name, "w", newline="", encoding="utf-8") as file:
+            with open(file_name, "wb") as file:
                 for line in contents:
-                    file.write(line)
+                    file.write(line.encode())
 
             # Test text mode
             with open(file_name, "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file)):
-                    assert line == contents[len(contents) - idx - 1]
+                    # Open text in "r" mode would trigger OS
+                    # line ending handing
+                    assert (
+                        line.rstrip(os.linesep) + l_end
+                        == contents[len(contents) - idx - 1]
+                    )
                     assert isinstance(line, str)
 
             # # TODO: Test binary mode
