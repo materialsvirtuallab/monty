@@ -217,6 +217,11 @@ def reverse_readline(
             yield line if isinstance(line, str) else line.decode("utf-8")
 
     else:
+        # RAM limit should be greater than block size,
+        # as file as read into RAM one block each time
+        if max_mem < blk_size:
+            warnings.warn(f"{max_mem=} smaller than {blk_size=}", stacklevel=2)
+
         # For bz2 files, seek is expensive. It is therefore in our best
         # interest to maximize the block size within RAM usage limit.
 

@@ -109,16 +109,18 @@ class TestReverseReadline:
                 assert isinstance(line, str)
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
-    @pytest.mark.parametrize("ram", [4, 4_000, 4_000_000])
-    def test_reverse_readline_fake_big(self, ram):
+    def test_reverse_readline_fake_big(self):
         """
         Make sure that large text files are read properly,
         by setting max_mem to a very small value.
         """
-        with open(
-            os.path.join(TEST_DIR, "3000_lines.txt"), mode="r", encoding="utf-8"
-        ) as f:
-            for idx, line in enumerate(reverse_readline(f, max_mem=ram)):
+        with (
+            open(
+                os.path.join(TEST_DIR, "3000_lines.txt"), mode="r", encoding="utf-8"
+            ) as f,
+            pytest.warns(match="max_mem=0 smaller than blk_size="),
+        ):
+            for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
     @pytest.mark.skip("DEBUG: TODO")
@@ -144,7 +146,7 @@ class TestReverseReadline:
                 for _line in reverse_readline(f):
                     pytest.fail("No error should be thrown.")
 
-    @pytest.mark.parametrize("ram", [4_000, 4_0000_000])
+    @pytest.mark.parametrize("ram", [4_096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_file_with_empty_lines(self, l_end, ram):
         """Empty lines should not be skipped."""
@@ -180,7 +182,7 @@ class TestReverseReadline:
             # revert_contents_bz2 = tuple(reverse_readline(bz2_filename))
             # assert revert_contents_bz2[::-1] == contents
 
-    @pytest.mark.parametrize("ram", [4, 4_000, 4_0000_000])
+    @pytest.mark.parametrize("ram", [4096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_line_ending(self, l_end, ram):
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
@@ -194,8 +196,7 @@ class TestReverseReadline:
             # Test text mode
             with open(file_name, "r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file, max_mem=ram)):
-                    # Open text in "r" mode would trigger OS
-                    # line ending handing
+                    # OS would automatically change line ending in text mode
                     assert (
                         line.rstrip(os.linesep) + l_end
                         == contents[len(contents) - idx - 1]
@@ -248,7 +249,10 @@ class TestReverseReadfile:
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
         """
-        with pytest.warns(match="File is empty, return Unix line ending \n."):
+        with (
+            pytest.warns(match="File is empty, return Unix line ending \n."),
+            pytest.warns(match="trying to mmap an empty file"),
+        ):
             for _line in reverse_readfile(os.path.join(TEST_DIR, "empty_file.txt")):
                 pytest.fail("No error should be thrown.")
 
