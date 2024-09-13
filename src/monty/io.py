@@ -208,7 +208,7 @@ def reverse_readline(
         Lines from the back of the file.
     """
     # Check for illegal usage
-    if isinstance(m_file, str | Path):
+    if isinstance(m_file, (str, Path)):
         raise TypeError("expect a file stream, not file name")
 
     # Generate line ending
