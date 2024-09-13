@@ -109,10 +109,12 @@ class TestReverseReadline:
                 assert isinstance(line, str)
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
-    def test_reverse_readline_fake_big(self):
+    def test_big_file(self):
         """
         Make sure that large text files are read properly,
         by setting max_mem to a very small value.
+
+        TODO: rewrite test
 
         TODO: when max_mem = 0, the first item generated is "\n",
         but the sequential items are correct.
@@ -129,7 +131,7 @@ class TestReverseReadline:
     def test_small_blk_size(self):
         """TODO: test small block size."""
 
-    def test_reverse_readline_bz2(self):
+    def test_read_bz2(self):
         """
         Make sure a file containing line numbers is read in reverse order,
         i.e. the first line that is read corresponds to the last line number.
@@ -141,7 +143,7 @@ class TestReverseReadline:
         assert lines == ["\n", "HelloWorld.\n"]  # test file has one empty line
         assert all(isinstance(line, str) for line in lines)
 
-    def test_empty_file(self):
+    def test_read_empty_file(self):
         """
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
@@ -153,7 +155,7 @@ class TestReverseReadline:
 
     @pytest.mark.parametrize("ram", [4, 4096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
-    def test_file_with_empty_lines(self, l_end, ram):
+    def test_read_file_with_empty_lines(self, l_end, ram):
         """Empty lines should not be skipped.
         Using a very small RAM size to force non in-RAM mode.
         """
@@ -192,7 +194,7 @@ class TestReverseReadline:
 
     @pytest.mark.parametrize("ram", [4, 4096, 4_0000_000])
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
-    def test_line_ending(self, l_end, ram):
+    def test_different_line_endings(self, l_end, ram):
         """Using a very small RAM size to force non in-RAM mode."""
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
         file_name = "test_file.txt"
@@ -219,10 +221,9 @@ class TestReverseReadline:
             #         assert isinstance(line, str)
 
     @pytest.mark.parametrize("file", ["./file", Path("./file")])
-    def test_illegal_usage(self, file):
+    def test_illegal_file_type(self, file):
         with pytest.raises(TypeError, match="expect a file stream, not file name"):
-            for _ in reverse_readline(file):
-                pass
+            next(reverse_readline(file))
 
 
 class TestReverseReadfile:
@@ -239,7 +240,7 @@ class TestReverseReadfile:
             # OS would automatically convert line ending in text mode
             assert line == f"{str(self.NUM_LINES - idx)}{os.linesep}"
 
-    def test_reverse_readfile_gz(self):
+    def test_read_gz(self):
         """
         Make sure a file containing line numbers is read in reverse order,
         i.e. the first line that is read corresponds to the last line number.
@@ -249,7 +250,7 @@ class TestReverseReadfile:
             assert isinstance(line, str)
             assert line == f"{str(self.NUM_LINES - idx)}\n"
 
-    def test_reverse_readfile_bz2(self):
+    def test_read_bz2(self):
         """
         Make sure a file containing line numbers is read in reverse order,
         i.e. the first line that is read corresponds to the last line number.
@@ -259,7 +260,7 @@ class TestReverseReadfile:
             assert isinstance(line, str)
             assert line == f"{str(self.NUM_LINES - idx)}\n"
 
-    def test_empty_file(self):
+    def test_read_empty_file(self):
         """
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
@@ -272,7 +273,7 @@ class TestReverseReadfile:
                 pytest.fail("No error should be thrown.")
 
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
-    def test_file_with_empty_lines(self, l_end):
+    def test_read_file_with_empty_lines(self, l_end):
         """Empty lines should not be skipped."""
         contents = (f"line1{l_end}", f"{l_end}", f"line3{l_end}")
         filename = "test_empty_line.txt"
@@ -305,7 +306,7 @@ class TestReverseReadfile:
             assert revert_contents_bz2[::-1] == contents
 
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
-    def test_line_ending(self, l_end):
+    def test_different_line_endings(self, l_end):
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
         filename = "test_file.txt"
 
