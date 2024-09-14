@@ -68,9 +68,9 @@ def _get_line_ending(
 
     This function assumes the file has a single consistent line ending.
 
-    WARNING: as per the POSIX standard, a line is:
-        A sequence of zero or more non- characters plus a terminating character.
-    as such this func would fail if the last line misses a terminating character.
+    WARNING: as per the POSIX standard, a line is: "A sequence of zero or
+    more non- characters plus a terminating character.", as such this func
+    would fail if the only line misses a terminating character.
     https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html
 
     Returns:
@@ -78,8 +78,7 @@ def _get_line_ending(
         "\r\n": Windows line ending.
 
     Raises:
-        ValueError: If line ending is unknown, likely the file is
-            missing a terminating character.
+        ValueError: If line ending is unknown.
 
     Warnings:
         If file is empty, "\n" would be used as default.
@@ -151,16 +150,16 @@ def reverse_readfile(
             while file_size > 0:
                 # Find line segment start and end positions
                 seg_start_pos = filemap.rfind(l_end.encode(), 0, file_size)
-                sec_end_pos = file_size + len_l_end
+                seg_end_pos = file_size + len_l_end
 
-                # The first line (original) doesn't have an ending character at its start
+                # The first (originally) line doesn't have an ending character at its head
                 if seg_start_pos == -1:
-                    yield (filemap[:sec_end_pos].decode("utf-8"))
+                    yield (filemap[:seg_end_pos].decode("utf-8"))
 
-                # Skip the first match (the original last line ending character)
+                # Skip the first match (the last line ending character)
                 elif file_size != len(filemap):
                     yield (
-                        filemap[seg_start_pos + len_l_end : sec_end_pos].decode("utf-8")
+                        filemap[seg_start_pos + len_l_end : seg_end_pos].decode("utf-8")
                     )
                 file_size = seg_start_pos
 
@@ -181,12 +180,7 @@ def reverse_readline(
 
     Cases where file would be read forwards and reversed in RAM:
     - If file size is smaller than RAM usage limit (max_mem).
-    - For Gzip files, as reverse seeks are not supported.  # TODO: now supported
-
-    Files larger than max_mem are read one block each time.
-
-    NOTE: this function expect a file stream, and m_file
-        should NOT be the name of the file.
+    - Gzip files, as reverse seeks are not supported.  # TODO: now supported
 
     TODO:
     - Test gzip seek speed (not supported previously)
@@ -206,11 +200,17 @@ def reverse_readline(
         blk_size (int): The buffer size in bytes. Defaults to 4096.
         max_mem (int): The maximum amount of RAM to use in bytes,
             which determines when to reverse a file in-memory versus
-            seeking blocks of a file. For bz2 files, this sets
-            the block size.
+            seeking blocks of a file each time. For bz2 files,
+            this sets the block size.
 
     Yields:
         Lines from the back of the file.
+
+    Raises:
+        TypeError: If m_file is the name of the file (expect file stream).
+
+    Warnings:
+        If max_mem is smaller than blk_size.
     """
     # Check for illegal usage
     if isinstance(m_file, (str, Path)):
@@ -281,8 +281,8 @@ def reverse_readline(
                 if pt_pos == to_read:
                     buffer = l_end + buffer
 
-            # Start of file (no l_end found, and pt_pos at the start)
-            else:  # l_end_pos == -1 and pt_post == 0
+            # Start of file
+            else:  # l_end_pos == -1 (not found) and pt_post == 0 (start)
                 return
 
 
@@ -384,8 +384,7 @@ def get_open_fds() -> int:
     """
     Get the number of open file descriptors for current process.
 
-    Warnings:
-        Will only work on UNIX-like OS-es.
+    Warning, this will only work on UNIX-like OS.
 
     Returns:
         int: The number of open file descriptors for current process.
