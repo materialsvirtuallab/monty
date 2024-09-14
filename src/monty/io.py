@@ -256,7 +256,7 @@ def reverse_readline(
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
-            # Pointer position (also size of remaining block)
+            # Pointer position (also size of remaining file)
             pt_pos: int = m_file.tell()
 
             # Line ending found within buffer
