@@ -164,7 +164,7 @@ class TestReverseReadline:
         with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line)
-        assert lines == ["HelloWorld.\n"]  # test file has one single line
+        assert lines == ["\n", "HelloWorld.\n"]  # test file has one empty line
 
     def test_read_empty_file(self):
         """

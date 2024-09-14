@@ -181,6 +181,8 @@ def reverse_readline(
     Cases where file would be read forwards and reversed in RAM:
     - If file size is smaller than RAM usage limit (max_mem).
     - Gzip files, as reverse seeks are not supported.  # TODO: now supported
+    # WARNING: gzip might decompress in-RAM, and be careful about
+    the RAM usage (compression ratio)
 
     TODO:
     - Could buffer get overly large (buffer += to_read) if
@@ -222,15 +224,11 @@ def reverse_readline(
     l_end: Literal["\r\n", "\n"] = _get_line_ending(m_file)
     len_l_end: Literal[1, 2] = cast(Literal[1, 2], len(l_end))
 
-    # Check if the file stream is a buffered text stream (text instead of binary)
-    is_text: bool = isinstance(m_file, io.TextIOWrapper)
-
-    try:
+    # Bz2 files do not have "name" attribute, just set to max_mem for now
+    if hasattr(m_file, "name"):
         file_size: int = os.path.getsize(m_file.name)
-    except AttributeError:
-        # Bz2 files do not have "name" attribute.
-        # Just set file_size to max_mem for now.
-        file_size = max_mem + 1
+    else:
+        file_size = max_mem
 
     # If the file size is within desired RAM limit, just reverse it in memory.
     # Gzip files must use this method because there is no way to negative seek.
@@ -249,13 +247,16 @@ def reverse_readline(
         if isinstance(m_file, bz2.BZ2File):
             blk_size = min(max_mem, file_size)
 
+        # Check if the file stream is text (instead of binary)
+        is_text: bool = isinstance(m_file, io.TextIOWrapper)
+
         buffer: str = ""
         m_file.seek(0, 2)
         count = 0  # TODO: better way to skip first match
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
-            # Pointer position (also size of remaining file)
+            # Pointer position (also size of remaining block)
             pt_pos: int = m_file.tell()
 
             # Line ending found within buffer
@@ -264,8 +265,8 @@ def reverse_readline(
                 buffer = buffer[:l_end_pos]  # buffer doesn't include l_end
 
                 # Skip first match (the last line ending)
-                if count != 0:
-                    count += 1
+                count += 1
+                if count != 1:
                     yield line + l_end
 
             # Line ending not in current buffer, load next block into the buffer
