@@ -25,6 +25,10 @@ class TestGetLineEnding:
         """Test files with:
         Unix line ending (\n).
         Windows line ending (\r\n).
+
+        For:
+            - Text file: both text mode and binary mode
+            - gzip file and bzip2 file
         """
         test_file = "test_l_end.txt"
         test_line = f"This is a test{l_end}Second line{l_end}".encode()
@@ -36,7 +40,12 @@ class TestGetLineEnding:
             assert _get_line_ending(test_file) == l_end
             assert _get_line_ending(Path(test_file)) == l_end
 
+            # Test text mode
             with open(test_file, "r", encoding="utf-8") as f:
+                assert _get_line_ending(f) == l_end
+
+            # Test binary mode
+            with open(test_file, "rb") as f:
                 assert _get_line_ending(f) == l_end
 
             # Test gzip file
@@ -44,19 +53,19 @@ class TestGetLineEnding:
             with gzip.open(gzip_filename, "wb") as f:
                 f.write(test_line)
 
-            # Opened file
+            # Opened file stream
             with gzip.open(gzip_filename, "rb") as f:
                 assert _get_line_ending(f) == l_end
 
             # Filename directly
             assert _get_line_ending(gzip_filename) == l_end
 
-            # Test opened bzip2 file
+            # Test bzip2 file stream
             bz2_filename = f"{test_file}.bz2"
             with bz2.open(bz2_filename, "wb") as f:
                 f.write(test_line)
 
-            # Opened file
+            # Opened file stream
             with bz2.open(bz2_filename, "rb") as f:
                 assert _get_line_ending(f) == l_end
 
@@ -104,6 +113,7 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
+        # Test text mode
         with open(
             os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8", newline=""
         ) as f:
@@ -111,14 +121,19 @@ class TestReverseReadline:
                 assert isinstance(line, str)
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
+        # Test binary mode
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), mode="rb") as f:
+            for idx, line in enumerate(reverse_readline(f)):
+                assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
+
     def test_big_file(self):
         """
         Make sure that large text files are read properly,
         by setting max_mem to a very small value.
 
-        TODO: rewrite test
+        TODO: rewrite test with a real big file
 
-        TODO: when max_mem = 0, the first item generated is "\n",
+        DEBUG: when max_mem = 0, the first item generated is "\n",
         but the sequential items are correct.
         """
         with (
@@ -130,8 +145,8 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
-    def test_small_blk_size(self):
-        """TODO: test small block size."""
+    def test_blk_size(self):
+        """TODO: test different block sizes."""
 
     def test_read_bz2(self):
         """
@@ -216,11 +231,10 @@ class TestReverseReadline:
                     )
                     assert isinstance(line, str)
 
-            # # TODO: Support/test binary mode
-            # with open(file_name, "rb") as file:
-            #     for idx, line in enumerate(reverse_readline(file)):
-            #         assert line == contents[len(contents) - idx - 1]
-            #         assert isinstance(line, str)
+            # Test binary mode
+            with open(file_name, "rb") as file:
+                for idx, line in enumerate(reverse_readline(file)):
+                    assert line == contents[len(contents) - idx - 1]
 
     @pytest.mark.parametrize("file", ["./file", Path("./file")])
     def test_illegal_file_type(self, file):

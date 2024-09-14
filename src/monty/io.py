@@ -57,7 +57,12 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
 
 
 def _get_line_ending(
-    file: str | Path | io.TextIOWrapper,
+    file: str
+    | Path
+    | io.TextIOWrapper
+    | io.BufferedReader
+    | gzip.GzipFile
+    | bz2.BZ2File,
 ) -> Literal["\r\n", "\n"]:
     """Helper function to get line ending of a file.
 
@@ -79,20 +84,19 @@ def _get_line_ending(
     Warnings:
         If file is empty, "\n" would be used as default.
     """
-    # TODO: critical, read the last N (~2) chars instead of everything
+    # TODO: Read the last N chars instead of the entire line?
     if isinstance(file, (str, Path)):
         with zopen(file, "rb") as f:
             first_line = f.readline()
     elif isinstance(file, io.TextIOWrapper):
         first_line = file.buffer.readline()
-    elif isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
+    elif isinstance(file, (io.BufferedReader, gzip.GzipFile, bz2.BZ2File)):
         first_line = file.readline()
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
-    # TODO: more critical: make a copy of file, otherwise pointer of a
-    # iterator could change
-    # Reset pointer
+    # TODO: Make a copy of file if possible? otherwise pointer of a iterator could change
+    # Reset pointer to position 0
     try:
         file.seek(0)  # type: ignore[union-attr]
     except AttributeError:
@@ -163,7 +167,7 @@ def reverse_readfile(
 
 
 def reverse_readline(
-    m_file,  # TODO: expected type is unclear
+    m_file: io.BufferedReader | io.TextIOWrapper | gzip.GzipFile | bz2.BZ2File,
     blk_size: int = 4096,
     max_mem: int = 4_000_000,
 ) -> Iterator[str]:
@@ -171,6 +175,10 @@ def reverse_readline(
     Read a file backwards line-by-line, and behave similarly to
     the file.readline function. This allows one to efficiently
     get data from the end of a file.
+
+    Supported file stream formats:
+    - TextIOWrapper (text mode) | BufferedReader (binary mode)
+    - gzip/bzip2 file stream
 
     Cases where file would be read forwards and reversed in RAM:
     - If file size is smaller than RAM usage limit (max_mem).
@@ -182,7 +190,6 @@ def reverse_readline(
         should NOT be the name of the file.
 
     TODO:
-    - is it possible to support binary file stream
     - Test gzip seek speed (not supported previously)
     - Test bzip2 seek speed (for any improvement?)
          https://stackoverflow.com/questions/25734252/
@@ -218,7 +225,7 @@ def reverse_readline(
     is_text: bool = isinstance(m_file, io.TextIOWrapper)
 
     try:
-        file_size = os.path.getsize(m_file.name)
+        file_size: int = os.path.getsize(m_file.name)
     except AttributeError:
         # Bz2 files do not have "name" attribute.
         # Just set file_size to max_mem for now.
@@ -228,11 +235,11 @@ def reverse_readline(
     # Gzip files must use this method because there is no way to negative seek.
     if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
         for line in reversed(m_file.readlines()):
-            yield line if isinstance(line, str) else line.decode("utf-8")
+            yield line if isinstance(line, str) else cast(bytes, line).decode("utf-8")
 
     else:
         # RAM limit should be greater than block size,
-        # as file as read into RAM one block each time
+        # as file is read into RAM one block each time.
         if max_mem < blk_size:
             warnings.warn(f"{max_mem=} smaller than {blk_size=}", stacklevel=2)
 
@@ -247,7 +254,7 @@ def reverse_readline(
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
-            # Pointer position (also size of remaining file to read)
+            # Pointer position (also size of remaining file)
             pt_pos: int = m_file.tell()
 
             # Line ending found within buffer
@@ -255,8 +262,8 @@ def reverse_readline(
                 line = buffer[l_end_pos + len_l_end :]
                 buffer = buffer[:l_end_pos]  # buffer doesn't include l_end
 
-                # Skip first match (which is the last line ending)
-                if eof_pos != l_end_pos:
+                # Skip first match (the last line ending)
+                if l_end_pos != eof_pos:
                     yield line + l_end
 
             # Line ending not in current buffer, load next block into the buffer
@@ -264,9 +271,9 @@ def reverse_readline(
                 to_read: int = min(blk_size, pt_pos)
                 m_file.seek(pt_pos - to_read)
                 if is_text:
-                    buffer += m_file.read(to_read)
+                    buffer += cast(str, m_file.read(to_read))
                 else:
-                    buffer += m_file.read(to_read).decode("utf-8")
+                    buffer += cast(bytes, m_file.read(to_read)).decode("utf-8")
 
                 # Move pointer forward
                 m_file.seek(pt_pos - to_read)
@@ -275,8 +282,8 @@ def reverse_readline(
                 if pt_pos == to_read:
                     buffer = l_end + buffer
 
-            # Start of file (no more l_end found, and pt_pos at the start)
-            else:
+            # Start of file (no l_end found, and pt_pos at the start)
+            else:  # l_end_pos == -1 and pt_post == 0
                 return
 
 
