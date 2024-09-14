@@ -72,6 +72,18 @@ class TestGetLineEnding:
             # Filename directly
             assert _get_line_ending(bz2_filename) == l_end
 
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
+    def test_miss_last_l_end(self, l_end):
+        """Make sure this still works if the last l_end is missing."""
+        test_line = f"This is a test{l_end}Second line".encode()
+        test_file = "test_l_end.txt"
+
+        with ScratchDir("."):
+            with open(test_file, "wb") as f:
+                f.write(test_line)
+
+            assert _get_line_ending(test_file) == l_end
+
     def test_unknown_file_type(self):
         unknown_file = 123
 

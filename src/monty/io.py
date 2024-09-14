@@ -95,8 +95,7 @@ def _get_line_ending(
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
-    # TODO: Make a copy of file if possible? otherwise pointer of a iterator could change
-    # Reset pointer to position 0
+    # Reset pointer to start of file
     try:
         file.seek(0)  # type: ignore[union-attr]
     except AttributeError:
@@ -112,7 +111,7 @@ def _get_line_ending(
     if first_line.endswith(b"\n"):
         return "\n"
 
-    # It's likely the line is missing a line ending for its last line
+    # It's likely the line is missing a line ending for the first line
     raise ValueError(f"Unknown line ending in line {repr(first_line)}.")
 
 
