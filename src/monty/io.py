@@ -183,6 +183,8 @@ def reverse_readline(
     - Gzip files, as reverse seeks are not supported.  # TODO: now supported
 
     TODO:
+    - Could buffer get overly large (buffer += to_read) if
+        rfind(l_end) missed several times in a row (line longer than blk_size)?
     - Test gzip seek speed (not supported previously)
     - Test bzip2 seek speed (for any improvement?)
          https://stackoverflow.com/questions/25734252/
@@ -197,11 +199,11 @@ def reverse_readline(
 
     Args:
         m_file: File stream to read (backwards).
-        blk_size (int): The buffer size in bytes. Defaults to 4096.
-        max_mem (int): The maximum amount of RAM to use in bytes,
-            which determines when to reverse a file in-memory versus
-            seeking blocks of a file each time. For bz2 files,
-            this sets the block size.
+        blk_size (int): The block size to read each time in bytes.
+            Defaults to 4096.  # TODO: it's unclear what this actually controls?
+        max_mem (int): Threshold to determine when to reverse a file
+            in-memory versus reading blocks of a file each time.
+            For bz2 files, this sets the block size.
 
     Yields:
         Lines from the back of the file.
