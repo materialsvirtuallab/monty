@@ -251,7 +251,7 @@ def reverse_readline(
 
         buffer: str = ""
         m_file.seek(0, 2)
-        eof_pos = m_file.tell()  # Needed to skip first match
+        count = 0  # TODO: better way to skip first match
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
@@ -264,7 +264,8 @@ def reverse_readline(
                 buffer = buffer[:l_end_pos]  # buffer doesn't include l_end
 
                 # Skip first match (the last line ending)
-                if l_end_pos != eof_pos:
+                if count != 0:
+                    count += 1
                     yield line + l_end
 
             # Line ending not in current buffer, load next block into the buffer

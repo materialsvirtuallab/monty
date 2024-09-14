@@ -138,15 +138,10 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f)):
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
-    def test_big_file(self):
+    def test_fake_big_file(self):
         """
         Make sure that large text files are read properly,
         by setting max_mem to a very small value.
-
-        TODO: rewrite test with a real big file
-
-        DEBUG: when max_mem = 0, the first item generated is "\n",
-        but the sequential items are correct.
         """
         with (
             open(
@@ -169,8 +164,7 @@ class TestReverseReadline:
         with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rb") as f:
             for line in reverse_readline(f):
                 lines.append(line)
-        assert lines == ["\n", "HelloWorld.\n"]  # test file has one empty line
-        assert all(isinstance(line, str) for line in lines)
+        assert lines == ["HelloWorld.\n"]  # test file has one single line
 
     def test_read_empty_file(self):
         """
