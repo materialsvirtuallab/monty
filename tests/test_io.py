@@ -138,19 +138,28 @@ class TestReverseReadline:
             for idx, line in enumerate(reverse_readline(f)):
                 assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
 
-    def test_fake_big_file(self):
+    @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
+    def test_big_file(self, l_end):
         """
-        Make sure that large text files are read properly,
-        by setting max_mem to a very small value.
+        Test read big file.
+
+        A file of 300,000 lines is about 2 MB, but the default max_mem
+        is still around 4 MB, so we have to reduce it.
         """
-        with (
-            open(
-                os.path.join(TEST_DIR, "3000_lines.txt"), mode="r", encoding="utf-8"
-            ) as f,
-            pytest.warns(match="max_mem=0 smaller than blk_size="),
-        ):
-            for idx, line in enumerate(reverse_readline(f, max_mem=0)):
-                assert line == f"{str(self.NUMLINES - idx)}{os.linesep}"
+        file_name = "big_file.txt"
+        num_lines = 300_000
+
+        with ScratchDir("."):
+            # Write test file (~ 2 MB)
+            with open(file_name, "wb") as file:
+                for num in range(1, num_lines + 1):
+                    file.write(f"{num}{l_end}".encode())
+
+            assert os.path.getsize(file_name) > 1_000_000  # 1 MB
+
+            with open(file_name) as file:
+                for idx, line in enumerate(reverse_readline(file, max_mem=4096)):
+                    assert line == f"{str(num_lines - idx)}{os.linesep}"
 
     def test_blk_size(self):
         """TODO: test different block sizes."""
