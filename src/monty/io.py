@@ -82,8 +82,11 @@ def _get_line_ending(
 
     Warnings:
         If file is empty, "\n" would be used as default.
+
+    TODO:
+        - Read the last N chars instead of the entire line?
+        - Unit test assert file.tell() is at start of file
     """
-    # TODO: Read the last N chars instead of the entire line?
     if isinstance(file, (str, Path)):
         with zopen(file, "rb") as f:
             first_line = f.readline()
@@ -94,11 +97,9 @@ def _get_line_ending(
     else:
         raise TypeError(f"Unknown file type {type(file).__name__}")
 
-    # Reset pointer to start of file
-    try:
-        file.seek(0)  # type: ignore[union-attr]
-    except AttributeError:
-        pass
+    # Reset pointer to start of file if possible
+    if hasattr(file, "seek"):
+        file.seek(0)
 
     # Return Unix "\n" line ending as default if file is empty
     if not first_line:
@@ -180,18 +181,15 @@ def reverse_readline(
 
     Cases where file would be read forwards and reversed in RAM:
     - If file size is smaller than RAM usage limit (max_mem).
-    - Gzip files, as reverse seeks are not supported.  # TODO: now supported
+    - Gzip files, as reverse seeks are not supported.
     # WARNING: gzip might decompress in-RAM, and be careful about
-    the RAM usage (compression ratio)
+    the RAM usage (compression ratio)  # TODO: confirm this
 
     TODO:
     - Could buffer get overly large (buffer += to_read) if
-        rfind(l_end) missed several times in a row (line longer than blk_size)?
+        rfind(l_end) missed several times in a row (line longer
+        than blk_size)? Need to profile RAM usage.
     - Test gzip seek speed (not supported previously)
-    - Test bzip2 seek speed (for any improvement?)
-         https://stackoverflow.com/questions/25734252/
-         why-is-seeking-from-the-end-of-a-file-allowed-for-
-         bzip2-files-and-not-gzip-files
 
     Reference:
         Based on code by Peter Astrand <astrand@cendio.se>, using
