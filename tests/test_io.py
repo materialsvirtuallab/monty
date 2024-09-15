@@ -157,9 +157,15 @@ class TestReverseReadline:
 
             assert os.path.getsize(file_name) > 1_000_000  # 1 MB
 
-            with open(file_name) as file:
+            # Test text mode
+            with open(file_name, mode="r", encoding="utf-8") as file:
                 for idx, line in enumerate(reverse_readline(file, max_mem=4096)):
                     assert line == f"{str(num_lines - idx)}{os.linesep}"
+
+            # Test binary mode
+            with open(file_name, mode="rb") as file:
+                for idx, line in enumerate(reverse_readline(file, max_mem=4096)):
+                    assert line == f"{str(num_lines - idx)}{l_end}"
 
     def test_blk_size(self):
         """TODO: test different block sizes."""

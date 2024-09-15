@@ -200,7 +200,7 @@ def reverse_readline(
     Args:
         m_file: File stream to read (backwards).
         blk_size (int): The block size to read each time in bytes.
-            Defaults to 4096.  # TODO: it's unclear what this actually controls?
+            Defaults to 4096.  # TODO: unclear what this actually controls?
         max_mem (int): Threshold to determine when to reverse a file
             in-memory versus reading blocks of a file each time.
             For bz2 files, this sets the block size.
@@ -272,9 +272,9 @@ def reverse_readline(
                 to_read: int = min(blk_size, pt_pos)
                 m_file.seek(pt_pos - to_read)
                 if is_text:
-                    buffer += cast(str, m_file.read(to_read))
+                    buffer = cast(str, m_file.read(to_read)) + buffer
                 else:
-                    buffer += cast(bytes, m_file.read(to_read)).decode("utf-8")
+                    buffer = cast(bytes, m_file.read(to_read)).decode("utf-8") + buffer
 
                 # Move pointer forward
                 m_file.seek(pt_pos - to_read)
@@ -284,7 +284,7 @@ def reverse_readline(
                     buffer = l_end + buffer
 
             # Start of file
-            else:  # l_end_pos == -1 (not found) and pt_post == 0 (start)
+            else:  # l_end_pos == -1 and pt_post == 0
                 return
 
 
