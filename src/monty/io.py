@@ -85,7 +85,6 @@ def _get_line_ending(
 
     TODO:
         - Read the last N chars instead of the entire line?
-        - Unit test assert file.tell() is at start of file
     """
     if isinstance(file, (str, Path)):
         with zopen(file, "rb") as f:
@@ -200,7 +199,7 @@ def reverse_readline(
     Args:
         m_file: File stream to read (backwards).
         blk_size (int): The block size to read each time in bytes.
-            Defaults to 4096.  # TODO: unclear what this actually controls?
+            Defaults to 4096.
         max_mem (int): Threshold to determine when to reverse a file
             in-memory versus reading blocks of a file each time.
             For bz2 files, this sets the block size.
