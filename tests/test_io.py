@@ -3,6 +3,7 @@ from __future__ import annotations
 import bz2
 import gzip
 import os
+import warnings
 from pathlib import Path
 
 import pytest
@@ -167,9 +168,6 @@ class TestReverseReadline:
                 for idx, line in enumerate(reverse_readline(file, max_mem=4096)):
                     assert line == f"{str(num_lines - idx)}{l_end}"
 
-    def test_blk_size(self):
-        """TODO: test different block sizes."""
-
     def test_read_bz2(self):
         """
         Make sure a file containing line numbers is read in reverse order,
@@ -197,6 +195,10 @@ class TestReverseReadline:
         """Empty lines should not be skipped.
         Using a very small RAM size to force non in-RAM mode.
         """
+        warnings.filterwarnings(
+            "ignore", message="max_mem=4 smaller than blk_size=4096"
+        )
+
         contents = (f"line1{l_end}", f"{l_end}", f"line3{l_end}")
         filename = "test_empty_line.txt"
 
@@ -234,6 +236,10 @@ class TestReverseReadline:
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_different_line_endings(self, l_end, ram):
         """Using a very small RAM size to force non in-RAM mode."""
+        warnings.filterwarnings(
+            "ignore", message="max_mem=4 smaller than blk_size=4096"
+        )
+
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
         file_name = "test_file.txt"
 
