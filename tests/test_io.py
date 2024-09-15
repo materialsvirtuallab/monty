@@ -158,9 +158,9 @@ class TestReverseReadline:
             assert os.path.getsize(file_name) > 1_000_000  # 1 MB
 
             # Test text mode
-            with open(file_name, mode="r", encoding="utf-8") as file:
+            with open(file_name, mode="r", encoding="utf-8", newline="") as file:
                 for idx, line in enumerate(reverse_readline(file, max_mem=4096)):
-                    assert line == f"{str(num_lines - idx)}{os.linesep}"
+                    assert line == f"{str(num_lines - idx)}{l_end}"
 
             # Test binary mode
             with open(file_name, mode="rb") as file:
