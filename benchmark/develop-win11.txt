@@ -143,4 +143,3 @@ Last line 178466370 read, time taken: 0.00046110 s.
 75% line 133849777 read, time taken: 27.03316890 s.
 50% line 89233185 read, time taken: 53.99668290 s.
 ============================End of reverse_readfile=============================
-
