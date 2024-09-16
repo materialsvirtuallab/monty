@@ -13,7 +13,7 @@ import time
 from monty.io import reverse_readfile, reverse_readline
 
 # Test config
-FILE_SIZES_MB = (1, 10, 100, 500, 1000,)
+FILE_SIZES_MB = (1, 10, 100, 500, 1000, 5000)
 
 
 def create_test_file(file_path, target_size_mb):
@@ -22,14 +22,29 @@ def create_test_file(file_path, target_size_mb):
     line_number = 1
 
     start = time.perf_counter()
-    with open(file_path, "w", encoding="utf-8", newline="") as f:
-        while os.path.getsize(file_path) < target_size:
-            f.write(f"This is line number {line_number}\n")
-            line_number += 1
+
+    # Create a list of lines and concatenate them at the end
+    lines = []
+    total_bytes_written = 0
+
+    while total_bytes_written < target_size:
+        line = f"This is line number {line_number}\n"
+        line_bytes = line.encode('utf-8')
+
+        if total_bytes_written + len(line_bytes) > target_size:
+            break
+
+        lines.append(line)
+        total_bytes_written += len(line_bytes)
+        line_number += 1
+
+    with open(file_path, "wb") as f:
+        f.write("".join(lines).encode('utf-8'))
 
     last_time = time.perf_counter() - start
+
     total_lines = line_number - 1
-    print(f"Test file of size {target_size_mb} MB created with {total_lines} lines, time used {last_time} seconds.")
+    print(f"Test file of size {target_size_mb} MB created with {total_lines} lines, time used {last_time:.2f} seconds.")
     return total_lines
 
 
