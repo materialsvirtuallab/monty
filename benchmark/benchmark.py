@@ -29,7 +29,7 @@ def create_test_file(file_path, target_size_mb):
 
     while total_bytes_written < target_size:
         line = f"This is line number {line_number}\n"
-        line_bytes = line.encode('utf-8')
+        line_bytes = line.encode("utf-8")
 
         if total_bytes_written + len(line_bytes) > target_size:
             break
@@ -39,12 +39,14 @@ def create_test_file(file_path, target_size_mb):
         line_number += 1
 
     with open(file_path, "wb") as f:
-        f.write("".join(lines).encode('utf-8'))
+        f.write("".join(lines).encode("utf-8"))
 
     last_time = time.perf_counter() - start
 
     total_lines = line_number - 1
-    print(f"Test file of size {target_size_mb} MB created with {total_lines} lines, time used {last_time:.2f} seconds.")
+    print(
+        f"Test file of size {target_size_mb} MB created with {total_lines} lines, time used {last_time:.2f} seconds."
+    )
     return total_lines
 
 
