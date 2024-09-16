@@ -59,7 +59,8 @@ def test_builtin_readline(file_path, total_lines):
     """Test built-in readline function."""
     start = time.perf_counter()
     with open(file_path, "r") as f:
-        _last_line = f.readlines()[-1]
+        for _ in range(total_lines):
+            _last_line = f.readline()
     last_time = time.perf_counter() - start
 
     line_75_idx = int(0.75 * total_lines)
@@ -67,12 +68,14 @@ def test_builtin_readline(file_path, total_lines):
 
     start = time.perf_counter()
     with open(file_path, "r") as f:
-        _line = f.readlines()[line_75_idx]
+        for _ in range(line_75_idx + 1):
+            _line_75 = f.readline()
     time_75 = time.perf_counter() - start
 
     start = time.perf_counter()
     with open(file_path, "r") as f:
-        _line = f.readlines()[line_50_idx]
+        for _ in range(line_50_idx + 1):
+            _line_50 = f.readline()
     time_50 = time.perf_counter() - start
 
     print_separator("Built-in readline")
