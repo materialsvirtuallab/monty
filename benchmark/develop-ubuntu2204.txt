@@ -1,0 +1,146 @@
+
+Running on OS: Linux-5.15.153.1-microsoft-standard-WSL2-x86_64-with-glibc2.35, Python 3.12.5
+==========================Benchmarking file size: 1 MB==========================
+
+Test file of size 1 MB created with 40757 lines, time used 0.01 seconds.
+===============================Built-in readline================================
+
+Last line 40757 read, time taken: 0.00299960 s.
+75% line 30567 read, time taken: 0.00225260 s.
+50% line 20378 read, time taken: 0.00147340 s.
+============================End of Built-in readline============================
+
+================================reverse_readline================================
+
+Last line 40757 read, time taken: 0.00215450 s.
+75% line 30567 read, time taken: 0.00299860 s.
+50% line 20378 read, time taken: 0.00347230 s.
+============================End of reverse_readline=============================
+
+================================reverse_readfile================================
+
+Last line 40757 read, time taken: 0.00007200 s.
+75% line 30567 read, time taken: 0.00393440 s.
+50% line 20378 read, time taken: 0.00788680 s.
+============================End of reverse_readfile=============================
+
+=========================Benchmarking file size: 10 MB==========================
+
+Test file of size 10 MB created with 392476 lines, time used 0.11 seconds.
+===============================Built-in readline================================
+
+Last line 392476 read, time taken: 0.02891790 s.
+75% line 294357 read, time taken: 0.02203730 s.
+50% line 196238 read, time taken: 0.01453720 s.
+============================End of Built-in readline============================
+
+================================reverse_readline================================
+
+Last line 392476 read, time taken: 0.00010690 s.
+75% line 294357 read, time taken: 0.08467931 s.
+50% line 196238 read, time taken: 0.16308102 s.
+============================End of reverse_readline=============================
+
+================================reverse_readfile================================
+
+Last line 392476 read, time taken: 0.00007110 s.
+75% line 294357 read, time taken: 0.03886231 s.
+50% line 196238 read, time taken: 0.07676581 s.
+============================End of reverse_readfile=============================
+
+=========================Benchmarking file size: 100 MB=========================
+
+Test file of size 100 MB created with 3784596 lines, time used 1.11 seconds.
+===============================Built-in readline================================
+
+Last line 3784596 read, time taken: 0.28840513 s.
+75% line 2838447 read, time taken: 0.22593426 s.
+50% line 1892298 read, time taken: 0.14234112 s.
+============================End of Built-in readline============================
+
+================================reverse_readline================================
+
+Last line 3784596 read, time taken: 0.00010290 s.
+75% line 2838447 read, time taken: 0.80831332 s.
+50% line 1892298 read, time taken: 1.62029043 s.
+============================End of reverse_readline=============================
+
+================================reverse_readfile================================
+
+Last line 3784596 read, time taken: 0.00007960 s.
+75% line 2838447 read, time taken: 0.35162211 s.
+50% line 1892298 read, time taken: 0.70727881 s.
+============================End of reverse_readfile=============================
+
+=========================Benchmarking file size: 500 MB=========================
+
+Test file of size 500 MB created with 18462038 lines, time used 5.24 seconds.
+===============================Built-in readline================================
+
+Last line 18462038 read, time taken: 1.38365400 s.
+75% line 13846528 read, time taken: 1.11287734 s.
+50% line 9231019 read, time taken: 0.69148150 s.
+============================End of Built-in readline============================
+
+================================reverse_readline================================
+
+Last line 18462038 read, time taken: 0.00009210 s.
+75% line 13846528 read, time taken: 3.98585572 s.
+50% line 9231019 read, time taken: 7.93171154 s.
+============================End of reverse_readline=============================
+
+================================reverse_readfile================================
+
+Last line 18462038 read, time taken: 0.00007860 s.
+75% line 13846528 read, time taken: 1.75920299 s.
+50% line 9231019 read, time taken: 3.45924340 s.
+============================End of reverse_readfile=============================
+
+========================Benchmarking file size: 1000 MB=========================
+
+Test file of size 1000 MB created with 36540934 lines, time used 10.33 seconds.
+===============================Built-in readline================================
+
+Last line 36540934 read, time taken: 2.79645362 s.
+75% line 27405700 read, time taken: 2.20113669 s.
+50% line 18270467 read, time taken: 1.37504352 s.
+============================End of Built-in readline============================
+
+================================reverse_readline================================
+
+Last line 36540934 read, time taken: 0.00009140 s.
+75% line 27405700 read, time taken: 8.09242921 s.
+50% line 18270467 read, time taken: 15.43773309 s.
+============================End of reverse_readline=============================
+
+================================reverse_readfile================================
+
+Last line 36540934 read, time taken: 0.00010630 s.
+75% line 27405700 read, time taken: 3.53976401 s.
+50% line 18270467 read, time taken: 7.18230309 s.
+============================End of reverse_readfile=============================
+
+========================Benchmarking file size: 5000 MB=========================
+
+Test file of size 5000 MB created with 178466370 lines, time used 59.52 seconds.
+===============================Built-in readline================================
+
+Last line 178466370 read, time taken: 14.19376238 s.
+75% line 133849777 read, time taken: 10.26362936 s.
+50% line 89233185 read, time taken: 6.69335968 s.
+============================End of Built-in readline============================
+
+================================reverse_readline================================
+
+Last line 178466370 read, time taken: 0.00255530 s.
+75% line 133849777 read, time taken: 39.30825986 s.
+50% line 89233185 read, time taken: 76.32949390 s.
+============================End of reverse_readline=============================
+
+================================reverse_readfile================================
+
+Last line 178466370 read, time taken: 0.00073260 s.
+75% line 133849777 read, time taken: 18.99764580 s.
+50% line 89233185 read, time taken: 37.87064222 s.
+============================End of reverse_readfile=============================
+
