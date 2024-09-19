@@ -238,7 +238,7 @@ def reverse_readline(
 
         buffer: str = ""
         m_file.seek(0, 2)
-        skipped_1st_l_end = False
+        skipped_1st_l_end: bool = False
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
