@@ -203,14 +203,13 @@ class TestReverseReadline:
         """Empty lines should not be skipped.
         Using a very small RAM size to force non in-RAM mode.
         """
-        warnings.filterwarnings(
-            "ignore", message="max_mem=4 smaller than blk_size=4096"
-        )
-
         contents = (f"line1{l_end}", f"{l_end}", f"line3{l_end}")
         filename = "test_empty_line.txt"
 
-        with ScratchDir("."):
+        with ScratchDir("."), warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore", message="max_mem=4 smaller than blk_size=4096"
+            )
             # Test text file
             with open(filename, "wb") as file:
                 for line in contents:
@@ -244,14 +243,14 @@ class TestReverseReadline:
     @pytest.mark.parametrize("l_end", ["\n", "\r\n"])
     def test_different_line_endings(self, l_end, ram):
         """Using a very small RAM size to force non in-RAM mode."""
-        warnings.filterwarnings(
-            "ignore", message="max_mem=4 smaller than blk_size=4096"
-        )
-
         contents = (f"Line1{l_end}", f"Line2{l_end}", f"Line3{l_end}")
         file_name = "test_file.txt"
 
-        with ScratchDir("."):
+        with ScratchDir("."), warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore", message="max_mem=4 smaller than blk_size=4096"
+            )
+
             with open(file_name, "wb") as file:
                 for line in contents:
                     file.write(line.encode())
