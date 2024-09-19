@@ -69,8 +69,8 @@ def _get_line_ending(
     This function assumes the file has a single consistent line ending.
 
     WARNING: as per the POSIX standard, a line is: "A sequence of zero or
-    more non- characters plus a terminating character.", as such this func
-    would fail if the only line misses a terminating character.
+    more non-<newline> characters plus a terminating <newline> char.",
+    as such this func might fail if the only line misses a terminating character.
     https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html
 
     Returns:
