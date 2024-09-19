@@ -82,9 +82,6 @@ def _get_line_ending(
 
     Warnings:
         If file is empty, "\n" would be used as default.
-
-    TODO:
-        - Read the last N chars instead of the entire line?
     """
     if isinstance(file, (str, Path)):
         with zopen(file, "rb") as f:
@@ -181,14 +178,6 @@ def reverse_readline(
     Cases where file would be read forwards and reversed in RAM:
     - If file size is smaller than RAM usage limit (max_mem).
     - Gzip files, as reverse seeks are not supported.
-    # WARNING: gzip might decompress in-RAM, and be careful about
-    the RAM usage (compression ratio)  # TODO: confirm this
-
-    TODO:
-    - Could buffer get overly large (buffer += to_read) if
-        rfind(l_end) missed several times in a row (line longer
-        than blk_size)? Need to profile RAM usage.
-    - Test gzip seek speed (not supported previously)
 
     Reference:
         Based on code by Peter Astrand <astrand@cendio.se>, using
@@ -249,7 +238,7 @@ def reverse_readline(
 
         buffer: str = ""
         m_file.seek(0, 2)
-        skip_1st_l_end = False  # TODO: better way to skip first match
+        skip_1st_l_end = False
 
         while True:
             l_end_pos: int = buffer.rfind(l_end)
