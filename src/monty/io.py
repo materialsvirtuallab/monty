@@ -253,7 +253,8 @@ def reverse_readline(
                 # Skip first match (the last line ending)
                 if skipped_1st_l_end:
                     yield line + l_end
-                skipped_1st_l_end = True
+                else:
+                    skipped_1st_l_end = True
 
             # Line ending not in current buffer, load next block into the buffer
             elif pt_pos > 0:
