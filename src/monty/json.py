@@ -27,11 +27,6 @@ except ImportError:
     bson = None
 
 try:
-    from ruamel.yaml import YAML
-except ImportError:
-    YAML = None
-
-try:
     import orjson
 except ImportError:
     orjson = None
@@ -42,6 +37,8 @@ __version__ = "3.0.0"
 
 def _load_redirect(redirect_file):
     try:
+        from ruamel.yaml import YAML
+
         with open(redirect_file) as f:
             yaml = YAML()
             d = yaml.load(f)
