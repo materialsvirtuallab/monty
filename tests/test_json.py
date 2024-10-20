@@ -8,10 +8,7 @@ import pathlib
 from enum import Enum
 from typing import Union
 
-try:
-    import numpy as np
-except ImportError:
-    np = None
+import numpy as np
 
 try:
     import pandas as pd
@@ -564,7 +561,6 @@ class TestJson:
         d = json.loads(djson)
         assert isinstance(d[0], float)
 
-    @pytest.mark.skipif(np is None, reason="numpy not present")
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         with pytest.raises(TypeError):
@@ -872,9 +868,7 @@ class TestJson:
         clean = jsanitize(s)
         assert clean == s.to_dict()
 
-    @pytest.mark.skipif(
-        np is None or ObjectId is None, reason="numpy and bson not present"
-    )
+    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
     def test_jsanitize_numpy_bson(self):
         d = {
             "a": ["b", np.array([1, 2, 3])],

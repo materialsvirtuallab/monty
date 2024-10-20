@@ -21,12 +21,8 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid4
 
+import numpy as np
 from ruamel.yaml import YAML
-
-try:
-    import numpy as np
-except ImportError:
-    np = None
 
 try:
     import pydantic
@@ -595,23 +591,22 @@ class MontyEncoder(json.JSONEncoder):
                 d["data"] = o.numpy().tolist()
             return d
 
-        if np is not None:
-            if isinstance(o, np.ndarray):
-                if str(o.dtype).startswith("complex"):
-                    return {
-                        "@module": "numpy",
-                        "@class": "array",
-                        "dtype": str(o.dtype),
-                        "data": [o.real.tolist(), o.imag.tolist()],
-                    }
+        if isinstance(o, np.ndarray):
+            if str(o.dtype).startswith("complex"):
                 return {
                     "@module": "numpy",
                     "@class": "array",
                     "dtype": str(o.dtype),
-                    "data": o.tolist(),
+                    "data": [o.real.tolist(), o.imag.tolist()],
                 }
-            if isinstance(o, np.generic):
-                return o.item()
+            return {
+                "@module": "numpy",
+                "@class": "array",
+                "dtype": str(o.dtype),
+                "data": o.tolist(),
+            }
+        if isinstance(o, np.generic):
+            return o.item()
 
         if _check_type(o, "pandas.core.frame.DataFrame"):
             return {
@@ -809,7 +804,7 @@ class MontyDecoder(json.JSONDecoder):
                         ).type(d["dtype"])
                     return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
 
-                elif np is not None and modname == "numpy" and classname == "array":
+                elif modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
                             [
@@ -932,7 +927,8 @@ def jsanitize(
             )
             for i in obj
         ]
-    if np is not None and isinstance(obj, np.ndarray):
+
+    if isinstance(obj, np.ndarray):
         try:
             return [
                 jsanitize(
@@ -946,8 +942,10 @@ def jsanitize(
             ]
         except TypeError:
             return obj.tolist()
-    if np is not None and isinstance(obj, np.generic):
+
+    if isinstance(obj, np.generic):
         return obj.item()
+
     if _check_type(
         obj,
         (
