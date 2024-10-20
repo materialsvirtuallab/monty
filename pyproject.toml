@@ -106,3 +106,4 @@ lint.select = [
 ]
 
 lint.isort.required-imports = ["from __future__ import annotations"]
+lint.isort.known-first-party = ["monty"]

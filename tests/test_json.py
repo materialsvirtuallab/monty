@@ -9,6 +9,17 @@ from enum import Enum
 from typing import Union
 
 import numpy as np
+import pytest
+from monty.json import (
+    MontyDecoder,
+    MontyEncoder,
+    MSONable,
+    _load_redirect,
+    jsanitize,
+    load,
+)
+
+from . import __version__ as TESTS_VERSION
 
 try:
     import pandas as pd
@@ -34,18 +45,6 @@ try:
     from bson.objectid import ObjectId
 except ImportError:
     ObjectId = None
-
-import pytest
-from monty.json import (
-    MontyDecoder,
-    MontyEncoder,
-    MSONable,
-    _load_redirect,
-    jsanitize,
-    load,
-)
-
-from . import __version__ as tests_version
 
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -317,7 +316,7 @@ class TestMSONable:
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
-        assert d["@version"] == tests_version
+        assert d["@version"] == TESTS_VERSION
 
     def test_nested_to_from_dict(self):
         GMC = GoodMSONClass
