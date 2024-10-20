@@ -64,7 +64,7 @@ def _load_redirect(redirect_file):
     return dict(redirect_dict)
 
 
-def _check_type(obj, type_str) -> bool:
+def _check_type(obj, type_str: tuple[str, ...] | str) -> bool:
     """Alternative to isinstance that avoids imports.
 
     Checks whether obj is an instance of the type defined by type_str. This
