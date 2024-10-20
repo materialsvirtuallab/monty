@@ -22,11 +22,6 @@ from typing import Any
 from uuid import UUID, uuid4
 
 try:
-    import numpy as np
-except ImportError:
-    np = None
-
-try:
     import pydantic
 except ImportError:
     pydantic = None
@@ -594,7 +589,9 @@ class MontyEncoder(json.JSONEncoder):
                 d["data"] = o.numpy().tolist()
             return d
 
-        if np is not None:
+        try:
+            import numpy as np
+
             if isinstance(o, np.ndarray):
                 if str(o.dtype).startswith("complex"):
                     return {
@@ -611,6 +608,8 @@ class MontyEncoder(json.JSONEncoder):
                 }
             if isinstance(o, np.generic):
                 return o.item()
+        except ImportError:
+            pass
 
         if _check_type(o, "pandas.core.frame.DataFrame"):
             return {
@@ -800,6 +799,7 @@ class MontyDecoder(json.JSONDecoder):
 
                 elif modname == "torch" and classname == "Tensor":
                     try:
+                        import numpy as np
                         import torch
 
                         if "Complex" in d["dtype"]:
@@ -814,16 +814,22 @@ class MontyDecoder(json.JSONDecoder):
                     except ImportError:
                         pass
 
-                elif np is not None and modname == "numpy" and classname == "array":
-                    if d["dtype"].startswith("complex"):
-                        return np.array(
-                            [
-                                np.array(r) + np.array(i) * 1j
-                                for r, i in zip(*d["data"])
-                            ],
-                            dtype=d["dtype"],
-                        )
-                    return np.array(d["data"], dtype=d["dtype"])
+                elif modname == "numpy" and classname == "array":
+                    try:
+                        import numpy as np
+
+                        if d["dtype"].startswith("complex"):
+                            return np.array(
+                                [
+                                    np.array(r) + np.array(i) * 1j
+                                    for r, i in zip(*d["data"])
+                                ],
+                                dtype=d["dtype"],
+                            )
+                        return np.array(d["data"], dtype=d["dtype"])
+
+                    except ImportError:
+                        pass
 
                 elif modname == "pandas":
                     import pandas as pd
@@ -926,6 +932,7 @@ def jsanitize(
         or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
     ):
         return obj
+
     if isinstance(obj, (list, tuple)):
         return [
             jsanitize(
@@ -937,22 +944,30 @@ def jsanitize(
             )
             for i in obj
         ]
-    if np is not None and isinstance(obj, np.ndarray):
-        try:
-            return [
-                jsanitize(
-                    i,
-                    strict=strict,
-                    allow_bson=allow_bson,
-                    enum_values=enum_values,
-                    recursive_msonable=recursive_msonable,
-                )
-                for i in obj.tolist()
-            ]
-        except TypeError:
-            return obj.tolist()
-    if np is not None and isinstance(obj, np.generic):
-        return obj.item()
+
+    try:
+        import numpy as np
+
+        if isinstance(obj, np.ndarray):
+            try:
+                return [
+                    jsanitize(
+                        i,
+                        strict=strict,
+                        allow_bson=allow_bson,
+                        enum_values=enum_values,
+                        recursive_msonable=recursive_msonable,
+                    )
+                    for i in obj.tolist()
+                ]
+            except TypeError:
+                return obj.tolist()
+
+        if isinstance(obj, np.generic):
+            return obj.item()
+    except ImportError:
+        pass
+
     if _check_type(
         obj,
         (
@@ -962,6 +977,7 @@ def jsanitize(
         ),
     ):
         return obj.to_dict()
+
     if isinstance(obj, dict):
         return {
             str(k): jsanitize(
@@ -973,10 +989,13 @@ def jsanitize(
             )
             for k, v in obj.items()
         }
+
     if isinstance(obj, (int, float)):
         return obj
+
     if obj is None:
         return None
+
     if isinstance(obj, (pathlib.Path, datetime.datetime)):
         return str(obj)
 
