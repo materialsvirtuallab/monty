@@ -21,6 +21,8 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid4
 
+from ruamel.yaml import YAML
+
 try:
     import numpy as np
 except ImportError:
@@ -42,15 +44,9 @@ except ImportError:
     bson = None
 
 try:
-    from ruamel.yaml import YAML
-except ImportError:
-    YAML = None
-
-try:
     import orjson
 except ImportError:
     orjson = None
-
 
 try:
     import torch
