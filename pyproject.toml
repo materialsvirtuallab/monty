@@ -33,6 +33,7 @@ ci = [
   "types-orjson",
   "types-requests",
 ]
+# dev is for "dev" module, not for development
 dev = ["ipython"]
 docs = [
     "sphinx",
@@ -49,6 +50,7 @@ json = [
 multiprocessing = ["tqdm"]
 optional = ["monty[dev,json,multiprocessing,serialization]"]
 serialization = ["msgpack"]
+task = ["requests", "invoke"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
