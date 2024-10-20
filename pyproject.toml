@@ -25,36 +25,30 @@ dependencies = [
 version = "2024.7.30"
 
 [project.optional-dependencies]
-json = [
-  "pydantic",
-  "orjson",
-  "bson",
-  "pandas",
-  "torch",
-  "pint",
-]
-serialization = [
-  "msgpack",
- ]
-multiprocessing = [
-  "tqdm",
-]
-dev = [
-  "ipython",
-]
-
 ci = [
-    "monty[json,serialization,multiprocessing,dev]",
-    "pytest>=8",
-    "pytest-cov>=4",
-    "coverage",
-    "types-orjson",
-    "types-requests",
+  "coverage",
+  "monty[optional]",
+  "pytest>=8",
+  "pytest-cov>=4",
+  "types-orjson",
+  "types-requests",
 ]
+dev = ["ipython"]
 docs = [
     "sphinx",
     "sphinx_rtd_theme",
 ]
+json = [
+  "bson",
+  "orjson",
+  "pandas",
+  "pydantic",
+  "pint",
+  "torch",
+]
+multiprocessing = ["tqdm"]
+optional = ["monty[dev,json,multiprocessing,serialization]"]
+serialization = ["msgpack"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
