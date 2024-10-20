@@ -232,7 +232,7 @@ def install_excepthook(hook_type: str = "color", **kwargs) -> int:
     try:
         from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
     except ImportError:
-        warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
+        warnings.warn("Cannot install excepthook, IPython not installed")
         return 1
 
     # Select the hook.
