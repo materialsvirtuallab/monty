@@ -778,7 +778,7 @@ class MontyDecoder(json.JSONDecoder):
                         try:
                             import pydantic
 
-                            if issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
+                            if issubclass(cls_, pydantic.BaseModel):
                                 d = {
                                     k: self.process_decoded(v) for k, v in data.items()
                                 }
@@ -800,13 +800,13 @@ class MontyDecoder(json.JSONDecoder):
                         import torch
 
                         if "Complex" in d["dtype"]:
-                            return torch.tensor(  # pylint: disable=E1101
+                            return torch.tensor(
                                 [
                                     np.array(r) + np.array(i) * 1j
                                     for r, i in zip(*d["data"])
                                 ],
                             ).type(d["dtype"])
-                        return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
+                        return torch.tensor(d["data"]).type(d["dtype"])
 
                     except ImportError:
                         pass
@@ -871,8 +871,8 @@ class MontyDecoder(json.JSONDecoder):
         """
         if orjson is not None:
             try:
-                d = orjson.loads(s)  # pylint: disable=E1101
-            except orjson.JSONDecodeError:  # pylint: disable=E1101
+                d = orjson.loads(s)
+            except orjson.JSONDecodeError:
                 d = json.loads(s)
         else:
             d = json.loads(s)
