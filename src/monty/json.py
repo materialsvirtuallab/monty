@@ -586,8 +586,8 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, Path):
             return {"@module": "pathlib", "@class": "Path", "string": str(o)}
 
-        if torch is not None and isinstance(o, torch.Tensor):
-            # Support for Pytorch Tensors.
+        # Support for Pytorch Tensors
+        if _check_type(o, "torch.Tensor"):
             d: dict[str, Any] = {
                 "@module": "torch",
                 "@class": "Tensor",
