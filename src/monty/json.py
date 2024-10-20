@@ -98,7 +98,7 @@ def _check_type(obj, type_str) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any(o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str)
+    return any(f"{o.__module__}.{o.__name__}" == ts for o in mro for ts in type_str)
 
 
 class MSONable:
