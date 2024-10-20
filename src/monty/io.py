@@ -9,11 +9,7 @@ import bz2
 import errno
 import gzip
 import io
-
-try:
-    import lzma
-except ImportError:
-    lzma = None  # type: ignore[assignment]
+import lzma
 import mmap
 import os
 import subprocess
