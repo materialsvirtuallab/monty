@@ -22,16 +22,6 @@ from typing import Any
 from uuid import UUID, uuid4
 
 try:
-    import pydantic
-except ImportError:
-    pydantic = None
-
-try:
-    from pydantic_core import core_schema
-except ImportError:
-    core_schema = None
-
-try:
     import bson
 except ImportError:
     bson = None
@@ -328,8 +318,11 @@ class MSONable:
         """
         pydantic v2 core schema definition
         """
-        if core_schema is None:
-            raise RuntimeError("Pydantic >= 2.0 is required for validation")
+        try:
+            from pydantic_core import core_schema
+
+        except ImportError as exc:
+            raise RuntimeError("Pydantic >= 2.0 is required for validation") from exc
 
         s = core_schema.with_info_plain_validator_function(cls.validate_monty_v2)
 
@@ -654,7 +647,7 @@ class MontyEncoder(json.JSONEncoder):
                 raise AttributeError(e)
 
         try:
-            if pydantic is not None and isinstance(o, pydantic.BaseModel):
+            if _check_type(o, "pydantic.main.BaseModel"):
                 d = o.model_dump()
             elif (
                 dataclasses is not None
@@ -784,11 +777,18 @@ class MontyDecoder(json.JSONDecoder):
                             return cls_.from_dict(data)
                         if issubclass(cls_, Enum):
                             return cls_(d["value"])
-                        if pydantic is not None and issubclass(
-                            cls_, pydantic.BaseModel
-                        ):  # pylint: disable=E1101
-                            d = {k: self.process_decoded(v) for k, v in data.items()}
-                            return cls_(**d)
+
+                        try:
+                            import pydantic
+
+                            if issubclass(cls_, pydantic.BaseModel):  # pylint: disable=E1101
+                                d = {
+                                    k: self.process_decoded(v) for k, v in data.items()
+                                }
+                                return cls_(**d)
+                        except ImportError:
+                            pass
+
                         if (
                             dataclasses is not None
                             and (not issubclass(cls_, MSONable))
@@ -1017,7 +1017,7 @@ def jsanitize(
     if isinstance(obj, str):
         return obj
 
-    if pydantic is not None and isinstance(obj, pydantic.BaseModel):  # pylint: disable=E1101
+    if _check_type(obj, "pydantic.main.BaseModel"):
         return jsanitize(
             MontyEncoder().default(obj),
             strict=strict,
