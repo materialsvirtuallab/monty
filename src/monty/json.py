@@ -21,6 +21,8 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid4
 
+from ruamel.yaml import YAML
+
 try:
     import bson
 except ImportError:
@@ -37,8 +39,6 @@ __version__ = "3.0.0"
 
 def _load_redirect(redirect_file):
     try:
-        from ruamel.yaml import YAML
-
         with open(redirect_file) as f:
             yaml = YAML()
             d = yaml.load(f)
