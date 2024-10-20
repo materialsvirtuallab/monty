@@ -48,7 +48,6 @@ ci = [
     "pytest>=8",
     "pytest-cov>=4",
     "coverage",
-    "pymongo",  # TODO: not used?
     "types-orjson",
     "types-requests",
 ]
