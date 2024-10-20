@@ -10,6 +10,7 @@ from typing import Union
 
 import numpy as np
 import pytest
+
 from monty.json import (
     MontyDecoder,
     MontyEncoder,

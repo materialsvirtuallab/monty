@@ -6,6 +6,7 @@ import os
 import unittest
 
 import pytest
+
 from monty.serialization import dumpfn, loadfn
 from monty.tempfile import ScratchDir
 
