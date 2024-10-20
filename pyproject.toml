@@ -30,7 +30,6 @@ ci = [
   "monty[optional]",
   "pytest>=8",
   "pytest-cov>=4",
-  "types-orjson",
   "types-requests",
 ]
 # dev is for "dev" module, not for development
