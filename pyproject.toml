@@ -40,7 +40,7 @@ docs = [
 ]
 json = [
   "bson",
-  "orjson",
+  "orjson>=3.6.1",
   "pandas",
   "pydantic",
   "pint",
