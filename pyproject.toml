@@ -38,6 +38,7 @@ docs = [
     "sphinx",
     "sphinx_rtd_theme",
 ]
+io = ["lzma"]
 json = [
   "bson",
   "orjson",
@@ -47,7 +48,7 @@ json = [
   "torch",
 ]
 multiprocessing = ["tqdm"]
-optional = ["monty[dev,json,multiprocessing,serialization]"]
+optional = ["monty[dev,io,json,multiprocessing,serialization]"]
 serialization = ["msgpack"]
 
 [tool.setuptools.packages.find]
