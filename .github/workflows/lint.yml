@@ -19,9 +19,12 @@ jobs:
 
       - name: ruff
         run: |
+          ruff --version
           ruff check .
           ruff format --check .
 
       - name: mypy
         run: |
+          mypy --version
+          rm -rf .mypy_cache
           mypy src
