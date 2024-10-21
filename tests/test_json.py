@@ -1096,6 +1096,33 @@ class TestCheckType:
         assert _check_type(b, class_name_A)
         assert isinstance(b, A)
 
+    def test_callable(self):
+        # Test function
+        def my_function():
+            pass
+
+        callable_class_name = (
+            f"{type(my_function).__module__}.{type(my_function).__qualname__}"
+        )
+
+        assert _check_type(my_function, callable_class_name), callable_class_name
+        assert isinstance(my_function, type(my_function))
+
+        # Test callable class
+        class MyCallableClass:
+            def __call__(self):
+                pass
+
+        callable_instance = MyCallableClass()
+        assert callable(callable_instance)
+
+        callable_class_instance_name = f"{type(callable_instance).__module__}.{type(callable_instance).__qualname__}"
+
+        assert _check_type(
+            callable_instance, callable_class_instance_name
+        ), callable_class_instance_name
+        assert isinstance(callable_instance, MyCallableClass)
+
     def test_numpy(self):
         # Test NumPy array
         arr = np.array([1, 2, 3])
