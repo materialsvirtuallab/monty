@@ -17,11 +17,6 @@ import time
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-try:
-    import lzma
-except ImportError:
-    lzma = None  # type: ignore[assignment]
-
 if TYPE_CHECKING:
     from typing import IO, Generator, Union
 
