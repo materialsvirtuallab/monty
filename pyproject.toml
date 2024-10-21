@@ -46,7 +46,7 @@ docs = [
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["monty"]
+include = ["monty", "monty.*"]
 
 [tool.black]
 line-length = 120
