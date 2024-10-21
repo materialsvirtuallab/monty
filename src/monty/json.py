@@ -18,10 +18,14 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
+import numpy as np
 from ruamel.yaml import YAML
+
+if TYPE_CHECKING:
+    from typing import Any
 
 try:
     import bson
@@ -521,7 +525,7 @@ def _recursive_name_object_map_replacement(d, name_object_map):
 class MontyEncoder(json.JSONEncoder):
     """
     A Json Encoder which supports the MSONable API, plus adds support for
-    numpy arrays, datetime objects, bson ObjectIds (requires bson).
+    NumPy arrays, datetime objects, bson ObjectIds (requires bson).
     Usage::
         # Add it as a *cls* keyword when using json.dump
         json.dumps(object, cls=MontyEncoder)
@@ -579,27 +583,23 @@ class MontyEncoder(json.JSONEncoder):
                 d["data"] = o.numpy().tolist()
             return d
 
-        try:
-            import numpy as np
-
-            if isinstance(o, np.ndarray):
-                if str(o.dtype).startswith("complex"):
-                    return {
-                        "@module": "numpy",
-                        "@class": "array",
-                        "dtype": str(o.dtype),
-                        "data": [o.real.tolist(), o.imag.tolist()],
-                    }
+        if isinstance(o, np.ndarray):
+            if str(o.dtype).startswith("complex"):
                 return {
                     "@module": "numpy",
                     "@class": "array",
                     "dtype": str(o.dtype),
-                    "data": o.tolist(),
+                    "data": [o.real.tolist(), o.imag.tolist()],
                 }
-            if isinstance(o, np.generic):
-                return o.item()
-        except ImportError:
-            pass
+            return {
+                "@module": "numpy",
+                "@class": "array",
+                "dtype": str(o.dtype),
+                "data": o.tolist(),
+            }
+
+        if isinstance(o, np.generic):
+            return o.item()
 
         if _check_type(o, "pandas.core.frame.DataFrame"):
             return {
@@ -796,7 +796,6 @@ class MontyDecoder(json.JSONDecoder):
 
                 elif modname == "torch" and classname == "Tensor":
                     try:
-                        import numpy as np
                         import torch
 
                         if "Complex" in d["dtype"]:
@@ -812,21 +811,15 @@ class MontyDecoder(json.JSONDecoder):
                         pass
 
                 elif modname == "numpy" and classname == "array":
-                    try:
-                        import numpy as np
-
-                        if d["dtype"].startswith("complex"):
-                            return np.array(
-                                [
-                                    np.array(r) + np.array(i) * 1j
-                                    for r, i in zip(*d["data"])
-                                ],
-                                dtype=d["dtype"],
-                            )
-                        return np.array(d["data"], dtype=d["dtype"])
-
-                    except ImportError:
-                        pass
+                    if d["dtype"].startswith("complex"):
+                        return np.array(
+                            [
+                                np.array(r) + np.array(i) * 1j
+                                for r, i in zip(*d["data"])
+                            ],
+                            dtype=d["dtype"],
+                        )
+                    return np.array(d["data"], dtype=d["dtype"])
 
                 elif modname == "pandas":
                     import pandas as pd
@@ -942,28 +935,23 @@ def jsanitize(
             for i in obj
         ]
 
-    try:
-        import numpy as np
+    if isinstance(obj, np.ndarray):
+        try:
+            return [
+                jsanitize(
+                    i,
+                    strict=strict,
+                    allow_bson=allow_bson,
+                    enum_values=enum_values,
+                    recursive_msonable=recursive_msonable,
+                )
+                for i in obj.tolist()
+            ]
+        except TypeError:
+            return obj.tolist()
 
-        if isinstance(obj, np.ndarray):
-            try:
-                return [
-                    jsanitize(
-                        i,
-                        strict=strict,
-                        allow_bson=allow_bson,
-                        enum_values=enum_values,
-                        recursive_msonable=recursive_msonable,
-                    )
-                    for i in obj.tolist()
-                ]
-            except TypeError:
-                return obj.tolist()
-
-        if isinstance(obj, np.generic):
-            return obj.item()
-    except ImportError:
-        pass
+    if isinstance(obj, np.generic):
+        return obj.item()
 
     if _check_type(
         obj,
