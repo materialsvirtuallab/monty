@@ -41,7 +41,7 @@ except ImportError:
 __version__ = "3.0.0"
 
 
-def _load_redirect(redirect_file):
+def _load_redirect(redirect_file) -> dict:
     try:
         with open(redirect_file) as f:
             yaml = YAML()
@@ -52,7 +52,7 @@ def _load_redirect(redirect_file):
         return {}
 
     # Convert the full paths to module/class
-    redirect_dict = defaultdict(dict)
+    redirect_dict: dict = defaultdict(dict)
     for old_path, new_path in d.items():
         old_class = old_path.split(".")[-1]
         old_module = ".".join(old_path.split(".")[:-1])
