@@ -1072,6 +1072,30 @@ class TestJson:
 
 
 class TestCheckType:
+    def test_subclass(self):
+        class A:
+            pass
+
+        class B(A):
+            pass
+
+        a, b = A(), B()
+
+        class_name_A = f"{type(a).__module__}.{type(a).__qualname__}"
+        class_name_B = f"{type(b).__module__}.{type(b).__qualname__}"
+
+        # a is an instance of A, but not B
+        assert _check_type(a, class_name_A)
+        assert isinstance(a, A)
+        assert not _check_type(a, class_name_B)
+        assert not isinstance(a, B)
+
+        # b is an instance of both B and A
+        assert _check_type(b, class_name_B)
+        assert isinstance(b, B)
+        assert _check_type(b, class_name_A)
+        assert isinstance(b, A)
+
     def test_numpy(self):
         # Test NumPy array
         arr = np.array([1, 2, 3])
