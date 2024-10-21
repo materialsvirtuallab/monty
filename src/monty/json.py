@@ -652,7 +652,7 @@ class MontyEncoder(json.JSONEncoder):
                 and dataclasses.is_dataclass(o)
             ):
                 # This handles dataclasses that are not subclasses of MSONAble.
-                d = dataclasses.asdict(o)  # type: ignore[call-overload]
+                d = dataclasses.asdict(o)  # type: ignore[call-overload, arg-type]
             elif hasattr(o, "as_dict"):
                 d = o.as_dict()
             elif isinstance(o, Enum):

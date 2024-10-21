@@ -7,13 +7,13 @@ import unittest
 
 import pytest
 
+from monty.serialization import dumpfn, loadfn
+from monty.tempfile import ScratchDir
+
 try:
     import msgpack
 except ImportError:
     msgpack = None
-
-from monty.serialization import dumpfn, loadfn
-from monty.tempfile import ScratchDir
 
 
 class TestSerial:
