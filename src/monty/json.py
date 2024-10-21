@@ -16,7 +16,7 @@ from collections import OrderedDict, defaultdict
 from enum import Enum
 from hashlib import sha1
 from importlib import import_module
-from inspect import getfullargspec
+from inspect import getfullargspec, isclass
 from pathlib import Path
 from typing import Any
 from uuid import UUID, uuid4
@@ -105,12 +105,13 @@ def _check_type(obj: object, type_str: str | tuple[str, ...]) -> bool:
     list all the types that an object can resolve to in order of generality
     (all objects have the builtins.object as the last one).
     """
-    type_str = type_str if isinstance(type_str, tuple) else (type_str,)
-    # I believe this try-except is only necessary for callable types
-    try:
-        mro = type(obj).mro()
-    except TypeError:
+    if isclass(obj):
         return False
+
+    type_str = type_str if isinstance(type_str, tuple) else (type_str,)
+
+    mro = type(obj).mro()
+
     return any(
         o.__module__ + "." + o.__qualname__ == ts for o in mro for ts in type_str
     )
