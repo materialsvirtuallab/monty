@@ -5,10 +5,11 @@ on: [push, pull_request, workflow_call]
 jobs:
   build:
     strategy:
+      fail-fast: false
       max-parallel: 20
       matrix:
         os: [ubuntu-latest, macos-14, windows-latest]
-        python-version: ["3.9", "3.x"]
+        python-version: ["3.9", "3.12"]
 
     runs-on: ${{ matrix.os }}
 

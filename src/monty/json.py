@@ -18,23 +18,14 @@ from hashlib import sha1
 from importlib import import_module
 from inspect import getfullargspec
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-try:
-    import numpy as np
-except ImportError:
-    np = None
+import numpy as np
+from ruamel.yaml import YAML
 
-try:
-    import pydantic
-except ImportError:
-    pydantic = None
-
-try:
-    from pydantic_core import core_schema
-except ImportError:
-    core_schema = None
+if TYPE_CHECKING:
+    from typing import Any
 
 try:
     import bson
@@ -42,25 +33,15 @@ except ImportError:
     bson = None
 
 try:
-    from ruamel.yaml import YAML
-except ImportError:
-    YAML = None
-
-try:
     import orjson
 except ImportError:
     orjson = None
 
 
-try:
-    import torch
-except ImportError:
-    torch = None
-
 __version__ = "3.0.0"
 
 
-def _load_redirect(redirect_file):
+def _load_redirect(redirect_file) -> dict:
     try:
         with open(redirect_file) as f:
             yaml = YAML()
@@ -71,7 +52,7 @@ def _load_redirect(redirect_file):
         return {}
 
     # Convert the full paths to module/class
-    redirect_dict = defaultdict(dict)
+    redirect_dict: dict = defaultdict(dict)
     for old_path, new_path in d.items():
         old_class = old_path.split(".")[-1]
         old_module = ".".join(old_path.split(".")[:-1])
@@ -87,7 +68,7 @@ def _load_redirect(redirect_file):
     return dict(redirect_dict)
 
 
-def _check_type(obj, type_str) -> bool:
+def _check_type(obj, type_str: tuple[str, ...] | str) -> bool:
     """Alternative to isinstance that avoids imports.
 
     Checks whether obj is an instance of the type defined by type_str. This
@@ -121,7 +102,7 @@ def _check_type(obj, type_str) -> bool:
         mro = type(obj).mro()
     except TypeError:
         return False
-    return any(o.__module__ + "." + o.__name__ == ts for o in mro for ts in type_str)
+    return any(f"{o.__module__}.{o.__name__}" == ts for o in mro for ts in type_str)
 
 
 class MSONable:
@@ -338,8 +319,11 @@ class MSONable:
         """
         pydantic v2 core schema definition
         """
-        if core_schema is None:
-            raise RuntimeError("Pydantic >= 2.0 is required for validation")
+        try:
+            from pydantic_core import core_schema
+
+        except ImportError as exc:
+            raise RuntimeError("Pydantic >= 2.0 is required for validation") from exc
 
         s = core_schema.with_info_plain_validator_function(cls.validate_monty_v2)
 
@@ -541,7 +525,7 @@ def _recursive_name_object_map_replacement(d, name_object_map):
 class MontyEncoder(json.JSONEncoder):
     """
     A Json Encoder which supports the MSONable API, plus adds support for
-    numpy arrays, datetime objects, bson ObjectIds (requires bson).
+    NumPy arrays, datetime objects, bson ObjectIds (requires bson).
     Usage::
         # Add it as a *cls* keyword when using json.dump
         json.dumps(object, cls=MontyEncoder)
@@ -586,8 +570,8 @@ class MontyEncoder(json.JSONEncoder):
         if isinstance(o, Path):
             return {"@module": "pathlib", "@class": "Path", "string": str(o)}
 
-        if torch is not None and isinstance(o, torch.Tensor):
-            # Support for Pytorch Tensors.
+        # Support for Pytorch Tensors
+        if _check_type(o, "torch.Tensor"):
             d: dict[str, Any] = {
                 "@module": "torch",
                 "@class": "Tensor",
@@ -599,23 +583,23 @@ class MontyEncoder(json.JSONEncoder):
                 d["data"] = o.numpy().tolist()
             return d
 
-        if np is not None:
-            if isinstance(o, np.ndarray):
-                if str(o.dtype).startswith("complex"):
-                    return {
-                        "@module": "numpy",
-                        "@class": "array",
-                        "dtype": str(o.dtype),
-                        "data": [o.real.tolist(), o.imag.tolist()],
-                    }
+        if isinstance(o, np.ndarray):
+            if str(o.dtype).startswith("complex"):
                 return {
                     "@module": "numpy",
                     "@class": "array",
                     "dtype": str(o.dtype),
-                    "data": o.tolist(),
+                    "data": [o.real.tolist(), o.imag.tolist()],
                 }
-            if isinstance(o, np.generic):
-                return o.item()
+            return {
+                "@module": "numpy",
+                "@class": "array",
+                "dtype": str(o.dtype),
+                "data": o.tolist(),
+            }
+
+        if isinstance(o, np.generic):
+            return o.item()
 
         if _check_type(o, "pandas.core.frame.DataFrame"):
             return {
@@ -660,7 +644,7 @@ class MontyEncoder(json.JSONEncoder):
                 raise AttributeError(e)
 
         try:
-            if pydantic is not None and isinstance(o, pydantic.BaseModel):
+            if _check_type(o, "pydantic.main.BaseModel"):
                 d = o.model_dump()
             elif (
                 dataclasses is not None
@@ -668,7 +652,7 @@ class MontyEncoder(json.JSONEncoder):
                 and dataclasses.is_dataclass(o)
             ):
                 # This handles dataclasses that are not subclasses of MSONAble.
-                d = dataclasses.asdict(o)  # type: ignore[call-overload]
+                d = dataclasses.asdict(o)  # type: ignore[call-overload, arg-type]
             elif hasattr(o, "as_dict"):
                 d = o.as_dict()
             elif isinstance(o, Enum):
@@ -790,11 +774,18 @@ class MontyDecoder(json.JSONDecoder):
                             return cls_.from_dict(data)
                         if issubclass(cls_, Enum):
                             return cls_(d["value"])
-                        if pydantic is not None and issubclass(
-                            cls_, pydantic.BaseModel
-                        ):  # pylint: disable=E1101
-                            d = {k: self.process_decoded(v) for k, v in data.items()}
-                            return cls_(**d)
+
+                        try:
+                            import pydantic
+
+                            if issubclass(cls_, pydantic.BaseModel):
+                                d = {
+                                    k: self.process_decoded(v) for k, v in data.items()
+                                }
+                                return cls_(**d)
+                        except ImportError:
+                            pass
+
                         if (
                             dataclasses is not None
                             and (not issubclass(cls_, MSONable))
@@ -803,17 +794,23 @@ class MontyDecoder(json.JSONDecoder):
                             d = {k: self.process_decoded(v) for k, v in data.items()}
                             return cls_(**d)
 
-                elif torch is not None and modname == "torch" and classname == "Tensor":
-                    if "Complex" in d["dtype"]:
-                        return torch.tensor(  # pylint: disable=E1101
-                            [
-                                np.array(r) + np.array(i) * 1j
-                                for r, i in zip(*d["data"])
-                            ],
-                        ).type(d["dtype"])
-                    return torch.tensor(d["data"]).type(d["dtype"])  # pylint: disable=E1101
+                elif modname == "torch" and classname == "Tensor":
+                    try:
+                        import torch  # import torch is very expensive
 
-                elif np is not None and modname == "numpy" and classname == "array":
+                        if "Complex" in d["dtype"]:
+                            return torch.tensor(
+                                [
+                                    np.array(r) + np.array(i) * 1j
+                                    for r, i in zip(*d["data"])
+                                ],
+                            ).type(d["dtype"])
+                        return torch.tensor(d["data"]).type(d["dtype"])
+
+                    except ImportError:
+                        pass
+
+                elif modname == "numpy" and classname == "array":
                     if d["dtype"].startswith("complex"):
                         return np.array(
                             [
@@ -867,8 +864,8 @@ class MontyDecoder(json.JSONDecoder):
         """
         if orjson is not None:
             try:
-                d = orjson.loads(s)  # pylint: disable=E1101
-            except orjson.JSONDecodeError:  # pylint: disable=E1101
+                d = orjson.loads(s)
+            except orjson.JSONDecodeError:
                 d = json.loads(s)
         else:
             d = json.loads(s)
@@ -925,6 +922,7 @@ def jsanitize(
         or (bson is not None and isinstance(obj, bson.objectid.ObjectId))
     ):
         return obj
+
     if isinstance(obj, (list, tuple)):
         return [
             jsanitize(
@@ -936,7 +934,8 @@ def jsanitize(
             )
             for i in obj
         ]
-    if np is not None and isinstance(obj, np.ndarray):
+
+    if isinstance(obj, np.ndarray):
         try:
             return [
                 jsanitize(
@@ -950,8 +949,10 @@ def jsanitize(
             ]
         except TypeError:
             return obj.tolist()
-    if np is not None and isinstance(obj, np.generic):
+
+    if isinstance(obj, np.generic):
         return obj.item()
+
     if _check_type(
         obj,
         (
@@ -961,6 +962,7 @@ def jsanitize(
         ),
     ):
         return obj.to_dict()
+
     if isinstance(obj, dict):
         return {
             str(k): jsanitize(
@@ -972,10 +974,13 @@ def jsanitize(
             )
             for k, v in obj.items()
         }
+
     if isinstance(obj, (int, float)):
         return obj
+
     if obj is None:
         return None
+
     if isinstance(obj, (pathlib.Path, datetime.datetime)):
         return str(obj)
 
@@ -997,7 +1002,7 @@ def jsanitize(
     if isinstance(obj, str):
         return obj
 
-    if pydantic is not None and isinstance(obj, pydantic.BaseModel):  # pylint: disable=E1101
+    if _check_type(obj, "pydantic.main.BaseModel"):
         return jsanitize(
             MontyEncoder().default(obj),
             strict=strict,
