@@ -8,15 +8,29 @@ import pathlib
 from enum import Enum
 from typing import Union
 
-try:
-    import numpy as np
-except ImportError:
-    np = None
+import numpy as np
+import pytest
+
+from monty.json import (
+    MontyDecoder,
+    MontyEncoder,
+    MSONable,
+    _load_redirect,
+    jsanitize,
+    load,
+)
+
+from . import __version__ as TESTS_VERSION
 
 try:
     import pandas as pd
 except ImportError:
     pd = None
+
+try:
+    import pint
+except ImportError:
+    pint = None
 
 try:
     import torch
@@ -33,19 +47,7 @@ try:
 except ImportError:
     ObjectId = None
 
-import pytest
-from monty.json import (
-    MontyDecoder,
-    MontyEncoder,
-    MSONable,
-    _load_redirect,
-    jsanitize,
-    load,
-)
-
-from . import __version__ as tests_version
-
-test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
+TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
 class GoodMSONClass(MSONable):
@@ -183,6 +185,11 @@ class ClassContainingSeries(MSONable):
         self.s = s
 
 
+class ClassContainingQuantity(MSONable):
+    def __init__(self, qty):
+        self.qty = qty
+
+
 class ClassContainingNumpyArray(MSONable):
     def __init__(self, np_a):
         self.np_a = np_a
@@ -310,7 +317,7 @@ class TestMSONable:
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
-        assert d["@version"] == tests_version
+        assert d["@version"] == TESTS_VERSION
 
     def test_nested_to_from_dict(self):
         GMC = GoodMSONClass
@@ -554,7 +561,6 @@ class TestJson:
         d = json.loads(djson)
         assert isinstance(d[0], float)
 
-    @pytest.mark.skipif(np is None, reason="numpy not present")
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         with pytest.raises(TypeError):
@@ -665,6 +671,24 @@ class TestJson:
         assert isinstance(obj, ClassContainingSeries)
         assert isinstance(obj.s["df"][0], pd.Series)
         assert list(obj.s["df"][0].a), [1, 2 == 3]
+
+    @pytest.mark.skipif(pint is None, reason="pint not present")
+    def test_pint_quantity(self):
+        ureg = pint.UnitRegistry()
+        cls = ClassContainingQuantity(qty=pint.Quantity("9.81 m/s**2"))
+
+        d = json.loads(MontyEncoder().encode(cls))
+        print(d)
+
+        assert d["qty"]["@module"] == "pint"
+        assert d["qty"]["@class"] == "Quantity"
+        assert d["qty"].get("@version") is not None
+
+        obj = ClassContainingQuantity.from_dict(d)
+        assert isinstance(obj, ClassContainingQuantity)
+        assert isinstance(obj.qty, pint.Quantity)
+        assert obj.qty.magnitude == 9.81
+        assert str(obj.qty.units) == "meter / second ** 2"
 
     def test_callable(self):
         instance = MethodSerializationClass(a=1)
@@ -844,9 +868,7 @@ class TestJson:
         clean = jsanitize(s)
         assert clean == s.to_dict()
 
-    @pytest.mark.skipif(
-        np is None or ObjectId is None, reason="numpy and bson not present"
-    )
+    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
     def test_jsanitize_numpy_bson(self):
         d = {
             "a": ["b", np.array([1, 2, 3])],
@@ -890,7 +912,7 @@ class TestJson:
             json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
-        data = _load_redirect(os.path.join(test_dir, "test_settings.yaml"))
+        data = _load_redirect(os.path.join(TEST_DIR, "test_settings.yaml"))
         assert data == {
             "old_module": {
                 "old_class": {"@class": "new_class", "@module": "new_module"}

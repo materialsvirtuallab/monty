@@ -9,6 +9,7 @@ from gzip import GzipFile
 from pathlib import Path
 
 import pytest
+
 from monty.shutil import (
     compress_dir,
     compress_file,
@@ -127,7 +128,7 @@ class TestGzipDir:
 
         self.mtime = os.path.getmtime(os.path.join(test_dir, "gzip_dir", "tempfile"))
 
-    def test_gzip(self):
+    def test_gzip_dir(self):
         full_f = os.path.join(test_dir, "gzip_dir", "tempfile")
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
@@ -138,6 +139,29 @@ class TestGzipDir:
             assert g.readline().decode("utf-8") == "what"
 
         assert os.path.getmtime(f"{full_f}.gz") == pytest.approx(self.mtime, 4)
+
+    def test_gzip_dir_file_coexist(self):
+        """Test case where both file and file.gz exist."""
+        full_f = os.path.join(test_dir, "gzip_dir", "temptestfile")
+        gz_f = f"{full_f}.gz"
+
+        # Create both the file and its gzipped version
+        with open(full_f, "w") as f:
+            f.write("not gzipped")
+        with GzipFile(gz_f, "wb") as g:
+            g.write(b"gzipped")
+
+        with pytest.warns(
+            UserWarning, match="Both temptestfile and temptestfile.gz exist."
+        ):
+            gzip_dir(os.path.join(test_dir, "gzip_dir"))
+
+        # Verify contents of the files
+        with open(full_f, "r") as f:
+            assert f.read() == "not gzipped"
+
+        with GzipFile(gz_f, "rb") as g:
+            assert g.read() == b"gzipped"
 
     def test_handle_sub_dirs(self):
         sub_dir = os.path.join(test_dir, "gzip_dir", "sub_dir")

@@ -3,16 +3,18 @@ from __future__ import annotations
 import os
 import shutil
 
+import pytest
+
 from monty.tempfile import ScratchDir
 
-test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
+TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
 class TestScratchDir:
     def setup_method(self):
         self.cwd = os.getcwd()
-        os.chdir(test_dir)
-        self.scratch_root = os.path.join(test_dir, "..", "..", "tempscratch")
+        os.chdir(TEST_DIR)
+        self.scratch_root = os.path.join(TEST_DIR, "..", "..", "tempscratch")
         os.mkdir(self.scratch_root)
 
     def test_with_copy(self):
@@ -49,23 +51,24 @@ class TestScratchDir:
         # We write a pre-scratch file.
         with open("pre_scratch_text", "w") as f:
             f.write("write")
-        init_gz = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
-        with (
-            ScratchDir(
-                self.scratch_root,
-                copy_from_current_on_enter=True,
-                copy_to_current_on_exit=True,
-                gzip_on_exit=True,
-            ),
-            open("scratch_text", "w") as f,
-        ):
-            f.write("write")
+        init_gz_files = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
+        with pytest.warns(match="Both 3000_lines.txt and 3000_lines.txt.gz exist."):
+            with (
+                ScratchDir(
+                    self.scratch_root,
+                    copy_from_current_on_enter=True,
+                    copy_to_current_on_exit=True,
+                    gzip_on_exit=True,
+                ),
+                open("scratch_text", "w") as f,
+            ):
+                f.write("write")
         files = os.listdir(os.getcwd())
 
-        # Make sure the stratch_text.gz exists
+        # Make sure the scratch_text.gz exists
         assert "scratch_text.gz" in files
         for f in files:
-            if f.endswith(".gz") and f not in init_gz:
+            if f.endswith(".gz") and f not in init_gz_files:
                 os.remove(f)
         os.remove("pre_scratch_text")
 
@@ -141,7 +144,7 @@ class TestScratchDir:
 
     def test_bad_root(self):
         with ScratchDir("bad_groot") as d:
-            assert d == test_dir
+            assert d == TEST_DIR
 
     def teardown_method(self):
         os.chdir(self.cwd)

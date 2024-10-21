@@ -3,9 +3,10 @@ from __future__ import annotations
 import os
 
 import pytest
+
 from monty.collections import AttrDict, FrozenAttrDict, Namespace, frozendict, tree
 
-test_dir = os.path.join(os.path.dirname(__file__), "test_files")
+TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 class TestFrozenDict:

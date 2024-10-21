@@ -9,8 +9,8 @@ from typing import Callable, Iterable
 
 try:
     from tqdm.autonotebook import tqdm
-except ImportError:
-    tqdm = None
+except ImportError as exc:
+    raise ImportError("tqdm must be installed for this function.") from exc
 
 
 def imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, *args, **kwargs) -> list:
@@ -28,14 +28,12 @@ def imap_tqdm(nprocs: int, func: Callable, iterable: Iterable, *args, **kwargs) 
     Returns:
         Results of Pool.imap.
     """
-    if tqdm is None:
-        raise ImportError("tqdm must be installed for this function.")
     data = []
     with Pool(nprocs) as pool:
         try:
-            n = len(iterable)  # type: ignore
+            n = len(iterable)  # type: ignore[arg-type]
         except TypeError:
-            n = None  # type: ignore
+            n = None  # type: ignore[arg-type]
         with tqdm(total=n) as prog_bar:
             for d in pool.imap(func, iterable, *args, **kwargs):
                 prog_bar.update()

@@ -12,6 +12,7 @@ import os
 import subprocess
 import sys
 import warnings
+from dataclasses import is_dataclass
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -121,6 +122,7 @@ def deprecated(
         return msg
 
     def deprecated_function_decorator(old: Callable) -> Callable:
+        @functools.wraps(old)
         def wrapped(*args, **kwargs):
             msg = craft_message(old, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
@@ -129,14 +131,23 @@ def deprecated(
         return wrapped
 
     def deprecated_class_decorator(cls: Type) -> Type:
-        original_init = cls.__init__
+        # Modify __post_init__ for dataclass
+        if is_dataclass(cls) and hasattr(cls, "__post_init__"):
+            original_init = cls.__post_init__
+        else:
+            original_init = cls.__init__
 
+        @functools.wraps(original_init)
         def new_init(self, *args, **kwargs):
             msg = craft_message(cls, replacement, message, _deadline)
             warnings.warn(msg, category=category, stacklevel=2)
             original_init(self, *args, **kwargs)
 
-        cls.__init__ = new_init
+        if is_dataclass(cls) and hasattr(cls, "__post_init__"):
+            cls.__post_init__ = new_init
+        else:
+            cls.__init__ = new_init
+
         return cls
 
     # Convert deadline to datetime type
@@ -220,9 +231,8 @@ def install_excepthook(hook_type: str = "color", **kwargs) -> int:
     """
     try:
         from IPython.core import ultratb  # pylint: disable=import-outside-toplevel
-    except ImportError:
-        warnings.warn("Cannot install excepthook, IPyhon.core.ultratb not available")
-        return 1
+    except ImportError as exc:
+        raise ImportError("Cannot install excepthook, IPython not installed") from exc
 
     # Select the hook.
     hook = dict(
