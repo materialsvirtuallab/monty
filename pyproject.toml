@@ -19,6 +19,8 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 dependencies = [
+  "ruamel.yaml",
+  "numpy<2.0.0",
 ]
 version = "2024.7.30"
 
@@ -40,14 +42,28 @@ ci = [
     "types-requests",
     "torch"
 ]
+# dev is for "dev" module, not for development
+dev = ["ipython"]
 docs = [
     "sphinx",
     "sphinx_rtd_theme",
 ]
+json = [
+  "bson",
+  "orjson>=3.6.1",
+  "pandas",
+  "pydantic",
+  "pint",
+  "torch",
+]
+multiprocessing = ["tqdm"]
+optional = ["monty[dev,json,multiprocessing,serialization]"]
+serialization = ["msgpack"]
+task = ["requests", "invoke"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["monty"]
+include = ["monty", "monty.*"]
 
 [tool.black]
 line-length = 120
