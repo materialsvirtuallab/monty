@@ -1072,7 +1072,7 @@ class TestJson:
 
 
 class TestCheckType:
-    def test_subclass(self):
+    def test_check_subclass(self):
         class A:
             pass
 
@@ -1095,6 +1095,23 @@ class TestCheckType:
         assert isinstance(b, B)
         assert _check_type(b, class_name_A)
         assert isinstance(b, A)
+
+    def test_check_class(self):
+        """This should not work for classes."""
+
+        class A:
+            pass
+
+        class B(A):
+            pass
+
+        class_name_A = f"{A.__module__}.{A.__qualname__}"
+        class_name_B = f"{B.__module__}.{B.__qualname__}"
+
+        # Test class behavior (should return False, like isinstance does)
+        assert not _check_type(A, class_name_A)
+        assert not _check_type(B, class_name_B)
+        assert not _check_type(B, class_name_A)
 
     def test_callable(self):
         # Test function
