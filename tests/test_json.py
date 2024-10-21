@@ -15,6 +15,7 @@ from monty.json import (
     MontyDecoder,
     MontyEncoder,
     MSONable,
+    _check_type,
     _load_redirect,
     jsanitize,
     load,
@@ -1068,3 +1069,63 @@ class TestJson:
         assert d_ == {"v": "value_a"}
         na2 = EnumAsDict.from_dict(d_)
         assert na2 == na1
+
+
+class TestCheckType:
+    def test_numpy(self):
+        # Test NumPy array
+        arr = np.array([1, 2, 3])
+
+        assert _check_type(arr, "numpy.ndarray")
+        assert isinstance(arr, np.ndarray)
+
+        # Test NumPy generic
+        scalar = np.float64(3.14)
+
+        assert _check_type(scalar, "numpy.generic")
+        assert isinstance(scalar, np.generic)
+
+    @pytest.mark.skipif(pd is None, reason="pandas is not installed")
+    def test_pandas(self):
+        # Test pandas DataFrame
+        df = pd.DataFrame({"a": [1, 2, 3]})
+
+        assert _check_type(df, "pandas.core.frame.DataFrame")
+        assert isinstance(df, pd.DataFrame)
+
+        assert _check_type(df, "pandas.core.base.PandasObject")
+        assert isinstance(df, pd.core.base.PandasObject)
+
+        # Test pandas Series
+        series = pd.Series([1, 2, 3])
+
+        assert _check_type(series, "pandas.core.series.Series")
+        assert isinstance(series, pd.Series)
+
+        assert _check_type(series, "pandas.core.base.PandasObject")
+        assert isinstance(series, pd.core.base.PandasObject)
+
+    @pytest.mark.skipif(torch is None, reason="torch is not installed")
+    def test_torch(self):
+        tensor = torch.tensor([1, 2, 3])
+
+        assert _check_type(tensor, "torch.Tensor")
+        assert isinstance(tensor, torch.Tensor)
+
+    @pytest.mark.skipif(pydantic is None, reason="pydantic is not installed")
+    def test_pydantic(self):
+        class MyModel(pydantic.BaseModel):
+            name: str
+
+        model_instance = MyModel(name="Alice")
+
+        assert _check_type(model_instance, "pydantic.main.BaseModel")
+        assert isinstance(model_instance, pydantic.BaseModel)
+
+    @pytest.mark.skipif(pint is None, reason="pint is not installed")
+    def test_pint(self):
+        ureg = pint.UnitRegistry()
+        qty = 3 * ureg.meter
+
+        assert _check_type(qty, "pint.registry.Quantity")
+        assert isinstance(qty, pint.Quantity)
