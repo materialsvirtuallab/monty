@@ -9,10 +9,7 @@ import json
 import os
 from typing import TYPE_CHECKING
 
-try:
-    from ruamel.yaml import YAML
-except ImportError:
-    YAML = None  # type: ignore[arg-type]
+from ruamel.yaml import YAML
 
 from monty.io import zopen
 from monty.json import MontyDecoder, MontyEncoder
