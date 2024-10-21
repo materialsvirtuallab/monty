@@ -1,5 +1,10 @@
 # Change log
 
+## 2024.10.21
+* Lazily import torch/pydantic in json module, speedup from monty.json import by 10x (@DanielYang59)
+* Fix missing monty.os package. (@eamanu)
+* Fix zpath when passing pathlib.Path (@janosh)
+
 ## 2024.7.29
 - Fix line ending in reverse_readfile/readline in Windows (@DanielYang59)
 - Add missing functools.wraps decorator to deprecated decorator and handle dataclass properly (@DanielYang59)
