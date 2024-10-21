@@ -796,7 +796,7 @@ class MontyDecoder(json.JSONDecoder):
 
                 elif modname == "torch" and classname == "Tensor":
                     try:
-                        import torch
+                        import torch  # import torch is very expensive
 
                         if "Complex" in d["dtype"]:
                             return torch.tensor(
