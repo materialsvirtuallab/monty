@@ -8,10 +8,19 @@ import pathlib
 from enum import Enum
 from typing import Union
 
-try:
-    import numpy as np
-except ImportError:
-    np = None
+import numpy as np
+import pytest
+
+from monty.json import (
+    MontyDecoder,
+    MontyEncoder,
+    MSONable,
+    _load_redirect,
+    jsanitize,
+    load,
+)
+
+from . import __version__ as TESTS_VERSION
 
 try:
     import pandas as pd
@@ -37,18 +46,6 @@ try:
     from bson.objectid import ObjectId
 except ImportError:
     ObjectId = None
-
-import pytest
-from monty.json import (
-    MontyDecoder,
-    MontyEncoder,
-    MSONable,
-    _load_redirect,
-    jsanitize,
-    load,
-)
-
-from . import __version__ as tests_version
 
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -320,7 +317,7 @@ class TestMSONable:
     def test_version(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
-        assert d["@version"] == tests_version
+        assert d["@version"] == TESTS_VERSION
 
     def test_nested_to_from_dict(self):
         GMC = GoodMSONClass
@@ -564,7 +561,6 @@ class TestJson:
         d = json.loads(djson)
         assert isinstance(d[0], float)
 
-    @pytest.mark.skipif(np is None, reason="numpy not present")
     def test_numpy(self):
         x = np.array([1, 2, 3], dtype="int64")
         with pytest.raises(TypeError):
@@ -872,9 +868,7 @@ class TestJson:
         clean = jsanitize(s)
         assert clean == s.to_dict()
 
-    @pytest.mark.skipif(
-        np is None or ObjectId is None, reason="numpy and bson not present"
-    )
+    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
     def test_jsanitize_numpy_bson(self):
         d = {
             "a": ["b", np.array([1, 2, 3])],

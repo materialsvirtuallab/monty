@@ -51,7 +51,7 @@ def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
         return bz2.open(filename, *args, **kwargs)
     if ext in {".GZ", ".Z"}:
         return gzip.open(filename, *args, **kwargs)
-    if lzma is not None and ext in {".XZ", ".LZMA"}:
+    if ext in {".XZ", ".LZMA"}:
         return lzma.open(filename, *args, **kwargs)
     return open(filename, *args, **kwargs)
 

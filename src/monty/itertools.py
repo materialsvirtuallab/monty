@@ -7,10 +7,7 @@ from __future__ import annotations
 import itertools
 from typing import TYPE_CHECKING
 
-try:
-    import numpy as np
-except ImportError:
-    np = None
+import numpy as np
 
 if TYPE_CHECKING:
     from typing import Iterable
