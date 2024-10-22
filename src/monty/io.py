@@ -83,7 +83,7 @@ def _get_line_ending(
         with zopen(file, "rb") as f:
             first_line = f.readline()
     elif isinstance(file, io.TextIOWrapper):
-        first_line = file.buffer.readline()
+        first_line = file.buffer.readline()  # type: ignore[attr-defined]
     elif isinstance(file, (io.BufferedReader, gzip.GzipFile, bz2.BZ2File)):
         first_line = file.readline()
     else:

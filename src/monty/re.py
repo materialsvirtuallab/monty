@@ -58,5 +58,5 @@ def regrep(
 
     with contextlib.suppress(Exception):
         # Try to close open file handle. Pass if it is a generator.
-        gen.close()  # type: ignore[attr-defined]
+        gen.close()  # type: ignore[attr-defined, union-attr]
     return matches

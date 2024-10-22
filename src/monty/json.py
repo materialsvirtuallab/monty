@@ -35,7 +35,7 @@ except ImportError:
 try:
     import orjson
 except ImportError:
-    orjson = None
+    orjson = None  # type: ignore[assignment]
 
 
 __version__ = "3.0.0"
