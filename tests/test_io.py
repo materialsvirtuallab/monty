@@ -44,15 +44,15 @@ class TestGetLineEnding:
 
             # Test text mode
             with open(test_file, "r", encoding="utf-8") as f:
-                start_pot = f.tell()
+                start_pos = f.tell()
                 assert _get_line_ending(f) == l_end
-                assert f.tell() == start_pot
+                assert f.tell() == start_pos
 
             # Test binary mode
             with open(test_file, "rb") as f:
-                start_pot = f.tell()
+                start_pos = f.tell()
                 assert _get_line_ending(f) == l_end
-                assert f.tell() == start_pot
+                assert f.tell() == start_pos
 
             # Test gzip file
             gzip_filename = f"{test_file}.gz"
@@ -61,9 +61,9 @@ class TestGetLineEnding:
 
             # Opened file stream
             with gzip.open(gzip_filename, "rb") as f:
-                start_pot = f.tell()
+                start_pos = f.tell()
                 assert _get_line_ending(f) == l_end
-                assert f.tell() == start_pot
+                assert f.tell() == start_pos
 
             # Filename directly
             assert _get_line_ending(gzip_filename) == l_end
@@ -75,9 +75,9 @@ class TestGetLineEnding:
 
             # Opened file stream
             with bz2.open(bz2_filename, "rb") as f:
-                start_pot = f.tell()
+                start_pos = f.tell()
                 assert _get_line_ending(f) == l_end
-                assert f.tell() == start_pot
+                assert f.tell() == start_pos
 
             # Filename directly
             assert _get_line_ending(bz2_filename) == l_end
