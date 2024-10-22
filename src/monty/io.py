@@ -9,6 +9,7 @@ import bz2
 import errno
 import gzip
 import io
+import lzma
 import mmap
 import os
 import subprocess
@@ -16,11 +17,6 @@ import time
 import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
-
-try:
-    import lzma
-except ImportError:
-    lzma = None  # type: ignore[assignment]
 
 if TYPE_CHECKING:
     from typing import IO, Iterator, Union
