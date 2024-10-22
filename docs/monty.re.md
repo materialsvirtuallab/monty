@@ -25,9 +25,11 @@ A powerful regular expression version of grep.
 * **Returns**
 
 > {key1: [[[matches…], lineno], [[matches…], lineno],
+
 > ```none
 > [[matches…], lineno], …],
 > ```
+
 > key2: …}
 
 For reverse reads, the lineno is given as a -ve number. Please note
