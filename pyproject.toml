@@ -20,7 +20,7 @@ classifiers = [
 ]
 dependencies = [
   "ruamel.yaml",
-  "numpy",
+  "numpy>=2",
 ]
 version = "2024.10.21"
 
@@ -44,7 +44,7 @@ json = [
   "pandas",
   "pydantic",
   "pint",
-  "torch",  # need torch>=2.3.0 for numpy 2
+  "torch==2.2.2",  # need torch>=2.3.0 for numpy 2
 ]
 multiprocessing = ["tqdm"]
 optional = ["monty[dev,json,multiprocessing,serialization]"]
