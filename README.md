@@ -24,6 +24,6 @@ Monty is created to serve as a complement to the Python standard library. It
 provides suite of tools to solve many common problems, and hopefully,
 be a resource to collect the best solutions.
 
-Monty supports Python 3.x.
+Monty supports Python 3.10+.
 
 Please visit the [official docs](https://materialsvirtuallab.github.io/monty) for more information.
