@@ -43,7 +43,8 @@ json = [
   "orjson>=3.6.1",
   "pandas",
   "pydantic",
-  "pint",
+  # https://github.com/hgrecco/pint/issues/2065
+  "pint; python_version<'3.13'",
   # Note: need torch>=2.3.0 for numpy 2 # 719
   "torch; python_version<'3.13'",  # python 3.13 not supported yet
 ]
