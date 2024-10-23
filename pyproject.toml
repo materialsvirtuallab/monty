@@ -44,7 +44,7 @@ json = [
   "pandas",
   "pydantic",
   "pint",
-  "torch>=2.3.0",  # need torch>=2.3.0 for numpy 2 # 719
+  "torch",  # Note: need torch>=2.3.0 for numpy 2 # 719
 ]
 multiprocessing = ["tqdm"]
 optional = ["monty[dev,json,multiprocessing,serialization]"]
