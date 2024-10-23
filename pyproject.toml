@@ -44,7 +44,8 @@ json = [
   "pandas",
   "pydantic",
   "pint",
-  "torch",  # Note: need torch>=2.3.0 for numpy 2 # 719
+  # Note: need torch>=2.3.0 for numpy 2 # 719
+  "torch; python_version<'3.13'",  # python 3.13 not supported yet
 ]
 multiprocessing = ["tqdm"]
 optional = ["monty[dev,json,multiprocessing,serialization]"]
