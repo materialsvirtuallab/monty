@@ -92,7 +92,7 @@ def _check_type(obj: object, type_str: tuple[str, ...] | str) -> bool:
     object. For example, pandas.DataFrame is actually "pandas.core.frame.DataFrame".
     To find out the type_str for an object, run type(obj).mro(). This will
     list all the types that an object can resolve to in order of generality
-    (all objects have the builtins.object as the last one).
+    (all objects have the "builtins.object" as the last one).
     """
     # This function is intended as an alternative of "isinstance",
     # therefore wouldn't check class
