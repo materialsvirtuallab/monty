@@ -26,5 +26,4 @@ jobs:
       - name: mypy
         run: |
           mypy --version
-          rm -rf .mypy_cache
           mypy src
