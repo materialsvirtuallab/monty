@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 import os
-from collections import namedtuple
 
 import pytest
 
 from monty.collections import (
     AttrDict,
     FrozenAttrDict,
+    MongoDict,
     Namespace,
     dict2namedtuple,
     frozendict,
@@ -54,6 +54,8 @@ def test_attr_dict():
     dct = AttrDict(foo=1, bar=2)
     assert dct.bar == 2
     assert dct["foo"] is dct.foo
+
+    # Test accessing values
     dct.bar = "hello"
     assert dct["bar"] == "hello"
 
@@ -77,7 +79,12 @@ def test_frozen_attrdict():
 
 
 def test_mongo_dict():
-    """TODO: add test"""
+    m_dct = MongoDict({"a": {"b": 1}, "x": 2})
+    assert m_dct.a.b == 1
+    assert m_dct.x == 2
+    assert "a" in m_dct
+    assert "b" in m_dct.a
+    assert m_dct["a"] == {"b": 1}
 
 
 def test_dict2namedtuple():

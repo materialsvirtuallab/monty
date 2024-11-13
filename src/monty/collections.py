@@ -151,11 +151,11 @@ class MongoDict:
     a nested dict interactively (e.g. documents extracted from a MongoDB
     database).
 
-    >>> m = MongoDict({'a': {'b': 1}, 'x': 2})
-    >>> assert m.a.b == 1 and m.x == 2
-    >>> assert "a" in m and "b" in m.a
-    >>> m["a"]
-    {'b': 1}
+    >>> m_dct = MongoDict({"a": {"b": 1}, "x": 2})
+    >>> assert m_dct.a.b == 1 and m_dct.x == 2
+    >>> assert "a" in m_dct and "b" in m_dct.a
+    >>> m_dct["a"]
+    {"b": 1}
 
     Notes:
         Cannot inherit from ABC collections.Mapping because otherwise
