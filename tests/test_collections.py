@@ -4,6 +4,7 @@ import pytest
 
 from monty.collections import (
     AttrDict,
+    ControlledDict,
     FrozenAttrDict,
     MongoDict,
     Namespace,
@@ -22,22 +23,121 @@ def test_tree():
     assert x["a"]["b"]["c"]["d"] == 1
 
 
-def test_frozendict():  # DEBUG
+class TestControlledDict:
+    def test_add_allowed(self):
+        dct = ControlledDict(a=1)
+        dct.allow_add = True
+
+        dct["b"] = 2
+        assert dct["b"] == 2
+
+        dct |= {"c": 3}
+        assert dct["c"] == 3
+
+        dct.update(d=4)
+        assert dct["d"] == 4
+
+        dct.setdefault("e", 5)
+        assert dct["e"] == 5
+
+    def test_add_disabled(self):
+        dct = ControlledDict(a=1)
+        dct.allow_add = False
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct["b"] = 2
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct.update(a=2)
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct.setdefault("a", 2)
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct |= {"b": 2}
+
+    def test_del_allowed(self):
+        dct = ControlledDict(a=1, b=2, c=3, d=4)
+        dct.allow_del = True
+
+        del dct["a"]
+        assert "a" not in dct
+
+        val = dct.pop("b")
+        assert val == 2 and "b" not in dct
+
+        val = dct.popitem()
+        assert val == ("c", 3) and "c" not in dct
+
+        dct.clear()
+        assert dct == {}
+
+    def test_del_disabled(self):
+        dct = ControlledDict(a=1)
+        dct.allow_del = False
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            del dct["a"]
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct.pop("a")
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct.popitem()
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct.clear()
+
+    def test_update_allowed(self):
+        dct = ControlledDict(a=1)
+        dct.allow_update = True
+
+        dct["a"] = 2
+        assert dct["a"] == 2
+
+        dct |= {"a": 3}
+        assert dct["a"] == 3
+
+    def test_update_disabled(self):
+        dct = ControlledDict(a=1)
+        dct.allow_update = False
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct["a"] = 2
+
+        with pytest.raises(TypeError):  # TODO: add msg
+            dct |= {"a": 3}
+
+
+def test_frozendict():
     dct = frozendict({"hello": "world"})
     assert isinstance(dct, dict)
     assert dct["hello"] == "world"
 
+    # Test setter
     with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct["key"] == "val"
 
+    # Test update
     with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct.update(key="val")
 
+    # Test inplace-or (|=)
     with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct |= {"key": "val"}
 
+    # TODO: from this point we need a different error message
 
-def test_namespace_dict():  # DEBUG
+    # Test pop
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+        dct.pop("key")
+
+    # Test delete
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+        del dct["key"]
+
+
+def test_namespace_dict():
     dct = Namespace(key="val")
     assert isinstance(dct, dict)
     dct["hello"] = "world"
@@ -63,7 +163,7 @@ def test_attr_dict():
     assert dct["bar"] == "hello"
 
 
-def test_frozen_attrdict():  # DEBUG
+def test_frozen_attrdict():
     dct = FrozenAttrDict({"hello": "world", 1: 2})
     assert isinstance(dct, dict)
     assert dct["hello"] == "world"
