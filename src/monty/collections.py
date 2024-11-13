@@ -216,11 +216,11 @@ def dict2namedtuple(*args, **kwargs) -> tuple:
     Helper function to create a class `namedtuple` from a dictionary.
 
     Examples:
-        >>> t = dict2namedtuple(foo=1, bar="hello")
-        >>> assert t.foo == 1 and t.bar == "hello"
+        >>> tpl = dict2namedtuple(foo=1, bar="hello")
+        >>> assert tpl.foo == 1 and tpl.bar == "hello"
 
-        >>> t = dict2namedtuple([("foo", 1), ("bar", "hello")])
-        >>> assert t[0] == t.foo and t[1] == t.bar
+        >>> tpl = dict2namedtuple([("foo", 1), ("bar", "hello")])
+        >>> assert tpl[0] is tpl.foo and t[1] is tpl.bar
 
     Warnings:
         - The order of the items in the namedtuple is not deterministic if
