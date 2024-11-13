@@ -9,47 +9,56 @@ from monty.collections import AttrDict, FrozenAttrDict, Namespace, frozendict, t
 TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 
 
-class TestFrozenDict:
-    def test_frozen_dict(self):
-        d = frozendict({"hello": "world"})
-        with pytest.raises(KeyError):
-            d["k"] == "v"
-        assert d["hello"] == "world"
-
-    def test_namespace_dict(self):
-        d = Namespace(foo="bar")
-        d["hello"] = "world"
-        assert d["foo"] == "bar"
-        with pytest.raises(KeyError):
-            d.update({"foo": "spam"})
-
-    def test_attr_dict(self):
-        d = AttrDict(foo=1, bar=2)
-        assert d.bar == 2
-        assert d["foo"] == d.foo
-        d.bar = "hello"
-        assert d["bar"] == "hello"
-
-    def test_frozen_attrdict(self):
-        d = FrozenAttrDict({"hello": "world", 1: 2})
-        assert d["hello"] == "world"
-        assert d.hello == "world"
-        with pytest.raises(KeyError):
-            d["updating"] == 2
-
-        with pytest.raises(KeyError):
-            d["foo"] = "bar"
-        with pytest.raises(KeyError):
-            d.foo = "bar"
-        with pytest.raises(KeyError):
-            d.hello = "new"
+def test_tree():
+    x = tree()
+    x["a"]["b"]["c"]["d"] = 1
+    assert "b" in x["a"]
+    assert "c" not in x["a"]
+    assert "c" in x["a"]["b"]
+    assert x["a"]["b"]["c"]["d"] == 1
 
 
-class TestTree:
-    def test_tree(self):
-        x = tree()
-        x["a"]["b"]["c"]["d"] = 1
-        assert "b" in x["a"]
-        assert "c" not in x["a"]
-        assert "c" in x["a"]["b"]
-        assert x["a"]["b"]["c"]["d"] == 1
+def test_frozendict():
+    dct = frozendict({"hello": "world"})
+    assert dct["hello"] == "world"
+
+    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+        dct["key"] == "val"
+
+    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+        dct.update(key="value")
+
+
+def test_namespace_dict():
+    dct = Namespace(foo="bar")
+    dct["hello"] = "world"
+    assert dct["key"] == "val"
+
+    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+        dct["key"] = "val"
+    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+        dct.update({"key": "val"})
+
+
+def test_attr_dict():
+    dct = AttrDict(foo=1, bar=2)
+    assert dct.bar == 2
+    assert dct["foo"] is dct.foo
+    dct.bar = "hello"
+    assert dct["bar"] == "hello"
+
+
+def test_frozen_attrdict():
+    dct = FrozenAttrDict({"hello": "world", 1: 2})
+    assert dct["hello"] == "world"
+    assert dct.hello == "world"
+
+    # Test adding item
+    with pytest.raises(KeyError, match="You cannot modify attribute"):
+        dct["foo"] = "bar"
+    with pytest.raises(KeyError, match="You cannot modify attribute"):
+        dct.foo = "bar"
+
+    # Test modifying existing item
+    with pytest.raises(KeyError, match="You cannot modify attribute"):
+        dct.hello = "new"

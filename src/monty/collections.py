@@ -20,7 +20,7 @@ def tree() -> collections.defaultdict:
 
     Usage:
         x = tree()
-        x['a']['b']['c'] = 1
+        x["a"]["b"]["c"] = 1
 
     Returns:
         A tree.
@@ -31,7 +31,7 @@ def tree() -> collections.defaultdict:
 class frozendict(dict):
     """
     A dictionary that does not permit changes. The naming
-    violates PEP8 to be consistent with standard Python's "frozenset" naming.
+    violates PEP 8 to be consistent with standard Python's "frozenset" naming.
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -55,7 +55,7 @@ class frozendict(dict):
 
 
 class Namespace(dict):
-    """A dictionary that does not permit to redefine its keys."""
+    """A dictionary that does not permit changing its values."""
 
     def __init__(self, *args, **kwargs) -> None:
         """
@@ -67,7 +67,7 @@ class Namespace(dict):
 
     def __setitem__(self, key: Any, val: Any) -> None:
         if key in self:
-            raise KeyError(f"Cannot overwrite existent key: {key!s}")
+            raise KeyError(f"Cannot overwrite existing key: {key!s}")
 
         dict.__setitem__(self, key, val)
 
@@ -83,14 +83,14 @@ class Namespace(dict):
 
 class AttrDict(dict):
     """
-    Allows to access dict keys as obj.foo in addition
-    to the traditional way obj['foo']"
+    Allows to access values as dct.key in addition
+    to the traditional way dct["key"]
 
     Examples:
-        >>> d = AttrDict(foo=1, bar=2)
-        >>> assert d["foo"] == d.foo
-        >>> d.bar = "hello"
-        >>> assert d.bar == "hello"
+        >>> dct = AttrDict(foo=1, bar=2)
+        >>> assert dct["foo"] == dct.foo
+        >>> dct.bar = "hello"
+        >>> assert dct.bar == "hello"
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -114,9 +114,9 @@ class AttrDict(dict):
 class FrozenAttrDict(frozendict):
     """
     A dictionary that:
-        * does not permit changes.
-        * Allows to access dict keys as obj.foo in addition
-          to the traditional way obj['foo']
+        - Does not permit changes.
+        - Allows to access values as dct.key in addition
+          to the traditional way dct["key"]
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -186,7 +186,6 @@ class MongoDict:
         try:
             return super().__getattribute__(name)
         except AttributeError:
-            # raise
             try:
                 a = self._mongo_dict_[name]
                 if isinstance(a, collections.abc.Mapping):
@@ -232,8 +231,8 @@ def dict2namedtuple(*args, **kwargs) -> tuple:
         - Don't use this function in code in which memory and performance are
           crucial since a dict is needed to instantiate the tuple!
     """
-    d = collections.OrderedDict(*args)
-    d.update(**kwargs)
+    dct = collections.OrderedDict(*args)
+    dct.update(**kwargs)
     return collections.namedtuple(
-        typename="dict2namedtuple", field_names=list(d.keys())
-    )(**d)
+        typename="dict2namedtuple", field_names=list(dct.keys())
+    )(**dct)
