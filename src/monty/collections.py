@@ -31,7 +31,7 @@ def tree() -> collections.defaultdict:
 class frozendict(dict):
     """
     A dictionary that does not permit changes. The naming
-    violates PEP 8 to be consistent with standard Python's "frozenset" naming.
+    violates PEP 8 to be consistent with the built-in "frozenset" naming.
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -88,7 +88,7 @@ class AttrDict(dict):
 
     Examples:
         >>> dct = AttrDict(foo=1, bar=2)
-        >>> assert dct["foo"] == dct.foo
+        >>> assert dct["foo"] is dct.foo
         >>> dct.bar = "hello"
         >>> assert dct.bar == "hello"
     """
