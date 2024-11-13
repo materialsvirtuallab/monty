@@ -43,7 +43,7 @@ class frozendict(dict):
         dict.__init__(self, *args, **kwargs)
 
     def __setitem__(self, key: Any, val: Any) -> None:
-        raise KeyError(f"Cannot overwrite existing key: {str(key)}")
+        raise TypeError(f"Cannot overwrite existing key: {str(key)}")
 
     def update(self, *args, **kwargs) -> None:
         """
@@ -51,7 +51,7 @@ class frozendict(dict):
             args: Passthrough arguments for standard dict.
             kwargs: Passthrough keyword arguments for standard dict.
         """
-        raise KeyError(f"Cannot update a {self.__class__.__name__}")
+        raise TypeError(f"Cannot update a {self.__class__.__name__}")
 
 
 class Namespace(dict):
@@ -67,7 +67,7 @@ class Namespace(dict):
 
     def __setitem__(self, key: Any, val: Any) -> None:
         if key in self:
-            raise KeyError(f"Cannot overwrite existing key: {key!s}")
+            raise TypeError(f"Cannot overwrite existing key: {key!s}")
 
         dict.__setitem__(self, key, val)
 
@@ -137,7 +137,7 @@ class FrozenAttrDict(frozendict):
                 raise AttributeError(str(exc))
 
     def __setattr__(self, name: str, value: Any) -> None:
-        raise KeyError(
+        raise TypeError(
             f"You cannot modify attribute {name} of {self.__class__.__name__}"
         )
 

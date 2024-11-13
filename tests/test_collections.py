@@ -22,27 +22,34 @@ def test_tree():
     assert x["a"]["b"]["c"]["d"] == 1
 
 
-def test_frozendict():
+def test_frozendict():  # DEBUG
     dct = frozendict({"hello": "world"})
+    assert isinstance(dct, dict)
     assert dct["hello"] == "world"
 
-    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct["key"] == "val"
 
-    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
-        dct.update(key="value")
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+        dct.update(key="val")
+
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+        dct |= {"key": "val"}
 
 
-def test_namespace_dict():
+def test_namespace_dict():  # DEBUG
     dct = Namespace(key="val")
+    assert isinstance(dct, dict)
     dct["hello"] = "world"
     assert dct["key"] == "val"
 
-    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct["key"] = "val"
-    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct.update({"key": "val"})
-    with pytest.raises(KeyError, match="Cannot overwrite existing key"):
+
+    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
         dct |= {"key": "val"}
 
 
@@ -56,21 +63,23 @@ def test_attr_dict():
     assert dct["bar"] == "hello"
 
 
-def test_frozen_attrdict():
+def test_frozen_attrdict():  # DEBUG
     dct = FrozenAttrDict({"hello": "world", 1: 2})
+    assert isinstance(dct, dict)
     assert dct["hello"] == "world"
     assert dct.hello == "world"
+    assert dct["hello"] is dct.hello
 
     # Test adding item
-    with pytest.raises(KeyError, match="You cannot modify attribute"):
+    with pytest.raises(TypeError, match="You cannot modify attribute"):
         dct["foo"] = "bar"
-    with pytest.raises(KeyError, match="You cannot modify attribute"):
+    with pytest.raises(TypeError, match="You cannot modify attribute"):
         dct.foo = "bar"
 
     # Test modifying existing item
-    with pytest.raises(KeyError, match="You cannot modify attribute"):
+    with pytest.raises(TypeError, match="You cannot modify attribute"):
         dct.hello = "new"
-    with pytest.raises(KeyError, match="You cannot modify attribute"):
+    with pytest.raises(TypeError, match="You cannot modify attribute"):
         dct["hello"] = "new"
 
 
