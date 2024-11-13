@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import os
-
 import pytest
 
 from monty.collections import (
@@ -13,8 +11,6 @@ from monty.collections import (
     frozendict,
     tree,
 )
-
-TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
 
 
 def test_tree():
