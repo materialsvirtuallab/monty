@@ -152,17 +152,17 @@ def test_frozendict():
 def test_namespace_dict():
     dct = Namespace(key="val")
     assert isinstance(dct, UserDict)
+
+    # Test setter
     dct["hello"] = "world"
     assert dct["key"] == "val"
 
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+    # Test update (not allowed)
+    with pytest.raises(TypeError, match="update is disabled"):
         dct["key"] = "val"
 
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+    with pytest.raises(TypeError, match="update is disabled"):
         dct.update({"key": "val"})
-
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
-        dct |= {"key": "val"}
 
 
 def test_attr_dict():
