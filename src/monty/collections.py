@@ -43,9 +43,9 @@ class ControlledDict(collections.UserDict, ABC):
     A base dictionary class with configurable mutability.
 
     Attributes:
-        allow_add (bool): Whether new keys can be added.
-        allow_del (bool): Whether existing keys can be deleted.
-        allow_update (bool): Whether existing keys can be updated.
+        _allow_add (bool): Whether new keys can be added.
+        _allow_del (bool): Whether existing keys can be deleted.
+        _allow_update (bool): Whether existing keys can be updated.
 
     Configurable Operations:
         This class allows controlling the following dict operations (refer to
@@ -63,29 +63,26 @@ class ControlledDict(collections.UserDict, ABC):
             - `clear()`
     """
 
-    allow_add: ClassVar[bool] = True
-    allow_del: ClassVar[bool] = True
-    allow_update: ClassVar[bool] = True
+    _allow_add: ClassVar[bool] = True
+    _allow_del: ClassVar[bool] = True
+    _allow_update: ClassVar[bool] = True
 
     def __init__(self, *args, **kwargs):
-        """Temporarily allow all add/update during initialization."""
-        original_allow_add = self.allow_add
-        original_allow_update = self.allow_update
+        """Temporarily allow add during initialization."""
+        original_allow_add = self._allow_add
 
         try:
-            self.allow_add = True
-            self.allow_update = True
+            self._allow_add = True
             super().__init__(*args, **kwargs)
         finally:
-            self.allow_add = original_allow_add
-            self.allow_update = original_allow_update
+            self._allow_add = original_allow_add
 
     # Override add/update operations
     def __setitem__(self, key, value):
         """Forbid adding or updating keys based on allow_add and allow_update."""
-        if key not in self.data and not self.allow_add:
+        if key not in self.data and not self._allow_add:
             raise TypeError(f"Cannot add new key {key!r}, because add is disabled.")
-        elif key in self.data and not self.allow_update:
+        elif key in self.data and not self._allow_update:
             raise TypeError(f"Cannot update key {key!r}, because update is disabled.")
 
         super().__setitem__(key, value)
@@ -93,11 +90,11 @@ class ControlledDict(collections.UserDict, ABC):
     def update(self, *args, **kwargs):
         """Forbid adding or updating keys based on allow_add and allow_update."""
         for key in dict(*args, **kwargs):
-            if key not in self.data and not self.allow_add:
+            if key not in self.data and not self._allow_add:
                 raise TypeError(
                     f"Cannot add new key {key!r} using update, because add is disabled."
                 )
-            elif key in self.data and not self.allow_update:
+            elif key in self.data and not self._allow_update:
                 raise TypeError(
                     f"Cannot update key {key!r} using update, because update is disabled."
                 )
@@ -111,11 +108,11 @@ class ControlledDict(collections.UserDict, ABC):
             new default value is the same as current value for efficiency.
         """
         if key not in self.data:
-            if not self.allow_add:
+            if not self._allow_add:
                 raise TypeError(
                     f"Cannot add new key using setdefault: {key!r}, because add is disabled."
                 )
-        elif not self.allow_update:
+        elif not self._allow_update:
             raise TypeError(
                 f"Cannot update key using setdefault: {key!r}, because update is disabled."
             )
@@ -125,25 +122,25 @@ class ControlledDict(collections.UserDict, ABC):
     # Override delete operations
     def __delitem__(self, key):
         """Forbid deleting keys when self.allow_del is False."""
-        if not self.allow_del:
+        if not self._allow_del:
             raise TypeError(f"Cannot delete key {key!r}, because delete is disabled.")
         super().__delitem__(key)
 
     def pop(self, key, *args):
         """Forbid popping keys when self.allow_del is False."""
-        if not self.allow_del:
+        if not self._allow_del:
             raise TypeError(f"Cannot pop key {key!r}, because delete is disabled.")
         return super().pop(key, *args)
 
     def popitem(self):
         """Forbid popping the last item when self.allow_del is False."""
-        if not self.allow_del:
+        if not self._allow_del:
             raise TypeError("Cannot pop item, because delete is disabled.")
         return super().popitem()
 
     def clear(self):
         """Forbid clearing the dictionary when self.allow_del is False."""
-        if not self.allow_del:
+        if not self._allow_del:
             raise TypeError("Cannot clear dictionary, because delete is disabled.")
         super().clear()
 
@@ -154,17 +151,17 @@ class frozendict(ControlledDict):
     violates PEP 8 to be consistent with the built-in `frozenset` naming.
     """
 
-    allow_add: ClassVar[bool] = False
-    allow_del: ClassVar[bool] = False
-    allow_update: ClassVar[bool] = False
+    _allow_add: ClassVar[bool] = False
+    _allow_del: ClassVar[bool] = False
+    _allow_update: ClassVar[bool] = False
 
 
 class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecate it?
     """A dictionary that does not permit update/delete its values (but allows add)."""
 
-    allow_add: ClassVar[bool] = True
-    allow_del: ClassVar[bool] = False
-    allow_update: ClassVar[bool] = False
+    _allow_add: ClassVar[bool] = True
+    _allow_del: ClassVar[bool] = False
+    _allow_update: ClassVar[bool] = False
 
 
 class AttrDict(dict):
@@ -200,50 +197,35 @@ class AttrDict(dict):
         super().__setitem__(key, value)
 
 
-class FrozenAttrDict(AttrDict):
+class FrozenAttrDict(frozendict):
     """
     A dictionary that:
         - Does not permit changes (add/update/delete).
         - Allow accessing values as `dct.key` in addition to
             the traditional way `dct["key"]`.
-
-    TODO: I didn't manage to inherit from `frozendict` which would trigger a RecursionError.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
-        """Allow setting only during initialization."""
-        object.__setattr__(self, "_initialized", False)
+    def __init__(self, *args, **kwargs):
+        """Allow add during init, as __setattr__ is called unlike frozendict."""
+        self._allow_add = True
         super().__init__(*args, **kwargs)
-        object.__setattr__(self, "_initialized", True)
+        self._allow_add = False
 
-    def __setattr__(self, key, value):
-        """Allow setting only during initialization."""
-        if getattr(self, "_initialized", True) and key != "_initialized":
+    def __getattribute__(self, name):
+        try:
+            return super().__getattribute__(name)
+        except AttributeError:
+            return self[name]
+
+    def __setattr__(self, name, value):
+        if not self._allow_add and name != "_allow_add":
             raise TypeError(
                 f"{self.__class__.__name__} does not support item assignment."
             )
-        super().__setattr__(key, value)
+        super().__setattr__(name, value)
 
-    def __setitem__(self, key, value):
-        raise TypeError(f"{self.__class__.__name__} does not support item assignment.")
-
-    def update(self, *args, **kwargs):
-        raise TypeError(f"{self.__class__.__name__} does not support update.")
-
-    def clear(self):
-        raise TypeError(f"{self.__class__.__name__} does not support clear.")
-
-    def pop(self, key, *args):
-        raise TypeError(f"{self.__class__.__name__} does not support pop.")
-
-    def popitem(self):
-        raise TypeError(f"{self.__class__.__name__} does not support popitem.")
-
-    def __delitem__(self, key):
-        raise TypeError(f"{self.__class__.__name__} does not support deletion.")
-
-    def __delattr__(self, key):
-        raise TypeError(f"{self.__class__.__name__} does not support deletion.")
+    def __delattr__(self, name):
+        raise TypeError(f"{self.__class__.__name__} does not support item deletion.")
 
 
 class MongoDict:

@@ -28,7 +28,7 @@ def test_tree():
 class TestControlledDict:
     def test_add_allowed(self):
         dct = ControlledDict(a=1)
-        dct.allow_add = True
+        dct._allow_add = True
 
         dct["b"] = 2
         assert dct["b"] == 2
@@ -41,7 +41,7 @@ class TestControlledDict:
 
     def test_add_disabled(self):
         dct = ControlledDict(a=1)
-        dct.allow_add = False
+        dct._allow_add = False
 
         with pytest.raises(TypeError, match="add is disabled"):
             dct["b"] = 2
@@ -54,7 +54,7 @@ class TestControlledDict:
 
     def test_update_allowed(self):
         dct = ControlledDict(a=1)
-        dct.allow_update = True
+        dct._allow_update = True
 
         dct["a"] = 2
         assert dct["a"] == 2
@@ -67,7 +67,7 @@ class TestControlledDict:
 
     def test_update_disabled(self):
         dct = ControlledDict(a=1)
-        dct.allow_update = False
+        dct._allow_update = False
 
         with pytest.raises(TypeError, match="update is disabled"):
             dct["a"] = 2
@@ -80,7 +80,7 @@ class TestControlledDict:
 
     def test_del_allowed(self):
         dct = ControlledDict(a=1, b=2, c=3, d=4)
-        dct.allow_del = True
+        dct._allow_del = True
 
         del dct["a"]
         assert "a" not in dct
@@ -96,7 +96,7 @@ class TestControlledDict:
 
     def test_del_disabled(self):
         dct = ControlledDict(a=1)
-        dct.allow_del = False
+        dct._allow_del = False
 
         with pytest.raises(TypeError, match="delete is disabled"):
             del dct["a"]
@@ -112,15 +112,15 @@ class TestControlledDict:
 
     def test_frozen_like(self):
         """Make sure add and update are allowed at init time."""
-        ControlledDict.allow_add = False
-        ControlledDict.allow_update = False
+        ControlledDict._allow_add = False
+        ControlledDict._allow_update = False
 
         dct = ControlledDict({"hello": "world"})
         assert isinstance(dct, UserDict)
         assert dct["hello"] == "world"
 
-        assert not dct.allow_add
-        assert not dct.allow_update
+        assert not dct._allow_add
+        assert not dct._allow_update
 
 
 def test_frozendict():
@@ -128,9 +128,9 @@ def test_frozendict():
     assert isinstance(dct, UserDict)
     assert dct["hello"] == "world"
 
-    assert not dct.allow_add
-    assert not dct.allow_update
-    assert not dct.allow_del
+    assert not dct._allow_add
+    assert not dct._allow_update
+    assert not dct._allow_del
 
     # Test setter
     with pytest.raises(TypeError, match="add is disabled"):
@@ -195,7 +195,7 @@ def test_attr_dict():
 
 def test_frozen_attrdict():
     dct = FrozenAttrDict({"hello": "world", 1: 2})
-    assert isinstance(dct, dict)
+    assert isinstance(dct, UserDict)
 
     # Test get value
     assert dct["hello"] == "world"
@@ -203,9 +203,7 @@ def test_frozen_attrdict():
     assert dct["hello"] is dct.hello
 
     # Test adding item
-    with pytest.raises(
-        TypeError, match="FrozenAttrDict does not support item assignment"
-    ):
+    with pytest.raises(TypeError, match="add is disabled"):
         dct["foo"] = "bar"
     with pytest.raises(
         TypeError, match="FrozenAttrDict does not support item assignment"
@@ -217,30 +215,28 @@ def test_frozen_attrdict():
         TypeError, match="FrozenAttrDict does not support item assignment"
     ):
         dct.hello = "new"
-    with pytest.raises(
-        TypeError, match="FrozenAttrDict does not support item assignment"
-    ):
+    with pytest.raises(TypeError, match="update is disabled"):
         dct["hello"] = "new"
 
     # Test update
-    with pytest.raises(TypeError, match="FrozenAttrDict does not support update"):
+    with pytest.raises(TypeError, match="update is disabled"):
         dct.update({"hello": "world"})
 
     # Test pop
-    with pytest.raises(TypeError, match="FrozenAttrDict does not support pop"):
+    with pytest.raises(TypeError, match="delete is disabled"):
         dct.pop("hello")
 
-    with pytest.raises(TypeError, match="FrozenAttrDict does not support popitem"):
+    with pytest.raises(TypeError, match="delete is disabled"):
         dct.popitem()
 
     # Test delete
-    with pytest.raises(TypeError, match="FrozenAttrDict does not support deletion"):
+    with pytest.raises(TypeError, match="delete is disabled"):
         del dct["hello"]
 
-    with pytest.raises(TypeError, match="FrozenAttrDict does not support deletion"):
+    with pytest.raises(TypeError, match="does not support item deletion"):
         del dct.hello
 
-    with pytest.raises(TypeError, match="FrozenAttrDict does not support clear"):
+    with pytest.raises(TypeError, match="delete is disabled"):
         dct.clear()
 
 
