@@ -5,7 +5,8 @@ Useful collection classes, e.g., tree, frozendict, etc.
 from __future__ import annotations
 
 import collections
-from typing import TYPE_CHECKING
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Mapping
 
 if TYPE_CHECKING:
     from typing import Any, Iterable
@@ -140,6 +141,97 @@ class FrozenAttrDict(frozendict):
         raise KeyError(
             f"You cannot modify attribute {name} of {self.__class__.__name__}"
         )
+
+
+class CaseInsensitiveDictBase(collections.UserDict, ABC):
+    """A dictionary that performs case-insensitive key operations.
+
+    The following operations are overridden to handle case-insensitive keys:
+       - Add/update items:
+            `__setitem__`, `setdefault`, `update`, `|=` (`__ior__`)
+
+        - Delete items:
+            `__delitem__`, `del dct[key]`, `pop(key)`
+
+        - Other operations:
+            getter (`__getitem__`)
+            membership check with `in` (`__contains__`)
+
+    Subclasses must implement the `_converter` static method to define
+        how to convert keys (e.g., to `lower` or `upper`).
+    """
+
+    @staticmethod
+    @abstractmethod
+    def _converter(key: Any) -> Any:
+        """Subclasses must implement this to convert keys.
+
+        Example:
+            `return key.upper() if isinstance(key, str) else key`
+        """
+        pass
+
+    def __init__(self, initial_data: Mapping | Iterable | None = None, **kwargs):
+        """Initialize the dictionary, applying _converter to all keys."""
+        super().__init__()
+
+        # TODO: simplify init
+        if initial_data:
+            if isinstance(initial_data, Mapping):
+                for key, value in initial_data.items():
+                    self[key] = value
+            else:
+                for key, value in initial_data:
+                    self[key] = value
+
+        if kwargs:
+            for key, value in kwargs.items():
+                self[key] = value
+
+    def __setitem__(self, key: Any, value: Any) -> None:
+        """Sets a value in the dictionary with case-insensitive key."""
+        super().__setitem__(self._converter(key), value)
+
+    def __getitem__(self, key: Any) -> Any:
+        """Gets a value from the dictionary using a case-insensitive key."""
+        return super().__getitem__(self._converter(key))
+
+    def __delitem__(self, key: Any) -> None:
+        """Deletes a key-value pair using a case-insensitive key."""
+        super().__delitem__(self._converter(key))
+
+    def __contains__(self, key: Any) -> bool:
+        """Checks if a case-insensitive key is `in` the dictionary."""
+        return super().__contains__(self._converter(key))
+
+    def __ior__(self, other: Mapping) -> Self:
+        """The |= operator."""
+        self.update(other)
+        return self
+
+    def setdefault(self, key: Any, default: Any = None) -> Any:
+        return super().setdefault(self._converter(key), default)
+
+    def update(self, *args: Iterable[Mapping], **kwargs: Any) -> None:
+        if args:
+            for mapping in args:
+                if isinstance(mapping, Mapping):
+                    for key, value in mapping.items():
+                        self[key] = value
+                else:
+                    for key, value in mapping:
+                        self[key] = value
+        for key, value in kwargs.items():
+            self[key] = value
+
+    def pop(self, key: Any, default: Any = None) -> Any:
+        return super().pop(self._converter(key), default)
+
+
+class CaseInsensitiveDictUpper(CaseInsensitiveDictBase):
+    @staticmethod
+    def _converter(key: Any) -> Any:
+        return key.upper() if isinstance(key, str) else key
 
 
 class MongoDict:

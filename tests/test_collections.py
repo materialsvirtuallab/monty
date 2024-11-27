@@ -1,12 +1,15 @@
 from __future__ import annotations
 
-import os
-
 import pytest
 
-from monty.collections import AttrDict, FrozenAttrDict, Namespace, frozendict, tree
-
-TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
+from monty.collections import (
+    AttrDict,
+    CaseInsensitiveDictUpper,
+    FrozenAttrDict,
+    Namespace,
+    frozendict,
+    tree,
+)
 
 
 class TestFrozenDict:
@@ -43,6 +46,57 @@ class TestFrozenDict:
             d.foo = "bar"
         with pytest.raises(KeyError):
             d.hello = "new"
+
+
+def test_CaseInsensitiveDictUpper():
+    upper_dict = CaseInsensitiveDictUpper({"HI": "world"})
+    assert "hi" in upper_dict
+    assert upper_dict["HI"] == "world"
+    assert upper_dict["hi"] == "world"
+
+    # Test setter and getter
+    upper_dict["a"] = 1
+    assert upper_dict["a"] == 1
+    assert upper_dict["A"] == 1
+
+    upper_dict["B"] = 2  # upper case
+    assert upper_dict["b"] == 2
+    assert upper_dict["B"] == 2
+
+    # Test update with setter
+    upper_dict["B"] = 3
+    assert upper_dict["b"] == 3
+    assert upper_dict["B"] == 3
+
+    upper_dict["b"] = 4
+    assert upper_dict["b"] == 4
+    assert upper_dict["B"] == 4
+
+    # Test update with `update`
+    upper_dict.update({"c": 5, "D": 6})
+    assert upper_dict["C"] == 5
+    assert upper_dict["c"] == 5
+    assert upper_dict["D"] == 6
+    assert upper_dict["d"] == 6
+
+    # Test update with `|=`
+    upper_dict |= {"e": 7, "F": 8}
+    assert upper_dict["E"] == 7
+    assert upper_dict["e"] == 7
+    assert upper_dict["F"] == 8
+    assert upper_dict["f"] == 8
+
+    # Test `setdefault`
+    assert upper_dict.setdefault("g", 9) == 9  # Add new key
+    assert upper_dict["G"] == 9
+    assert upper_dict["g"] == 9
+    assert upper_dict.setdefault("g", 10) == 9  # Existing key remains unchanged
+    assert upper_dict["G"] == 9
+
+    # Test membership check with `in`
+    assert "g" in upper_dict
+    assert "G" in upper_dict
+    assert "non-existent" not in upper_dict
 
 
 class TestTree:
