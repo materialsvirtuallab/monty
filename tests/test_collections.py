@@ -98,6 +98,33 @@ def test_CaseInsensitiveDictUpper():
     assert "G" in upper_dict
     assert "non-existent" not in upper_dict
 
+    # Test `__delitem__`
+    del upper_dict["hi"]
+    assert "hi" not in upper_dict
+    assert "HI" not in upper_dict
+
+    # Test `del dct[key]`
+    del upper_dict["b"]
+    assert "b" not in upper_dict
+    assert "B" not in upper_dict
+
+    # Test `pop(key)`
+    popped_value = upper_dict.pop("c")
+    assert popped_value == 5
+    assert "c" not in upper_dict
+    assert "C" not in upper_dict
+
+    # Test `pop(key)` with default value (key exists)
+    popped_value = upper_dict.pop("d", "default")
+    assert popped_value == 6
+    assert "d" not in upper_dict
+    assert "D" not in upper_dict
+
+    # Test `pop(key)` with default value (key doesn't exist)
+    popped_value = upper_dict.pop("non-existent", "default")
+    assert popped_value == "default"
+    assert "non-existent" not in upper_dict
+
 
 class TestTree:
     def test_tree(self):
