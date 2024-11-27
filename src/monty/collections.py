@@ -20,7 +20,7 @@ from abc import ABC
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Any, ClassVar, Iterable
+    from typing import Any, Iterable
 
 
 def tree() -> collections.defaultdict:
@@ -63,11 +63,11 @@ class ControlledDict(collections.UserDict, ABC):
             - `clear()`
     """
 
-    _allow_add: ClassVar[bool] = True
-    _allow_del: ClassVar[bool] = True
-    _allow_update: ClassVar[bool] = True
+    _allow_add: bool = True
+    _allow_del: bool = True
+    _allow_update: bool = True
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Temporarily allow add during initialization."""
         original_allow_add = self._allow_add
 
@@ -78,7 +78,7 @@ class ControlledDict(collections.UserDict, ABC):
             self._allow_add = original_allow_add
 
     # Override add/update operations
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         """Forbid adding or updating keys based on _allow_add and _allow_update."""
         if key not in self.data and not self._allow_add:
             raise TypeError(f"Cannot add new key {key!r}, because add is disabled.")
@@ -87,7 +87,7 @@ class ControlledDict(collections.UserDict, ABC):
 
         super().__setitem__(key, value)
 
-    def update(self, *args, **kwargs):
+    def update(self, *args, **kwargs) -> None:
         """Forbid adding or updating keys based on _allow_add and _allow_update."""
         for key in dict(*args, **kwargs):
             if key not in self.data and not self._allow_add:
@@ -101,7 +101,7 @@ class ControlledDict(collections.UserDict, ABC):
 
         super().update(*args, **kwargs)
 
-    def setdefault(self, key, default=None):
+    def setdefault(self, key, default=None) -> None:
         """Forbid adding or updating keys based on _allow_add and _allow_update.
 
         Note: if not _allow_update, this method would NOT check whether the
@@ -120,7 +120,7 @@ class ControlledDict(collections.UserDict, ABC):
         return super().setdefault(key, default)
 
     # Override delete operations
-    def __delitem__(self, key):
+    def __delitem__(self, key) -> None:
         """Forbid deleting keys when self._allow_del is False."""
         if not self._allow_del:
             raise TypeError(f"Cannot delete key {key!r}, because delete is disabled.")
@@ -138,7 +138,7 @@ class ControlledDict(collections.UserDict, ABC):
             raise TypeError("Cannot pop item, because delete is disabled.")
         return super().popitem()
 
-    def clear(self):
+    def clear(self) -> None:
         """Forbid clearing the dictionary when self._allow_del is False."""
         if not self._allow_del:
             raise TypeError("Cannot clear dictionary, because delete is disabled.")
@@ -151,17 +151,17 @@ class frozendict(ControlledDict):
     violates PEP 8 to be consistent with the built-in `frozenset` naming.
     """
 
-    _allow_add: ClassVar[bool] = False
-    _allow_del: ClassVar[bool] = False
-    _allow_update: ClassVar[bool] = False
+    _allow_add: bool = False
+    _allow_del: bool = False
+    _allow_update: bool = False
 
 
 class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecate it?
     """A dictionary that does not permit update/delete its values (but allows add)."""
 
-    _allow_add: ClassVar[bool] = True
-    _allow_del: ClassVar[bool] = False
-    _allow_update: ClassVar[bool] = False
+    _allow_add: bool = True
+    _allow_del: bool = False
+    _allow_update: bool = False
 
 
 class AttrDict(dict):
@@ -205,26 +205,26 @@ class FrozenAttrDict(frozendict):
             the traditional way `dct["key"]`.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Allow add during init, as __setattr__ is called unlike frozendict."""
         self._allow_add = True
         super().__init__(*args, **kwargs)
         self._allow_add = False
 
-    def __getattribute__(self, name):
+    def __getattribute__(self, name: str) -> Any:
         try:
             return super().__getattribute__(name)
         except AttributeError:
             return self[name]
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: Any) -> None:
         if not self._allow_add and name != "_allow_add":
             raise TypeError(
                 f"{self.__class__.__name__} does not support item assignment."
             )
         super().__setattr__(name, value)
 
-    def __delattr__(self, name):
+    def __delattr__(self, name: str) -> None:
         raise TypeError(f"{self.__class__.__name__} does not support item deletion.")
 
 
