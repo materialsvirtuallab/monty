@@ -101,7 +101,7 @@ class ControlledDict(collections.UserDict, ABC):
 
         super().update(*args, **kwargs)
 
-    def setdefault(self, key, default=None) -> None:
+    def setdefault(self, key, default=None) -> Any:
         """Forbid adding or updating keys based on _allow_add and _allow_update.
 
         Note: if not _allow_update, this method would NOT check whether the
