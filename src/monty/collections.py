@@ -306,7 +306,7 @@ def dict2namedtuple(*args, **kwargs) -> tuple:
         >>> assert tpl.foo == 1 and tpl.bar == "hello"
 
         >>> tpl = dict2namedtuple([("foo", 1), ("bar", "hello")])
-        >>> assert tpl[0] is tpl.foo and t[1] is tpl.bar
+        >>> assert tpl[0] is tpl.foo and tpl[1] is tpl.bar
 
     Warnings:
         - The order of the items in the namedtuple is not deterministic if
