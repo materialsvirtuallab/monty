@@ -213,7 +213,7 @@ class FrozenAttrDict(frozendict):
 
     def __getattribute__(self, name: str) -> Any:
         try:
-            return super().__getattribute__(name)
+            return object.__getattribute__(self, name)
         except AttributeError:
             return self[name]
 
