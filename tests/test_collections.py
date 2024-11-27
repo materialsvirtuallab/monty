@@ -44,17 +44,49 @@ class TestControlledDict:
         dct = ControlledDict(a=1)
         dct.allow_add = False
 
-        with pytest.raises(TypeError):  # TODO: add msg
+        with pytest.raises(TypeError, match="allow_add is set to False"):
             dct["b"] = 2
 
-        with pytest.raises(TypeError):  # TODO: add msg
-            dct.update(a=2)
+        with pytest.raises(TypeError, match="allow_add is set to False"):
+            dct.update(b=2)
 
-        with pytest.raises(TypeError):  # TODO: add msg
-            dct.setdefault("a", 2)
+        with pytest.raises(TypeError, match="allow_add is set to False"):
+            dct.setdefault("c", 2)
 
-        with pytest.raises(TypeError):  # TODO: add msg
-            dct |= {"b": 2}
+        with pytest.raises(TypeError, match="allow_add is set to False"):
+            dct |= {"d": 2}
+
+    def test_update_allowed(self):
+        dct = ControlledDict(a=1)
+        dct.allow_update = True
+
+        dct["a"] = 2
+        assert dct["a"] == 2
+
+        dct |= {"a": 3}
+        assert dct["a"] == 3
+
+        dct.update({"a": 4})
+        assert dct["a"] == 4
+
+        dct.setdefault("a", 5)  # existing key
+        assert dct["a"] == 4
+
+    def test_update_disabled(self):
+        dct = ControlledDict(a=1)
+        dct.allow_update = False
+
+        with pytest.raises(TypeError, match="allow_update is set to False"):
+            dct["a"] = 2
+
+        with pytest.raises(TypeError, match="allow_update is set to False"):
+            dct.update({"a": 3})
+
+        with pytest.raises(TypeError, match="allow_update is set to False"):
+            dct |= {"a": 4}
+
+        with pytest.raises(TypeError, match="allow_update is set to False"):
+            dct.setdefault("a", 5)
 
     def test_del_allowed(self):
         dct = ControlledDict(a=1, b=2, c=3, d=4)
@@ -76,37 +108,17 @@ class TestControlledDict:
         dct = ControlledDict(a=1)
         dct.allow_del = False
 
-        with pytest.raises(TypeError):  # TODO: add msg
+        with pytest.raises(TypeError, match="delete is disabled"):
             del dct["a"]
 
-        with pytest.raises(TypeError):  # TODO: add msg
+        with pytest.raises(TypeError, match="delete is disabled"):
             dct.pop("a")
 
-        with pytest.raises(TypeError):  # TODO: add msg
+        with pytest.raises(TypeError, match="delete is disabled"):
             dct.popitem()
 
-        with pytest.raises(TypeError):  # TODO: add msg
+        with pytest.raises(TypeError, match="delete is disabled"):
             dct.clear()
-
-    def test_update_allowed(self):
-        dct = ControlledDict(a=1)
-        dct.allow_update = True
-
-        dct["a"] = 2
-        assert dct["a"] == 2
-
-        dct |= {"a": 3}
-        assert dct["a"] == 3
-
-    def test_update_disabled(self):
-        dct = ControlledDict(a=1)
-        dct.allow_update = False
-
-        with pytest.raises(TypeError):  # TODO: add msg
-            dct["a"] = 2
-
-        with pytest.raises(TypeError):  # TODO: add msg
-            dct |= {"a": 3}
 
 
 def test_frozendict():

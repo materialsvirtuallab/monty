@@ -47,46 +47,114 @@ class ControlledDict(collections.UserDict, ABC):
         allow_add (bool): Whether new keys can be added.
         allow_del (bool): Whether existing keys can be deleted.
         allow_update (bool): Whether existing keys can be updated.
+
+    Configurable Operations:
+        This class allows controlling the following dictionary operations (refer to
+        https://docs.python.org/3.13/library/stdtypes.html#mapping-types-dict for details):
+
+        - Adding or updating items:
+            - setter method: `__setitem__`
+            - `setdefault`
+            - `update`
+            - Merging dictionaries using `|=`
+
+        - Deleting items:
+            - `del dict[key]`
+            - `pop(key)`
+            - `popitem`
+            - `clear()`
     """
 
     allow_add: ClassVar[bool] = True
     allow_del: ClassVar[bool] = True
     allow_update: ClassVar[bool] = True
 
+    # TODO: extract checkers
+
+    # Overriding add/update operations
     def __setitem__(self, key, value):
-        """Forbid set when self.allow_add is False."""
+        """Forbid adding or updating keys based on allow_add and allow_update."""
         if key not in self.data and not self.allow_add:
-            raise TypeError("Cannot add new key, because add is disabled.")
+            raise TypeError(
+                f"Cannot add new key {key!r}, because allow_add is set to False."
+            )
+        elif key in self.data and not self.allow_update:
+            raise TypeError(
+                f"Cannot update key {key!r}, because allow_update is set to False."
+            )
 
         super().__setitem__(key, value)
 
-    # def __ior__(self, other):
-    #     # Handle the |= operator for dictionary merging
-    #     for key in other:
-    #         if key not in self.data and not self.ADD:
-    #             raise TypeError(
-    #                 f"Cannot add new key using |= operator: {key!r} because ADD is set to False"
-    #             )
+    def __ior__(self, other):
+        """Handle the |= operator for dictionary updates."""
+        for key in other:
+            if key not in self.data and not self.allow_add:
+                raise TypeError(
+                    f"Cannot add new key using |= operator: {key!r}, because allow_add is set to False."
+                )
+            elif key in self.data and not self.allow_update:
+                raise TypeError(
+                    f"Cannot update key using |= operator: {key!r}, because allow_update is set to False."
+                )
 
-    #     return super().__ior__(other)
+        return super().__ior__(other)
 
     def update(self, *args, **kwargs):
-        # For each key in the provided dictionary, check if it's a new key
+        """Forbid adding or updating keys based on allow_add and allow_update."""
         for key in dict(*args, **kwargs):
             if key not in self.data and not self.allow_add:
-                raise KeyError(
-                    f"Cannot add new key using update: {key!r} because ADD is set to False"
+                raise TypeError(
+                    f"Cannot add new key {key!r} using update, because allow_add is set to False."
+                )
+            elif key in self.data and not self.allow_update:
+                raise TypeError(
+                    f"Cannot update key {key!r} using update, because allow_update is set to False."
                 )
 
         super().update(*args, **kwargs)
 
     def setdefault(self, key, default=None):
-        if key not in self.data and not self.allow_add:
+        """Forbid adding or updating keys based on allow_add and allow_update.
+
+        Note: if not allow_update, this method would NOT check whether the
+            new default value is the same as current value for efficiency.
+        """
+        if key not in self.data:
+            if not self.allow_add:
+                raise TypeError(
+                    f"Cannot add new key using setdefault: {key!r}, because allow_add is set to False."
+                )
+        elif not self.allow_update:
             raise TypeError(
-                f"Cannot add new key using setdefault: {key!r} because ADD is set to False"
+                f"Cannot update key using setdefault: {key!r}, because allow_update is set to False."
             )
 
         return super().setdefault(key, default)
+
+    # Overriding delete operations
+    def __delitem__(self, key):
+        """Forbid deleting keys when self.allow_del is False."""
+        if not self.allow_del:
+            raise TypeError(f"Cannot delete key {key!r}, because delete is disabled.")
+        super().__delitem__(key)
+
+    def pop(self, key, *args):
+        """Forbid popping keys when self.allow_del is False."""
+        if not self.allow_del:
+            raise TypeError(f"Cannot pop key {key!r}, because delete is disabled.")
+        return super().pop(key, *args)
+
+    def popitem(self):
+        """Forbid popping the last item when self.allow_del is False."""
+        if not self.allow_del:
+            raise TypeError("Cannot pop item, because delete is disabled.")
+        return super().popitem()
+
+    def clear(self):
+        """Forbid clearing the dictionary when self.allow_del is False."""
+        if not self.allow_del:
+            raise TypeError("Cannot clear dictionary, because delete is disabled.")
+        super().clear()
 
 
 class frozendict(dict):
