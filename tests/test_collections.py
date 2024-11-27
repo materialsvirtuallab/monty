@@ -43,13 +43,13 @@ class TestControlledDict:
         dct = ControlledDict(a=1)
         dct.allow_add = False
 
-        with pytest.raises(TypeError, match="allow_add is set to False"):
+        with pytest.raises(TypeError, match="add is disabled"):
             dct["b"] = 2
 
-        with pytest.raises(TypeError, match="allow_add is set to False"):
+        with pytest.raises(TypeError, match="add is disabled"):
             dct.update(b=2)
 
-        with pytest.raises(TypeError, match="allow_add is set to False"):
+        with pytest.raises(TypeError, match="add is disabled"):
             dct.setdefault("c", 2)
 
     def test_update_allowed(self):
@@ -69,13 +69,13 @@ class TestControlledDict:
         dct = ControlledDict(a=1)
         dct.allow_update = False
 
-        with pytest.raises(TypeError, match="allow_update is set to False"):
+        with pytest.raises(TypeError, match="update is disabled"):
             dct["a"] = 2
 
-        with pytest.raises(TypeError, match="allow_update is set to False"):
+        with pytest.raises(TypeError, match="update is disabled"):
             dct.update({"a": 3})
 
-        with pytest.raises(TypeError, match="allow_update is set to False"):
+        with pytest.raises(TypeError, match="update is disabled"):
             dct.setdefault("a", 4)
 
     def test_del_allowed(self):
@@ -133,11 +133,11 @@ def test_frozendict():
     assert not dct.allow_del
 
     # Test setter
-    with pytest.raises(TypeError, match="allow_add is set to False"):
+    with pytest.raises(TypeError, match="add is disabled"):
         dct["key"] = "val"
 
     # Test update
-    with pytest.raises(TypeError, match="allow_add is set to False"):
+    with pytest.raises(TypeError, match="add is disabled"):
         dct.update(key="val")
 
     # Test pop
@@ -151,7 +151,7 @@ def test_frozendict():
 
 def test_namespace_dict():
     dct = Namespace(key="val")
-    assert isinstance(dct, dict)
+    assert isinstance(dct, UserDict)
     dct["hello"] = "world"
     assert dct["key"] == "val"
 

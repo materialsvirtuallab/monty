@@ -72,6 +72,7 @@ class ControlledDict(collections.UserDict, ABC):
         """Temporarily allow all add/update during initialization."""
         original_allow_add = self.allow_add
         original_allow_update = self.allow_update
+
         try:
             self.allow_add = True
             self.allow_update = True
@@ -80,19 +81,13 @@ class ControlledDict(collections.UserDict, ABC):
             self.allow_add = original_allow_add
             self.allow_update = original_allow_update
 
-    # TODO: extract checkers
-
-    # Overriding add/update operations
+    # Override add/update operations
     def __setitem__(self, key, value):
         """Forbid adding or updating keys based on allow_add and allow_update."""
         if key not in self.data and not self.allow_add:
-            raise TypeError(
-                f"Cannot add new key {key!r}, because allow_add is set to False."
-            )
+            raise TypeError(f"Cannot add new key {key!r}, because add is disabled.")
         elif key in self.data and not self.allow_update:
-            raise TypeError(
-                f"Cannot update key {key!r}, because allow_update is set to False."
-            )
+            raise TypeError(f"Cannot update key {key!r}, because update is disabled.")
 
         super().__setitem__(key, value)
 
@@ -101,11 +96,11 @@ class ControlledDict(collections.UserDict, ABC):
         for key in dict(*args, **kwargs):
             if key not in self.data and not self.allow_add:
                 raise TypeError(
-                    f"Cannot add new key {key!r} using update, because allow_add is set to False."
+                    f"Cannot add new key {key!r} using update, because add is disabled."
                 )
             elif key in self.data and not self.allow_update:
                 raise TypeError(
-                    f"Cannot update key {key!r} using update, because allow_update is set to False."
+                    f"Cannot update key {key!r} using update, because update is disabled."
                 )
 
         super().update(*args, **kwargs)
@@ -119,16 +114,16 @@ class ControlledDict(collections.UserDict, ABC):
         if key not in self.data:
             if not self.allow_add:
                 raise TypeError(
-                    f"Cannot add new key using setdefault: {key!r}, because allow_add is set to False."
+                    f"Cannot add new key using setdefault: {key!r}, because add is disabled."
                 )
         elif not self.allow_update:
             raise TypeError(
-                f"Cannot update key using setdefault: {key!r}, because allow_update is set to False."
+                f"Cannot update key using setdefault: {key!r}, because update is disabled."
             )
 
         return super().setdefault(key, default)
 
-    # Overriding delete operations
+    # Override delete operations
     def __delitem__(self, key):
         """Forbid deleting keys when self.allow_del is False."""
         if not self.allow_del:
@@ -165,31 +160,12 @@ class frozendict(ControlledDict):
     allow_update: ClassVar[bool] = False
 
 
-class Namespace(dict):  # TODO: this name is a bit confusing, deprecate it?
+class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecate it?
     """A dictionary that does not permit changing its values."""
 
-    def __init__(self, *args, **kwargs) -> None:
-        """
-        Args:
-            args: Passthrough arguments for standard dict.
-            kwargs: Passthrough keyword arguments for standard dict.
-        """
-        self.update(*args, **kwargs)
-
-    def __setitem__(self, key: Any, val: Any) -> None:
-        if key in self:
-            raise TypeError(f"Cannot overwrite existing key: {key!s}")
-
-        dict.__setitem__(self, key, val)
-
-    def update(self, *args, **kwargs) -> None:
-        """
-        Args:
-            args: Passthrough arguments for standard dict.
-            kwargs: Passthrough keyword arguments for standard dict.
-        """
-        for k, v in dict(*args, **kwargs).items():
-            self[k] = v
+    allow_add: ClassVar[bool] = True
+    allow_del: ClassVar[bool] = True
+    allow_update: ClassVar[bool] = False
 
 
 class AttrDict(dict):
