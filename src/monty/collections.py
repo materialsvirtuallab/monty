@@ -156,7 +156,7 @@ class frozendict(ControlledDict):
     _allow_update: bool = False
 
 
-class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecate it?
+class Namespace(ControlledDict):
     """A dictionary that does not permit update/delete its values (but allows add)."""
 
     _allow_add: bool = True
