@@ -195,22 +195,53 @@ def test_attr_dict():
 
 def test_frozen_attrdict():
     dct = FrozenAttrDict({"hello": "world", 1: 2})
-    assert isinstance(dct, UserDict)
+    assert isinstance(dct, dict)
+
+    # Test get value
     assert dct["hello"] == "world"
     assert dct.hello == "world"
     assert dct["hello"] is dct.hello
 
     # Test adding item
-    with pytest.raises(TypeError, match="You cannot modify attribute"):
+    with pytest.raises(
+        TypeError, match="FrozenAttrDict does not support item assignment"
+    ):
         dct["foo"] = "bar"
-    with pytest.raises(TypeError, match="You cannot modify attribute"):
+    with pytest.raises(
+        TypeError, match="FrozenAttrDict does not support item assignment"
+    ):
         dct.foo = "bar"
 
     # Test modifying existing item
-    with pytest.raises(TypeError, match="You cannot modify attribute"):
+    with pytest.raises(
+        TypeError, match="FrozenAttrDict does not support item assignment"
+    ):
         dct.hello = "new"
-    with pytest.raises(TypeError, match="You cannot modify attribute"):
+    with pytest.raises(
+        TypeError, match="FrozenAttrDict does not support item assignment"
+    ):
         dct["hello"] = "new"
+
+    # Test update
+    with pytest.raises(TypeError, match="FrozenAttrDict does not support update"):
+        dct.update({"hello": "world"})
+
+    # Test pop
+    with pytest.raises(TypeError, match="FrozenAttrDict does not support pop"):
+        dct.pop("hello")
+
+    with pytest.raises(TypeError, match="FrozenAttrDict does not support popitem"):
+        dct.popitem()
+
+    # Test delete
+    with pytest.raises(TypeError, match="FrozenAttrDict does not support deletion"):
+        del dct["hello"]
+
+    with pytest.raises(TypeError, match="FrozenAttrDict does not support deletion"):
+        del dct.hello
+
+    with pytest.raises(TypeError, match="FrozenAttrDict does not support clear"):
+        dct.clear()
 
 
 def test_mongo_dict():

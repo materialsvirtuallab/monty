@@ -200,15 +200,50 @@ class AttrDict(dict):
         super().__setitem__(key, value)
 
 
-class FrozenAttrDict(frozendict):
+class FrozenAttrDict(AttrDict):
     """
     A dictionary that:
         - Does not permit changes (add/update/delete).
         - Allow accessing values as `dct.key` in addition to
             the traditional way `dct["key"]`.
 
-    TODO:
+    TODO: I didn't manage to inherit from `frozendict` which would trigger a RecursionError.
     """
+
+    def __init__(self, *args, **kwargs) -> None:
+        """Allow setting only during initialization."""
+        object.__setattr__(self, "_initialized", False)
+        super().__init__(*args, **kwargs)
+        object.__setattr__(self, "_initialized", True)
+
+    def __setattr__(self, key, value):
+        """Allow setting only during initialization."""
+        if getattr(self, "_initialized", True) and key != "_initialized":
+            raise TypeError(
+                f"{self.__class__.__name__} does not support item assignment."
+            )
+        super().__setattr__(key, value)
+
+    def __setitem__(self, key, value):
+        raise TypeError(f"{self.__class__.__name__} does not support item assignment.")
+
+    def update(self, *args, **kwargs):
+        raise TypeError(f"{self.__class__.__name__} does not support update.")
+
+    def clear(self):
+        raise TypeError(f"{self.__class__.__name__} does not support clear.")
+
+    def pop(self, key, *args):
+        raise TypeError(f"{self.__class__.__name__} does not support pop.")
+
+    def popitem(self):
+        raise TypeError(f"{self.__class__.__name__} does not support popitem.")
+
+    def __delitem__(self, key):
+        raise TypeError(f"{self.__class__.__name__} does not support deletion.")
+
+    def __delattr__(self, key):
+        raise TypeError(f"{self.__class__.__name__} does not support deletion.")
 
 
 class MongoDict:
