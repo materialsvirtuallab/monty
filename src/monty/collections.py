@@ -2,6 +2,7 @@
 Useful collection classes:
     - tree: A recursive `defaultdict` for creating nested dictionaries
         with default values.
+    - ControlledDict: A base dict class with configurable mutability.
     - frozendict: An immutable dictionary.
     - Namespace: A dict doesn't allow changing values, but could
         add new keys,
@@ -53,7 +54,7 @@ class ControlledDict(collections.UserDict, ABC):
     allow_update: ClassVar[bool] = True
 
     def __setitem__(self, key, value):
-        """Forbid set when self.ADD is False."""
+        """Forbid set when self.allow_add is False."""
         if key not in self.data and not self.allow_add:
             raise TypeError("Cannot add new key, because add is disabled.")
 
@@ -273,7 +274,7 @@ class MongoDict:
 
 def dict2namedtuple(*args, **kwargs) -> tuple:
     """
-    Helper function to create a class `namedtuple` from a dictionary.
+    Helper function to create a `namedtuple` from a dictionary.
 
     Examples:
         >>> tpl = dict2namedtuple(foo=1, bar="hello")
@@ -284,12 +285,11 @@ def dict2namedtuple(*args, **kwargs) -> tuple:
 
     Warnings:
         - The order of the items in the namedtuple is not deterministic if
-          kwargs are used.
-          namedtuples, however, should always be accessed by attribute hence
-          this behaviour should not represent a serious problem.
+          `kwargs` are used. namedtuples, however, should always be accessed
+          by attribute hence this behaviour should not be a serious problem.
 
-        - Don't use this function in code in which memory and performance are
-          crucial since a dict is needed to instantiate the tuple!
+        - Don't use this function in code where memory and performance are
+          crucial, since a dict is needed to instantiate the tuple!
     """
     dct = collections.OrderedDict(*args)
     dct.update(**kwargs)
