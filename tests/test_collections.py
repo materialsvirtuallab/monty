@@ -197,24 +197,26 @@ def test_frozen_attrdict():
     dct = FrozenAttrDict({"hello": "world", 1: 2})
     assert isinstance(dct, UserDict)
 
+    # Test attribute-like operations
+    with pytest.raises(TypeError, match="does not support item assignment"):
+        dct.foo = "bar"
+
+    with pytest.raises(TypeError, match="does not support item assignment"):
+        dct.hello = "new"
+
+    with pytest.raises(TypeError, match="does not support item deletion"):
+        del dct.hello
+
     # Test get value
     assert dct["hello"] == "world"
     assert dct.hello == "world"
-    assert dct["hello"] is dct.hello
+    assert dct["hello"] is dct.hello  # identity check
 
     # Test adding item
     with pytest.raises(TypeError, match="add is disabled"):
         dct["foo"] = "bar"
-    with pytest.raises(
-        TypeError, match="FrozenAttrDict does not support item assignment"
-    ):
-        dct.foo = "bar"
 
     # Test modifying existing item
-    with pytest.raises(
-        TypeError, match="FrozenAttrDict does not support item assignment"
-    ):
-        dct.hello = "new"
     with pytest.raises(TypeError, match="update is disabled"):
         dct["hello"] = "new"
 
@@ -232,9 +234,6 @@ def test_frozen_attrdict():
     # Test delete
     with pytest.raises(TypeError, match="delete is disabled"):
         del dct["hello"]
-
-    with pytest.raises(TypeError, match="does not support item deletion"):
-        del dct.hello
 
     with pytest.raises(TypeError, match="delete is disabled"):
         dct.clear()
