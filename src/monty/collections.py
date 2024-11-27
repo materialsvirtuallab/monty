@@ -56,7 +56,6 @@ class ControlledDict(collections.UserDict, ABC):
             - setter method: `__setitem__`
             - `setdefault`
             - `update`
-            - Merging dictionaries using `|=`
 
         - Deleting items:
             - `del dict[key]`
@@ -84,20 +83,6 @@ class ControlledDict(collections.UserDict, ABC):
             )
 
         super().__setitem__(key, value)
-
-    def __ior__(self, other):
-        """Handle the |= operator for dictionary updates."""
-        for key in other:
-            if key not in self.data and not self.allow_add:
-                raise TypeError(
-                    f"Cannot add new key using |= operator: {key!r}, because allow_add is set to False."
-                )
-            elif key in self.data and not self.allow_update:
-                raise TypeError(
-                    f"Cannot update key using |= operator: {key!r}, because allow_update is set to False."
-                )
-
-        return super().__ior__(other)
 
     def update(self, *args, **kwargs):
         """Forbid adding or updating keys based on allow_add and allow_update."""

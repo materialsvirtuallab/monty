@@ -31,14 +31,11 @@ class TestControlledDict:
         dct["b"] = 2
         assert dct["b"] == 2
 
-        dct |= {"c": 3}
-        assert dct["c"] == 3
+        dct.update(d=3)
+        assert dct["d"] == 3
 
-        dct.update(d=4)
-        assert dct["d"] == 4
-
-        dct.setdefault("e", 5)
-        assert dct["e"] == 5
+        dct.setdefault("e", 4)
+        assert dct["e"] == 4
 
     def test_add_disabled(self):
         dct = ControlledDict(a=1)
@@ -53,9 +50,6 @@ class TestControlledDict:
         with pytest.raises(TypeError, match="allow_add is set to False"):
             dct.setdefault("c", 2)
 
-        with pytest.raises(TypeError, match="allow_add is set to False"):
-            dct |= {"d": 2}
-
     def test_update_allowed(self):
         dct = ControlledDict(a=1)
         dct.allow_update = True
@@ -63,14 +57,11 @@ class TestControlledDict:
         dct["a"] = 2
         assert dct["a"] == 2
 
-        dct |= {"a": 3}
+        dct.update({"a": 3})
         assert dct["a"] == 3
 
-        dct.update({"a": 4})
-        assert dct["a"] == 4
-
-        dct.setdefault("a", 5)  # existing key
-        assert dct["a"] == 4
+        dct.setdefault("a", 4)  # existing key
+        assert dct["a"] == 3
 
     def test_update_disabled(self):
         dct = ControlledDict(a=1)
@@ -83,10 +74,7 @@ class TestControlledDict:
             dct.update({"a": 3})
 
         with pytest.raises(TypeError, match="allow_update is set to False"):
-            dct |= {"a": 4}
-
-        with pytest.raises(TypeError, match="allow_update is set to False"):
-            dct.setdefault("a", 5)
+            dct.setdefault("a", 4)
 
     def test_del_allowed(self):
         dct = ControlledDict(a=1, b=2, c=3, d=4)
