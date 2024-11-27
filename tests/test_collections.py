@@ -188,6 +188,10 @@ def test_attr_dict():
     del dct.bar
     assert "bar" not in dct
 
+    # Test builtin dict method shadowing
+    with pytest.warns(UserWarning, match="shadows dict method"):
+        dct["update"] = "value"
+
 
 def test_frozen_attrdict():
     dct = FrozenAttrDict({"hello": "world", 1: 2})

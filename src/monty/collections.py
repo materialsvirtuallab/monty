@@ -15,13 +15,12 @@ Useful collection classes:
 from __future__ import annotations
 
 import collections
+import warnings
 from abc import ABC
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Any, ClassVar, Iterable
-
-    from typing_extensions import Self
 
 
 def tree() -> collections.defaultdict:
@@ -170,27 +169,45 @@ class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecat
 
 class AttrDict(dict):
     """
-    Allow accessing values as `dct.key` in addition to
-    the traditional way `dct["key"]`.
+    Allow accessing values as `dct.key` in addition to the traditional way `dct["key"]`.
 
     Examples:
         >>> dct = AttrDict(foo=1, bar=2)
         >>> assert dct["foo"] is dct.foo
         >>> dct.bar = "hello"
-        >>> assert dct.bar == "hello"
+
+    Warnings:
+        When shadowing dict methods, e.g.:
+            >>> dct = AttrDict(update="value")
+            >>> dct.update()  # TypeError (the `update` method is overwritten)
+
+    References:
+        https://stackoverflow.com/a/14620633/24021108
     """
 
     def __init__(self, *args, **kwargs) -> None:
         super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
 
+    def __setitem__(self, key, value) -> None:
+        """Check if the key shadows dict method."""
+        if key in dir(dict):
+            warnings.warn(
+                f"'{key=}' shadows dict method. This may lead to unexpected behavior.",
+                UserWarning,
+                stacklevel=2,
+            )
+        super().__setitem__(key, value)
 
-class FrozenAttrDict(frozendict):  # TODO: fix inheritance
+
+class FrozenAttrDict(frozendict):
     """
     A dictionary that:
         - Does not permit changes (add/update/delete).
         - Allow accessing values as `dct.key` in addition to
             the traditional way `dct["key"]`.
+
+    TODO:
     """
 
 
