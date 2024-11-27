@@ -79,7 +79,7 @@ class ControlledDict(collections.UserDict, ABC):
 
     # Override add/update operations
     def __setitem__(self, key, value):
-        """Forbid adding or updating keys based on allow_add and allow_update."""
+        """Forbid adding or updating keys based on _allow_add and _allow_update."""
         if key not in self.data and not self._allow_add:
             raise TypeError(f"Cannot add new key {key!r}, because add is disabled.")
         elif key in self.data and not self._allow_update:
@@ -88,7 +88,7 @@ class ControlledDict(collections.UserDict, ABC):
         super().__setitem__(key, value)
 
     def update(self, *args, **kwargs):
-        """Forbid adding or updating keys based on allow_add and allow_update."""
+        """Forbid adding or updating keys based on _allow_add and _allow_update."""
         for key in dict(*args, **kwargs):
             if key not in self.data and not self._allow_add:
                 raise TypeError(
@@ -102,9 +102,9 @@ class ControlledDict(collections.UserDict, ABC):
         super().update(*args, **kwargs)
 
     def setdefault(self, key, default=None):
-        """Forbid adding or updating keys based on allow_add and allow_update.
+        """Forbid adding or updating keys based on _allow_add and _allow_update.
 
-        Note: if not allow_update, this method would NOT check whether the
+        Note: if not _allow_update, this method would NOT check whether the
             new default value is the same as current value for efficiency.
         """
         if key not in self.data:
@@ -121,25 +121,25 @@ class ControlledDict(collections.UserDict, ABC):
 
     # Override delete operations
     def __delitem__(self, key):
-        """Forbid deleting keys when self.allow_del is False."""
+        """Forbid deleting keys when self._allow_del is False."""
         if not self._allow_del:
             raise TypeError(f"Cannot delete key {key!r}, because delete is disabled.")
         super().__delitem__(key)
 
     def pop(self, key, *args):
-        """Forbid popping keys when self.allow_del is False."""
+        """Forbid popping keys when self._allow_del is False."""
         if not self._allow_del:
             raise TypeError(f"Cannot pop key {key!r}, because delete is disabled.")
         return super().pop(key, *args)
 
     def popitem(self):
-        """Forbid popping the last item when self.allow_del is False."""
+        """Forbid popping the last item when self._allow_del is False."""
         if not self._allow_del:
             raise TypeError("Cannot pop item, because delete is disabled.")
         return super().popitem()
 
     def clear(self):
-        """Forbid clearing the dictionary when self.allow_del is False."""
+        """Forbid clearing the dictionary when self._allow_del is False."""
         if not self._allow_del:
             raise TypeError("Cannot clear dictionary, because delete is disabled.")
         super().clear()
@@ -201,7 +201,7 @@ class FrozenAttrDict(frozendict):
     """
     A dictionary that:
         - Does not permit changes (add/update/delete).
-        - Allow accessing values as `dct.key` in addition to
+        - Allows accessing values as `dct.key` in addition to
             the traditional way `dct["key"]`.
     """
 
