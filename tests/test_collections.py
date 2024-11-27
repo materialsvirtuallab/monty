@@ -111,7 +111,7 @@ class TestControlledDict:
             dct.clear()
 
     def test_frozen_like(self):
-        """Make sure setter is allow at init time."""
+        """Make sure add and update are allowed at init time."""
         ControlledDict.allow_add = False
         ControlledDict.allow_update = False
 
@@ -167,12 +167,22 @@ def test_namespace_dict():
 
 def test_attr_dict():
     dct = AttrDict(foo=1, bar=2)
+
+    # Test get attribute
     assert dct.bar == 2
     assert dct["foo"] is dct.foo
 
-    # Test accessing values
+    # Test key not found error
+    with pytest.raises(KeyError, match="no-such-key"):
+        dct["no-such-key"]
+
+    # Test setter
     dct.bar = "hello"
     assert dct["bar"] == "hello"
+
+    # Test delete
+    del dct.bar
+    assert "bar" not in dct
 
 
 def test_frozen_attrdict():

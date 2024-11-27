@@ -49,7 +49,7 @@ class ControlledDict(collections.UserDict, ABC):
         allow_update (bool): Whether existing keys can be updated.
 
     Configurable Operations:
-        This class allows controlling the following dictionary operations (refer to
+        This class allows controlling the following dict operations (refer to
         https://docs.python.org/3.13/library/stdtypes.html#mapping-types-dict for details):
 
         - Adding or updating items:
@@ -170,8 +170,8 @@ class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecat
 
 class AttrDict(dict):
     """
-    Allows to access values as dct.key in addition
-    to the traditional way dct["key"]
+    Allow accessing values as `dct.key` in addition to
+    the traditional way `dct["key"]`.
 
     Examples:
         >>> dct = AttrDict(foo=1, bar=2)
@@ -181,52 +181,17 @@ class AttrDict(dict):
     """
 
     def __init__(self, *args, **kwargs) -> None:
-        """
-        Args:
-            args: Passthrough arguments for standard dict.
-            kwargs: Passthrough keyword arguments for standard dict.
-        """
-        super().__init__(*args, **kwargs)
+        super(AttrDict, self).__init__(*args, **kwargs)
         self.__dict__ = self
 
-    def copy(self) -> Self:
-        """
-        Returns:
-            Copy of AttrDict
-        """
-        newd = super().copy()
-        return self.__class__(**newd)
 
-
-class FrozenAttrDict(frozendict):
+class FrozenAttrDict(frozendict, AttrDict):  # TODO: fix inheritance
     """
     A dictionary that:
-        - Does not permit changes.
-        - Allows to access values as dct.key in addition
-          to the traditional way dct["key"]
+        - Does not permit changes (add/update/delete).
+        - Allow accessing values as `dct.key` in addition to
+            the traditional way `dct["key"]`.
     """
-
-    def __init__(self, *args, **kwargs) -> None:
-        """
-        Args:
-            args: Passthrough arguments for standard dict.
-            kwargs: Passthrough keyword arguments for standard dict.
-        """
-        super().__init__(*args, **kwargs)
-
-    def __getattribute__(self, name: str) -> Any:
-        try:
-            return super().__getattribute__(name)
-        except AttributeError:
-            try:
-                return self[name]
-            except KeyError as exc:
-                raise AttributeError(str(exc))
-
-    def __setattr__(self, name: str, value: Any) -> None:
-        raise TypeError(
-            f"You cannot modify attribute {name} of {self.__class__.__name__}"
-        )
 
 
 class MongoDict:
