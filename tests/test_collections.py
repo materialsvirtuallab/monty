@@ -164,6 +164,10 @@ def test_namespace_dict():
     with pytest.raises(TypeError, match="update is disabled"):
         dct.update({"key": "val"})
 
+    # Test delete (not allowed)
+    with pytest.raises(TypeError, match="delete is disabled"):
+        del dct["key"]
+
 
 def test_attr_dict():
     dct = AttrDict(foo=1, bar=2)
@@ -187,7 +191,7 @@ def test_attr_dict():
 
 def test_frozen_attrdict():
     dct = FrozenAttrDict({"hello": "world", 1: 2})
-    assert isinstance(dct, dict)
+    assert isinstance(dct, UserDict)
     assert dct["hello"] == "world"
     assert dct.hello == "world"
     assert dct["hello"] is dct.hello

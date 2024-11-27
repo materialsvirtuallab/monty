@@ -161,10 +161,10 @@ class frozendict(ControlledDict):
 
 
 class Namespace(ControlledDict):  # TODO: this name is a bit confusing, deprecate it?
-    """A dictionary that does not permit changing its values."""
+    """A dictionary that does not permit update/delete its values (but allows add)."""
 
     allow_add: ClassVar[bool] = True
-    allow_del: ClassVar[bool] = True
+    allow_del: ClassVar[bool] = False
     allow_update: ClassVar[bool] = False
 
 
@@ -185,7 +185,7 @@ class AttrDict(dict):
         self.__dict__ = self
 
 
-class FrozenAttrDict(frozendict, AttrDict):  # TODO: fix inheritance
+class FrozenAttrDict(frozendict):  # TODO: fix inheritance
     """
     A dictionary that:
         - Does not permit changes (add/update/delete).
