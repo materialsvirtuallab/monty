@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections import UserDict
+
 import pytest
 
 from monty.collections import (
@@ -108,32 +110,42 @@ class TestControlledDict:
         with pytest.raises(TypeError, match="delete is disabled"):
             dct.clear()
 
+    def test_frozen_like(self):
+        """Make sure setter is allow at init time."""
+        ControlledDict.allow_add = False
+        ControlledDict.allow_update = False
+
+        dct = ControlledDict({"hello": "world"})
+        assert isinstance(dct, UserDict)
+        assert dct["hello"] == "world"
+
+        assert not dct.allow_add
+        assert not dct.allow_update
+
 
 def test_frozendict():
     dct = frozendict({"hello": "world"})
-    assert isinstance(dct, dict)
+    assert isinstance(dct, UserDict)
     assert dct["hello"] == "world"
 
+    assert not dct.allow_add
+    assert not dct.allow_update
+    assert not dct.allow_del
+
     # Test setter
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
-        dct["key"] == "val"
+    with pytest.raises(TypeError, match="allow_add is set to False"):
+        dct["key"] = "val"
 
     # Test update
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+    with pytest.raises(TypeError, match="allow_add is set to False"):
         dct.update(key="val")
 
-    # Test inplace-or (|=)
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
-        dct |= {"key": "val"}
-
-    # TODO: from this point we need a different error message
-
     # Test pop
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+    with pytest.raises(TypeError, match="delete is disabled"):
         dct.pop("key")
 
     # Test delete
-    with pytest.raises(TypeError, match="Cannot overwrite existing key"):
+    with pytest.raises(TypeError, match="delete is disabled"):
         del dct["key"]
 
 

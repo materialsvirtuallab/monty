@@ -68,6 +68,18 @@ class ControlledDict(collections.UserDict, ABC):
     allow_del: ClassVar[bool] = True
     allow_update: ClassVar[bool] = True
 
+    def __init__(self, *args, **kwargs):
+        """Temporarily allow all add/update during initialization."""
+        original_allow_add = self.allow_add
+        original_allow_update = self.allow_update
+        try:
+            self.allow_add = True
+            self.allow_update = True
+            super().__init__(*args, **kwargs)
+        finally:
+            self.allow_add = original_allow_add
+            self.allow_update = original_allow_update
+
     # TODO: extract checkers
 
     # Overriding add/update operations
@@ -142,30 +154,15 @@ class ControlledDict(collections.UserDict, ABC):
         super().clear()
 
 
-class frozendict(dict):
+class frozendict(ControlledDict):
     """
     A dictionary that does not permit changes. The naming
-    violates PEP 8 to be consistent with the built-in "frozenset" naming.
+    violates PEP 8 to be consistent with the built-in `frozenset` naming.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
-        """
-        Args:
-            args: Passthrough arguments for standard dict.
-            kwargs: Passthrough keyword arguments for standard dict.
-        """
-        dict.__init__(self, *args, **kwargs)
-
-    def __setitem__(self, key: Any, val: Any) -> None:
-        raise TypeError(f"{type(self).__name__} does not support item assignment")
-
-    def update(self, *args, **kwargs) -> None:
-        """
-        Args:
-            args: Passthrough arguments for standard dict.
-            kwargs: Passthrough keyword arguments for standard dict.
-        """
-        raise TypeError(f"Cannot update a {self.__class__.__name__}")
+    allow_add: ClassVar[bool] = False
+    allow_del: ClassVar[bool] = False
+    allow_update: ClassVar[bool] = False
 
 
 class Namespace(dict):  # TODO: this name is a bit confusing, deprecate it?
