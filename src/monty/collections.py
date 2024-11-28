@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import collections
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Mapping
+from typing import TYPE_CHECKING, Mapping, overload
 
 if TYPE_CHECKING:
     from typing import Any, Iterable
@@ -204,15 +204,24 @@ class CaseInsensitiveDictBase(collections.UserDict, ABC):
         """Checks if a case-insensitive key is `in` the dictionary."""
         return super().__contains__(self._converter(key))
 
-    def __ior__(self, other: Mapping) -> Self:
-        """The |= operator."""
+    def __ior__(self, other: Mapping | Iterable, /) -> Self:
+        """The `|=` operator."""
         self.update(other)
         return self
+
+    def __or__(self, other: Mapping[Any, Any]) -> Self:
+        """The `|` operator."""
+        if not isinstance(other, Mapping):
+            return NotImplemented
+
+        new_dict = type(self)(self)
+        new_dict.update(other)
+        return new_dict
 
     def setdefault(self, key: Any, default: Any = None) -> Any:
         return super().setdefault(self._converter(key), default)
 
-    def update(self, *args: Iterable[Mapping], **kwargs: Any) -> None:
+    def update(self, *args, **kwargs: Any) -> None:
         if args:
             for mapping in args:
                 if isinstance(mapping, Mapping):

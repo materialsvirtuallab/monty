@@ -140,6 +140,29 @@ class TestCaseInsensitiveDictUpper:
         assert self.upper_dict["F"] == 8
         assert self.upper_dict["f"] == 8
 
+    def test_or_operator(self):
+        # Test with another CaseInsensitiveDictUpper
+        other = CaseInsensitiveDictUpper({"E": 7, "F": 8})
+        result = self.upper_dict | other
+        assert isinstance(result, CaseInsensitiveDictUpper)
+        assert result["E"] == 7
+        assert result["e"] == 7
+        assert result["F"] == 8
+        assert result["f"] == 8
+        assert result["HI"] == "world"
+        assert result["hi"] == "world"
+
+        # Test with a regular dict
+        other = {"g": 9, "H": 10}
+        result = self.upper_dict | other
+        assert isinstance(result, CaseInsensitiveDictUpper)
+        assert result["G"] == 9
+        assert result["g"] == 9
+        assert result["H"] == 10
+        assert result["h"] == 10
+        assert result["HI"] == "world"
+        assert result["hi"] == "world"
+
     def test_setdefault(self):
         assert self.upper_dict.setdefault("g", 9) == 9
         assert self.upper_dict["G"] == 9
