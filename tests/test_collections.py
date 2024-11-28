@@ -52,6 +52,28 @@ class TestCaseInsensitiveDictUpper:
     def setup_method(self):
         self.upper_dict = CaseInsensitiveDictUpper({"HI": "world"})
 
+    def test_init(self):
+        # Test init from Mapping
+        dct = CaseInsensitiveDictUpper({"key1": "value1", "Key2": "value2"})
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init from Iterable
+        dct = CaseInsensitiveDictUpper([("key1", "value1"), ("Key2", "value2")])
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init with kwargs
+        dct = CaseInsensitiveDictUpper(key1="value1", Key2="value2")
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
     def test_converter(self):
         str_key = "upper"
         assert CaseInsensitiveDictUpper._converter(str_key) == "UPPER"
@@ -79,11 +101,35 @@ class TestCaseInsensitiveDictUpper:
         assert self.upper_dict["B"] == 2
 
     def test_update(self):
+        # Test with Mapping
         self.upper_dict.update({"c": 5, "D": 6})
         assert self.upper_dict["C"] == 5
         assert self.upper_dict["c"] == 5
         assert self.upper_dict["D"] == 6
         assert self.upper_dict["d"] == 6
+
+        # Test with Iterable
+        self.upper_dict.update([("e", 7), ("F", 8)])
+        assert self.upper_dict["E"] == 7
+        assert self.upper_dict["e"] == 7
+        assert self.upper_dict["F"] == 8
+        assert self.upper_dict["f"] == 8
+
+        # Test with kwargs
+        self.upper_dict.update(g=9, H=10)
+        assert self.upper_dict["G"] == 9
+        assert self.upper_dict["g"] == 9
+        assert self.upper_dict["H"] == 10
+        assert self.upper_dict["h"] == 10
+
+        # Test combined
+        self.upper_dict.update({"I": 11}, j=12, k=13)
+        assert self.upper_dict["I"] == 11
+        assert self.upper_dict["i"] == 11
+        assert self.upper_dict["J"] == 12
+        assert self.upper_dict["j"] == 12
+        assert self.upper_dict["K"] == 13
+        assert self.upper_dict["k"] == 13
 
     def test_ior_operator(self):
         self.upper_dict |= {"e": 7, "F": 8}
