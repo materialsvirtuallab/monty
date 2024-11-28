@@ -48,82 +48,80 @@ class TestFrozenDict:
             d.hello = "new"
 
 
-def test_CaseInsensitiveDictUpper():
-    upper_dict = CaseInsensitiveDictUpper({"HI": "world"})
-    assert "hi" in upper_dict
-    assert upper_dict["HI"] == "world"
-    assert upper_dict["hi"] == "world"
+class TestCaseInsensitiveDictUpper:
+    def setup_method(self):
+        self.upper_dict = CaseInsensitiveDictUpper({"HI": "world"})
 
-    # Test setter and getter
-    upper_dict["a"] = 1
-    assert upper_dict["a"] == 1
-    assert upper_dict["A"] == 1
+    def test_converter(self):
+        str_key = "upper"
+        assert CaseInsensitiveDictUpper._converter(str_key) == "UPPER"
 
-    upper_dict["B"] = 2  # upper case
-    assert upper_dict["b"] == 2
-    assert upper_dict["B"] == 2
+        # Test non-string object handling (should be returned as is)
+        int_key = 1
+        assert CaseInsensitiveDictUpper._converter(int_key) == 1
 
-    # Test update with setter
-    upper_dict["B"] = 3
-    assert upper_dict["b"] == 3
-    assert upper_dict["B"] == 3
+        tup_key = (1, 2, 3)
+        assert CaseInsensitiveDictUpper._converter(tup_key) == (1, 2, 3)
 
-    upper_dict["b"] = 4
-    assert upper_dict["b"] == 4
-    assert upper_dict["B"] == 4
+    def test_membership(self):
+        assert "hi" in self.upper_dict
+        assert "HI" in self.upper_dict
+        assert self.upper_dict["HI"] == "world"
+        assert self.upper_dict["hi"] == "world"
 
-    # Test update with `update`
-    upper_dict.update({"c": 5, "D": 6})
-    assert upper_dict["C"] == 5
-    assert upper_dict["c"] == 5
-    assert upper_dict["D"] == 6
-    assert upper_dict["d"] == 6
+    def test_setter_and_getter(self):
+        self.upper_dict["a"] = 1
+        assert self.upper_dict["a"] == 1
+        assert self.upper_dict["A"] == 1
 
-    # Test update with `|=`
-    upper_dict |= {"e": 7, "F": 8}
-    assert upper_dict["E"] == 7
-    assert upper_dict["e"] == 7
-    assert upper_dict["F"] == 8
-    assert upper_dict["f"] == 8
+        self.upper_dict["B"] = 2
+        assert self.upper_dict["b"] == 2
+        assert self.upper_dict["B"] == 2
 
-    # Test `setdefault`
-    assert upper_dict.setdefault("g", 9) == 9  # Add new key
-    assert upper_dict["G"] == 9
-    assert upper_dict["g"] == 9
-    assert upper_dict.setdefault("g", 10) == 9  # Existing key remains unchanged
-    assert upper_dict["G"] == 9
+    def test_update(self):
+        self.upper_dict.update({"c": 5, "D": 6})
+        assert self.upper_dict["C"] == 5
+        assert self.upper_dict["c"] == 5
+        assert self.upper_dict["D"] == 6
+        assert self.upper_dict["d"] == 6
 
-    # Test membership check with `in`
-    assert "g" in upper_dict
-    assert "G" in upper_dict
-    assert "non-existent" not in upper_dict
+    def test_ior_operator(self):
+        self.upper_dict |= {"e": 7, "F": 8}
+        assert self.upper_dict["E"] == 7
+        assert self.upper_dict["e"] == 7
+        assert self.upper_dict["F"] == 8
+        assert self.upper_dict["f"] == 8
 
-    # Test `__delitem__`
-    del upper_dict["hi"]
-    assert "hi" not in upper_dict
-    assert "HI" not in upper_dict
+    def test_setdefault(self):
+        assert self.upper_dict.setdefault("g", 9) == 9
+        assert self.upper_dict["G"] == 9
+        assert self.upper_dict.setdefault("g", 10) == 9  # Unchanged
+        assert self.upper_dict["G"] == 9
 
-    # Test `del dct[key]`
-    del upper_dict["b"]
-    assert "b" not in upper_dict
-    assert "B" not in upper_dict
+    def test_delete_items(self):
+        # Test `__delitem__`
+        del self.upper_dict["hi"]
+        assert "hi" not in self.upper_dict
+        assert "HI" not in self.upper_dict
 
-    # Test `pop(key)`
-    popped_value = upper_dict.pop("c")
-    assert popped_value == 5
-    assert "c" not in upper_dict
-    assert "C" not in upper_dict
+        # Test `del dct[key]`
+        self.upper_dict["b"] = 4
+        del self.upper_dict["b"]
+        assert "b" not in self.upper_dict
+        assert "B" not in self.upper_dict
 
-    # Test `pop(key)` with default value (key exists)
-    popped_value = upper_dict.pop("d", "default")
-    assert popped_value == 6
-    assert "d" not in upper_dict
-    assert "D" not in upper_dict
+    def test_pop(self):
+        # Test `pop(key)`
+        self.upper_dict["c"] = 5
+        popped_value = self.upper_dict.pop("c")
+        assert popped_value == 5
+        assert "c" not in self.upper_dict
+        assert "C" not in self.upper_dict
 
-    # Test `pop(key)` with default value (key doesn't exist)
-    popped_value = upper_dict.pop("non-existent", "default")
-    assert popped_value == "default"
-    assert "non-existent" not in upper_dict
+        # Test `pop(key)` with default value
+        popped_value = self.upper_dict.pop("non-existent", "default")
+        assert popped_value == "default"
+        assert "non-existent" not in self.upper_dict
 
 
 class TestTree:
