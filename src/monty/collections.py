@@ -204,7 +204,7 @@ class CaseInsensitiveDictBase(collections.UserDict, ABC):
         """Checks if a case-insensitive key is `in` the dictionary."""
         return super().__contains__(self._converter(key))
 
-    def __ior__(self, other: Mapping | Iterable, /) -> Self:
+    def __ior__(self, other: Mapping | Iterable, /) -> Self:  # type: ignore[override]
         """The `|=` operator."""
         self.update(other)
         return self
