@@ -154,7 +154,7 @@ class CaseInsensitiveDictBase(collections.UserDict, ABC):
             `__delitem__`, `del dct[key]`, `pop(key)`
 
         - Other operations:
-            getter (`__getitem__`)
+            getter (`__getitem__`, `get`)
             membership check with `in` (`__contains__`)
 
     Subclasses must implement the `_converter` static method to define

@@ -99,6 +99,8 @@ class TestCaseInsensitiveDictUpper:
         self.upper_dict["B"] = 2
         assert self.upper_dict["b"] == 2
         assert self.upper_dict["B"] == 2
+        assert self.upper_dict.get("b") == 2
+        assert self.upper_dict.get("B") == 2
 
     def test_update(self):
         # Test with Mapping
