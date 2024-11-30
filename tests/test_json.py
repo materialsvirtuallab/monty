@@ -20,7 +20,7 @@ from monty.json import (
     load,
 )
 
-from . import __version__ as TESTS_VERSION
+from monty import __version__ as TESTS_VERSION
 
 try:
     import pandas as pd
@@ -794,6 +794,18 @@ class TestJson:
         assert clean_recursive_msonable["hello"][1] == "test"
         assert clean_recursive_msonable["test"] == "hi"
 
+        DoubleGoodMSONClass = GoodMSONClass(1, 2, 3)
+        DoubleGoodMSONClass.values = [GoodMSONClass(1, 2, 3)]
+        clean_recursive_msonable = jsanitize(
+            DoubleGoodMSONClass, recursive_msonable=True
+        )
+        assert clean_recursive_msonable["a"] == 1
+        assert clean_recursive_msonable["b"] == 2
+        assert clean_recursive_msonable["c"] == 3
+        assert clean_recursive_msonable["values"][0]["a"] == 1
+        assert clean_recursive_msonable["values"][0]["b"] == 2
+        assert clean_recursive_msonable["values"][0]["c"] == 3
+        
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
         assert isinstance(clean["dt"], str)
