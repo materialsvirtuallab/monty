@@ -11,7 +11,7 @@ from typing import Union
 import numpy as np
 import pytest
 
-from monty import __version__ as TESTS_VERSION
+from . import __version__ as TESTS_VERSION
 from monty.json import (
     MontyDecoder,
     MontyEncoder,
