@@ -11,7 +11,6 @@ from typing import Union
 import numpy as np
 import pytest
 
-from . import __version__ as TESTS_VERSION
 from monty.json import (
     MontyDecoder,
     MontyEncoder,
@@ -20,6 +19,8 @@ from monty.json import (
     jsanitize,
     load,
 )
+
+from . import __version__ as TESTS_VERSION
 
 try:
     import pandas as pd
