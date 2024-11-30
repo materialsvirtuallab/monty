@@ -15,7 +15,7 @@ from bson.objectid import ObjectId
 
 from monty.json import MontyDecoder, MontyEncoder, MSONable, _load_redirect, jsanitize
 
-from . import __version__ as tests_version
+from monty import __version__ as tests_version
 
 test_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -576,6 +576,18 @@ class TestJson:
         assert clean_recursive_msonable["hello"]["a"] == 1
         assert clean_recursive_msonable["hello"]["b"] == 2
 
+        DoubleGoodMSONClass = GoodMSONClass(1, 2, 3)
+        DoubleGoodMSONClass.values = [GoodMSONClass(1, 2, 3)]
+        clean_recursive_msonable = jsanitize(
+            DoubleGoodMSONClass, recursive_msonable=True
+        )
+        assert clean_recursive_msonable["a"] == 1
+        assert clean_recursive_msonable["b"] == 2
+        assert clean_recursive_msonable["c"] == 3
+        assert clean_recursive_msonable["values"][0]["a"] == 1
+        assert clean_recursive_msonable["values"][0]["b"] == 2
+        assert clean_recursive_msonable["values"][0]["c"] == 3
+        
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
         assert isinstance(clean["dt"], str)
