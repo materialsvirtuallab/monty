@@ -11,6 +11,7 @@ from typing import Union
 import numpy as np
 import pytest
 
+from monty import __version__ as TESTS_VERSION
 from monty.json import (
     MontyDecoder,
     MontyEncoder,
@@ -19,8 +20,6 @@ from monty.json import (
     jsanitize,
     load,
 )
-
-from monty import __version__ as TESTS_VERSION
 
 try:
     import pandas as pd
@@ -805,7 +804,7 @@ class TestJson:
         assert clean_recursive_msonable["values"][0]["a"] == 1
         assert clean_recursive_msonable["values"][0]["b"] == 2
         assert clean_recursive_msonable["values"][0]["c"] == 3
-        
+
         d = {"dt": datetime.datetime.now()}
         clean = jsanitize(d)
         assert isinstance(clean["dt"], str)
