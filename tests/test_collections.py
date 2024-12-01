@@ -164,6 +164,10 @@ class TestCaseInsensitiveDictUpper:
         assert result["HI"] == "world"
         assert result["hi"] == "world"
 
+        # Test with not-supported type
+        with pytest.raises(TypeError, match="unsupported operand type"):
+            self.upper_dict | "hello"
+
     def test_setdefault(self):
         assert self.upper_dict.setdefault("g", 9) == 9
         assert self.upper_dict["G"] == 9
