@@ -212,6 +212,28 @@ class TestCaseInsensitiveDictLower:
         tup_key = (1, 2, 3)
         assert CaseInsensitiveDictLower._converter(tup_key) == (1, 2, 3)
 
+    def test_init(self):
+        # Test init from Mapping
+        dct = CaseInsensitiveDictLower({"key1": "value1", "Key2": "value2"})
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init from Iterable
+        dct = CaseInsensitiveDictLower([("key1", "value1"), ("Key2", "value2")])
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init with kwargs
+        dct = CaseInsensitiveDictLower(key1="value1", Key2="value2")
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
 
 class TestTree:
     def test_tree(self):
