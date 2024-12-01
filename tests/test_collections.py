@@ -4,6 +4,7 @@ import pytest
 
 from monty.collections import (
     AttrDict,
+    CaseInsensitiveDictLower,
     CaseInsensitiveDictUpper,
     FrozenAttrDict,
     Namespace,
@@ -193,6 +194,23 @@ class TestCaseInsensitiveDictUpper:
         popped_value = self.upper_dict.pop("non-existent", "default")
         assert popped_value == "default"
         assert "non-existent" not in self.upper_dict
+
+
+class TestCaseInsensitiveDictLower:
+    """Most case-insensitive dict behaviour would be tested in
+    `TestCaseInsensitiveDictUpper` to avoid duplicate.
+    """
+
+    def test_converter(self):
+        str_key = "Capitalized"
+        assert CaseInsensitiveDictLower._converter(str_key) == "capitalized"
+
+        # Test non-string object handling (should be returned as is)
+        int_key = 1
+        assert CaseInsensitiveDictLower._converter(int_key) == 1
+
+        tup_key = (1, 2, 3)
+        assert CaseInsensitiveDictLower._converter(tup_key) == (1, 2, 3)
 
 
 class TestTree:

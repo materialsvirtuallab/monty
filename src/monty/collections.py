@@ -243,6 +243,12 @@ class CaseInsensitiveDictUpper(CaseInsensitiveDictBase):
         return key.upper() if isinstance(key, str) else key
 
 
+class CaseInsensitiveDictLower(CaseInsensitiveDictBase):
+    @staticmethod
+    def _converter(key: Any) -> Any:
+        return key.lower() if isinstance(key, str) else key
+
+
 class MongoDict:
     """
     This dict-like object allows one to access the entries in a nested dict as
