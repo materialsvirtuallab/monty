@@ -1,12 +1,16 @@
 from __future__ import annotations
 
-import os
-
 import pytest
 
-from monty.collections import AttrDict, FrozenAttrDict, Namespace, frozendict, tree
-
-TEST_DIR = os.path.join(os.path.dirname(__file__), "test_files")
+from monty.collections import (
+    AttrDict,
+    CaseInsensitiveDictLower,
+    CaseInsensitiveDictUpper,
+    FrozenAttrDict,
+    Namespace,
+    frozendict,
+    tree,
+)
 
 
 class TestFrozenDict:
@@ -43,6 +47,196 @@ class TestFrozenDict:
             d.foo = "bar"
         with pytest.raises(KeyError):
             d.hello = "new"
+
+
+class TestCaseInsensitiveDictUpper:
+    def setup_method(self):
+        self.upper_dict = CaseInsensitiveDictUpper({"HI": "world"})
+
+    def test_init(self):
+        # Test init from Mapping
+        dct = CaseInsensitiveDictUpper({"key1": "value1", "Key2": "value2"})
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init from Iterable
+        dct = CaseInsensitiveDictUpper([("key1", "value1"), ("Key2", "value2")])
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init with kwargs
+        dct = CaseInsensitiveDictUpper(key1="value1", Key2="value2")
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+    def test_converter(self):
+        str_key = "upper"
+        assert CaseInsensitiveDictUpper._converter(str_key) == "UPPER"
+
+        # Test non-string object handling (should be returned as is)
+        int_key = 1
+        assert CaseInsensitiveDictUpper._converter(int_key) == 1
+
+        tup_key = (1, 2, 3)
+        assert CaseInsensitiveDictUpper._converter(tup_key) == (1, 2, 3)
+
+    def test_membership(self):
+        assert "hi" in self.upper_dict
+        assert "HI" in self.upper_dict
+        assert self.upper_dict["HI"] == "world"
+        assert self.upper_dict["hi"] == "world"
+
+    def test_setter_and_getter(self):
+        self.upper_dict["a"] = 1
+        assert self.upper_dict["a"] == 1
+        assert self.upper_dict["A"] == 1
+
+        self.upper_dict["B"] = 2
+        assert self.upper_dict["b"] == 2
+        assert self.upper_dict["B"] == 2
+        assert self.upper_dict.get("b") == 2
+        assert self.upper_dict.get("B") == 2
+
+    def test_update(self):
+        # Test with Mapping
+        self.upper_dict.update({"c": 5, "D": 6})
+        assert self.upper_dict["C"] == 5
+        assert self.upper_dict["c"] == 5
+        assert self.upper_dict["D"] == 6
+        assert self.upper_dict["d"] == 6
+
+        # Test with Iterable
+        self.upper_dict.update([("e", 7), ("F", 8)])
+        assert self.upper_dict["E"] == 7
+        assert self.upper_dict["e"] == 7
+        assert self.upper_dict["F"] == 8
+        assert self.upper_dict["f"] == 8
+
+        # Test with kwargs
+        self.upper_dict.update(g=9, H=10)
+        assert self.upper_dict["G"] == 9
+        assert self.upper_dict["g"] == 9
+        assert self.upper_dict["H"] == 10
+        assert self.upper_dict["h"] == 10
+
+        # Test combined
+        self.upper_dict.update({"I": 11}, j=12, k=13)
+        assert self.upper_dict["I"] == 11
+        assert self.upper_dict["i"] == 11
+        assert self.upper_dict["J"] == 12
+        assert self.upper_dict["j"] == 12
+        assert self.upper_dict["K"] == 13
+        assert self.upper_dict["k"] == 13
+
+    def test_ior_operator(self):
+        self.upper_dict |= {"e": 7, "F": 8}
+        assert self.upper_dict["E"] == 7
+        assert self.upper_dict["e"] == 7
+        assert self.upper_dict["F"] == 8
+        assert self.upper_dict["f"] == 8
+
+    def test_or_operator(self):
+        # Test with another CaseInsensitiveDictUpper
+        other = CaseInsensitiveDictUpper({"E": 7, "F": 8})
+        result = self.upper_dict | other
+        assert isinstance(result, CaseInsensitiveDictUpper)
+        assert result["E"] == 7
+        assert result["e"] == 7
+        assert result["F"] == 8
+        assert result["f"] == 8
+        assert result["HI"] == "world"
+        assert result["hi"] == "world"
+
+        # Test with a regular dict
+        other = {"g": 9, "H": 10}
+        result = self.upper_dict | other
+        assert isinstance(result, CaseInsensitiveDictUpper)
+        assert result["G"] == 9
+        assert result["g"] == 9
+        assert result["H"] == 10
+        assert result["h"] == 10
+        assert result["HI"] == "world"
+        assert result["hi"] == "world"
+
+        # Test with not-supported type
+        with pytest.raises(TypeError, match="unsupported operand type"):
+            self.upper_dict | "hello"
+
+    def test_setdefault(self):
+        assert self.upper_dict.setdefault("g", 9) == 9
+        assert self.upper_dict["G"] == 9
+        assert self.upper_dict.setdefault("g", 10) == 9  # Unchanged
+        assert self.upper_dict["G"] == 9
+
+    def test_delete_items(self):
+        # Test `__delitem__`
+        del self.upper_dict["hi"]
+        assert "hi" not in self.upper_dict
+        assert "HI" not in self.upper_dict
+
+        # Test `del dct[key]`
+        self.upper_dict["b"] = 4
+        del self.upper_dict["b"]
+        assert "b" not in self.upper_dict
+        assert "B" not in self.upper_dict
+
+    def test_pop(self):
+        # Test `pop(key)`
+        self.upper_dict["c"] = 5
+        popped_value = self.upper_dict.pop("c")
+        assert popped_value == 5
+        assert "c" not in self.upper_dict
+        assert "C" not in self.upper_dict
+
+        # Test `pop(key)` with default value
+        popped_value = self.upper_dict.pop("non-existent", "default")
+        assert popped_value == "default"
+        assert "non-existent" not in self.upper_dict
+
+
+class TestCaseInsensitiveDictLower:
+    """Most case-insensitive dict behaviour would be tested in
+    `TestCaseInsensitiveDictUpper` to avoid duplicate.
+    """
+
+    def test_converter(self):
+        str_key = "Capitalized"
+        assert CaseInsensitiveDictLower._converter(str_key) == "capitalized"
+
+        # Test non-string object handling (should be returned as is)
+        int_key = 1
+        assert CaseInsensitiveDictLower._converter(int_key) == 1
+
+        tup_key = (1, 2, 3)
+        assert CaseInsensitiveDictLower._converter(tup_key) == (1, 2, 3)
+
+    def test_init(self):
+        # Test init from Mapping
+        dct = CaseInsensitiveDictLower({"key1": "value1", "Key2": "value2"})
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init from Iterable
+        dct = CaseInsensitiveDictLower([("key1", "value1"), ("Key2", "value2")])
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
+
+        # Test init with kwargs
+        dct = CaseInsensitiveDictLower(key1="value1", Key2="value2")
+        assert dct["key1"] == "value1"
+        assert dct["KEY1"] == "value1"
+        assert dct["Key2"] == "value2"
+        assert dct["key2"] == "value2"
 
 
 class TestTree:
