@@ -29,8 +29,10 @@ if TYPE_CHECKING:
 
 try:
     import bson
+    from bson import json_util
 except ImportError:
     bson = None
+    json_util = None
 
 try:
     import orjson
@@ -862,7 +864,9 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        if orjson is not None:
+        if bson is not None:
+            d = json_util.loads(s)
+        elif orjson is not None:
             try:
                 d = orjson.loads(s)
             except orjson.JSONDecodeError:
