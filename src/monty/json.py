@@ -865,7 +865,9 @@ class MontyDecoder(json.JSONDecoder):
         :return: Object.
         """
         if bson is not None:
-            d = json_util.loads(s)
+            # need to pass `json_options` to ensure that datetimes are not
+            # converted by BSON
+            d = json_util.loads(s, json_options=json_util.JSONOptions(tz_aware=True))
         elif orjson is not None:
             try:
                 d = orjson.loads(s)
