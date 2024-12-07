@@ -162,7 +162,9 @@ class TestReverseReadfile:
 
 
 class TestZopen:
-    def test_zopen(self):
+    def test_text_files(self):
+        # TODO: test write and then read
+        # TODO: remove static local test file
         with zopen(os.path.join(TEST_DIR, "myfile_gz.gz"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
         with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), mode="rt") as f:
@@ -176,10 +178,14 @@ class TestZopen:
         with zopen(os.path.join(TEST_DIR, "myfile"), mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
 
-    def test_Path_objects(self):
-        p = Path(TEST_DIR) / "myfile_gz.gz"
+    def test_binary_mode(self):
+        pass
 
-        with zopen(p, mode="rt") as f:
+    def test_encoding(self):
+        pass
+
+    def test_Path_objects(self):
+        with zopen(Path(TEST_DIR) / "myfile_gz.gz", mode="rt") as f:
             assert f.read() == "HelloWorld.\n\n"
 
 
