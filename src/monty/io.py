@@ -23,30 +23,30 @@ if TYPE_CHECKING:
 
 def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
     """
-    This function wraps around the bz2, gzip, lzma, xz and standard Python's open
-    function to deal intelligently with bzipped, gzipped or standard text
-    files.
+    This function wraps around the `bz2`, `gzip`, `lzma/xz` and built-in `open`
+    function to deal intelligently with bzipped, gzipped or standard text files.
 
     Args:
         filename (str/Path): filename or pathlib.Path.
-        *args: Standard args for Python open(..). E.g., 'r' for read, 'w' for
-            write.
-        **kwargs: Standard kwargs for Python open(..).
+        *args: arguments to pass to `open`. E.g., "r" for read, "w" for write.
+        **kwargs: keywords arguments to pass to `open`.
 
     Returns:
-        File-like object. Supports with context.
+        File-like object. Supports context manager `with`.
     """
     if filename is not None and isinstance(filename, Path):
         filename = str(filename)
 
     _name, ext = os.path.splitext(filename)
-    ext = ext.upper()
-    if ext == ".BZ2":
+    ext = ext.lower()
+
+    if ext == ".bz2":
         return bz2.open(filename, *args, **kwargs)
-    if ext in {".GZ", ".Z"}:
+    if ext in {".gz", ".z"}:
         return gzip.open(filename, *args, **kwargs)
-    if ext in {".XZ", ".LZMA"}:
+    if ext in {".xz", ".lzma"}:
         return lzma.open(filename, *args, **kwargs)
+
     return open(filename, *args, **kwargs)
 
 
