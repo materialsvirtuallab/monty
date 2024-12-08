@@ -227,7 +227,7 @@ class TestZopen:
     @pytest.mark.parametrize("extension", [".txt", ".bz2", ".gz", ".xz", ".lzma"])
     def test_warnings(self, extension):
         filename = f"test_warning{extension}"
-        content = "Test warning\n"
+        content = "Test warning"
 
         with ScratchDir("."):
             # Default `encoding` warning
