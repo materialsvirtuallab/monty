@@ -162,31 +162,50 @@ class TestReverseReadfile:
 
 
 class TestZopen:
-    def test_text_files(self):
-        # TODO: test write and then read
-        # TODO: remove static local test file
-        with zopen(os.path.join(TEST_DIR, "myfile_gz.gz"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_xz.xz"), "rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_lzma.lzma"), "rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
+    """TODO: Test objectives:
+    - Test read/write for each type
+    - Test str/Path as `filename`
+    - Test all possible file extensions of each type
+    """
 
-    def test_binary_mode(self):
+    def test_uncompressed_files(self):
         pass
 
-    def test_encoding(self):
+    def test_bzip2_files(self):
         pass
 
-    def test_Path_objects(self):
-        with zopen(Path(TEST_DIR) / "myfile_gz.gz", mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
+    def test_gzip_files(self):
+        pass
+
+    def test_fake_lzw_files(self):
+        # Test warning
+        pass
+
+    def test_lzma_files(self):
+        pass
+
+    def test_warnings(self):
+        # Implicit `mode` warning
+
+        # Implicit text/binary `mode` warning
+
+        # Default `encoding` warning
+        pass
+
+    # def test_text_files(self):
+    #     # TODO: remove static local test file
+    #     with zopen(os.path.join(TEST_DIR, "myfile_gz.gz"), mode="rt") as f:
+    #         assert f.read() == "HelloWorld.\n\n"
+    #     with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), mode="rt") as f:
+    #         assert f.read() == "HelloWorld.\n\n"
+    #     with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rt") as f:
+    #         assert f.read() == "HelloWorld.\n\n"
+    #     with zopen(os.path.join(TEST_DIR, "myfile_xz.xz"), "rt") as f:
+    #         assert f.read() == "HelloWorld.\n\n"
+    #     with zopen(os.path.join(TEST_DIR, "myfile_lzma.lzma"), "rt") as f:
+    #         assert f.read() == "HelloWorld.\n\n"
+    #     with zopen(os.path.join(TEST_DIR, "myfile"), mode="rt") as f:
+    #         assert f.read() == "HelloWorld.\n\n"
 
 
 class TestFileLock:

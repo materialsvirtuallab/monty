@@ -38,8 +38,9 @@ def zopen(
         - Default `mode` should not be used, and would not be allow
             in future versions.
         - Always explicitly specify binary/text in `mode`, i.e.
-            always pass `t` or `b` in `mode`.
-        - When using text mode, always provide an explicit encoding.
+            always pass `t` or `b` in `mode`, implicit binary/text
+            mode would not be allow in future versions.
+        - When using text mode, always provide an explicit `encoding`.
 
     Args:
         filename (str | Path): Filename.
@@ -51,7 +52,8 @@ def zopen(
     Returns:
         TextIO | BinaryIO
     """
-    _deadline = "2025-06-01"
+    # Deadline for dropping implicit `mode` support
+    _deadline: str = "2025-06-01"
 
     # Warn against default `mode`
     # TODO: remove default value of `mode` to force user to give one after deadline
@@ -61,7 +63,7 @@ def zopen(
             f"set to `rt` now but would not be allowed after {_deadline}",
             FutureWarning,
             stacklevel=2,
-        )  # TODO: unit test
+        )
         mode = "rt"
 
     # Warn against implicit text/binary `mode`
@@ -73,17 +75,17 @@ def zopen(
             "I.e. you should pass t/b in `mode`, we would assume text mode for now",
             FutureWarning,
             stacklevel=2,
-        )  # TODO: unit test
+        )
         mode += "t"  # assume text mode if not specified
 
     # Warn against default `encoding` in text mode
     if "t" in mode and kwargs.get("encoding", None) is None:
         warnings.warn(
             "We strongly encourage explicit `encoding`, "
-            "and we would use UTF-8 now as per PEP 686",
-            category=FutureWarning,
+            "and we would use UTF-8 by default as per PEP 686",
+            category=EncodingWarning,
             stacklevel=2,
-        )  # TODO: unit test
+        )
         kwargs["encoding"] = "utf-8"
 
     _name, ext = os.path.splitext(str(filename))
@@ -91,8 +93,17 @@ def zopen(
 
     if ext == ".bz2":
         return bz2.open(filename, mode, **kwargs)
-    if ext in {".gz", ".z"}:
+    if ext == ".gz":
         return gzip.open(filename, mode, **kwargs)
+    if ext == ".z":
+        # TODO: drop ".z" extension support after 2026-01-01
+        warnings.warn(
+            "Python gzip is not able to (de)compress LZW-compressed files. "
+            "You should rename it to .gz. Support for the '.z' extension will "
+            "be removed after 2026-01-01.",
+            category=FutureWarning,
+            stacklevel=2,
+        )
     if ext in {".xz", ".lzma"}:
         return lzma.open(filename, mode, **kwargs)
 
