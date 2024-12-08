@@ -108,6 +108,7 @@ def zopen(
             category=FutureWarning,
             stacklevel=2,
         )
+        return gzip.open(filename, mode, **kwargs)
     if ext in {".xz", ".lzma"}:
         return lzma.open(filename, mode, **kwargs)
 
