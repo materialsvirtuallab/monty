@@ -21,33 +21,42 @@ if TYPE_CHECKING:
     from typing import IO, Generator, Union
 
 
-def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
+def zopen(filename: Union[str, Path], /, mode=None, **kwargs) -> IO:
     """
-    This function wraps around the `bz2`, `gzip`, `lzma/xz` and built-in `open`
-    function to deal intelligently with bzipped, gzipped or standard text files.
+    This function wraps around `[bz2/gzip/lzma].open` and `open`
+    to deal intelligently with compressed or uncompressed files.
+    Supports context manager `with zopen`.
+
+    Note:
+        - explicit binary/text in `mode`
+        - encoding # TODO:
 
     Args:
-        filename (str/Path): filename or pathlib.Path.
-        *args: arguments to pass to `open`. E.g., "r" for read, "w" for write.
-        **kwargs: keywords arguments to pass to `open`.
+        filename (str | Path): Filename.
+        # TODO: mode use Literal type
+        mode (str):  E.g., "r" for read, "w" for write.  # TODO: finish this
+        **kwargs: Keyword arguments to pass to `open`.
 
     Returns:
-        File-like object. Supports context manager `with`.
+        TextIO | BinaryIO
     """
-    if filename is not None and isinstance(filename, Path):
-        filename = str(filename)
+    # Warn against default `mode`
 
-    _name, ext = os.path.splitext(filename)
+    # Warn against implicit text/binary `mode`
+
+    # Warn against default `encoding`
+
+    _name, ext = os.path.splitext(str(filename))
     ext = ext.lower()
 
     if ext == ".bz2":
-        return bz2.open(filename, *args, **kwargs)
+        return bz2.open(filename, mode, **kwargs)
     if ext in {".gz", ".z"}:
-        return gzip.open(filename, *args, **kwargs)
+        return gzip.open(filename, mode, **kwargs)
     if ext in {".xz", ".lzma"}:
-        return lzma.open(filename, *args, **kwargs)
+        return lzma.open(filename, mode, **kwargs)
 
-    return open(filename, *args, **kwargs)
+    return open(filename, mode, **kwargs)
 
 
 def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
