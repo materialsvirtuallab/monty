@@ -62,11 +62,11 @@ def zopen(
     if mode is None:
         warnings.warn(
             "We strongly discourage using a default `mode`, it would be"
-            f"set to `rt` now but would not be allowed after {_deadline}",
+            f"set to `r` now but would not be allowed after {_deadline}",
             FutureWarning,
             stacklevel=2,
         )
-        mode = "rt"
+        mode = "r"
 
     # Warn against implicit text/binary `mode`
     # TODO: replace warning with exception after deadline

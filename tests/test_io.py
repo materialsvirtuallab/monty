@@ -255,9 +255,12 @@ class TestZopen:
             # Implicit `mode` warning
             with (
                 pytest.warns(FutureWarning, match="discourage using a default `mode`"),
-                zopen(filename, encoding="utf-8") as f,
+                zopen(filename) as f,
             ):
-                assert f.readline() == content
+                if extension == ".txt":
+                    assert f.readline() == content
+                else:
+                    assert f.readline().decode("utf-8") == content
 
 
 class TestFileLock:
