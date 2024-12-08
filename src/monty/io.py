@@ -14,37 +14,77 @@ import mmap
 import os
 import subprocess
 import time
+import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import IO, Generator, Union
+    from typing import IO, Any, Generator, Union
 
 
-def zopen(filename: Union[str, Path], /, mode=None, **kwargs) -> IO:
+def zopen(
+    filename: Union[str, Path],
+    /,
+    mode: str | None = None,
+    **kwargs: Any,
+) -> IO:  # TODO: incomplete return type for compressed files
     """
     This function wraps around `[bz2/gzip/lzma].open` and `open`
     to deal intelligently with compressed or uncompressed files.
-    Supports context manager `with zopen`.
+    Supports context manager:
+        `with zopen(filename, mode="rt", ...)`.
 
-    Note:
-        - explicit binary/text in `mode`
-        - encoding # TODO:
+    Important Notes:
+        - Default `mode` should not be used, and would not be allow
+            in future versions.
+        - Always explicitly specify binary/text in `mode`, i.e.
+            always pass `t` or `b` in `mode`.
+        - When using text mode, always provide an explicit encoding.
 
     Args:
         filename (str | Path): Filename.
-        # TODO: mode use Literal type
-        mode (str):  E.g., "r" for read, "w" for write.  # TODO: finish this
-        **kwargs: Keyword arguments to pass to `open`.
+        mode (str): The mode in which the file is opened (
+            e.g., "r" for read, "w" for write.), you MUST
+            explicitly specify "b" for binary or "t" for text.
+        **kwargs: Additional keyword arguments to pass to `open`.
 
     Returns:
         TextIO | BinaryIO
     """
+    _deadline = "2025-06-01"
+
     # Warn against default `mode`
+    # TODO: remove default value of `mode` to force user to give one after deadline
+    if mode is None:
+        warnings.warn(
+            "We strongly discourage using a default `mode`, it would be"
+            f"set to `rt` now but would not be allowed after {_deadline}",
+            FutureWarning,
+            stacklevel=2,
+        )  # TODO: unit test
+        mode = "rt"
 
     # Warn against implicit text/binary `mode`
+    # TODO: replace warning with exception after deadline
+    elif not ("b" in mode or "t" in mode):
+        warnings.warn(
+            "We strongly discourage using implicit binary/text `mode`, "
+            f"and this would not be allowed after {_deadline}. "
+            "I.e. you should pass t/b in `mode`, we would assume text mode for now",
+            FutureWarning,
+            stacklevel=2,
+        )  # TODO: unit test
+        mode += "t"  # assume text mode if not specified
 
-    # Warn against default `encoding`
+    # Warn against default `encoding` in text mode
+    if "t" in mode and kwargs.get("encoding", None) is None:
+        warnings.warn(
+            "We strongly encourage explicit `encoding`, "
+            "and we would use UTF-8 now as per PEP 686",
+            category=FutureWarning,
+            stacklevel=2,
+        )  # TODO: unit test
+        kwargs["encoding"] = "utf-8"
 
     _name, ext = os.path.splitext(str(filename))
     ext = ext.lower()
