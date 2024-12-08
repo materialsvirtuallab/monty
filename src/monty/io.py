@@ -89,6 +89,9 @@ def zopen(
         )
         kwargs["encoding"] = "utf-8"
 
+    # Emit EncodingWarning when encoding is not set (PEP 597)
+    os.environ["PYTHONWARNDEFAULTENCODING"] = "1"
+
     _name, ext = os.path.splitext(str(filename))
     ext = ext.lower()
 
