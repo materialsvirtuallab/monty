@@ -30,7 +30,7 @@ def zopen(
     /,
     mode: str | None = None,
     **kwargs: Any,
-) -> IO:  # TODO: incomplete return type for compressed files
+) -> IO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile:
     """
     This function wraps around `[bz2/gzip/lzma].open` and `open`
     to deal intelligently with compressed or uncompressed files.
@@ -52,7 +52,7 @@ def zopen(
         **kwargs: Additional keyword arguments to pass to `open`.
 
     Returns:
-        TextIO | BinaryIO
+        TextIO | BinaryIO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile
     """
     # Deadline for dropping implicit `mode` support
     _deadline: str = "2025-06-01"
