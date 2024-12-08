@@ -82,6 +82,6 @@ class TestSerial:
             os.chdir("mpk_test")
             fname = os.path.abspath("test_file.json")
             dumpfn({"test": 1}, fname)
-            with open("test_file.json") as f:
+            with open("test_file.json", encoding="utf-8") as f:
                 reloaded = json.loads(f.read())
             assert reloaded["test"] == 1
