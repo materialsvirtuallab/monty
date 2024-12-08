@@ -22,6 +22,9 @@ if TYPE_CHECKING:
     from typing import IO, Any, Generator, Union
 
 
+class EncodingWarning(Warning): ...  # Added in Python 3.10
+
+
 def zopen(
     filename: Union[str, Path],
     /,
