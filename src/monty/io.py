@@ -43,12 +43,11 @@ def zopen(
         - Always explicitly specify binary/text in `mode`, i.e.
             always pass `t` or `b` in `mode`, implicit binary/text
             mode would not be allow in future versions.
-        - When using text mode, always provide an explicit `encoding`.
+        - Always provide an explicit `encoding` in text mode.
 
     Args:
-        filename (str | Path): Filename.
-        mode (str): The mode in which the file is opened (
-            e.g., "r" for read, "w" for write.), you MUST
+        filename (str | Path): The file to open.
+        mode (str): The mode in which the file is opened, you MUST
             explicitly specify "b" for binary or "t" for text.
         **kwargs: Additional keyword arguments to pass to `open`.
 
