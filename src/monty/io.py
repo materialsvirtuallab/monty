@@ -74,11 +74,10 @@ def zopen(
         warnings.warn(
             "We strongly discourage using implicit binary/text `mode`, "
             f"and this would not be allowed after {_deadline}. "
-            "I.e. you should pass t/b in `mode`, we would assume text mode for now",
+            "I.e. you should pass t/b in `mode`.",
             FutureWarning,
             stacklevel=2,
         )
-        mode += "t"  # assume text mode if not specified
 
     # Warn against default `encoding` in text mode
     if "t" in mode and kwargs.get("encoding", None) is None:

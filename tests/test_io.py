@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import warnings
 from pathlib import Path
 from unittest.mock import patch
 
@@ -237,13 +238,19 @@ class TestZopen:
                 f.write(content)
 
             # Implicit text/binary `mode` warning
+            warnings.filterwarnings(
+                "ignore", category=EncodingWarning, message="argument not specified"
+            )
             with (
                 pytest.warns(
                     FutureWarning, match="discourage using implicit binary/text"
                 ),
-                zopen(filename, "r", encoding="utf-8") as f,
+                zopen(filename, "r") as f,
             ):
-                assert f.readline() == content
+                if extension == ".txt":
+                    assert f.readline() == content
+                else:
+                    assert f.readline().decode("utf-8") == content
 
             # Implicit `mode` warning
             with (
