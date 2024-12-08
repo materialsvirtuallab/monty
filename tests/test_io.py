@@ -28,7 +28,7 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -38,7 +38,7 @@ class TestReverseReadline:
         """
         Make sure that large text files are read properly.
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -60,7 +60,7 @@ class TestReverseReadline:
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
         """
-        with open(os.path.join(TEST_DIR, "empty_file.txt")) as f:
+        with open(os.path.join(TEST_DIR, "empty_file.txt"), encoding="utf-8") as f:
             for _line in reverse_readline(f):
                 raise ValueError("an empty file is being read!")
 
@@ -74,10 +74,12 @@ class TestReverseReadline:
             assert linux_line_end == "\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                with open(
+                    "sample_unix_mac.txt", "w", newline=linux_line_end, encoding="utf-8"
+                ) as file:
                     file.write(linux_line_end.join(contents))
 
-                with open("sample_unix_mac.txt") as file:
+                with open("sample_unix_mac.txt", encoding="utf-8") as file:
                     for idx, line in enumerate(reverse_readfile(file)):
                         assert line == contents[len(contents) - idx - 1]
 
@@ -87,10 +89,15 @@ class TestReverseReadline:
             assert windows_line_end == "\r\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                with open(
+                    "sample_windows.txt",
+                    "w",
+                    newline=windows_line_end,
+                    encoding="utf-8",
+                ) as file:
                     file.write(windows_line_end.join(contents))
 
-                with open("sample_windows.txt") as file:
+                with open("sample_windows.txt", encoding="utf-8") as file:
                     for idx, line in enumerate(reverse_readfile(file)):
                         assert line == contents[len(contents) - idx - 1]
 
@@ -143,7 +150,9 @@ class TestReverseReadfile:
             assert linux_line_end == "\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                with open(
+                    "sample_unix_mac.txt", "w", newline=linux_line_end, encoding="utf-8"
+                ) as file:
                     file.write(linux_line_end.join(contents))
 
                 for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
@@ -155,7 +164,12 @@ class TestReverseReadfile:
             assert windows_line_end == "\r\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                with open(
+                    "sample_windows.txt",
+                    "w",
+                    newline=windows_line_end,
+                    encoding="utf-8",
+                ) as file:
                     file.write(windows_line_end.join(contents))
 
                 for idx, line in enumerate(reverse_readfile("sample_windows.txt")):

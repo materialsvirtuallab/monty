@@ -67,7 +67,7 @@ def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> 
         with zopen(fn, "rb") as fp:
             return msgpack.load(fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, "rt") as fp:
+        with zopen(fn, "rt", encoding="utf-8") as fp:
             if fmt == "yaml":
                 if YAML is None:
                     raise RuntimeError("Loading of YAML files requires ruamel.yaml.")
@@ -120,7 +120,7 @@ def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None
         with zopen(fn, "wb") as fp:
             msgpack.dump(obj, fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, "wt") as fp:
+        with zopen(fn, "wt", encoding="utf-8") as fp:
             if fmt == "yaml":
                 if YAML is None:
                     raise RuntimeError("Loading of YAML files requires ruamel.yaml.")

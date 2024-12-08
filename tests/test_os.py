@@ -88,7 +88,7 @@ class TestMakedirs_p:
         makedirs_p(self.test_dir_path)
         assert os.path.exists(self.test_dir_path)
         makedirs_p(self.test_dir_path)
-        with pytest.raises(OSError, match="File exists"):
+        with pytest.raises(OSError, match="exists"):
             makedirs_p(os.path.join(TEST_DIR, "3000_lines.txt"))
 
     def teardown_method(self):
