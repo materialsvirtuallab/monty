@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gzip
 import os
 import warnings
 from pathlib import Path
@@ -202,7 +203,13 @@ class TestZopen:
             with zopen(filename, "rb") as f:
                 assert f.read() == content.encode()
 
-    def test_fake_lzw_files(self):
+    def test_lzw_files(self):
+        """gzip is not really able to (de)compress LZW files.
+
+        TODO: remove text file real_lzw_file.txt.Z after dropping
+        ".Z" extension support
+        """
+        # Test a fake LZW file (just with .Z extension but DEFLATED algorithm)
         filename = "test.Z"
         content = "This is not a real LZW compressed file.\n"
 
@@ -223,6 +230,13 @@ class TestZopen:
 
             with zopen(filename, "rb") as f:
                 assert f.read() == content.encode()
+
+        # Cannot decompress a real LZW file
+        with (
+            pytest.raises(gzip.BadGzipFile, match="Not a gzipped file"),
+            zopen(f"{TEST_DIR}/real_lzw_file.txt.Z", "rt", encoding="utf-8") as f,
+        ):
+            f.read()
 
     @pytest.mark.parametrize("extension", [".txt", ".bz2", ".gz", ".xz", ".lzma"])
     def test_warnings(self, extension):
