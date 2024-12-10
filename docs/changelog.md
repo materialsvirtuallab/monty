@@ -1,5 +1,12 @@
 # Change log
 
+## 2024.12.10
+- zopen changes: forbid implicit binary/text mode, signature change, default UTF-8 encoding in text mode, drop .z 
+  support after one-year. (@DanielYang59) 
+- Add support for extended JSON to MontyDecoder (@esoteric-ephemera)
+- Fix jsanitize when recursive_msonable=True (@Andrew-S-Rosen)
+- Fix custom dict overriding in collections (@DanielYang59)
+
 ## 2024.10.21
 * Lazily import torch/pydantic in json module, speedup from monty.json import by 10x (@DanielYang59)
 * Fix missing monty.os package. (@eamanu)
