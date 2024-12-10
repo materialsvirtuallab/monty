@@ -31,6 +31,7 @@ ci = [
   "pytest>=8",
   "pytest-cov>=4",
   "types-requests",
+  "bson"
 ]
 # dev is for "dev" module, not for development
 dev = ["ipython"]
