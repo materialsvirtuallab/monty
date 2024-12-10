@@ -26,10 +26,14 @@ test_dir = os.path.join(os.path.dirname(__file__), "test_files")
 class TestCopyR:
     def setup_method(self):
         os.mkdir(os.path.join(test_dir, "cpr_src"))
-        with open(os.path.join(test_dir, "cpr_src", "test"), "w") as f:
+        with open(
+            os.path.join(test_dir, "cpr_src", "test"), "w", encoding="utf-8"
+        ) as f:
             f.write("what")
         os.mkdir(os.path.join(test_dir, "cpr_src", "sub"))
-        with open(os.path.join(test_dir, "cpr_src", "sub", "testr"), "w") as f:
+        with open(
+            os.path.join(test_dir, "cpr_src", "sub", "testr"), "w", encoding="utf-8"
+        ) as f:
             f.write("what2")
         if os.name != "nt":
             os.symlink(
@@ -49,7 +53,7 @@ class TestCopyR:
         decompress_dir(os.path.join(test_dir, "cpr_src"))
         assert os.path.exists(os.path.join(test_dir, "cpr_src", "test"))
         assert os.path.exists(os.path.join(test_dir, "cpr_src", "sub", "testr"))
-        with open(os.path.join(test_dir, "cpr_src", "test")) as f:
+        with open(os.path.join(test_dir, "cpr_src", "test"), encoding="utf-8") as f:
             txt = f.read()
             assert txt == "what"
 
@@ -66,7 +70,7 @@ class TestCopyR:
 
 class TestCompressFileDir:
     def setup_method(self):
-        with open(os.path.join(test_dir, "tempfile"), "w") as f:
+        with open(os.path.join(test_dir, "tempfile"), "w", encoding="utf-8") as f:
             f.write("hello world")
 
     def test_compress_and_decompress_file(self):
@@ -81,7 +85,7 @@ class TestCompressFileDir:
             assert os.path.exists(fname)
             assert not os.path.exists(fname + "." + fmt)
 
-            with open(fname) as f:
+            with open(fname, encoding="utf-8") as f:
                 assert f.read() == "hello world"
 
         with pytest.raises(ValueError):
@@ -113,7 +117,7 @@ class TestCompressFileDir:
             shutil.move(decompressed_file_path, fname)
             shutil.rmtree(target_dir)
 
-            with open(fname) as f:
+            with open(fname, encoding="utf-8") as f:
                 assert f.read() == "hello world"
 
     def teardown_method(self):
@@ -123,7 +127,9 @@ class TestCompressFileDir:
 class TestGzipDir:
     def setup_method(self):
         os.mkdir(os.path.join(test_dir, "gzip_dir"))
-        with open(os.path.join(test_dir, "gzip_dir", "tempfile"), "w") as f:
+        with open(
+            os.path.join(test_dir, "gzip_dir", "tempfile"), "w", encoding="utf-8"
+        ) as f:
             f.write("what")
 
         self.mtime = os.path.getmtime(os.path.join(test_dir, "gzip_dir", "tempfile"))
@@ -146,7 +152,7 @@ class TestGzipDir:
         gz_f = f"{full_f}.gz"
 
         # Create both the file and its gzipped version
-        with open(full_f, "w") as f:
+        with open(full_f, "w", encoding="utf-8") as f:
             f.write("not gzipped")
         with GzipFile(gz_f, "wb") as g:
             g.write(b"gzipped")
@@ -157,7 +163,7 @@ class TestGzipDir:
             gzip_dir(os.path.join(test_dir, "gzip_dir"))
 
         # Verify contents of the files
-        with open(full_f, "r") as f:
+        with open(full_f, "r", encoding="utf-8") as f:
             assert f.read() == "not gzipped"
 
         with GzipFile(gz_f, "rb") as g:
@@ -167,7 +173,7 @@ class TestGzipDir:
         sub_dir = os.path.join(test_dir, "gzip_dir", "sub_dir")
         sub_file = os.path.join(sub_dir, "new_tempfile")
         os.mkdir(sub_dir)
-        with open(sub_file, "w") as f:
+        with open(sub_file, "w", encoding="utf-8") as f:
             f.write("anotherwhat")
 
         gzip_dir(os.path.join(test_dir, "gzip_dir"))
