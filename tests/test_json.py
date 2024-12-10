@@ -15,6 +15,7 @@ from monty.json import (
     MontyDecoder,
     MontyEncoder,
     MSONable,
+    _check_type,
     _load_redirect,
     jsanitize,
     load,
@@ -1080,6 +1081,134 @@ class TestJson:
         assert d_ == {"v": "value_a"}
         na2 = EnumAsDict.from_dict(d_)
         assert na2 == na1
+
+
+class TestCheckType:
+    def test_check_subclass(self):
+        class A:
+            pass
+
+        class B(A):
+            pass
+
+        a, b = A(), B()
+
+        class_name_A = f"{type(a).__module__}.{type(a).__qualname__}"
+        class_name_B = f"{type(b).__module__}.{type(b).__qualname__}"
+
+        # a is an instance of A, but not B
+        assert _check_type(a, class_name_A)
+        assert isinstance(a, A)
+        assert not _check_type(a, class_name_B)
+        assert not isinstance(a, B)
+
+        # b is an instance of both B and A
+        assert _check_type(b, class_name_B)
+        assert isinstance(b, B)
+        assert _check_type(b, class_name_A)
+        assert isinstance(b, A)
+
+    def test_check_class(self):
+        """This should not work for classes."""
+
+        class A:
+            pass
+
+        class B(A):
+            pass
+
+        class_name_A = f"{A.__module__}.{A.__qualname__}"
+        class_name_B = f"{B.__module__}.{B.__qualname__}"
+
+        # Test class behavior (should return False, like isinstance does)
+        assert not _check_type(A, class_name_A)
+        assert not _check_type(B, class_name_B)
+        assert not _check_type(B, class_name_A)
+
+    def test_callable(self):
+        # Test function
+        def my_function():
+            pass
+
+        callable_class_name = (
+            f"{type(my_function).__module__}.{type(my_function).__qualname__}"
+        )
+
+        assert _check_type(my_function, callable_class_name), callable_class_name
+        assert isinstance(my_function, type(my_function))
+
+        # Test callable class
+        class MyCallableClass:
+            def __call__(self):
+                pass
+
+        callable_instance = MyCallableClass()
+        assert callable(callable_instance)
+
+        callable_class_instance_name = f"{type(callable_instance).__module__}.{type(callable_instance).__qualname__}"
+
+        assert _check_type(
+            callable_instance, callable_class_instance_name
+        ), callable_class_instance_name
+        assert isinstance(callable_instance, MyCallableClass)
+
+    def test_numpy(self):
+        # Test NumPy array
+        arr = np.array([1, 2, 3])
+
+        assert _check_type(arr, "numpy.ndarray")
+        assert isinstance(arr, np.ndarray)
+
+        # Test NumPy generic
+        scalar = np.float64(3.14)
+
+        assert _check_type(scalar, "numpy.generic")
+        assert isinstance(scalar, np.generic)
+
+    @pytest.mark.skipif(pd is None, reason="pandas is not installed")
+    def test_pandas(self):
+        # Test pandas DataFrame
+        df = pd.DataFrame({"a": [1, 2, 3]})
+
+        assert _check_type(df, "pandas.core.frame.DataFrame")
+        assert isinstance(df, pd.DataFrame)
+
+        assert _check_type(df, "pandas.core.base.PandasObject")
+        assert isinstance(df, pd.core.base.PandasObject)
+
+        # Test pandas Series
+        series = pd.Series([1, 2, 3])
+
+        assert _check_type(series, "pandas.core.series.Series")
+        assert isinstance(series, pd.Series)
+
+        assert _check_type(series, "pandas.core.base.PandasObject")
+        assert isinstance(series, pd.core.base.PandasObject)
+
+    @pytest.mark.skipif(torch is None, reason="torch is not installed")
+    def test_torch(self):
+        tensor = torch.tensor([1, 2, 3])
+
+        assert _check_type(tensor, "torch.Tensor")
+        assert isinstance(tensor, torch.Tensor)
+
+    @pytest.mark.skipif(pydantic is None, reason="pydantic is not installed")
+    def test_pydantic(self):
+        class MyModel(pydantic.BaseModel):
+            name: str
+
+        model_instance = MyModel(name="Alice")
+
+        assert _check_type(model_instance, "pydantic.main.BaseModel")
+        assert isinstance(model_instance, pydantic.BaseModel)
+
+    @pytest.mark.skipif(pint is None, reason="pint is not installed")
+    def test_pint(self):
+        ureg = pint.UnitRegistry()
+        qty = 3 * ureg.meter
+
+        assert _check_type(qty, "pint.registry.Quantity")
+        assert isinstance(qty, pint.Quantity)
 
     @pytest.mark.skipif(ObjectId is None, reason="bson not present")
     def test_extended_json(self):
