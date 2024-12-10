@@ -1082,6 +1082,7 @@ class TestJson:
         na2 = EnumAsDict.from_dict(d_)
         assert na2 == na1
 
+
 class TestCheckType:
     def test_check_subclass(self):
         class A:
