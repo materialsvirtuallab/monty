@@ -9,11 +9,11 @@ import pstats
 import signal
 import sys
 import tempfile
-from collections import namedtuple
 from functools import partial, wraps
-from typing import Any, Callable, Union
+from typing import TYPE_CHECKING
 
-_CacheInfo = namedtuple("_CacheInfo", ["hits", "misses", "maxsize", "currsize"])
+if TYPE_CHECKING:
+    from typing import Any, Callable, Union
 
 
 class _HashedSeq(list):  # pylint: disable=C0205

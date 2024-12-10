@@ -1,12 +1,15 @@
 from __future__ import annotations
 
+import gzip
 import os
+import warnings
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 
 from monty.io import (
+    EncodingWarning,
     FileLock,
     FileLockException,
     reverse_readfile,
@@ -27,7 +30,7 @@ class TestReverseReadline:
         order, i.e. the first line that is read corresponds to the last line.
         number
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -37,7 +40,7 @@ class TestReverseReadline:
         """
         Make sure that large text files are read properly.
         """
-        with open(os.path.join(TEST_DIR, "3000_lines.txt")) as f:
+        with open(os.path.join(TEST_DIR, "3000_lines.txt"), encoding="utf-8") as f:
             for idx, line in enumerate(reverse_readline(f, max_mem=0)):
                 assert (
                     int(line) == self.NUMLINES - idx
@@ -59,7 +62,7 @@ class TestReverseReadline:
         Make sure an empty file does not throw an error when reverse_readline
         is called, which was a problem with an earlier implementation.
         """
-        with open(os.path.join(TEST_DIR, "empty_file.txt")) as f:
+        with open(os.path.join(TEST_DIR, "empty_file.txt"), encoding="utf-8") as f:
             for _line in reverse_readline(f):
                 raise ValueError("an empty file is being read!")
 
@@ -73,10 +76,12 @@ class TestReverseReadline:
             assert linux_line_end == "\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                with open(
+                    "sample_unix_mac.txt", "w", newline=linux_line_end, encoding="utf-8"
+                ) as file:
                     file.write(linux_line_end.join(contents))
 
-                with open("sample_unix_mac.txt") as file:
+                with open("sample_unix_mac.txt", encoding="utf-8") as file:
                     for idx, line in enumerate(reverse_readfile(file)):
                         assert line == contents[len(contents) - idx - 1]
 
@@ -86,10 +91,15 @@ class TestReverseReadline:
             assert windows_line_end == "\r\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                with open(
+                    "sample_windows.txt",
+                    "w",
+                    newline=windows_line_end,
+                    encoding="utf-8",
+                ) as file:
                     file.write(windows_line_end.join(contents))
 
-                with open("sample_windows.txt") as file:
+                with open("sample_windows.txt", encoding="utf-8") as file:
                     for idx, line in enumerate(reverse_readfile(file)):
                         assert line == contents[len(contents) - idx - 1]
 
@@ -142,7 +152,9 @@ class TestReverseReadfile:
             assert linux_line_end == "\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_unix_mac.txt", "w", newline=linux_line_end) as file:
+                with open(
+                    "sample_unix_mac.txt", "w", newline=linux_line_end, encoding="utf-8"
+                ) as file:
                     file.write(linux_line_end.join(contents))
 
                 for idx, line in enumerate(reverse_readfile("sample_unix_mac.txt")):
@@ -154,7 +166,12 @@ class TestReverseReadfile:
             assert windows_line_end == "\r\n"
 
             with ScratchDir("./test_files"):
-                with open("sample_windows.txt", "w", newline=windows_line_end) as file:
+                with open(
+                    "sample_windows.txt",
+                    "w",
+                    newline=windows_line_end,
+                    encoding="utf-8",
+                ) as file:
                     file.write(windows_line_end.join(contents))
 
                 for idx, line in enumerate(reverse_readfile("sample_windows.txt")):
@@ -162,25 +179,102 @@ class TestReverseReadfile:
 
 
 class TestZopen:
-    def test_zopen(self):
-        with zopen(os.path.join(TEST_DIR, "myfile_gz.gz"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_bz2.bz2"), "rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_xz.xz"), "rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile_lzma.lzma"), "rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
-        with zopen(os.path.join(TEST_DIR, "myfile"), mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
+    @pytest.mark.parametrize("extension", [".txt", ".bz2", ".gz", ".xz", ".lzma"])
+    def test_read_write_files(self, extension):
+        """Test read/write in binary/text mode:
+        - uncompressed text file: .txt
+        - compressed files: bz2/gz/xz/lzma
+        """
+        filename = f"test_file{extension}"
+        content = "This is a test file.\n"
 
-    def test_Path_objects(self):
-        p = Path(TEST_DIR) / "myfile_gz.gz"
+        with ScratchDir("."):
+            # Test write and read in text mode
+            with zopen(filename, "wt", encoding="utf-8") as f:
+                f.write(content)
 
-        with zopen(p, mode="rt") as f:
-            assert f.read() == "HelloWorld.\n\n"
+            with zopen(Path(filename), "rt", encoding="utf-8") as f:
+                assert f.read() == content
+
+            # Test write and read in binary mode
+            with zopen(Path(filename), "wb") as f:
+                f.write(content.encode())
+
+            with zopen(filename, "rb") as f:
+                assert f.read() == content.encode()
+
+    def test_lzw_files(self):
+        """gzip is not really able to (de)compress LZW files.
+
+        TODO: remove text file real_lzw_file.txt.Z after dropping
+        ".Z" extension support
+        """
+        # Test a fake LZW file (just with .Z extension but DEFLATED algorithm)
+        filename = "test.Z"
+        content = "This is not a real LZW compressed file.\n"
+
+        with (
+            ScratchDir("."),
+            pytest.warns(FutureWarning, match="compress LZW-compressed files"),
+        ):
+            # Test write and read in text mode
+            with zopen(filename, "wt", encoding="utf-8") as f:
+                f.write(content)
+
+            with zopen(filename, "rt", encoding="utf-8") as f:
+                assert f.read() == content
+
+            # Test write and read in binary mode
+            with zopen(filename, "wb") as f:
+                f.write(content.encode())
+
+            with zopen(filename, "rb") as f:
+                assert f.read() == content.encode()
+
+        # Cannot decompress a real LZW file
+        with (
+            pytest.raises(gzip.BadGzipFile, match="Not a gzipped file"),
+            zopen(f"{TEST_DIR}/real_lzw_file.txt.Z", "rt", encoding="utf-8") as f,
+        ):
+            f.read()
+
+    @pytest.mark.parametrize("extension", [".txt", ".bz2", ".gz", ".xz", ".lzma"])
+    def test_warnings(self, extension):
+        filename = f"test_warning{extension}"
+        content = "Test warning"
+
+        with ScratchDir("."):
+            # Default `encoding` warning
+            with (
+                pytest.warns(EncodingWarning, match="use UTF-8 by default"),
+                zopen(filename, "wt") as f,
+            ):
+                f.write(content)
+
+            # Implicit text/binary `mode` warning
+            warnings.filterwarnings(
+                "ignore", category=EncodingWarning, message="argument not specified"
+            )
+            with (
+                pytest.warns(
+                    FutureWarning, match="discourage using implicit binary/text"
+                ),
+                zopen(filename, "r") as f,
+            ):
+                if extension == ".txt":
+                    assert f.readline() == content
+                else:
+                    assert f.readline().decode("utf-8") == content
+
+            # Implicit `mode` warning
+            with (
+                pytest.warns(FutureWarning, match="discourage using a default `mode`"),
+                zopen(filename) as f,
+            ):
+                if extension == ".txt":
+                    assert f.readline() == content
+                else:
+                    assert f.readline().decode("utf-8") == content
 
 
 class TestFileLock:
