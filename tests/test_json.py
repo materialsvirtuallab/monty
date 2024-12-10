@@ -1068,3 +1068,31 @@ class TestJson:
         assert d_ == {"v": "value_a"}
         na2 = EnumAsDict.from_dict(d_)
         assert na2 == na1
+
+    @pytest.mark.skipif(ObjectId is None, reason="bson not present")
+    def test_extended_json(self):
+        from bson import json_util
+
+        ext_json_dict = {
+            "datetime": datetime.datetime.now(datetime.timezone.utc),
+            "NaN": float("NaN"),
+            "infinity": float("inf"),
+            "-infinity": -float("inf"),
+        }
+        ext_json_str = json_util.dumps(ext_json_dict)
+
+        not_serialized = json.loads(ext_json_str)
+        assert all(isinstance(v, dict) for v in not_serialized.values())
+
+        reserialized = MontyDecoder().decode(ext_json_str)
+        for k, v in ext_json_dict.items():
+            if k == "datetime":
+                # BSON's json_util only saves datetimes up to microseconds
+                assert reserialized[k].timestamp() == pytest.approx(
+                    v.timestamp(), abs=1e-3
+                )
+            elif k == "NaN":
+                assert np.isnan(reserialized[k])
+            else:
+                assert v == reserialized[k]
+            assert not isinstance(reserialized[k], dict)
