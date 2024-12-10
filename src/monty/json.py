@@ -998,7 +998,13 @@ def jsanitize(
 
     if recursive_msonable:
         try:
-            return obj.as_dict()
+            return jsanitize(
+                obj.as_dict(),
+                strict=strict,
+                allow_bson=allow_bson,
+                enum_values=enum_values,
+                recursive_msonable=recursive_msonable,
+            )
         except AttributeError:
             pass
 
