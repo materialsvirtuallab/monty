@@ -14,40 +14,102 @@ import mmap
 import os
 import subprocess
 import time
+import warnings
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import IO, Generator, Union
+    from typing import IO, Any, Generator, Union
 
 
-def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
+class EncodingWarning(Warning): ...  # Added in Python 3.10
+
+
+def zopen(
+    filename: Union[str, Path],
+    /,
+    mode: str | None = None,
+    **kwargs: Any,
+) -> IO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile:
     """
-    This function wraps around the bz2, gzip, lzma, xz and standard Python's open
-    function to deal intelligently with bzipped, gzipped or standard text
-    files.
+    This function wraps around `[bz2/gzip/lzma].open` and `open`
+    to deal intelligently with compressed or uncompressed files.
+    Supports context manager:
+        `with zopen(filename, mode="rt", ...)`.
+
+    Important Notes:
+        - Default `mode` should not be used, and would not be allow
+            in future versions.
+        - Always explicitly specify binary/text in `mode`, i.e.
+            always pass `t` or `b` in `mode`, implicit binary/text
+            mode would not be allow in future versions.
+        - Always provide an explicit `encoding` in text mode.
 
     Args:
-        filename (str/Path): filename or pathlib.Path.
-        *args: Standard args for Python open(..). E.g., 'r' for read, 'w' for
-            write.
-        **kwargs: Standard kwargs for Python open(..).
+        filename (str | Path): The file to open.
+        mode (str): The mode in which the file is opened, you MUST
+            explicitly specify "b" for binary or "t" for text.
+        **kwargs: Additional keyword arguments to pass to `open`.
 
     Returns:
-        File-like object. Supports with context.
+        TextIO | BinaryIO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile
     """
-    if filename is not None and isinstance(filename, Path):
-        filename = str(filename)
+    # Deadline for dropping implicit `mode` support
+    _deadline: str = "2025-06-01"
+
+    # Warn against default `mode`
+    # TODO: remove default value of `mode` to force user to give one after deadline
+    if mode is None:
+        warnings.warn(
+            "We strongly discourage using a default `mode`, it would be"
+            f"set to `r` now but would not be allowed after {_deadline}",
+            FutureWarning,
+            stacklevel=2,
+        )
+        mode = "r"
+
+    # Warn against implicit text/binary `mode`
+    # TODO: replace warning with exception after deadline
+    elif not ("b" in mode or "t" in mode):
+        warnings.warn(
+            "We strongly discourage using implicit binary/text `mode`, "
+            f"and this would not be allowed after {_deadline}. "
+            "I.e. you should pass t/b in `mode`.",
+            FutureWarning,
+            stacklevel=2,
+        )
+
+    # Warn against default `encoding` in text mode
+    if "t" in mode and kwargs.get("encoding", None) is None:
+        warnings.warn(
+            "We strongly encourage explicit `encoding`, "
+            "and we would use UTF-8 by default as per PEP 686",
+            category=EncodingWarning,
+            stacklevel=2,
+        )
+        kwargs["encoding"] = "utf-8"
 
     _name, ext = os.path.splitext(filename)
-    ext = ext.upper()
-    if ext == ".BZ2":
-        return bz2.open(filename, *args, **kwargs)
-    if ext in {".GZ", ".Z"}:
-        return gzip.open(filename, *args, **kwargs)
-    if ext in {".XZ", ".LZMA"}:
-        return lzma.open(filename, *args, **kwargs)
-    return open(filename, *args, **kwargs)
+    ext = ext.lower()
+
+    if ext == ".bz2":
+        return bz2.open(filename, mode, **kwargs)
+    if ext == ".gz":
+        return gzip.open(filename, mode, **kwargs)
+    if ext == ".z":
+        # TODO: drop ".z" extension support after 2026-01-01
+        warnings.warn(
+            "Python gzip is not able to (de)compress LZW-compressed files. "
+            "You should rename it to .gz. Support for the '.z' extension will "
+            "be removed after 2026-01-01.",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+        return gzip.open(filename, mode, **kwargs)
+    if ext in {".xz", ".lzma"}:
+        return lzma.open(filename, mode, **kwargs)
+
+    return open(filename, mode, **kwargs)
 
 
 def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:

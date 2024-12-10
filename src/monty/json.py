@@ -45,7 +45,7 @@ __version__ = "3.0.0"
 
 def _load_redirect(redirect_file) -> dict:
     try:
-        with open(redirect_file) as f:
+        with open(redirect_file, encoding="utf-8") as f:
             yaml = YAML()
             d = yaml.load(f)
     except OSError:
@@ -448,7 +448,7 @@ class MSONable:
             raise FileExistsError(f"strict is true and file {pickle_path} exists")
 
         # Save the json file
-        with open(json_path, "w") as outfile:
+        with open(json_path, "w", encoding="utf-8") as outfile:
             outfile.write(encoded)
 
         # Save the pickle file if we have anything to save from the name_object_map
@@ -501,7 +501,7 @@ def _d_from_path(file_path):
     save_dir = json_path.parent
     pickle_path = save_dir / f"{json_path.stem}.pkl"
 
-    with open(json_path, "r") as infile:
+    with open(json_path, "r", encoding="utf-8") as infile:
         d = json.loads(infile.read())
 
     if pickle_path.exists():
