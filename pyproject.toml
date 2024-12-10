@@ -9,7 +9,7 @@ maintainers = [
 ]
 description = "Monty is the missing complement to Python."
 readme = "README.md"
-requires-python = ">=3.9,<=3.13"
+requires-python = ">=3.10"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 4 - Beta",
@@ -60,10 +60,9 @@ include = ["monty", "monty.*"]
 
 [tool.black]
 line-length = 120
-target-version = ['py39']
+target-version = ["py310"]
 include = '\.pyi?$'
 exclude = '''
-
 (
   /(
       \.eggs         # exclude a few common directories in the
@@ -88,8 +87,6 @@ branch = true
 exclude_also = [
     "@deprecated",
     "def __repr__",
-    "if 0:",
-    "if __name__ == .__main__.:",
     "if self.debug:",
     "if settings.DEBUG",
     "pragma: no cover",
@@ -97,17 +94,17 @@ exclude_also = [
     "raise NotImplementedError",
     "show_plot",
     "if TYPE_CHECKING:",
-    "if typing.TYPE_CHECKING:",
     "except ImportError:"
 ]
 
 [tool.mypy]
 ignore_missing_imports = true
 
-[tool.ruff]
-lint.select = [
-  "I",  #isort
+[tool.ruff.lint]
+select = [
+  "I",  # isort
 ]
 
-lint.isort.required-imports = ["from __future__ import annotations"]
-lint.isort.known-first-party = ["monty"]
+[tool.ruff.lint.isort]
+required-imports = ["from __future__ import annotations"]
+known-first-party = ["monty"]
