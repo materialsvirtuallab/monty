@@ -89,7 +89,7 @@ def zopen(
         )
         kwargs["encoding"] = "utf-8"
 
-    _name, ext = os.path.splitext(str(filename))
+    _name, ext = os.path.splitext(filename)
     ext = ext.lower()
 
     if ext == ".bz2":
