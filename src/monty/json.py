@@ -16,7 +16,7 @@ from collections import OrderedDict, defaultdict
 from enum import Enum
 from hashlib import sha1
 from importlib import import_module
-from inspect import getfullargspec
+from inspect import getfullargspec, isclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
@@ -29,8 +29,10 @@ if TYPE_CHECKING:
 
 try:
     import bson
+    from bson import json_util
 except ImportError:
     bson = None
+    json_util = None
 
 try:
     import orjson
@@ -43,7 +45,7 @@ __version__ = "3.0.0"
 
 def _load_redirect(redirect_file) -> dict:
     try:
-        with open(redirect_file) as f:
+        with open(redirect_file, encoding="utf-8") as f:
             yaml = YAML()
             d = yaml.load(f)
     except OSError:
@@ -68,12 +70,12 @@ def _load_redirect(redirect_file) -> dict:
     return dict(redirect_dict)
 
 
-def _check_type(obj, type_str: tuple[str, ...] | str) -> bool:
+def _check_type(obj: object, type_str: tuple[str, ...] | str) -> bool:
     """Alternative to isinstance that avoids imports.
 
     Checks whether obj is an instance of the type defined by type_str. This
     removes the need to explicitly import type_str. Handles subclasses like
-    isinstance does. E.g.::
+    isinstance does. E.g.:
         class A:
             pass
 
@@ -88,21 +90,22 @@ def _check_type(obj, type_str: tuple[str, ...] | str) -> bool:
         assert isinstance(b, A)
         assert not isinstance(a, B)
 
-    type_str: str | tuple[str]
-
     Note for future developers: the type_str is not always obvious for an
-    object. For example, pandas.DataFrame is actually pandas.core.frame.DataFrame.
+    object. For example, pandas.DataFrame is actually "pandas.core.frame.DataFrame".
     To find out the type_str for an object, run type(obj).mro(). This will
     list all the types that an object can resolve to in order of generality
-    (all objects have the builtins.object as the last one).
+    (all objects have the "builtins.object" as the last one).
     """
-    type_str = type_str if isinstance(type_str, tuple) else (type_str,)
-    # I believe this try-except is only necessary for callable types
-    try:
-        mro = type(obj).mro()
-    except TypeError:
+    # This function is intended as an alternative of "isinstance",
+    # therefore wouldn't check class
+    if isclass(obj):
         return False
-    return any(f"{o.__module__}.{o.__name__}" == ts for o in mro for ts in type_str)
+
+    type_str = type_str if isinstance(type_str, tuple) else (type_str,)
+
+    mro = type(obj).mro()
+
+    return any(f"{o.__module__}.{o.__qualname__}" == ts for o in mro for ts in type_str)
 
 
 class MSONable:
@@ -446,7 +449,7 @@ class MSONable:
             raise FileExistsError(f"strict is true and file {pickle_path} exists")
 
         # Save the json file
-        with open(json_path, "w") as outfile:
+        with open(json_path, "w", encoding="utf-8") as outfile:
             outfile.write(encoded)
 
         # Save the pickle file if we have anything to save from the name_object_map
@@ -499,7 +502,7 @@ def _d_from_path(file_path):
     save_dir = json_path.parent
     pickle_path = save_dir / f"{json_path.stem}.pkl"
 
-    with open(json_path, "r") as infile:
+    with open(json_path, "r", encoding="utf-8") as infile:
         d = json.loads(infile.read())
 
     if pickle_path.exists():
@@ -862,7 +865,11 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        if orjson is not None:
+        if bson is not None:
+            # need to pass `json_options` to ensure that datetimes are not
+            # converted by BSON
+            d = json_util.loads(s, json_options=json_util.JSONOptions(tz_aware=True))
+        elif orjson is not None:
             try:
                 d = orjson.loads(s)
             except orjson.JSONDecodeError:
@@ -992,7 +999,13 @@ def jsanitize(
 
     if recursive_msonable:
         try:
-            return obj.as_dict()
+            return jsanitize(
+                obj.as_dict(),
+                strict=strict,
+                allow_bson=allow_bson,
+                enum_values=enum_values,
+                recursive_msonable=recursive_msonable,
+            )
         except AttributeError:
             pass
 
