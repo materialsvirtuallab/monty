@@ -46,11 +46,7 @@ def regrep(
     """
     compiled = {k: re.compile(v) for k, v in patterns.items()}
     matches = collections.defaultdict(list)
-    gen = (
-        reverse_readfile(filename)
-        if reverse
-        else zopen(filename, "rt", encoding="utf-8")
-    )
+    gen = reverse_readfile(filename) if reverse else zopen(filename, "rt")
     for i, line in enumerate(gen):
         for k, p in compiled.items():
             if m := p.search(line):
@@ -62,5 +58,5 @@ def regrep(
 
     with contextlib.suppress(Exception):
         # Try to close open file handle. Pass if it is a generator.
-        gen.close()  # type: ignore[attr-defined, union-attr]
+        gen.close()  # type: ignore[attr-defined]
     return matches

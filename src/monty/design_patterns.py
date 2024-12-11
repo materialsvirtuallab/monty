@@ -7,11 +7,8 @@ from __future__ import annotations
 import inspect
 import os
 from functools import wraps
-from typing import TYPE_CHECKING, TypeVar
+from typing import Any, Dict, Hashable, Tuple, TypeVar
 from weakref import WeakValueDictionary
-
-if TYPE_CHECKING:
-    from typing import Any
 
 
 def singleton(cls):
@@ -98,7 +95,7 @@ def cached_class(cls: type[Klass]) -> type[Klass]:
             orig_init(self, *args, **kwargs)
             self._initialized = True
 
-    def reduce(self: Any) -> tuple[type, tuple, dict[str, Any]]:
+    def reduce(self: Any) -> Tuple[type, Tuple, Dict[str, Any]]:
         for key, value in cache.items():
             if value is self:
                 cls, args = key

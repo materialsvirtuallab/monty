@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import os
-import platform
 import shutil
 
 import pytest
@@ -20,7 +19,7 @@ class TestScratchDir:
 
     def test_with_copy(self):
         # We write a pre-scratch file.
-        with open("pre_scratch_text", "w", encoding="utf-8") as f:
+        with open("pre_scratch_text", "w") as f:
             f.write("write")
 
         with ScratchDir(
@@ -28,7 +27,7 @@ class TestScratchDir:
             copy_from_current_on_enter=True,
             copy_to_current_on_exit=True,
         ) as d:
-            with open("scratch_text", "w", encoding="utf-8") as f:
+            with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
             assert "scratch_text" in files
@@ -50,7 +49,7 @@ class TestScratchDir:
 
     def test_with_copy_gzip(self):
         # We write a pre-scratch file.
-        with open("pre_scratch_text", "w", encoding="utf-8") as f:
+        with open("pre_scratch_text", "w") as f:
             f.write("write")
         init_gz_files = [f for f in os.listdir(os.getcwd()) if f.endswith(".gz")]
         with pytest.warns(match="Both 3000_lines.txt and 3000_lines.txt.gz exist."):
@@ -61,7 +60,7 @@ class TestScratchDir:
                     copy_to_current_on_exit=True,
                     gzip_on_exit=True,
                 ),
-                open("scratch_text", "w", encoding="utf-8") as f,
+                open("scratch_text", "w") as f,
             ):
                 f.write("write")
         files = os.listdir(os.getcwd())
@@ -75,7 +74,7 @@ class TestScratchDir:
 
     def test_with_copy_nodelete(self):
         # We write a pre-scratch file.
-        with open("pre_scratch_text", "w", encoding="utf-8") as f:
+        with open("pre_scratch_text", "w") as f:
             f.write("write")
 
         with ScratchDir(
@@ -84,7 +83,7 @@ class TestScratchDir:
             copy_to_current_on_exit=True,
             delete_removed_files=False,
         ) as d:
-            with open("scratch_text", "w", encoding="utf-8") as f:
+            with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
             assert "scratch_text" in files
@@ -110,7 +109,7 @@ class TestScratchDir:
             copy_from_current_on_enter=False,
             copy_to_current_on_exit=False,
         ) as d:
-            with open("scratch_text", "w", encoding="utf-8") as f:
+            with open("scratch_text", "w") as f:
                 f.write("write")
             files = os.listdir(d)
             assert "scratch_text" in files
@@ -122,14 +121,14 @@ class TestScratchDir:
         assert "scratch_text" not in files
 
     def test_symlink(self):
-        if platform.system() != "Windows":
+        if os.name != "nt":
             with ScratchDir(
                 self.scratch_root,
                 copy_from_current_on_enter=False,
                 copy_to_current_on_exit=False,
                 create_symbolic_link=True,
             ) as d:
-                with open("scratch_text", "w", encoding="utf-8") as f:
+                with open("scratch_text", "w") as f:
                     f.write("write")
                 files = os.listdir(d)
                 assert "scratch_text" in files
