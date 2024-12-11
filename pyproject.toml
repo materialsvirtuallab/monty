@@ -22,7 +22,7 @@ dependencies = [
   "ruamel.yaml",
   "numpy",
 ]
-version = "2024.10.21"
+version = "2024.12.10"
 
 [project.optional-dependencies]
 ci = [
