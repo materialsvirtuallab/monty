@@ -35,7 +35,7 @@ class TestCopyR:
             os.path.join(test_dir, "cpr_src", "sub", "testr"), "w", encoding="utf-8"
         ) as f:
             f.write("what2")
-        if os.name != "nt":
+        if platform.system() != "Windows":
             os.symlink(
                 os.path.join(test_dir, "cpr_src", "test"),
                 os.path.join(test_dir, "cpr_src", "mysymlink"),
