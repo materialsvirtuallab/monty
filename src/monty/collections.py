@@ -89,6 +89,8 @@ class ControlledDict(collections.UserDict, ABC):
 
     def update(self, *args, **kwargs) -> None:
         """Forbid adding or updating keys based on _allow_add and _allow_update."""
+
+        updates = dict(*args, **kwargs)
         for key in dict(*args, **kwargs):
             if key not in self.data and not self._allow_add:
                 raise TypeError(
@@ -99,7 +101,7 @@ class ControlledDict(collections.UserDict, ABC):
                     f"Cannot update key {key!r} using update, because update is disabled."
                 )
 
-        super().update(*args, **kwargs)
+        super().update(updates)
 
     def setdefault(self, key, default=None) -> Any:
         """Forbid adding or updating keys based on _allow_add and _allow_update.
