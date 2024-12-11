@@ -62,6 +62,10 @@ class TestControlledDict:
         dct.update({"a": 3})
         assert dct["a"] == 3
 
+        # Test Iterator handling
+        dct.update(zip(["c", "d"], [11, 12]))
+        assert dct["c"] == 11
+
         dct.setdefault("a", 4)  # existing key
         assert dct["a"] == 3
 
@@ -157,7 +161,11 @@ def test_namespace_dict():
     dct["hello"] = "world"
     assert dct["key"] == "val"
 
-    # Test update (not allowed)
+    # Test use `update` to add new values
+    dct.update({"new_key": "new_value"})
+    assert dct["new_key"] == "new_value"
+
+    # Test add (not allowed)
     with pytest.raises(TypeError, match="update is disabled"):
         dct["key"] = "val"
 
