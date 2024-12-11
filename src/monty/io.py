@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
 if TYPE_CHECKING:
-    from typing import IO, Any, Generator, Union
+    from typing import IO, Any, Iterator, Union
 
 
 class EncodingWarning(Warning): ...  # Added in Python 3.10
