@@ -112,6 +112,7 @@ def zopen(
 
     return open(filename, mode, **kwargs)
 
+
 def _get_line_ending(
     file: str
     | Path
