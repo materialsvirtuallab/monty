@@ -29,10 +29,8 @@ if TYPE_CHECKING:
 
 try:
     import bson
-    from bson import json_util
 except ImportError:
     bson = None
-    json_util = None
 
 try:
     import orjson
@@ -45,7 +43,7 @@ __version__ = "3.0.0"
 
 def _load_redirect(redirect_file) -> dict:
     try:
-        with open(redirect_file, encoding="utf-8") as f:
+        with open(redirect_file) as f:
             yaml = YAML()
             d = yaml.load(f)
     except OSError:
@@ -448,7 +446,7 @@ class MSONable:
             raise FileExistsError(f"strict is true and file {pickle_path} exists")
 
         # Save the json file
-        with open(json_path, "w", encoding="utf-8") as outfile:
+        with open(json_path, "w") as outfile:
             outfile.write(encoded)
 
         # Save the pickle file if we have anything to save from the name_object_map
@@ -501,7 +499,7 @@ def _d_from_path(file_path):
     save_dir = json_path.parent
     pickle_path = save_dir / f"{json_path.stem}.pkl"
 
-    with open(json_path, "r", encoding="utf-8") as infile:
+    with open(json_path, "r") as infile:
         d = json.loads(infile.read())
 
     if pickle_path.exists():
@@ -864,11 +862,7 @@ class MontyDecoder(json.JSONDecoder):
         :param s: string
         :return: Object.
         """
-        if bson is not None:
-            # need to pass `json_options` to ensure that datetimes are not
-            # converted by BSON
-            d = json_util.loads(s, json_options=json_util.JSONOptions(tz_aware=True))
-        elif orjson is not None:
+        if orjson is not None:
             try:
                 d = orjson.loads(s)
             except orjson.JSONDecodeError:
@@ -998,13 +992,7 @@ def jsanitize(
 
     if recursive_msonable:
         try:
-            return jsanitize(
-                obj.as_dict(),
-                strict=strict,
-                allow_bson=allow_bson,
-                enum_values=enum_values,
-                recursive_msonable=recursive_msonable,
-            )
+            return obj.as_dict()
         except AttributeError:
             pass
 
