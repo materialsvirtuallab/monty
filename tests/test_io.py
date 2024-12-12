@@ -9,7 +9,6 @@ from pathlib import Path
 import pytest
 
 from monty.io import (
-    EncodingWarning,
     FileLock,
     FileLockException,
     _get_line_ending,
@@ -426,6 +425,7 @@ class TestZopen:
 
         # Cannot decompress a real LZW file
         with (
+            pytest.warns(FutureWarning, match="compress LZW-compressed files"),
             pytest.raises(gzip.BadGzipFile, match="Not a gzipped file"),
             zopen(f"{TEST_DIR}/real_lzw_file.txt.Z", "rt", encoding="utf-8") as f,
         ):
