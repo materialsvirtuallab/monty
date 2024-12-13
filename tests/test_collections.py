@@ -126,6 +126,11 @@ class TestControlledDict:
         assert not dct._allow_add
         assert not dct._allow_update
 
+    def test_iterator_handling(self):
+        """Make sure iterators are handling correctly."""
+        c_dict = ControlledDict(zip(["c", "d"], [11, 12]))
+        assert c_dict["c"] == 11
+
 
 def test_frozendict():
     dct = frozendict({"hello": "world"})

@@ -91,7 +91,7 @@ class ControlledDict(collections.UserDict, ABC):
         """Forbid adding or updating keys based on _allow_add and _allow_update."""
 
         updates = dict(*args, **kwargs)
-        for key in dict(*args, **kwargs):
+        for key in updates:
             if key not in self.data and not self._allow_add:
                 raise TypeError(
                     f"Cannot add new key {key!r} using update, because add is disabled."
