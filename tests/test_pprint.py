@@ -34,4 +34,4 @@ class TestDrawTree:
             ],
         )
 
-        print(draw_tree(root))
+        assert draw_tree(root)
