@@ -39,7 +39,7 @@ def make_doc(ctx: Context) -> None:
         ctx.run("rm *.rst", warn=True)
         ctx.run("cp markdown/monty*.md .")
         for fn in glob.glob("monty*.md"):
-            with open(fn) as f:
+            with open(fn, encoding="utf-8") as f:
                 lines = [line.rstrip() for line in f if "Submodules" not in line]
             if fn == "monty.md":
                 preamble = [
@@ -59,7 +59,7 @@ def make_doc(ctx: Context) -> None:
                     "---",
                     "",
                 ]
-            with open(fn, "w") as f:
+            with open(fn, "w", encoding="utf-8") as f:
                 f.write("\n".join(preamble + lines))
 
         ctx.run("rm -r markdown", warn=True)
@@ -67,9 +67,9 @@ def make_doc(ctx: Context) -> None:
         ctx.run("mv README.md index.md")
         ctx.run("rm -rf *.orig doctrees", warn=True)
 
-        with open("index.md") as f:
+        with open("index.md", encoding="utf-8") as f:
             contents = f.read()
-        with open("index.md", "w") as f:
+        with open("index.md", "w", encoding="utf-8") as f:
             contents = re.sub(
                 r"\n## Official Documentation[^#]*",
                 "{: .no_toc }\n\n## Table of contents\n{: .no_toc .text-delta }\n* TOC\n{:toc}\n\n",
@@ -104,7 +104,7 @@ def setver(ctx: Context) -> None:
 
 @task
 def release_github(ctx: Context) -> None:
-    with open("docs/changelog.md") as f:
+    with open("docs/changelog.md", encoding="utf-8") as f:
         contents = f.read()
     toks = re.split("##", contents)
     desc = toks[1].strip()

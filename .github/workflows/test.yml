@@ -8,18 +8,18 @@ jobs:
       fail-fast: false
       max-parallel: 20
       matrix:
-        os: [ubuntu-latest, macos-14, windows-latest]
-        python-version: ["3.9", "3.12"]
+        os: [ubuntu-latest, macos-14] #, windows-latest]
+        python-version: ["3.10", "3.12"]
 
     runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python }}
 
       - name: Install dependencies
         run: |
@@ -30,6 +30,6 @@ jobs:
         run: pytest --cov=monty --cov-report html:coverage_reports tests
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

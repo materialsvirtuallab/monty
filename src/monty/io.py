@@ -14,43 +14,163 @@ import mmap
 import os
 import subprocess
 import time
+import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Literal, cast
 
 if TYPE_CHECKING:
-    from typing import IO, Generator, Union
+    from typing import IO, Any, Iterator, Union
 
 
-def zopen(filename: Union[str, Path], *args, **kwargs) -> IO:
+class EncodingWarning(Warning): ...  # Added in Python 3.10
+
+
+def zopen(
+    filename: Union[str, Path],
+    /,
+    mode: str | None = None,
+    **kwargs: Any,
+) -> IO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile:
     """
-    This function wraps around the bz2, gzip, lzma, xz and standard Python's open
-    function to deal intelligently with bzipped, gzipped or standard text
-    files.
+    This function wraps around `[bz2/gzip/lzma].open` and `open`
+    to deal intelligently with compressed or uncompressed files.
+    Supports context manager:
+        `with zopen(filename, mode="rt", ...)`.
+
+    Important Notes:
+        - Default `mode` should not be used, and would not be allow
+            in future versions.
+        - Always explicitly specify binary/text in `mode`, i.e.
+            always pass `t` or `b` in `mode`, implicit binary/text
+            mode would not be allow in future versions.
+        - Always provide an explicit `encoding` in text mode.
 
     Args:
-        filename (str/Path): filename or pathlib.Path.
-        *args: Standard args for Python open(..). E.g., 'r' for read, 'w' for
-            write.
-        **kwargs: Standard kwargs for Python open(..).
+        filename (str | Path): The file to open.
+        mode (str): The mode in which the file is opened, you MUST
+            explicitly specify "b" for binary or "t" for text.
+        **kwargs: Additional keyword arguments to pass to `open`.
 
     Returns:
-        File-like object. Supports with context.
+        TextIO | BinaryIO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile
     """
-    if filename is not None and isinstance(filename, Path):
-        filename = str(filename)
+    # Deadline for dropping implicit `mode` support
+    _deadline: str = "2025-06-01"
+
+    # Warn against default `mode`
+    # TODO: remove default value of `mode` to force user to give one after deadline
+    if mode is None:
+        warnings.warn(
+            "We strongly discourage using a default `mode`, it would be"
+            f"set to `r` now but would not be allowed after {_deadline}",
+            FutureWarning,
+            stacklevel=2,
+        )
+        mode = "r"
+
+    # Warn against implicit text/binary `mode`
+    # TODO: replace warning with exception after deadline
+    elif not ("b" in mode or "t" in mode):
+        warnings.warn(
+            "We strongly discourage using implicit binary/text `mode`, "
+            f"and this would not be allowed after {_deadline}. "
+            "I.e. you should pass t/b in `mode`.",
+            FutureWarning,
+            stacklevel=2,
+        )
+
+    # Warn against default `encoding` in text mode
+    if "t" in mode and kwargs.get("encoding", None) is None:
+        warnings.warn(
+            "We strongly encourage explicit `encoding`, "
+            "and we would use UTF-8 by default as per PEP 686",
+            category=EncodingWarning,
+            stacklevel=2,
+        )
+        kwargs["encoding"] = "utf-8"
 
     _name, ext = os.path.splitext(filename)
-    ext = ext.upper()
-    if ext == ".BZ2":
-        return bz2.open(filename, *args, **kwargs)
-    if ext in {".GZ", ".Z"}:
-        return gzip.open(filename, *args, **kwargs)
-    if ext in {".XZ", ".LZMA"}:
-        return lzma.open(filename, *args, **kwargs)
-    return open(filename, *args, **kwargs)
+
+    ext = ext.lower()
+
+    if ext == ".bz2":
+        return bz2.open(filename, mode, **kwargs)
+    if ext == ".gz":
+        return gzip.open(filename, mode, **kwargs)
+    if ext == ".z":
+        # TODO: drop ".z" extension support after 2026-01-01
+        warnings.warn(
+            "Python gzip is not able to (de)compress LZW-compressed files. "
+            "You should rename it to .gz. Support for the '.z' extension will "
+            "be removed after 2026-01-01.",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+        return gzip.open(filename, mode, **kwargs)
+    if ext in {".xz", ".lzma"}:
+        return lzma.open(filename, mode, **kwargs)
+
+    return open(filename, mode, **kwargs)
 
 
-def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
+def _get_line_ending(
+    file: str
+    | Path
+    | io.TextIOWrapper
+    | io.BufferedReader
+    | gzip.GzipFile
+    | bz2.BZ2File,
+) -> Literal["\r\n", "\n"]:
+    """Helper function to get line ending of a file.
+
+    This function assumes the file has a single consistent line ending.
+
+    WARNING: as per the POSIX standard, a line is: "A sequence of zero or
+    more non-<newline> characters plus a terminating <newline> char.", as such
+    this func might fail if the only line misses a terminating newline character.
+    https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html
+
+    Returns:
+        "\n": Unix line ending.
+        "\r\n": Windows line ending.
+
+    Raises:
+        ValueError: If line ending is unknown.
+
+    Warnings:
+        If file is empty, "\n" would be used as default.
+    """
+    if isinstance(file, (str, Path)):
+        with zopen(file, "rb") as f:
+            first_line = f.readline()
+    elif isinstance(file, io.TextIOWrapper):
+        first_line = file.buffer.readline()  # type: ignore[attr-defined]
+    elif isinstance(file, (io.BufferedReader, gzip.GzipFile, bz2.BZ2File)):
+        first_line = file.readline()
+    else:
+        raise TypeError(f"Unknown file type {type(file).__name__}")
+
+    # Reset pointer to start of file if possible
+    if hasattr(file, "seek"):
+        file.seek(0)
+
+    # Return Unix "\n" line ending as default if file is empty
+    if not first_line:
+        warnings.warn("File is empty, return Unix line ending \n.", stacklevel=2)
+        return "\n"
+
+    if first_line.endswith(b"\r\n"):
+        return "\r\n"
+    if first_line.endswith(b"\n"):
+        return "\n"
+
+    # It's likely the line is missing a line ending for the first line
+    raise ValueError(f"Unknown line ending in line {repr(first_line)}.")
+
+
+def reverse_readfile(
+    filename: Union[str, Path],
+) -> Iterator[str]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
     memory-mapped file. It is slower for very small files than
@@ -63,108 +183,154 @@ def reverse_readfile(filename: Union[str, Path]) -> Generator[str, str, None]:
     Yields:
         Lines from the file in reverse order.
     """
-    try:
-        with zopen(filename, "rb") as file:
-            if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
-                for line in reversed(file.readlines()):
-                    yield line.decode("utf-8").rstrip(os.linesep)
-            else:
-                filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
-                n = len(filemap)
-                while n > 0:
-                    i = filemap.rfind(os.linesep.encode(), 0, n)
-                    yield filemap[i + 1 : n].decode("utf-8").rstrip(os.linesep)
-                    n = i
+    # Get line ending
+    l_end = _get_line_ending(filename)
+    len_l_end = len(l_end)
 
-    except ValueError:
-        return
+    with zopen(filename, "rb") as file:
+        if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
+            for line in reversed(file.readlines()):
+                # "readlines" would keep the line end character
+                yield line.decode("utf-8")
+
+        else:
+            try:
+                filemap = mmap.mmap(file.fileno(), 0, access=mmap.ACCESS_READ)
+            except ValueError:
+                warnings.warn("trying to mmap an empty file.", stacklevel=2)
+                return
+
+            file_size = len(filemap)
+            while file_size > 0:
+                # Find line segment start and end positions
+                seg_start_pos = filemap.rfind(l_end.encode(), 0, file_size)
+                seg_end_pos = file_size + len_l_end
+
+                # The first (originally) line doesn't have an ending character at its head
+                if seg_start_pos == -1:
+                    yield (filemap[:seg_end_pos].decode("utf-8"))
+
+                # Skip the first match (the last line ending character)
+                elif file_size != len(filemap):
+                    yield (
+                        filemap[seg_start_pos + len_l_end : seg_end_pos].decode("utf-8")
+                    )
+                file_size = seg_start_pos
 
 
 def reverse_readline(
-    m_file, blk_size: int = 4096, max_mem: int = 4000000
-) -> Generator[str, str, None]:
+    m_file: io.BufferedReader | io.TextIOWrapper | gzip.GzipFile | bz2.BZ2File,
+    blk_size: int = 4096,
+    max_mem: int = 4_000_000,
+) -> Iterator[str]:
     """
-    Generator function to read a file line-by-line, but backwards.
-    This allows one to efficiently get data at the end of a file.
+    Read a file backwards line-by-line, and behave similarly to
+    the file.readline function. This allows one to efficiently
+    get data from the end of a file.
 
-    Read file forwards and reverse in memory for files smaller than the
-    max_mem parameter, or for gzip files where reverse seeks are not supported.
+    Supported file stream formats:
+    - TextIOWrapper (text mode) | BufferedReader (binary mode)
+    - gzip/bzip2 file stream
 
-    Files larger than max_mem are dynamically read backwards.
+    Cases where file would be read forwards and reversed in RAM:
+    - If file size is smaller than RAM usage limit (max_mem).
+    - Gzip files, as reverse seeks are not supported.
 
     Reference:
-        Based on code by Peter Astrand <astrand@cendio.se>, using modifications
-        by Raymond Hettinger and Kevin German.
-        http://code.activestate.com/recipes/439045-read-a-text-file-backwards
-        -yet-another-implementat/
+        Based on code by Peter Astrand <astrand@cendio.se>, using
+        modifications by Raymond Hettinger and Kevin German.
+        http://code.activestate.com/recipes/439045-read-a-text-
+        file-backwards-yet-another-implementat/
 
     Args:
-        m_file (File): File stream to read (backwards)
-        blk_size (int): The buffer size. Defaults to 4096.
-        max_mem (int): The maximum amount of memory to involve in this
-            operation. This is used to determine when to reverse a file
-            in-memory versus seeking portions of a file. For bz2 files,
-            this sets the maximum block size.
+        m_file: File stream to read (backwards).
+        blk_size (int): The block size to read each time in bytes.
+            Defaults to 4096.
+        max_mem (int): Threshold to determine when to reverse a file
+            in-memory versus reading blocks of a file each time.
+            For bz2 files, this sets the block size.
 
-    Returns:
-        Generator that yields lines from the file. Behave similarly to the
-        file.readline() function, except the lines are returned from the back
-        of the file.
+    Yields:
+        Lines from the back of the file.
+
+    Raises:
+        TypeError: If m_file is the name of the file (expect file stream).
+
+    Warnings:
+        If max_mem is smaller than blk_size.
     """
-    # Check if the file stream is a bit stream or not
-    is_text = isinstance(m_file, io.TextIOWrapper)
+    # Check for illegal usage
+    if isinstance(m_file, (str, Path)):
+        raise TypeError("expect a file stream, not file name")
 
-    try:
-        file_size = os.path.getsize(m_file.name)
-    except AttributeError:
-        # Bz2 files do not have name attribute. Just set file_size to above
-        # max_mem for now.
-        file_size = max_mem + 1
+    # Generate line ending
+    l_end: Literal["\r\n", "\n"] = _get_line_ending(m_file)
+    len_l_end: Literal[1, 2] = cast(Literal[1, 2], len(l_end))
 
-    # If the file size is within our desired RAM use, just reverse it in memory
-    # GZip files must use this method because there is no way to negative seek
-    # For windows, we also read the whole file.
-    if file_size < max_mem or isinstance(m_file, gzip.GzipFile) or os.name == "nt":
-        for line in reversed(m_file.readlines()):
-            yield line.rstrip()
+    # Bz2 files do not have "name" attribute, just set to max_mem for now
+    if hasattr(m_file, "name"):
+        file_size: int = os.path.getsize(m_file.name)
     else:
+        file_size = max_mem
+
+    # If the file size is within desired RAM limit, just reverse it in memory.
+    # Gzip files must use this method because there is no way to negative seek.
+    if file_size < max_mem or isinstance(m_file, gzip.GzipFile):
+        for line in reversed(m_file.readlines()):
+            yield line if isinstance(line, str) else cast(bytes, line).decode("utf-8")
+
+    else:
+        # RAM limit should be greater than block size,
+        # as file is read into RAM one block each time.
+        if max_mem < blk_size:
+            warnings.warn(f"{max_mem=} smaller than {blk_size=}", stacklevel=2)
+
+        # For bz2 files, seek is expensive. It is therefore in our best
+        # interest to maximize the block size within RAM usage limit.
         if isinstance(m_file, bz2.BZ2File):
-            # for bz2 files, seeks are expensive. It is therefore in our best
-            # interest to maximize the blk_size within limits of desired RAM
-            # use.
             blk_size = min(max_mem, file_size)
 
-        buf = ""
-        m_file.seek(0, 2)
-        lastchar = m_file.read(1) if is_text else m_file.read(1).decode("utf-8")
+        # Check if the file stream is text (instead of binary)
+        is_text: bool = isinstance(m_file, io.TextIOWrapper)
 
-        trailing_newline = lastchar == os.linesep
+        buffer: str = ""
+        m_file.seek(0, 2)
+        skipped_1st_l_end: bool = False
 
         while True:
-            newline_pos = buf.rfind(os.linesep)
-            pos = m_file.tell()
-            if newline_pos != -1:
-                # Found a newline
-                line = buf[newline_pos + 1 :]
-                buf = buf[:newline_pos]
-                if pos or newline_pos or trailing_newline:
-                    line += os.linesep
-                yield line
+            l_end_pos: int = buffer.rfind(l_end)
+            # Pointer position (also size of remaining file)
+            pt_pos: int = m_file.tell()
 
-            elif pos:
-                # Need to fill buffer
-                toread = min(blk_size, pos)
-                m_file.seek(pos - toread, 0)
-                if is_text:
-                    buf = m_file.read(toread) + buf
+            # Line ending found within buffer
+            if l_end_pos != -1:
+                line = buffer[l_end_pos + len_l_end :]
+                buffer = buffer[:l_end_pos]  # buffer doesn't include l_end
+
+                # Skip first match (the last line ending)
+                if skipped_1st_l_end:
+                    yield line + l_end
                 else:
-                    buf = m_file.read(toread).decode("utf-8") + buf
-                m_file.seek(pos - toread, 0)
-                if pos == toread:
-                    buf = os.linesep + buf
+                    skipped_1st_l_end = True
 
-            else:
-                # Start-of-file
+            # Line ending not in current buffer, load next block into the buffer
+            elif pt_pos > 0:
+                to_read: int = min(blk_size, pt_pos)
+                m_file.seek(pt_pos - to_read)
+                if is_text:
+                    buffer = cast(str, m_file.read(to_read)) + buffer
+                else:
+                    buffer = cast(bytes, m_file.read(to_read)).decode("utf-8") + buffer
+
+                # Move pointer forward
+                m_file.seek(pt_pos - to_read)
+
+                # Add a l_end to the start of file
+                if pt_pos == to_read:
+                    buffer = l_end + buffer
+
+            # Start of file
+            else:  # l_end_pos == -1 and pt_post == 0
                 return
 
 
@@ -266,8 +432,7 @@ def get_open_fds() -> int:
     """
     Get the number of open file descriptors for current process.
 
-    Warnings:
-        Will only work on UNIX-like OS-es.
+    Warning, this will only work on UNIX-like OS.
 
     Returns:
         int: The number of open file descriptors for current process.
