@@ -22,10 +22,15 @@ except ImportError:
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Any, Optional, TextIO
+    from typing import Any, Literal, TextIO
 
 
-def loadfn(fn: str | Path, *args, fmt: Optional[str] = None, **kwargs) -> Any:
+def loadfn(
+    fn: str | Path,
+    *args,
+    fmt: Literal["json", "yaml", "mpk"] | None = None,
+    **kwargs,
+) -> Any:
     """
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -39,9 +44,8 @@ def loadfn(fn: str | Path, *args, fmt: Optional[str] = None, **kwargs) -> Any:
     Args:
         fn (str/Path): filename or pathlib.Path.
         *args: Any of the args supported by json/yaml.load.
-        fmt (string): If specified, the fmt specified would be used instead
-            of autodetection from filename. Supported formats right now are
-            "json", "yaml" or "mpk".
+        fmt ("json" | "yaml" | "mpk"): If specified, the fmt specified would
+            be used instead of autodetection from filename.
         **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
@@ -81,7 +85,13 @@ def loadfn(fn: str | Path, *args, fmt: Optional[str] = None, **kwargs) -> Any:
             raise TypeError(f"Invalid format: {fmt}")
 
 
-def dumpfn(obj: object, fn: str | Path, *args, fmt=None, **kwargs) -> None:
+def dumpfn(
+    obj: object,
+    fn: str | Path,
+    *args,
+    fmt: Literal["json", "yaml", "mpk"] | None = None,
+    **kwargs,
+) -> None:
     """
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -95,6 +105,8 @@ def dumpfn(obj: object, fn: str | Path, *args, fmt=None, **kwargs) -> None:
     Args:
         obj (object): Object to dump.
         fn (str/Path): filename or pathlib.Path.
+        fmt ("json" | "yaml" | "mpk"): If specified, the fmt specified would
+            be used instead of autodetection from filename.
         *args: Any of the args supported by json/yaml.dump.
         **kwargs: Any of the kwargs supported by json/yaml.dump.
 
