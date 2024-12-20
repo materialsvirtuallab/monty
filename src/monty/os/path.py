@@ -12,7 +12,7 @@ from monty.fnmatch import WildCard
 from monty.string import list_strings
 
 if TYPE_CHECKING:
-    from typing import Callable, Literal, Optional, Union
+    from typing import Callable, Literal, Optional
 
 
 def zpath(filename: str | Path) -> str:
@@ -41,7 +41,7 @@ def zpath(filename: str | Path) -> str:
 
 def find_exts(
     top: str,
-    exts: Union[str, list[str]],
+    exts: str | list[str],
     exclude_dirs: Optional[str] = None,
     include_dirs: Optional[str] = None,
     match_mode: Literal["basename", "abspath"] = "basename",

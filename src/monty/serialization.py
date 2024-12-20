@@ -22,10 +22,10 @@ except ImportError:
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Any, Optional, TextIO, Union
+    from typing import Any, Optional, TextIO
 
 
-def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> Any:
+def loadfn(fn: str | Path, *args, fmt: Optional[str] = None, **kwargs) -> Any:
     """
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -81,7 +81,7 @@ def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> 
             raise TypeError(f"Invalid format: {fmt}")
 
 
-def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None:
+def dumpfn(obj: object, fn: str | Path, *args, fmt=None, **kwargs) -> None:
     """
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
