@@ -68,10 +68,10 @@ def loadfn(
             )
         if "object_hook" not in kwargs:
             kwargs["object_hook"] = object_hook
-        with zopen(fn, "rb") as fp:
+        with zopen(fn, mode="rb") as fp:
             return msgpack.load(fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, "rt", encoding="utf-8") as fp:
+        with zopen(fn, mode="rt", encoding="utf-8") as fp:
             if fmt == "yaml":
                 if YAML is None:
                     raise RuntimeError("Loading of YAML files requires ruamel.yaml.")
@@ -129,10 +129,10 @@ def dumpfn(
             )
         if "default" not in kwargs:
             kwargs["default"] = default
-        with zopen(fn, "wb") as fp:
+        with zopen(fn, mode="wb") as fp:
             msgpack.dump(obj, fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, "wt", encoding="utf-8") as fp:
+        with zopen(fn, mode="wt", encoding="utf-8") as fp:
             fp = cast(TextIO, fp)
 
             if fmt == "yaml":

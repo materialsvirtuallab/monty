@@ -143,7 +143,7 @@ def _get_line_ending(
         If file is empty, "\n" would be used as default.
     """
     if isinstance(file, (str, Path)):
-        with zopen(file, "rb") as f:
+        with zopen(file, mode="rb") as f:
             first_line = f.readline()
     elif isinstance(file, io.TextIOWrapper):
         first_line = file.buffer.readline()  # type: ignore[attr-defined]
@@ -189,7 +189,7 @@ def reverse_readfile(
     l_end = _get_line_ending(filename)
     len_l_end = len(l_end)
 
-    with zopen(filename, "rb") as file:
+    with zopen(filename, mode="rb") as file:
         if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
             for line in reversed(file.readlines()):
                 # "readlines" would keep the line end character

@@ -49,7 +49,7 @@ def regrep(
     gen = (
         reverse_readfile(filename)
         if reverse
-        else zopen(filename, "rt", encoding="utf-8")
+        else zopen(filename, mode="rt", encoding="utf-8")
     )
     for i, line in enumerate(gen):
         for k, p in compiled.items():
