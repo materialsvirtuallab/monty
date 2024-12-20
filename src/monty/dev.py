@@ -17,15 +17,15 @@ from datetime import datetime
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from typing import Callable, Optional, Type
+    from typing import Callable, Type
 
 logger = logging.getLogger(__name__)
 
 
 def deprecated(
-    replacement: Optional[Callable | str] = None,
+    replacement: Callable | str | None = None,
     message: str = "",
-    deadline: Optional[tuple[int, int, int]] = None,
+    deadline: tuple[int, int, int] | None = None,
     category: Type[Warning] = FutureWarning,
 ) -> Callable:
     """
@@ -34,7 +34,7 @@ def deprecated(
     Args:
         replacement (Callable | str): A replacement class or function.
         message (str): A warning message to be displayed.
-        deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
+        deadline (tuple[int, int, int] | None): Optional deadline for removal
             of the old function/class, in format (yyyy, MM, dd). A CI warning would
             be raised after this date if is running in code owner' repo.
         category (Warning): Choose the category of the warning to issue. Defaults
