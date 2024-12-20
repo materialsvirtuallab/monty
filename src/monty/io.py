@@ -76,11 +76,12 @@ def zopen(
             stacklevel=2,
         )
 
-    # Warn against default `encoding` in text mode if `PYTHONWARNDEFAULTENCODING` is set
+    # Warn against default `encoding` in text mode if
+    # `PYTHONWARNDEFAULTENCODING` environment variable is set (PEP 597)
     if (
-        os.getenv("PYTHONWARNDEFAULTENCODING", False)
-        and "t" in mode
+        "t" in mode
         and kwargs.get("encoding", None) is None
+        and os.getenv("PYTHONWARNDEFAULTENCODING", False)
     ):
         warnings.warn(
             "We strongly encourage explicit `encoding`, "
