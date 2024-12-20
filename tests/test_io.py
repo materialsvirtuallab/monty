@@ -9,7 +9,6 @@ from pathlib import Path
 import pytest
 
 from monty.io import (
-    EncodingWarning,
     FileLock,
     FileLockException,
     _get_line_ending,
