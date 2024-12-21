@@ -78,17 +78,14 @@ def zopen(
 
     # Warn against default `encoding` in text mode if
     # `PYTHONWARNDEFAULTENCODING` environment variable is set (PEP 597)
-    if (
-        "t" in mode
-        and kwargs.get("encoding", None) is None
-        and os.getenv("PYTHONWARNDEFAULTENCODING", False)
-    ):
-        warnings.warn(
-            "We strongly encourage explicit `encoding`, "
-            "and we would use UTF-8 by default as per PEP 686",
-            category=EncodingWarning,
-            stacklevel=2,
-        )
+    if "t" in mode and kwargs.get("encoding", None) is None:
+        if os.getenv("PYTHONWARNDEFAULTENCODING", False):
+            warnings.warn(
+                "We strongly encourage explicit `encoding`, "
+                "and we would use UTF-8 by default as per PEP 686",
+                category=EncodingWarning,
+                stacklevel=2,
+            )
         kwargs["encoding"] = "utf-8"
 
     _name, ext = os.path.splitext(filename)
