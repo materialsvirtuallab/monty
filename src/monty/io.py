@@ -32,7 +32,7 @@ def zopen(
     This function wraps around `[bz2/gzip/lzma].open` and `open`
     to deal intelligently with compressed or uncompressed files.
     Supports context manager:
-        `with zopen(filename, mode="rt", ...)`.
+        `with zopen(filename, mode="rt", ...)`
 
     Important Notes:
         - Default `mode` should not be used, and would not be allow
@@ -40,11 +40,12 @@ def zopen(
         - Always explicitly specify binary/text in `mode`, i.e.
             always pass `t` or `b` in `mode`, implicit binary/text
             mode would not be allow in future versions.
-        - Always provide an explicit `encoding` in text mode.
+        - Always provide an explicit `encoding` in text mode, it would
+            be set to UTF-8 by default otherwise.
 
     Args:
         filename (str | Path): The file to open.
-        mode (str): The mode in which the file is opened, you MUST
+        mode (str): The mode in which the file is opened, you should
             explicitly specify "b" for binary or "t" for text.
         **kwargs: Additional keyword arguments to pass to `open`.
 
