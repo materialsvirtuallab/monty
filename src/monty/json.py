@@ -355,20 +355,9 @@ class MSONable:
         custom_schema = cls._generic_json_schema()
         field_schema.update(custom_schema)
 
-    def _get_partial_json(self, json_kwargs, pickle_kwargs):
-        """Used with the save method. Gets the json representation of a class
-        with the unserializable components sustituted for hash references."""
-
-        if pickle_kwargs is None:
-            pickle_kwargs = {}
-        if json_kwargs is None:
-            json_kwargs = {}
-        encoder = MontyEncoder(allow_unserializable_objects=True, **json_kwargs)
-        encoded = encoder.encode(self)
-        return encoder, encoded, json_kwargs, pickle_kwargs
-
     def get_partial_json(self, json_kwargs=None, pickle_kwargs=None):
-        """
+        """Process a dictionary that may contain unhashable object.
+
         Parameters
         ----------
         json_kwargs : dict
@@ -382,14 +371,8 @@ class MSONable:
             The json encoding of the class and the name-object map if one is
             required, otherwise None.
         """
-
-        encoder, encoded, json_kwargs, pickle_kwargs = self._get_partial_json(
-            json_kwargs, pickle_kwargs
-        )
-        name_object_map = encoder._name_object_map
-        if len(name_object_map) == 0:
-            name_object_map = None
-        return encoded, name_object_map, json_kwargs, pickle_kwargs
+        encoded, name_object_map = partial_monty_decode(self, json_kwargs=json_kwargs)
+        return encoded, name_object_map
 
     def save(
         self,
@@ -432,9 +415,10 @@ class MSONable:
         json_path = Path(json_path)
         save_dir = json_path.parent
 
-        encoded, name_object_map, json_kwargs, pickle_kwargs = self.get_partial_json(
-            json_kwargs, pickle_kwargs
-        )
+        json_kwargs = json_kwargs or {}
+        pickle_kwargs = pickle_kwargs or {}
+
+        encoded, name_object_map = self.get_partial_json(json_kwargs, pickle_kwargs)
 
         if mkdir:
             save_dir.mkdir(exist_ok=True, parents=True)
@@ -1063,3 +1047,38 @@ def _serialize_callable(o):
         "@callable": getattr(o, "__qualname__", o.__name__),
         "@bound": bound,
     }
+
+
+def _get_partial_json(obj, json_kwargs):
+    """Used with the save method. Gets the json representation of a class
+    with the unserializable components sustituted for hash references."""
+    encoder = MontyEncoder(allow_unserializable_objects=True, **json_kwargs)
+    encoded = encoder.encode(obj)
+    return encoder, encoded, json_kwargs
+
+
+def partial_monty_decode(obj, json_kwargs=None):
+    """Encode an object that may contain unhashable parts.
+
+    Parameters
+    ----------
+    json_kwargs : dict
+        Keyword arguments to pass to the serializer.
+    pickle_kwargs : dict
+        Keyword arguments to pass to pickle.dump.
+
+    Returns
+    -------
+    str, dict
+        The json encoding of the class and the name-object map if one is
+        required, otherwise None.
+    """
+    encoder, encoded = _get_partial_json(
+        obj=obj,
+        json_kwargs=json_kwargs,
+    )
+
+    name_object_map = encoder._name_object_map
+    if len(name_object_map) == 0:
+        name_object_map = None
+    return encoded, name_object_map
