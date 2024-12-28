@@ -905,7 +905,8 @@ def jsanitize(
             jsanitize will try to get the as_dict() attribute of the object. If
             no such attribute is found, an attribute error will be thrown. If
             strict is False, jsanitize will simply call str(object) to convert
-            the object to a string representation.
+            the object to a string representation.  If "skip" is provided,
+            jsanitize will skip and return the original object without modification.
         allow_bson (bool): This parameter sets the behavior when jsanitize
             encounters a bson supported type such as objectid and datetime. If
             True, such bson types will be ignored, allowing for proper
@@ -1009,7 +1010,7 @@ def jsanitize(
         except AttributeError:
             pass
 
-    if not strict:
+    if strict is False:
         return str(obj)
 
     if isinstance(obj, str):
@@ -1024,13 +1025,18 @@ def jsanitize(
             recursive_msonable=recursive_msonable,
         )
 
-    return jsanitize(
-        obj.as_dict(),
-        strict=strict,
-        allow_bson=allow_bson,
-        enum_values=enum_values,
-        recursive_msonable=recursive_msonable,
-    )
+    try:
+        return jsanitize(
+            obj.as_dict(),
+            strict=strict,
+            allow_bson=allow_bson,
+            enum_values=enum_values,
+            recursive_msonable=recursive_msonable,
+        )
+    except Exception as exc_:
+        if strict == "skip":
+            return obj
+        raise exc_
 
 
 def _serialize_callable(o):
