@@ -54,13 +54,13 @@ def deprecated(
         def _is_in_owner_repo() -> bool:
             """Check if is running in code owner's repo.
             Only generate reliable check when `git` is installed and remote name
-            is "origin".
+            is "upstream".
             """
 
             try:
                 # Get current running repo
                 result = subprocess.run(
-                    ["git", "config", "--get", "remote.origin.url"],
+                    ["git", "config", "--get", "remote.upstream.url"],
                     stdout=subprocess.PIPE,
                 )
                 owner_repo = (
