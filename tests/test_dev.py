@@ -168,64 +168,81 @@ class TestDeprecated:
         assert old_class.__doc__ == "A dummy old class for tests."
         assert old_class.class_attrib_old == "OLD_ATTRIB"
 
-    def test_deadline(self, monkeypatch):
-        with pytest.warns(
-            DeprecationWarning, match="This function should have been removed"
+    @pytest.mark.parametrize(
+        "repo_url",
+        (
+            "git@github.com:TESTOWNER/TESTREPO.git",  # SSH clone
+            "https://github.com/TESTOWNER/TESTREPO.git",  # HTTPS clone
+        ),
+    )
+    def test_deadline(self, monkeypatch, repo_url):
+        with (
+            pytest.warns(
+                DeprecationWarning, match="This function should have been removed"
+            ),
+            patch("subprocess.run") as mock_run,
         ):
-            with patch("subprocess.run") as mock_run:
-                monkeypatch.setenv("CI", "true")  # mock CI env
+            monkeypatch.setenv("CI", "true")  # mock CI env
 
-                # Mock "GITHUB_REPOSITORY"
-                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
-                mock_run.return_value.stdout.decode.return_value = (
-                    "git@github.com:TESTOWNER/TESTREPO.git"
-                )
+            # Mock "GITHUB_REPOSITORY" to return "upstream URL"
+            monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+            mock_run.return_value.stdout.decode.return_value = repo_url
 
-                @deprecated(deadline=(2000, 1, 1))
-                def func_old():
-                    pass
+            @deprecated(deadline=(2000, 1, 1))
+            def func_old():
+                pass
 
     def test_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be emitted."""
 
-        # No warn case 1: date before deadline
+        # Case 1: date before deadline
+        with warnings.catch_warnings(), patch("subprocess.run") as mock_run:
+            warnings.filterwarnings(
+                "error", "should have been removed", DeprecationWarning
+            )
+
+            monkeypatch.setenv("CI", "true")  # mock CI env
+
+            # Mock "GITHUB_REPOSITORY"
+            monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+            mock_run.return_value.stdout.decode.return_value = (
+                "git@github.com:TESTOWNER/TESTREPO.git"
+            )
+
+            @deprecated(deadline=(9999, 1, 1))
+            def func_old():
+                pass
+
+        monkeypatch.undo()
+
+        # Case 2: not in CI env
+        with warnings.catch_warnings(), patch("subprocess.run") as mock_run:
+            warnings.filterwarnings(
+                "error", "should have been removed", DeprecationWarning
+            )
+
+            monkeypatch.delenv("CI", raising=False)
+
+            # Mock "GITHUB_REPOSITORY"
+            monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
+            mock_run.return_value.stdout.decode.return_value = (
+                "git@github.com:TESTOWNER/TESTREPO.git"
+            )
+
+            @deprecated(deadline=(2000, 1, 1))
+            def func_old_1():
+                pass
+
+        monkeypatch.undo()
+
+        # Case 3: not in code owner (upstream) repo
         with warnings.catch_warnings():
-            with patch("subprocess.run") as mock_run:
-                monkeypatch.setenv("CI", "true")  # mock CI env
+            warnings.filterwarnings(
+                "error", "should have been removed", DeprecationWarning
+            )
 
-                # Mock "GITHUB_REPOSITORY"
-                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
-                mock_run.return_value.stdout.decode.return_value = (
-                    "git@github.com:TESTOWNER/TESTREPO.git"
-                )
-
-                @deprecated(deadline=(9999, 1, 1))
-                def func_old():
-                    pass
-
-            monkeypatch.undo()
-
-        # No warn case 2: not in CI env
-        with warnings.catch_warnings():
-            with patch("subprocess.run") as mock_run:
-                monkeypatch.delenv("CI", raising=False)
-
-                # Mock "GITHUB_REPOSITORY"
-                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
-                mock_run.return_value.stdout.decode.return_value = (
-                    "git@github.com:TESTOWNER/TESTREPO.git"
-                )
-
-                @deprecated(deadline=(2000, 1, 1))
-                def func_old_1():
-                    pass
-
-            monkeypatch.undo()
-
-        # No warn case 3: not in code owner repo
-        with warnings.catch_warnings():
             monkeypatch.setenv("CI", "true")
-            monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
+            monkeypatch.setenv("GITHUB_REPOSITORY", "OTHERUSER/OTHERREPO")
 
             @deprecated(deadline=(2000, 1, 1))
             def func_old_2():
