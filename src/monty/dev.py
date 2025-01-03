@@ -8,8 +8,6 @@ from __future__ import annotations
 import functools
 import inspect
 import logging
-import os
-import subprocess
 import sys
 import warnings
 from dataclasses import is_dataclass
@@ -35,8 +33,7 @@ def deprecated(
         replacement (Callable | str): A replacement class or function.
         message (str): A warning message to be displayed.
         deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
-            of the old function/class, in format (yyyy, MM, dd). DeprecationWarning
-            would be emitted after this date if is running in code owner' repo.
+            of the old function/class, in format (yyyy, MM, dd).
         category (Warning): Choose the category of the warning to issue. Defaults
             to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.
@@ -47,47 +44,6 @@ def deprecated(
     Returns:
         Original function/class, but with a warning to use the replacement.
     """
-
-    def emit_deadline_warning() -> None:
-        """Emit DeprecationWarning after removal deadline in code owner's repo."""
-
-        def _is_in_owner_repo() -> bool:
-            """Check if is running in code owner's repo.
-            Only generate reliable check when `git` is installed and remote name
-            is "upstream".
-            """
-
-            try:
-                # Get upstream (code owner) repo
-                result = subprocess.run(
-                    ["git", "config", "--get", "remote.upstream.url"],
-                    stdout=subprocess.PIPE,
-                )
-                owner_repo = (
-                    result.stdout.decode("utf-8")
-                    .strip()
-                    .lstrip("https://github.com/")  # HTTPS clone
-                    .lstrip("git@github.com:")  # SSH clone
-                    .rstrip(".git")  # SSH clone
-                )
-
-                return owner_repo == os.getenv("GITHUB_REPOSITORY")
-
-            except (subprocess.CalledProcessError, FileNotFoundError):
-                return False
-
-        # Only emit warning in code owner's repo CI
-        if (
-            _deadline is not None
-            and os.getenv("CI") is not None
-            and datetime.now() > _deadline
-            and _is_in_owner_repo()
-        ):
-            warnings.warn(
-                f"This function should have been removed on {_deadline:%Y-%m-%d}.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
 
     def craft_message(
         old: Callable,
@@ -154,9 +110,6 @@ def deprecated(
 
     # Convert deadline to `datetime` type
     _deadline: datetime | None = datetime(*deadline) if deadline is not None else None
-
-    # Emit CI warning after removal deadline
-    emit_deadline_warning()
 
     def decorator(target: Callable) -> Callable:
         if inspect.isfunction(target):
