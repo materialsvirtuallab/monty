@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 import unittest
 import warnings
 from dataclasses import dataclass
@@ -14,8 +13,8 @@ from monty.dev import deprecated, install_excepthook, requires
 warnings.simplefilter("always")
 
 
-class TestDecorator:
-    def test_deprecated(self):
+class TestDeprecated:
+    def test_basic_usage(self):
         def func_replace():
             pass
 
@@ -35,7 +34,7 @@ class TestDecorator:
         assert func_old.__name__ == "func_old"
         assert func_old.__doc__ == "This is the old function."
 
-    def test_deprecated_str_replacement(self):
+    def test_str_replacement(self):
         @deprecated("func_replace")
         def func_old():
             pass
@@ -47,7 +46,7 @@ class TestDecorator:
             assert issubclass(w[0].category, FutureWarning)
             assert "use func_replace instead" in str(w[0].message)
 
-    def test_deprecated_property(self):
+    def test_property(self):
         class TestClass:
             """A dummy class for tests."""
 
@@ -76,7 +75,7 @@ class TestDecorator:
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
-    def test_deprecated_classmethod(self):
+    def test_classmethod(self):
         class TestClass:
             """A dummy class for tests."""
 
@@ -110,7 +109,7 @@ class TestDecorator:
         with pytest.warns(DeprecationWarning):
             assert TestClass_deprecationwarning().classmethod_b() == "b"
 
-    def test_deprecated_class(self):
+    def test_class(self):
         class TestClassNew:
             """A dummy class for tests."""
 
@@ -137,7 +136,7 @@ class TestDecorator:
 
         assert old_class.method_b.__doc__ == "This is method_b."
 
-    def test_deprecated_dataclass(self):
+    def test_dataclass(self):
         @dataclass
         class TestClassNew:
             """A dummy class for tests."""
@@ -169,7 +168,7 @@ class TestDecorator:
         assert old_class.__doc__ == "A dummy old class for tests."
         assert old_class.class_attrib_old == "OLD_ATTRIB"
 
-    def test_deprecated_deadline(self, monkeypatch):
+    def test_deadline(self, monkeypatch):
         with pytest.warns(
             DeprecationWarning, match="This function should have been removed"
         ):
@@ -186,7 +185,7 @@ class TestDecorator:
                 def func_old():
                     pass
 
-    def test_deprecated_deadline_no_warn(self, monkeypatch):
+    def test_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be emitted."""
 
         # No warn case 1: date before deadline
@@ -232,34 +231,36 @@ class TestDecorator:
             def func_old_2():
                 pass
 
-    def test_requires(self):
-        try:
-            import fictitious_mod
-        except ImportError:
-            fictitious_mod = None
 
-        err_msg = "fictitious_mod is not present."
+def test_requires():
+    try:
+        import fictitious_mod
+    except ImportError:
+        fictitious_mod = None
 
-        @requires(fictitious_mod is not None, err_msg)
-        def use_fictitious_mod():
-            print("success")
+    err_msg = "fictitious_mod is not present."
 
-        with pytest.raises(RuntimeError, match=err_msg):
-            use_fictitious_mod()
+    @requires(fictitious_mod is not None, err_msg)
+    def use_fictitious_mod():
+        print("success")
 
-        @requires(unittest is not None, "unittest is not present.")
-        def use_unittest():
-            return "success"
+    with pytest.raises(RuntimeError, match=err_msg):
+        use_fictitious_mod()
 
-        assert use_unittest() == "success"
+    @requires(unittest is not None, "unittest is not present.")
+    def use_unittest():
+        return "success"
 
-        # test with custom error class
-        @requires(False, "expect ImportError", err_cls=ImportError)
-        def use_import_error():
-            return "success"
+    assert use_unittest() == "success"
 
-        with pytest.raises(ImportError, match="expect ImportError"):
-            use_import_error()
+    # test with custom error class
+    @requires(False, "expect ImportError", err_cls=ImportError)
+    def use_import_error():
+        return "success"
 
-    def test_install_except_hook(self):
-        install_excepthook()
+    with pytest.raises(ImportError, match="expect ImportError"):
+        use_import_error()
+
+
+def test_install_except_hook():
+    install_excepthook()
