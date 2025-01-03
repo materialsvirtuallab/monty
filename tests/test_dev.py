@@ -170,7 +170,9 @@ class TestDecorator:
         assert old_class.class_attrib_old == "OLD_ATTRIB"
 
     def test_deprecated_deadline(self, monkeypatch):
-        with pytest.raises(DeprecationWarning):
+        with pytest.warns(
+            DeprecationWarning, match="This function should have been removed"
+        ):
             with patch("subprocess.run") as mock_run:
                 monkeypatch.setenv("CI", "true")  # mock CI env
 
@@ -184,7 +186,6 @@ class TestDecorator:
                 def func_old():
                     pass
 
-    @pytest.fixture()
     def test_deprecated_deadline_no_warn(self, monkeypatch):
         """Test cases where no warning should be raised."""
 
@@ -193,18 +194,13 @@ class TestDecorator:
             with patch("subprocess.run") as mock_run:
                 monkeypatch.setenv("CI", "true")  # mock CI env
 
-                # Mock date to 1999-01-01
-                monkeypatch.setattr(
-                    datetime.datetime, "now", datetime.datetime(1999, 1, 1)
-                )
-
                 # Mock "GITHUB_REPOSITORY"
                 monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
                 mock_run.return_value.stdout.decode.return_value = (
                     "git@github.com:TESTOWNER/TESTREPO.git"
                 )
 
-                @deprecated(deadline=(2000, 1, 1))
+                @deprecated(deadline=(9999, 1, 1))
                 def func_old():
                     pass
 
