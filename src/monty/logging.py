@@ -13,8 +13,6 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Callable
 
-logger = logging.getLogger(__name__)
-
 
 def logged(level: int = logging.DEBUG) -> Callable:
     """
