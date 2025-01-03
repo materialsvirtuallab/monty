@@ -18,7 +18,7 @@ class TestDeprecated:
         def func_replace():
             pass
 
-        @deprecated(func_replace, "Use func_replace instead")
+        @deprecated(func_replace, "Use func_replace instead", deadline=(2025, 1, 1))
         def func_old():
             """This is the old function."""
             pass
@@ -26,9 +26,10 @@ class TestDeprecated:
         with warnings.catch_warnings(record=True) as w:
             # Trigger a warning.
             func_old()
-            # Verify Warning and message
+
             assert issubclass(w[0].category, FutureWarning)
             assert "Use func_replace instead" in str(w[0].message)
+            assert "will be removed on 2025-01-01" in str(w[0].message)
 
         # Check metadata preservation
         assert func_old.__name__ == "func_old"
