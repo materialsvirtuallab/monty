@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import functools
 import inspect
-import logging
 import sys
 import warnings
 from dataclasses import is_dataclass
@@ -16,8 +15,6 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from typing import Callable, Optional, Type
-
-logger = logging.getLogger(__name__)
 
 
 def deprecated(
