@@ -43,7 +43,7 @@ def deprecated(
             the choice accordingly.
 
     Returns:
-        Original function, but with a warning to use the updated function.
+        Original function/class, but with a warning to use the replacement.
     """
 
     def craft_message(
@@ -109,7 +109,7 @@ def deprecated(
 
         return cls
 
-    # Convert deadline to datetime type
+    # Convert deadline to `datetime` type
     _deadline: datetime | None = datetime(*deadline) if deadline is not None else None
 
     # Emit DeprecationWarning after removal deadline
