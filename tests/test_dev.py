@@ -187,7 +187,7 @@ class TestDecorator:
                     pass
 
     def test_deprecated_deadline_no_warn(self, monkeypatch):
-        """Test cases where no warning should be raised."""
+        """Test cases where no warning should be emitted."""
 
         # No warn case 1: date before deadline
         with warnings.catch_warnings():
