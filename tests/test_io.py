@@ -427,7 +427,6 @@ class TestZopen:
         with (
             pytest.warns(FutureWarning, match="compress LZW-compressed files"),
             pytest.raises(gzip.BadGzipFile, match="Not a gzipped file"),
-            pytest.warns(FutureWarning, match="compress LZW-compressed files"),
             zopen(f"{TEST_DIR}/real_lzw_file.txt.Z", "rt", encoding="utf-8") as f,
         ):
             f.read()
