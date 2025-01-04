@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import datetime
 import unittest
 import warnings
 from dataclasses import dataclass
@@ -14,12 +13,12 @@ from monty.dev import deprecated, install_excepthook, requires
 warnings.simplefilter("always")
 
 
-class TestDecorator:
-    def test_deprecated(self):
+class TestDeprecated:
+    def test_basic_usage(self):
         def func_replace():
             pass
 
-        @deprecated(func_replace, "Use func_replace instead")
+        @deprecated(func_replace, "Use func_replace instead", deadline=(2025, 1, 1))
         def func_old():
             """This is the old function."""
             pass
@@ -27,15 +26,16 @@ class TestDecorator:
         with warnings.catch_warnings(record=True) as w:
             # Trigger a warning.
             func_old()
-            # Verify Warning and message
+
             assert issubclass(w[0].category, FutureWarning)
             assert "Use func_replace instead" in str(w[0].message)
+            assert "will be removed on 2025-01-01" in str(w[0].message)
 
         # Check metadata preservation
         assert func_old.__name__ == "func_old"
         assert func_old.__doc__ == "This is the old function."
 
-    def test_deprecated_str_replacement(self):
+    def test_str_replacement(self):
         @deprecated("func_replace")
         def func_old():
             pass
@@ -47,7 +47,7 @@ class TestDecorator:
             assert issubclass(w[0].category, FutureWarning)
             assert "use func_replace instead" in str(w[0].message)
 
-    def test_deprecated_property(self):
+    def test_property(self):
         class TestClass:
             """A dummy class for tests."""
 
@@ -76,7 +76,7 @@ class TestDecorator:
             # Verify some things
             assert issubclass(w[-1].category, FutureWarning)
 
-    def test_deprecated_classmethod(self):
+    def test_classmethod(self):
         class TestClass:
             """A dummy class for tests."""
 
@@ -110,7 +110,7 @@ class TestDecorator:
         with pytest.warns(DeprecationWarning):
             assert TestClass_deprecationwarning().classmethod_b() == "b"
 
-    def test_deprecated_class(self):
+    def test_class(self):
         class TestClassNew:
             """A dummy class for tests."""
 
@@ -137,7 +137,7 @@ class TestDecorator:
 
         assert old_class.method_b.__doc__ == "This is method_b."
 
-    def test_deprecated_dataclass(self):
+    def test_dataclass(self):
         @dataclass
         class TestClassNew:
             """A dummy class for tests."""
@@ -169,101 +169,36 @@ class TestDecorator:
         assert old_class.__doc__ == "A dummy old class for tests."
         assert old_class.class_attrib_old == "OLD_ATTRIB"
 
-    def test_deprecated_deadline(self, monkeypatch):
-        with pytest.raises(DeprecationWarning):
-            with patch("subprocess.run") as mock_run:
-                monkeypatch.setenv("CI", "true")  # mock CI env
 
-                # Mock "GITHUB_REPOSITORY"
-                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
-                mock_run.return_value.stdout.decode.return_value = (
-                    "git@github.com:TESTOWNER/TESTREPO.git"
-                )
+def test_requires():
+    try:
+        import fictitious_mod
+    except ImportError:
+        fictitious_mod = None
 
-                @deprecated(deadline=(2000, 1, 1))
-                def func_old():
-                    pass
+    err_msg = "fictitious_mod is not present."
 
-    @pytest.fixture()
-    def test_deprecated_deadline_no_warn(self, monkeypatch):
-        """Test cases where no warning should be raised."""
+    @requires(fictitious_mod is not None, err_msg)
+    def use_fictitious_mod():
+        print("success")
 
-        # No warn case 1: date before deadline
-        with warnings.catch_warnings():
-            with patch("subprocess.run") as mock_run:
-                monkeypatch.setenv("CI", "true")  # mock CI env
+    with pytest.raises(RuntimeError, match=err_msg):
+        use_fictitious_mod()
 
-                # Mock date to 1999-01-01
-                monkeypatch.setattr(
-                    datetime.datetime, "now", datetime.datetime(1999, 1, 1)
-                )
+    @requires(unittest is not None, "unittest is not present.")
+    def use_unittest():
+        return "success"
 
-                # Mock "GITHUB_REPOSITORY"
-                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
-                mock_run.return_value.stdout.decode.return_value = (
-                    "git@github.com:TESTOWNER/TESTREPO.git"
-                )
+    assert use_unittest() == "success"
 
-                @deprecated(deadline=(2000, 1, 1))
-                def func_old():
-                    pass
+    # test with custom error class
+    @requires(False, "expect ImportError", err_cls=ImportError)
+    def use_import_error():
+        return "success"
 
-            monkeypatch.undo()
+    with pytest.raises(ImportError, match="expect ImportError"):
+        use_import_error()
 
-        # No warn case 2: not in CI env
-        with warnings.catch_warnings():
-            with patch("subprocess.run") as mock_run:
-                monkeypatch.delenv("CI", raising=False)
 
-                # Mock "GITHUB_REPOSITORY"
-                monkeypatch.setenv("GITHUB_REPOSITORY", "TESTOWNER/TESTREPO")
-                mock_run.return_value.stdout.decode.return_value = (
-                    "git@github.com:TESTOWNER/TESTREPO.git"
-                )
-
-                @deprecated(deadline=(2000, 1, 1))
-                def func_old_1():
-                    pass
-
-            monkeypatch.undo()
-
-        # No warn case 3: not in code owner repo
-        with warnings.catch_warnings():
-            monkeypatch.setenv("CI", "true")
-            monkeypatch.delenv("GITHUB_REPOSITORY", raising=False)
-
-            @deprecated(deadline=(2000, 1, 1))
-            def func_old_2():
-                pass
-
-    def test_requires(self):
-        try:
-            import fictitious_mod
-        except ImportError:
-            fictitious_mod = None
-
-        err_msg = "fictitious_mod is not present."
-
-        @requires(fictitious_mod is not None, err_msg)
-        def use_fictitious_mod():
-            print("success")
-
-        with pytest.raises(RuntimeError, match=err_msg):
-            use_fictitious_mod()
-
-        @requires(unittest is not None, "unittest is not present.")
-        def use_unittest():
-            return "success"
-
-        assert use_unittest() == "success"
-
-        # test with custom error class
-        @requires(False, "expect ImportError", err_cls=ImportError)
-        def use_import_error():
-            return "success"
-
-        with pytest.raises(ImportError, match="expect ImportError"):
-            use_import_error()
-
-    def test_install_except_hook(self):
-        install_excepthook()
+def test_install_except_hook():
+    install_excepthook()
