@@ -1,5 +1,9 @@
 # Change log
 
+## 2025.1.3
+- Drop deadline warning in dev.deprecated 
+- allow strict="skip" for jsanitize 
+
 ## 2024.12.10
 - zopen changes: forbid implicit binary/text mode, signature change, default UTF-8 encoding in text mode, drop .z 
   support after one-year. (@DanielYang59) 

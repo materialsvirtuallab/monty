@@ -875,6 +875,50 @@ class TestJson:
         clean = jsanitize(d, strict=True)
         assert "@class" in clean["c"]
 
+    def test_unserializable_composite(self):
+        class Unserializable:
+            def __init__(self, a):
+                self._a = a
+
+            def __str__(self):
+                return "Unserializable"
+
+        class Composite(MSONable):
+            def __init__(self, name, unserializable, msonable):
+                self.name = name
+                self.unserializable = unserializable
+                self.msonable = msonable
+
+        composite_dictionary = {
+            "name": "test",
+            "unserializable": Unserializable(1),
+            "msonable": GoodMSONClass(1, 2, 3),
+        }
+
+        with pytest.raises(AttributeError):
+            jsanitize(composite_dictionary, strict=True)
+
+        composite_obj = Composite.from_dict(composite_dictionary)
+
+        with pytest.raises(AttributeError):
+            jsanitize(composite_obj, strict=True)
+
+        # Test that skip mode preserves unserializable objects
+        skipped_dict = jsanitize(composite_obj, strict="skip", recursive_msonable=True)
+        assert skipped_dict["name"] == "test", "String values should remain unchanged"
+        assert (
+            skipped_dict["unserializable"]._a == 1
+        ), "Unserializable object should be preserved in skip mode"
+        assert (
+            skipped_dict["msonable"]["a"] == 1
+        ), "MSONable object should be properly serialized"
+
+        # Test non-strict mode converts unserializable to string
+        dict_with_str = jsanitize(composite_obj, strict=False, recursive_msonable=True)
+        assert isinstance(
+            dict_with_str["unserializable"], str
+        ), "Unserializable object should be converted to string in non-strict mode"
+
     @pytest.mark.skipif(pd is None, reason="pandas not present")
     def test_jsanitize_pandas(self):
         s = pd.Series({"a": [1, 2, 3], "b": [4, 5, 6]})

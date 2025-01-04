@@ -61,7 +61,7 @@ def zopen(
     # TODO: remove default value of `mode` to force user to give one after deadline
     if mode is None:
         warnings.warn(
-            "We strongly discourage using a default `mode`, it would be"
+            "We strongly discourage using a default `mode`, it would be "
             f"set to `r` now but would not be allowed after {_deadline}",
             FutureWarning,
             stacklevel=2,
