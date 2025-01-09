@@ -906,18 +906,18 @@ class TestJson:
         # Test that skip mode preserves unserializable objects
         skipped_dict = jsanitize(composite_obj, strict="skip", recursive_msonable=True)
         assert skipped_dict["name"] == "test", "String values should remain unchanged"
-        assert (
-            skipped_dict["unserializable"]._a == 1
-        ), "Unserializable object should be preserved in skip mode"
-        assert (
-            skipped_dict["msonable"]["a"] == 1
-        ), "MSONable object should be properly serialized"
+        assert skipped_dict["unserializable"]._a == 1, (
+            "Unserializable object should be preserved in skip mode"
+        )
+        assert skipped_dict["msonable"]["a"] == 1, (
+            "MSONable object should be properly serialized"
+        )
 
         # Test non-strict mode converts unserializable to string
         dict_with_str = jsanitize(composite_obj, strict=False, recursive_msonable=True)
-        assert isinstance(
-            dict_with_str["unserializable"], str
-        ), "Unserializable object should be converted to string in non-strict mode"
+        assert isinstance(dict_with_str["unserializable"], str), (
+            "Unserializable object should be converted to string in non-strict mode"
+        )
 
     @pytest.mark.skipif(pd is None, reason="pandas not present")
     def test_jsanitize_pandas(self):
@@ -1191,9 +1191,9 @@ class TestCheckType:
 
         callable_class_instance_name = f"{type(callable_instance).__module__}.{type(callable_instance).__qualname__}"
 
-        assert _check_type(
-            callable_instance, callable_class_instance_name
-        ), callable_class_instance_name
+        assert _check_type(callable_instance, callable_class_instance_name), (
+            callable_class_instance_name
+        )
         assert isinstance(callable_instance, MyCallableClass)
 
     def test_numpy(self):
