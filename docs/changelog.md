@@ -1,5 +1,8 @@
 # Change log
 
+## 2025.1.9
+- Re-add python 3.9 support 
+
 ## 2025.1.3
 - Drop deadline warning in dev.deprecated 
 - allow strict="skip" for jsanitize 
