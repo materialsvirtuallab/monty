@@ -143,7 +143,7 @@ class TestDeprecated:
             """A dummy class for tests."""
 
             def __post_init__(self):
-                print("Hello.")
+                pass
 
             def method_a(self):
                 pass
@@ -156,7 +156,7 @@ class TestDeprecated:
             class_attrib_old = "OLD_ATTRIB"
 
             def __post_init__(self):
-                print("Hello.")
+                pass
 
             def method_b(self):
                 """This is method_b."""
@@ -180,7 +180,7 @@ def test_requires():
 
     @requires(fictitious_mod is not None, err_msg)
     def use_fictitious_mod():
-        print("success")
+        pass
 
     with pytest.raises(RuntimeError, match=err_msg):
         use_fictitious_mod()

@@ -72,11 +72,9 @@ class Command:
 
         def target(**kw):
             try:
-                # print('Thread started')
                 with Popen(self.command, **kw) as self.process:
                     self.output, self.error = self.process.communicate()
                     self.retcode = self.process.returncode
-                # print('Thread stopped')
             except Exception:
                 self.error = traceback.format_exc()
                 self.retcode = -1
@@ -94,7 +92,6 @@ class Command:
         thread.join(timeout)
 
         if thread.is_alive() and self.process is not None:
-            # print("Terminating process")
             self.process.terminate()
             self.killed = True
             thread.join()

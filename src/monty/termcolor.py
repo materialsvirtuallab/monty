@@ -128,12 +128,7 @@ def cprint(
 
     It accepts arguments of print function.
     """
-    try:
-        print((colored(text, color, on_color, attrs)), **kwargs)
-    except TypeError:
-        # flush is not supported by py2.7
-        kwargs.pop("flush", None)
-        print((colored(text, color, on_color, attrs)), **kwargs)
+    print((colored(text, color, on_color, attrs)), **kwargs)
 
 
 def colored_map(text: str, cmap: dict) -> str:
@@ -162,12 +157,7 @@ def cprint_map(text: str, cmap: dict, **kwargs) -> None:
     Examples:
         cprint_map("Hello world", {"Hello": "red"})
     """
-    try:
-        print(colored_map(text, cmap), **kwargs)
-    except TypeError:
-        # flush is not supported by py2.7
-        kwargs.pop("flush", None)
-        print(colored_map(text, cmap), **kwargs)
+    print(colored_map(text, cmap), **kwargs)
 
 
 def get_terminal_size():
