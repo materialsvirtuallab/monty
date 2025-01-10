@@ -10,6 +10,10 @@ lists.
 from __future__ import annotations
 
 import bisect as bs
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from typing import Optional
 
 __author__ = "Matteo Giantomassi"
 __copyright__ = "Copyright 2013, The Materials Virtual Lab"
@@ -19,7 +23,7 @@ __email__ = "gmatteo@gmail.com"
 __date__ = "11/09/14"
 
 
-def index(a: list[float], x: float, atol: float | None = None) -> int:
+def index(a: list[float], x: float, atol: Optional[float] = None) -> int:
     """Locate the leftmost value exactly equal to x."""
     i = bs.bisect_left(a, x)
     if i != len(a):

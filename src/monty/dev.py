@@ -18,9 +18,9 @@ if TYPE_CHECKING:
 
 
 def deprecated(
-    replacement: Callable | str | None = None,
+    replacement: Optional[Callable | str] = None,
     message: str = "",
-    deadline: tuple[int, int, int] | None = None,
+    deadline: Optional[tuple[int, int, int]] = None,
     category: Type[Warning] = FutureWarning,
 ) -> Callable:
     """
@@ -29,7 +29,7 @@ def deprecated(
     Args:
         replacement (Callable | str): A replacement class or function.
         message (str): A warning message to be displayed.
-        deadline (tuple[int, int, int] | None): Optional deadline for removal
+        deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
             of the old function/class, in format (yyyy, MM, dd). A CI warning would
             be raised after this date if is running in code owner' repo.
         category (Warning): Choose the category of the warning to issue. Defaults

@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 from monty.io import zopen
 
 if TYPE_CHECKING:
-    from typing import Literal
+    from typing import Literal, Optional
 
 
 def copy_r(src: str | Path, dst: str | Path) -> None:
@@ -76,7 +76,7 @@ def gzip_dir(path: str | Path, compresslevel: int = 6) -> None:
 def compress_file(
     filepath: str | Path,
     compression: Literal["gz", "bz2"] = "gz",
-    target_dir: str | Path | None = None,
+    target_dir: Optional[str | Path] = None,
 ) -> None:
     """
     Compresses a file with the correct extension. Functions like standard
@@ -130,7 +130,7 @@ def compress_dir(path: str | Path, compression: Literal["gz", "bz2"] = "gz") -> 
 
 
 def decompress_file(
-    filepath: str | Path, target_dir: str | Path | None = None
+    filepath: str | Path, target_dir: Optional[str | Path] = None
 ) -> str | None:
     """
     Decompresses a file with the correct extension. Automatically detects
