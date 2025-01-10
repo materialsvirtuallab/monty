@@ -22,10 +22,15 @@ except ImportError:
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Any, Optional, TextIO, Union
+    from typing import Any, Literal, TextIO, Union
 
 
-def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> Any:
+def loadfn(
+    fn: Union[str, Path],
+    *args,
+    fmt: Literal["json", "yaml", "mpk"] | None = None,
+    **kwargs,
+) -> Any:
     """
     Loads json/yaml/msgpack directly from a filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -39,9 +44,8 @@ def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> 
     Args:
         fn (str/Path): filename or pathlib.Path.
         *args: Any of the args supported by json/yaml.load.
-        fmt (string): If specified, the fmt specified would be used instead
-            of autodetection from filename. Supported formats right now are
-            "json", "yaml" or "mpk".
+        fmt ("json" | "yaml" | "mpk"): If specified, the fmt specified would
+            be used instead of autodetection from filename.
         **kwargs: Any of the kwargs supported by json/yaml.load.
 
     Returns:
@@ -64,10 +68,10 @@ def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> 
             )
         if "object_hook" not in kwargs:
             kwargs["object_hook"] = object_hook
-        with zopen(fn, "rb") as fp:
+        with zopen(fn, mode="rb") as fp:
             return msgpack.load(fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, "rt", encoding="utf-8") as fp:
+        with zopen(fn, mode="rt", encoding="utf-8") as fp:
             if fmt == "yaml":
                 if YAML is None:
                     raise RuntimeError("Loading of YAML files requires ruamel.yaml.")
@@ -81,7 +85,13 @@ def loadfn(fn: Union[str, Path], *args, fmt: Optional[str] = None, **kwargs) -> 
             raise TypeError(f"Invalid format: {fmt}")
 
 
-def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None:
+def dumpfn(
+    obj: object,
+    fn: Union[str, Path],
+    *args,
+    fmt: Literal["json", "yaml", "mpk"] | None = None,
+    **kwargs,
+) -> None:
     """
     Dump to a json/yaml directly by filename instead of a
     File-like object. File may also be a BZ2 (".BZ2") or GZIP (".GZ", ".Z")
@@ -95,6 +105,8 @@ def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None
     Args:
         obj (object): Object to dump.
         fn (str/Path): filename or pathlib.Path.
+        fmt ("json" | "yaml" | "mpk"): If specified, the fmt specified would
+            be used instead of autodetection from filename.
         *args: Any of the args supported by json/yaml.dump.
         **kwargs: Any of the kwargs supported by json/yaml.dump.
 
@@ -117,10 +129,10 @@ def dumpfn(obj: object, fn: Union[str, Path], *args, fmt=None, **kwargs) -> None
             )
         if "default" not in kwargs:
             kwargs["default"] = default
-        with zopen(fn, "wb") as fp:
+        with zopen(fn, mode="wb") as fp:
             msgpack.dump(obj, fp, *args, **kwargs)  # pylint: disable=E1101
     else:
-        with zopen(fn, "wt", encoding="utf-8") as fp:
+        with zopen(fn, mode="wt", encoding="utf-8") as fp:
             fp = cast(TextIO, fp)
 
             if fmt == "yaml":

@@ -104,7 +104,7 @@ def compress_file(
         else:
             compressed_file = f"{str(filepath)}.{compression}"
 
-        with open(filepath, "rb") as f_in, zopen(compressed_file, "wb") as f_out:
+        with open(filepath, "rb") as f_in, zopen(compressed_file, mode="wb") as f_out:
             f_out.writelines(f_in)
 
         os.remove(filepath)
@@ -157,7 +157,7 @@ def decompress_file(
         else:
             decompressed_file = str(filepath).removesuffix(file_ext)
 
-        with zopen(filepath, "rb") as f_in, open(decompressed_file, "wb") as f_out:
+        with zopen(filepath, mode="rb") as f_in, open(decompressed_file, "wb") as f_out:
             f_out.writelines(f_in)
 
         os.remove(filepath)
