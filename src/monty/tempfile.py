@@ -11,6 +11,9 @@ from typing import TYPE_CHECKING
 
 from monty.shutil import copy_r, gzip_dir, remove
 
+if TYPE_CHECKING:
+    from typing import Union
+
 
 class ScratchDir:
     """
@@ -39,7 +42,7 @@ class ScratchDir:
 
     def __init__(
         self,
-        rootpath: str | Path | None,
+        rootpath: Union[str, Path, None],
         create_symbolic_link: bool = False,
         copy_from_current_on_enter: bool = False,
         copy_to_current_on_exit: bool = False,

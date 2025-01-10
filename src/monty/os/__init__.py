@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Generator
+    from typing import Generator, Union
 
 __author__ = "Shyue Ping Ong"
 __copyright__ = "Copyright 2013, The Materials Project"
@@ -22,7 +22,7 @@ __date__ = "1/24/14"
 
 
 @contextmanager
-def cd(path: str | Path) -> Generator:
+def cd(path: Union[str, Path]) -> Generator:
     """
     A Fabric-inspired cd context that temporarily changes directory for
     performing some tasks, and returns to the original working directory
@@ -42,7 +42,7 @@ def cd(path: str | Path) -> Generator:
         os.chdir(cwd)
 
 
-def makedirs_p(path: str | Path, **kwargs) -> None:
+def makedirs_p(path: Union[str, Path], **kwargs) -> None:
     """
     Wrapper for os.makedirs that does not raise an exception if the directory
     already exists, in the fashion of "mkdir -p" command. The check is

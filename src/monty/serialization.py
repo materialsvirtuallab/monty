@@ -22,11 +22,11 @@ except ImportError:
 
 if TYPE_CHECKING:
     from pathlib import Path
-    from typing import Any, Literal, TextIO
+    from typing import Any, Literal, TextIO, Union
 
 
 def loadfn(
-    fn: str | Path,
+    fn: Union[str, Path],
     *args,
     fmt: Literal["json", "yaml", "mpk"] | None = None,
     **kwargs,
@@ -87,7 +87,7 @@ def loadfn(
 
 def dumpfn(
     obj: object,
-    fn: str | Path,
+    fn: Union[str, Path],
     *args,
     fmt: Literal["json", "yaml", "mpk"] | None = None,
     **kwargs,

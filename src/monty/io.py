@@ -19,11 +19,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal, cast
 
 if TYPE_CHECKING:
-    from typing import IO, Any, Iterator
+    from typing import IO, Any, Iterator, Union
 
 
 def zopen(
-    filename: str | Path,
+    filename: Union[str, Path],
     /,
     mode: str | None = None,
     **kwargs: Any,
@@ -169,7 +169,7 @@ def _get_line_ending(
 
 
 def reverse_readfile(
-    filename: str | Path,
+    filename: Union[str, Path],
 ) -> Iterator[str]:
     """
     A much faster reverse read of file by using Python's mmap to generate a
