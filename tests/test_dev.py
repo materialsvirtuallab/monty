@@ -3,7 +3,6 @@ from __future__ import annotations
 import unittest
 import warnings
 from dataclasses import dataclass
-from unittest.mock import patch
 
 import pytest
 
