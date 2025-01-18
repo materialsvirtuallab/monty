@@ -975,7 +975,7 @@ class TestJson:
             json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
-        data = _load_redirect(os.path.join(TEST_DIR, "test_settings.yaml"))
+        data = _load_redirect(os.path.join(TEST_DIR, "settings_for_test.yaml"))
         assert data == {
             "old_module": {
                 "old_class": {"@class": "new_class", "@module": "new_module"}
