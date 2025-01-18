@@ -35,7 +35,7 @@ def zopen(
     This function wraps around `[bz2/gzip/lzma].open` and `open`
     to deal intelligently with compressed or uncompressed files.
     Supports context manager:
-        `with zopen(filename, mode="rt", ...)`.
+        `with zopen(filename, mode="rt", ...)`
 
     Important Notes:
         - Default `mode` should not be used, and would not be allow
@@ -43,11 +43,12 @@ def zopen(
         - Always explicitly specify binary/text in `mode`, i.e.
             always pass `t` or `b` in `mode`, implicit binary/text
             mode would not be allow in future versions.
-        - Always provide an explicit `encoding` in text mode.
+        - Always provide an explicit `encoding` in text mode, it would
+            be set to UTF-8 by default otherwise.
 
     Args:
         filename (str | Path): The file to open.
-        mode (str): The mode in which the file is opened, you MUST
+        mode (str): The mode in which the file is opened, you should
             explicitly specify "b" for binary or "t" for text.
         **kwargs: Additional keyword arguments to pass to `open`.
 
@@ -79,14 +80,16 @@ def zopen(
             stacklevel=2,
         )
 
-    # Warn against default `encoding` in text mode
+    # Warn against default `encoding` in text mode if
+    # `PYTHONWARNDEFAULTENCODING` environment variable is set (PEP 597)
     if "t" in mode and kwargs.get("encoding", None) is None:
-        warnings.warn(
-            "We strongly encourage explicit `encoding`, "
-            "and we would use UTF-8 by default as per PEP 686",
-            category=EncodingWarning,
-            stacklevel=2,
-        )
+        if os.getenv("PYTHONWARNDEFAULTENCODING", False):
+            warnings.warn(
+                "We strongly encourage explicit `encoding`, "
+                "and we would use UTF-8 by default as per PEP 686",
+                category=EncodingWarning,
+                stacklevel=2,
+            )
         kwargs["encoding"] = "utf-8"
 
     _name, ext = os.path.splitext(filename)
@@ -141,7 +144,7 @@ def _get_line_ending(
         If file is empty, "\n" would be used as default.
     """
     if isinstance(file, (str, Path)):
-        with zopen(file, "rb") as f:
+        with zopen(file, mode="rb") as f:
             first_line = f.readline()
     elif isinstance(file, io.TextIOWrapper):
         first_line = file.buffer.readline()  # type: ignore[attr-defined]
@@ -187,7 +190,7 @@ def reverse_readfile(
     l_end = _get_line_ending(filename)
     len_l_end = len(l_end)
 
-    with zopen(filename, "rb") as file:
+    with zopen(filename, mode="rb") as file:
         if isinstance(file, (gzip.GzipFile, bz2.BZ2File)):
             for line in reversed(file.readlines()):
                 # "readlines" would keep the line end character
