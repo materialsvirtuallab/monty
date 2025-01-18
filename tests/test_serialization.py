@@ -65,7 +65,7 @@ class TestSerial:
         with pytest.raises(TypeError):
             loadfn("monte_test.txt", fmt="garbage")
 
-    @pytest.mark.skipif(msgpack is None, "msgpack-python not installed.")
+    @pytest.mark.skipif(msgpack is None, reason="msgpack-python not installed.")
     def test_mpk(self):
         d = {"hello": "world"}
 

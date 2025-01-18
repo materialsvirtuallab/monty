@@ -619,7 +619,7 @@ class TestTryOrReturn:
 
 
 class TestTimeout:
-    @pytest.mark.skipif(platform.system() == "Windows", "Skip on windows")
+    @pytest.mark.skipif(platform.system() == "Windows", reason="Skip on windows")
     def test_with(self):
         try:
             with timeout(1, "timeout!"):
