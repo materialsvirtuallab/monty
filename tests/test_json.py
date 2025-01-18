@@ -48,6 +48,12 @@ try:
 except ImportError:
     ObjectId = None
 
+try:
+    from bson import json_util
+except ImportError:
+    json_util = None
+
+
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
@@ -969,7 +975,7 @@ class TestJson:
             json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
-        data = _load_redirect(os.path.join(TEST_DIR, "test_settings.yaml"))
+        data = _load_redirect(os.path.join(TEST_DIR, "settings_for_test.yaml"))
         assert data == {
             "old_module": {
                 "old_class": {"@class": "new_class", "@module": "new_module"}
@@ -1255,9 +1261,8 @@ class TestCheckType:
         assert isinstance(qty, pint.Quantity)
 
     @pytest.mark.skipif(ObjectId is None, reason="bson not present")
+    @pytest.mark.skipif(json_util is None, reason="pymongo not present")
     def test_extended_json(self):
-        from bson import json_util
-
         ext_json_dict = {
             "datetime": datetime.datetime.now(datetime.timezone.utc),
             "NaN": float("NaN"),
