@@ -48,6 +48,12 @@ try:
 except ImportError:
     ObjectId = None
 
+try:
+    from bson import json_util
+except ImportError:
+    json_util = None
+
+
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
@@ -1255,9 +1261,8 @@ class TestCheckType:
         assert isinstance(qty, pint.Quantity)
 
     @pytest.mark.skipif(ObjectId is None, reason="bson not present")
+    @pytest.mark.skipif(json_util is None, reason="pymongo not present")
     def test_extended_json(self):
-        from bson import json_util
-
         ext_json_dict = {
             "datetime": datetime.datetime.now(datetime.timezone.utc),
             "NaN": float("NaN"),
