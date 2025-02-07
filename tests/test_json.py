@@ -19,6 +19,7 @@ from monty.json import (
     _load_redirect,
     jsanitize,
     load,
+    partial_monty_encode,
 )
 
 from . import __version__ as TESTS_VERSION
@@ -1125,6 +1126,39 @@ class TestJson:
         assert d_ == {"v": "value_a"}
         na2 = EnumAsDict.from_dict(d_)
         assert na2 == na1
+
+    def test_partial(self):
+        class IsMSONable(MSONable):
+            def __init__(self, v1):
+                self._v1 = v1
+
+        class NotMSONable:
+            def __init__(self, v1):
+                self.v1 = v1
+
+        is_m = IsMSONable(1)
+        not_m = NotMSONable(2)
+
+        is_m_jsons, is_m_map = partial_monty_encode(is_m)
+        is_m_d = json.loads(is_m_jsons)
+        assert is_m_d["@class"] == "IsMSONable"
+        assert is_m_d["v1"] == 1
+        len(is_m_map) == 0
+
+        not_m_jsons, not_m_map = partial_monty_encode(not_m)
+        not_m_d = json.loads(not_m_jsons)
+        assert not_m_d["@class"] == "NotMSONable"
+        assert "@object_reference" in not_m_d
+        assert len(not_m_map) == 1
+
+        mixed_jsons, mixed_map = partial_monty_encode(
+            {"is_m": is_m, "not_m": not_m}, {"indent": 2}
+        )
+        mixed_d = json.loads(mixed_jsons)
+        assert mixed_d["is_m"]["v1"] == 1
+        assert mixed_d["is_m"]["@class"] == "IsMSONable"
+        assert "@object_reference" in mixed_d["not_m"]
+        assert mixed_d["not_m"]["@class"] == "NotMSONable"
 
 
 class TestCheckType:
