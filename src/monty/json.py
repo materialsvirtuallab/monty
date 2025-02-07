@@ -355,15 +355,13 @@ class MSONable:
         custom_schema = cls._generic_json_schema()
         field_schema.update(custom_schema)
 
-    def get_partial_json(self, json_kwargs=None, pickle_kwargs=None):
+    def get_partial_json(self, json_kwargs=None):
         """Process a dictionary that may contain unhashable object.
 
         Parameters
         ----------
         json_kwargs : dict
             Keyword arguments to pass to the serializer.
-        pickle_kwargs : dict
-            Keyword arguments to pass to pickle.dump.
 
         Returns
         -------
@@ -412,35 +410,14 @@ class MSONable:
         strict : bool
             If True, will not allow you to overwrite existing files.
         """
-
-        json_path = Path(json_path)
-        save_dir = json_path.parent
-
-        json_kwargs = json_kwargs or {}
-        pickle_kwargs = pickle_kwargs or {}
-
-        encoded, name_object_map = self.get_partial_json(json_kwargs, pickle_kwargs)
-
-        if mkdir:
-            save_dir.mkdir(exist_ok=True, parents=True)
-
-        # Define the pickle path
-        pickle_path = save_dir / f"{json_path.stem}.pkl"
-
-        # Check if the files exist and the strict parameter is True
-        if strict and json_path.exists():
-            raise FileExistsError(f"strict is true and file {json_path} exists")
-        if strict and pickle_path.exists():
-            raise FileExistsError(f"strict is true and file {pickle_path} exists")
-
-        # Save the json file
-        with open(json_path, "w", encoding="utf-8") as outfile:
-            outfile.write(encoded)
-
-        # Save the pickle file if we have anything to save from the name_object_map
-        if name_object_map is not None:
-            with open(pickle_path, "wb") as f:
-                pickle.dump(name_object_map, f, **pickle_kwargs)
+        save(
+            self,
+            json_path,
+            mkdir=mkdir,
+            json_kwargs=json_kwargs,
+            pickle_kwargs=pickle_kwargs,
+            strict=strict,
+        )
 
     @classmethod
     def load(cls, file_path):
@@ -457,8 +434,77 @@ class MSONable:
             An instance of the class being reloaded.
         """
 
-        d = _d_from_path(file_path)
+        d = load2dict(file_path)
         return cls.from_dict(d)
+
+
+def save(
+    obj,
+    json_path,
+    mkdir=True,
+    json_kwargs=None,
+    pickle_kwargs=None,
+    strict=True,
+):
+    """Utility that uses the standard tools of MSONable to convert the
+    class to json format, but also save it to disk. In addition, this
+    method intelligently uses pickle to individually pickle class objects
+    that are not serializable, saving them separately. This maximizes the
+    readability of the saved class information while allowing _any_
+    class to be at least partially serializable to disk.
+
+    For a fully MSONable class, only a class.json file will be saved to
+    the location {save_dir}/class.json. For a partially MSONable class,
+    additional information will be saved to the save directory at
+    {save_dir}. This includes a pickled object for each attribute that
+    e serialized.
+
+    Args:
+    obj : Object
+        The object to save.
+    file_path : os.PathLike
+        The file to which to save the json object. A pickled object of
+        the same name but different extension might also be saved if the
+        class is not entirely MSONable.
+    mkdir : bool
+        If True, makes the provided directory, including all parent
+        directories.
+    json_kwargs : dict
+        Keyword arguments to pass to the serializer.
+    pickle_kwargs : dict
+        Keyword arguments to pass to pickle.dump.
+    strict : bool
+        If True, will not allow you to overwrite existing files.
+    """
+
+    json_path = Path(json_path)
+    save_dir = json_path.parent
+
+    json_kwargs = json_kwargs or {}
+    pickle_kwargs = pickle_kwargs or {}
+
+    encoded, name_object_map = partial_monty_encode(obj, json_kwargs)
+
+    if mkdir:
+        save_dir.mkdir(exist_ok=True, parents=True)
+
+    # Define the pickle path
+    pickle_path = save_dir / f"{json_path.stem}.pkl"
+
+    # Check if the files exist and the strict parameter is True
+    if strict and json_path.exists():
+        raise FileExistsError(f"strict is true and file {json_path} exists")
+    if strict and pickle_path.exists():
+        raise FileExistsError(f"strict is true and file {pickle_path} exists")
+
+    # Save the json file
+    with open(json_path, "w", encoding="utf-8") as outfile:
+        outfile.write(encoded)
+
+    # Save the pickle file if we have anything to save from the name_object_map
+    if name_object_map is not None:
+        with open(pickle_path, "wb") as f:
+            pickle.dump(name_object_map, f, **pickle_kwargs)
 
 
 def load(path):
@@ -474,7 +520,7 @@ def load(path):
     MSONable
     """
 
-    d = _d_from_path(path)
+    d = load2dict(path)
     module = d["@module"]
     klass = d["@class"]
     module = import_module(module)
@@ -482,7 +528,18 @@ def load(path):
     return klass.from_dict(d)
 
 
-def _d_from_path(file_path):
+def load2dict(file_path) -> dict:
+    """Load a serialized json file into a dictionary.
+
+    Assumes that you saved using `save` and will
+    load the json file into a dictionary.
+
+    Arg:
+        file_path: (str) Path to the json file.
+
+    Returns:
+        (dict) The dictionary representation of the json file.
+    """
     json_path = Path(file_path)
     save_dir = json_path.parent
     pickle_path = save_dir / f"{json_path.stem}.pkl"
@@ -1052,7 +1109,7 @@ def _serialize_callable(o):
 
 def _get_partial_json(obj, json_kwargs):
     """Gets the json representation of a class
-    with the unserializable components sustituted for hash references."""
+    with the unserializable components substituted for hash references."""
     json_kwargs = json_kwargs or {}
     encoder = MontyEncoder(allow_unserializable_objects=True, **json_kwargs)
     encoded = encoder.encode(obj)
