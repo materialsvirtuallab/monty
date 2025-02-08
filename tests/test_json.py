@@ -457,12 +457,6 @@ class TestMSONable:
         with pytest.raises(TypeError):
             test_good_class.to_json()
 
-        # This will pass
-        jsonstr, mapping = test_good_class.get_partial_json()
-        parsed_dict = json.loads(jsonstr)
-        assert parsed_dict["a"] == "Hello"
-        assert len(mapping) == 4
-
         # This should also pass though
         target = tmp_path / "test.json"
         test_good_class.save(target, json_kwargs={"indent": 4, "sort_keys": True})
@@ -1169,6 +1163,7 @@ class TestJson:
             save(mixed, tmp_path / "mixed.json")
 
         save(mixed, tmp_path / "mixed.json", strict=False)
+
 
 class TestCheckType:
     def test_check_subclass(self):

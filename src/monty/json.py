@@ -355,24 +355,6 @@ class MSONable:
         custom_schema = cls._generic_json_schema()
         field_schema.update(custom_schema)
 
-    def get_partial_json(self, json_kwargs=None):
-        """Process a dictionary that may contain unhashable object.
-
-        Parameters
-        ----------
-        json_kwargs : dict
-            Keyword arguments to pass to the serializer.
-
-        Returns
-        -------
-        str, dict
-            The json encoding of the class and the name-object map if one is
-            required, otherwise None.
-        """
-        encoded, name_object_map = partial_monty_encode(self, json_kwargs=json_kwargs)
-        name_object_map = name_object_map or None
-        return encoded, name_object_map
-
     def save(
         self,
         json_path,
