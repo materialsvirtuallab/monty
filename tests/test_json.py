@@ -764,7 +764,9 @@ class TestJson:
 
     @pytest.mark.skipif(DBRef is None, reason="bson not present")
     def test_dbref(self):
-        dbref = DBRef("my_collection", 1, database="my_database", extra_field="extra_value")
+        dbref = DBRef(
+            "my_collection", 1, database="my_database", extra_field="extra_value"
+        )
         with pytest.raises(TypeError):
             json.dumps(dbref)
         djson = json.dumps(dbref, cls=MontyEncoder)

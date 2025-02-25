@@ -631,7 +631,7 @@ class MontyEncoder(json.JSONEncoder):
             return d
 
         if bson is not None:
-            if  isinstance(o, bson.objectid.ObjectId):
+            if isinstance(o, bson.objectid.ObjectId):
                 return {
                     "@module": "bson.objectid",
                     "@class": "ObjectId",
@@ -863,12 +863,15 @@ class MontyDecoder(json.JSONDecoder):
                 ):
                     # DBRef supports arbitrary additional fields
                     # therefore, the names of these keys are unknown in advance
-                    possible_extra_fields = {k: d[k] for k in d.keys() - {"@module", "@class", "$ref", "$id", "$db"}}
+                    possible_extra_fields = {
+                        k: d[k]
+                        for k in d.keys() - {"@module", "@class", "$ref", "$id", "$db"}
+                    }
                     return bson.dbref.DBRef(
                         collection=d["$ref"],
                         id=d["$id"],
                         database=d.get("$db"),  # optional
-                        **possible_extra_fields  # optional
+                        **possible_extra_fields,  # optional
                     )
 
             return {
