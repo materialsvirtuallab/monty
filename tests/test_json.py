@@ -48,6 +48,11 @@ try:
 except ImportError:
     ObjectId = None
 
+try:
+    from bson.dbref import DBRef
+except ImportError:
+    DBRef = None
+
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
 
@@ -756,6 +761,18 @@ class TestJson:
         djson = json.dumps(oid, cls=MontyEncoder)
         x = json.loads(djson, cls=MontyDecoder)
         assert isinstance(x, ObjectId)
+
+    @pytest.mark.skipif(DBRef is None, reason="bson not present")
+    def test_dbref(self):
+        dbref = DBRef("my_collection", 1, database="my_database", extra_field="extra_value")
+        with pytest.raises(TypeError):
+            json.dumps(dbref)
+        djson = json.dumps(dbref, cls=MontyEncoder)
+        x = json.loads(dbref, cls=MontyDecoder)
+        assert isinstance(x, DBRef)
+        assert x.collection == "my_collection"
+        assert x.database == "my_database"
+        assert x.extra_field == "extra_value"
 
     def test_jsanitize(self):
         # clean_json should have no effect on None types.
