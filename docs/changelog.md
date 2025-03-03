@@ -1,5 +1,8 @@
 # Change log
 
+## 2025.3.3
+- Move Partial Serialization out of MSONable (@jmmshn)
+
 ## 2025.1.9
 - Re-add python 3.9 support 
 
