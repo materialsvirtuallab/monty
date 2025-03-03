@@ -3,7 +3,6 @@ from __future__ import annotations
 import glob
 import json
 import os
-import unittest
 
 import pytest
 
@@ -66,7 +65,7 @@ class TestSerial:
         with pytest.raises(TypeError):
             loadfn("monte_test.txt", fmt="garbage")
 
-    @unittest.skipIf(msgpack is None, "msgpack-python not installed.")
+    @pytest.mark.skipif(msgpack is None, reason="msgpack-python not installed.")
     def test_mpk(self):
         d = {"hello": "world"}
 
