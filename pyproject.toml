@@ -25,20 +25,8 @@ dependencies = [
 version = "2025.1.9"
 
 [project.optional-dependencies]
-ci = [
-  "coverage",
-  "monty[optional]",
-  "pytest>=8",
-  "pytest-cov>=4",
-  "types-requests",
-  "pymongo"
-]
 # dev is for "dev" module, not for development
 dev = ["ipython"]
-docs = [
-    "sphinx",
-    "sphinx_rtd_theme",
-]
 json = [
   "pymongo",
   "orjson>=3.6.1",
@@ -108,3 +96,19 @@ select = [
 [tool.ruff.lint.isort]
 required-imports = ["from __future__ import annotations"]
 known-first-party = ["monty"]
+
+[dependency-groups]
+dev = [
+    "coverage>=7.7.1",
+    "pre-commit>=4.2.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.0.0",
+]
+lint = [
+    "mypy>=1.15.0",
+    "ruff>=0.11.2",
+]
+maintain = [
+    "sphinx>=7.4.7",
+    "sphinx-rtd-theme>=3.0.2",
+]

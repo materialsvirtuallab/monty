@@ -15,20 +15,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: ${{ matrix.python-version }}
-
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e '.[ci]'
-
+        run: uv sync --all-extras
       - name: pytest
-        run: pytest --cov=monty --cov-report html:coverage_reports tests
-
+        run: uv run pytest --cov=monty tests --color=yes
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         env:
