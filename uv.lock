@@ -584,7 +584,7 @@ wheels = [
 
 [[package]]
 name = "monty"
-version = "2025.1.9"
+version = "2025.3.3"
 source = { editable = "." }
 dependencies = [
     { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
