@@ -433,17 +433,32 @@ class TestZopen:
             f.read()
 
     @pytest.mark.parametrize("extension", [".txt", ".bz2", ".gz", ".xz", ".lzma"])
-    def test_warnings(self, extension):
+    def test_warnings(self, extension, monkeypatch):
         filename = f"test_warning{extension}"
         content = "Test warning"
 
         with ScratchDir("."):
+            monkeypatch.setenv("PYTHONWARNDEFAULTENCODING", "1")
+
             # Default `encoding` warning
             with (
                 pytest.warns(EncodingWarning, match="use UTF-8 by default"),
                 zopen(filename, "wt") as f,
             ):
                 f.write(content)
+
+            # No encoding warning if `PYTHONWARNDEFAULTENCODING` not set
+            monkeypatch.delenv("PYTHONWARNDEFAULTENCODING", raising=False)
+
+            with warnings.catch_warnings():
+                warnings.filterwarnings(
+                    "error",
+                    "We strongly encourage explicit `encoding`",
+                    EncodingWarning,
+                )
+
+                with zopen(filename, "wt") as f:
+                    f.write(content)
 
             # Implicit text/binary `mode` warning
             warnings.filterwarnings(

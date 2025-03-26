@@ -30,7 +30,8 @@ def deprecated(
         replacement (Callable | str): A replacement class or function.
         message (str): A warning message to be displayed.
         deadline (Optional[tuple[int, int, int]]): Optional deadline for removal
-            of the old function/class, in format (yyyy, MM, dd).
+            of the old function/class, in format (yyyy, MM, dd). A CI warning would
+            be raised after this date if is running in code owner' repo.
         category (Warning): Choose the category of the warning to issue. Defaults
             to FutureWarning. Another choice can be DeprecationWarning. Note that
             FutureWarning is meant for end users and is always shown unless silenced.

@@ -19,6 +19,9 @@ from monty.json import (
     _load_redirect,
     jsanitize,
     load,
+    load2dict,
+    partial_monty_encode,
+    save,
 )
 
 from . import __version__ as TESTS_VERSION
@@ -47,6 +50,12 @@ try:
     from bson.objectid import ObjectId
 except ImportError:
     ObjectId = None
+
+try:
+    from bson import json_util
+except ImportError:
+    json_util = None
+
 
 TEST_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "test_files")
 
@@ -969,7 +978,7 @@ class TestJson:
             json.loads(json.dumps(d2), cls=MontyDecoder)
 
     def test_redirect_settings_file(self):
-        data = _load_redirect(os.path.join(TEST_DIR, "test_settings.yaml"))
+        data = _load_redirect(os.path.join(TEST_DIR, "settings_for_test.yaml"))
         assert data == {
             "old_module": {
                 "old_class": {"@class": "new_class", "@module": "new_module"}
@@ -1126,6 +1135,41 @@ class TestJson:
         na2 = EnumAsDict.from_dict(d_)
         assert na2 == na1
 
+    def test_partial_serializable(self, tmp_path):
+        is_m = GoodMSONClass(a=1, b=2, c=3)
+        not_m = GoodNOTMSONClass(a="a", b="b", c="c")
+
+        is_m_jsons, is_m_map = partial_monty_encode(is_m)
+        is_m_d = json.loads(is_m_jsons)
+        assert is_m_d["@class"] == "GoodMSONClass"
+        assert is_m_d["a"] == 1
+        assert len(is_m_map) == 0
+
+        not_m_jsons, not_m_map = partial_monty_encode(not_m)
+        not_m_d = json.loads(not_m_jsons)
+        assert not_m_d["@class"] == "GoodNOTMSONClass"
+        assert "@object_reference" in not_m_d
+        assert len(not_m_map) == 1
+        mixed = {"is_m": is_m, "not_m": not_m}
+        mixed_jsons, mixed_map = partial_monty_encode(mixed, {"indent": 2})
+        mixed_d = json.loads(mixed_jsons)
+        assert mixed_d["is_m"]["a"] == 1
+        assert mixed_d["is_m"]["@class"] == "GoodMSONClass"
+        assert "@object_reference" in mixed_d["not_m"]
+        assert mixed_d["not_m"]["@class"] == "GoodNOTMSONClass"
+
+        mixed = {"is_m": is_m, "not_m": not_m}
+        save(mixed, tmp_path / "mixed.json")
+        loaded = load2dict(tmp_path / "mixed.json")
+        assert loaded["is_m"]["a"] == 1
+        assert loaded["not_m"].a == "a"
+
+        # Test when you are allowed to overwrite
+        with pytest.raises(FileExistsError):
+            save(mixed, tmp_path / "mixed.json")
+
+        save(mixed, tmp_path / "mixed.json", strict=False)
+
 
 class TestCheckType:
     def test_check_subclass(self):
@@ -1255,9 +1299,8 @@ class TestCheckType:
         assert isinstance(qty, pint.Quantity)
 
     @pytest.mark.skipif(ObjectId is None, reason="bson not present")
+    @pytest.mark.skipif(json_util is None, reason="pymongo not present")
     def test_extended_json(self):
-        from bson import json_util
-
         ext_json_dict = {
             "datetime": datetime.datetime.now(datetime.timezone.utc),
             "NaN": float("NaN"),
