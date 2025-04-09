@@ -258,12 +258,12 @@ class TestMSONable:
 
         self.kw_only_args_cls = ClassContainingKWOnlyArgs
 
-    def test_to_from_dict(self):
+    def test_as_from_dict(self):
         obj = self.good_cls("Hello", "World", "Python")
         d = obj.as_dict()
         assert d is not None
         self.good_cls.from_dict(d)
-        jsonstr = obj.to_json()
+        jsonstr = obj.as_json()
         d = json.loads(jsonstr)
         assert d["@class"], "GoodMSONClass"
         obj = self.bad_cls("Hello", "World")
@@ -284,7 +284,7 @@ class TestMSONable:
         assert d is not None
         assert d["a"] == 1
         self.kw_only_args_cls.from_dict(d)
-        jsonstr = obj.to_json()
+        jsonstr = obj.as_json()
         d = json.loads(jsonstr)
         assert d["@class"], "ClassContainingKWOnlyArgs"
 
@@ -461,7 +461,7 @@ class TestMSONable:
 
         # This will fail
         with pytest.raises(TypeError):
-            test_good_class.to_json()
+            test_good_class.as_json()
 
         # This should also pass though
         target = tmp_path / "test.json"

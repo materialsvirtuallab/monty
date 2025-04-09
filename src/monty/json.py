@@ -581,9 +581,9 @@ class MontyEncoder(json.JSONEncoder):
     def default(self, o) -> dict:
         """
         Overriding default method for JSON encoding. This method does two
-        things: (a) If an object has a to_dict property, return the to_dict
-        output. (b) If the @module and @class keys are not in the to_dict,
-        add them to the output automatically. If the object has no to_dict
+        things: (a) If an object has a as_dict property, return the as_dict
+        output. (b) If the @module and @class keys are not in the as_dict,
+        add them to the output automatically. If the object has no as_dict
         property, the default Python json encoder default method is called.
 
         Args:
