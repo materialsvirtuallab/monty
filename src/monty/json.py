@@ -21,10 +21,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
-from monty.dev import deprecated
-
 import numpy as np
 from ruamel.yaml import YAML
+
+from monty.dev import deprecated
 
 if TYPE_CHECKING:
     from typing import Any
