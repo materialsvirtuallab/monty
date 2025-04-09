@@ -21,6 +21,8 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from uuid import UUID, uuid4
 
+from monty.dev import deprecated
+
 import numpy as np
 from ruamel.yaml import YAML
 
@@ -232,11 +234,15 @@ class MSONable:
         }
         return cls(**decoded)
 
-    def to_json(self) -> str:
+    def as_json(self) -> str:
         """
         Returns a json string representation of the MSONable object.
         """
         return json.dumps(self, cls=MontyEncoder)
+
+    @deprecated(as_json, deadline=(2026, 4, 4))
+    def to_json(self):
+        return self.as_json()
 
     def unsafe_hash(self):
         """
