@@ -5,7 +5,6 @@ and yaml.
 
 from __future__ import annotations
 
-import json
 import os
 from typing import TYPE_CHECKING, TextIO, cast
 
@@ -14,6 +13,11 @@ from ruamel.yaml import YAML
 from monty.io import zopen
 from monty.json import MontyDecoder, MontyEncoder
 from monty.msgpack import default, object_hook
+
+try:
+    import orjson as json
+except ImportError:
+    import json
 
 try:
     import msgpack
