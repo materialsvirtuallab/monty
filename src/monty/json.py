@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import dataclasses
 import datetime
+import json
 import os
 import pathlib
 import pickle
@@ -32,12 +33,6 @@ try:
 except ImportError:
     bson = None
     json_util = None
-
-try:
-    import orjson as json
-except ImportError:
-    import json
-
 
 __version__ = "3.0.0"
 
