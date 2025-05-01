@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import dataclasses
 import datetime
-import json
 import os
 import pathlib
 import pickle
@@ -35,9 +34,9 @@ except ImportError:
     json_util = None
 
 try:
-    import orjson
+    import orjson as json
 except ImportError:
-    orjson = None  # type: ignore[assignment]
+    import json
 
 
 __version__ = "3.0.0"
@@ -893,11 +892,6 @@ class MontyDecoder(json.JSONDecoder):
             # need to pass `json_options` to ensure that datetimes are not
             # converted by BSON
             d = json_util.loads(s, json_options=json_util.JSONOptions(tz_aware=True))
-        elif orjson is not None:
-            try:
-                d = orjson.loads(s)
-            except orjson.JSONDecodeError:
-                d = json.loads(s)
         else:
             d = json.loads(s)
         return self.process_decoded(d)
