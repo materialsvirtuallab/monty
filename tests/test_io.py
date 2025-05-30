@@ -396,6 +396,14 @@ class TestZopen:
             with zopen(filename, "rb") as f:
                 assert f.read() == content.encode()
 
+            with (
+                pytest.raises(
+                    RuntimeError, match="Implicit text/binary mode is not allow"
+                ),
+                zopen(Path(filename), "w") as f,
+            ):
+                f.write(content.encode())
+
     def test_lzw_files(self):
         """gzip is not really able to (de)compress LZW files.
 
