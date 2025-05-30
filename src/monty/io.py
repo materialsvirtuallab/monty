@@ -54,7 +54,9 @@ def zopen(
     """
     # Don't allow implicit text/binary `mode`
     if not ("b" in mode or "t" in mode):
-        raise RuntimeError("Implicit text/binary mode is not allowed, please pass t/b explicitly in mode.")
+        raise RuntimeError(
+            "Implicit text/binary mode is not allowed, please pass t/b explicitly in mode."
+        )
 
     # Warn against default `encoding` in text mode if
     # `PYTHONWARNDEFAULTENCODING` environment variable is set (PEP 597)
