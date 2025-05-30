@@ -396,42 +396,6 @@ class TestZopen:
             with zopen(filename, "rb") as f:
                 assert f.read() == content.encode()
 
-    def test_lzw_files(self):
-        """gzip is not really able to (de)compress LZW files.
-
-        TODO: remove text file real_lzw_file.txt.Z after dropping
-        ".Z" extension support
-        """
-        # Test a fake LZW file (just with .Z extension but DEFLATED algorithm)
-        filename = "test.Z"
-        content = "This is not a real LZW compressed file.\n"
-
-        with (
-            ScratchDir("."),
-            pytest.warns(FutureWarning, match="compress LZW-compressed files"),
-        ):
-            # Test write and read in text mode
-            with zopen(filename, "wt", encoding="utf-8") as f:
-                f.write(content)
-
-            with zopen(filename, "rt", encoding="utf-8") as f:
-                assert f.read() == content
-
-            # Test write and read in binary mode
-            with zopen(filename, "wb") as f:
-                f.write(content.encode())
-
-            with zopen(filename, "rb") as f:
-                assert f.read() == content.encode()
-
-        # Cannot decompress a real LZW file
-        with (
-            pytest.warns(FutureWarning, match="compress LZW-compressed files"),
-            pytest.raises(gzip.BadGzipFile, match="Not a gzipped file"),
-            zopen(f"{TEST_DIR}/real_lzw_file.txt.Z", "rt", encoding="utf-8") as f,
-        ):
-            f.read()
-
     @pytest.mark.parametrize("extension", [".txt", ".bz2", ".gz", ".xz", ".lzma"])
     def test_warnings(self, extension, monkeypatch):
         filename = f"test_warning{extension}"
@@ -459,31 +423,6 @@ class TestZopen:
 
                 with zopen(filename, "wt") as f:
                     f.write(content)
-
-            # Implicit text/binary `mode` warning
-            warnings.filterwarnings(
-                "ignore", category=EncodingWarning, message="argument not specified"
-            )
-            with (
-                pytest.warns(
-                    FutureWarning, match="discourage using implicit binary/text"
-                ),
-                zopen(filename, "r") as f,
-            ):
-                if extension == ".txt":
-                    assert f.readline() == content
-                else:
-                    assert f.readline().decode("utf-8") == content
-
-            # Implicit `mode` warning
-            with (
-                pytest.warns(FutureWarning, match="discourage using a default `mode`"),
-                zopen(filename) as f,
-            ):
-                if extension == ".txt":
-                    assert f.readline() == content
-                else:
-                    assert f.readline().decode("utf-8") == content
 
 
 class TestFileLock:
