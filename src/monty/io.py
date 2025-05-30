@@ -76,6 +76,16 @@ def zopen(
         return bz2.open(filename, mode, **kwargs)
     if ext == ".gz":
         return gzip.open(filename, mode, **kwargs)
+    if ext == ".z":
+        # TODO: drop ".z" extension support after 2026-01-01
+        warnings.warn(
+            "Python gzip is not able to (de)compress LZW-compressed files. "
+            "You should rename it to .gz. Support for the '.z' extension will "
+            "be removed after 2026-01-01.",
+            category=FutureWarning,
+            stacklevel=2,
+        )
+        return gzip.open(filename, mode, **kwargs)
     if ext in {".xz", ".lzma"}:
         return lzma.open(filename, mode, **kwargs)
 
