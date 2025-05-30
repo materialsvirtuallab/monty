@@ -97,6 +97,9 @@ select = [
 required-imports = ["from __future__ import annotations"]
 known-first-party = ["monty"]
 
+[tool.uv]
+default-groups = "all"
+
 [dependency-groups]
 dev = [
     "coverage>=7.7.1",
