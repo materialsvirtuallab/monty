@@ -27,7 +27,6 @@ class EncodingWarning(Warning): ...  # Added in Python 3.10
 
 def zopen(
     filename: Union[str, Path],
-    /,
     mode: str,
     **kwargs: Any,
 ) -> IO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile:
