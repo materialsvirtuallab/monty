@@ -383,10 +383,10 @@ class TestZopen:
 
         with ScratchDir("."):
             # Test write and read in text mode
-            with zopen(filename, "wt", encoding="utf-8") as f:
+            with zopen(filename, mode="wt", encoding="utf-8") as f:
                 f.write(content)
 
-            with zopen(Path(filename), "rt", encoding="utf-8") as f:
+            with zopen(Path(filename), mode="rt", encoding="utf-8") as f:
                 assert f.read() == content
 
             # Test write and read in binary mode
@@ -456,7 +456,7 @@ class TestZopen:
                 f.write(content)
 
             # No encoding warning if `PYTHONWARNDEFAULTENCODING` not set
-            monkeypatch.delenv("PYTHONWARNDEFAULTENCODING", raising=False)
+            monkeypatch.delenv("PYTHONWARNDEFAULTENCODING")
 
             with warnings.catch_warnings():
                 warnings.filterwarnings(
