@@ -597,6 +597,7 @@ class MontyEncoder(json.JSONEncoder):
                 "@module": "torch",
                 "@class": "Tensor",
                 "dtype": o.type(),
+                "shape": list(o.shape),
             }
             if "Complex" in o.type():
                 d["data"] = [o.real.tolist(), o.imag.tolist()]
@@ -826,6 +827,10 @@ class MontyDecoder(json.JSONDecoder):
                                     for r, i in zip(*d["data"])
                                 ],
                             ).type(d["dtype"])
+
+                        elif not d["data"]:
+                            return torch.empty(d.get("shape", ())).type(d["dtype"])
+
                         return torch.tensor(d["data"]).type(d["dtype"])
 
                     except ImportError:
