@@ -9,7 +9,7 @@ maintainers = [
 ]
 description = "Monty is the missing complement to Python."
 readme = "README.md"
-requires-python = ">=3.9,<3.14"
+requires-python = ">=3.9"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Development Status :: 4 - Beta",
