@@ -828,10 +828,11 @@ class MontyDecoder(json.JSONDecoder):
                                 ],
                             ).type(d["dtype"])
 
-                        elif not d["data"]:
-                            return torch.empty(d.get("shape", ())).type(d["dtype"])
+                        else:
+                            if "shape" in d and d["data"] == []:
+                                return torch.empty(d["shape"]).type(d["dtype"])
 
-                        return torch.tensor(d["data"]).type(d["dtype"])
+                            return torch.tensor(d["data"]).type(d["dtype"])
 
                     except ImportError:
                         pass
