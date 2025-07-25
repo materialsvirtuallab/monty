@@ -504,19 +504,77 @@ class TestJson:
         assert listobj2[0].a.a == 1
 
     @pytest.mark.skipif(torch is None, reason="torch not present")
-    def test_torch(self):
-        t = torch.tensor([0, 1, 2])
-        jsonstr = json.dumps(t, cls=MontyEncoder)
-        t2 = json.loads(jsonstr, cls=MontyDecoder)
-        assert isinstance(t2, torch.Tensor)
-        assert t2.type() == t.type()
-        assert np.array_equal(t2, t)
-        t = torch.tensor([1 + 1j, 2 + 1j])
-        jsonstr = json.dumps(t, cls=MontyEncoder)
-        t2 = json.loads(jsonstr, cls=MontyDecoder)
-        assert isinstance(t2, torch.Tensor)
-        assert t2.type() == t.type()
-        assert np.array_equal(t2, t)
+    def test_torch_tensor(self):
+        t0 = torch.tensor([0, 1, 2])
+        t0_json_str = json.dumps(t0, cls=MontyEncoder)
+        t0_json_dict = json.loads(t0_json_str)
+        t0_from_json_dict = json.loads(t0_json_str, cls=MontyDecoder)
+
+        assert isinstance(t0_from_json_dict, torch.Tensor)
+        assert t0_from_json_dict.type() == t0.type()
+        assert t0_json_dict['shape'] == list(t0.shape)
+        assert np.array_equal(t0_from_json_dict, t0)
+
+        # Test shape preservation of empty (0, x) tensor
+        t_empty = torch.empty((0, 2))
+        t_empty_json_str = json.dumps(t_empty, cls=MontyEncoder)
+        t_empty_json_dict = json.loads(t_empty_json_str)
+
+        assert t_empty_json_dict['shape'] == list(t_empty.shape)
+
+        # Test complex tensor
+        ct0 = torch.tensor([1 + 1j, 2 + 1j])
+        ct0_json_str = json.dumps(ct0, cls=MontyEncoder)
+        ct0_json_dict = json.loads(ct0_json_str)
+        ct1 = json.loads(ct0_json_str, cls=MontyDecoder)
+
+        assert isinstance(ct1, torch.Tensor)
+        assert ct1.type() == ct0.type()
+        assert ct0_json_dict['shape'] == list(ct0.shape)
+        assert np.array_equal(ct1, ct0)
+
+        # Test shape preservation of empty (0, x) tensor
+        ct_empty = torch.empty((0, 2), dtype=torch.complex64)
+        ct_empty_json_str = json.dumps(ct_empty, cls=MontyEncoder)
+        ct_empty_json_dict = json.loads(ct_empty_json_str)
+
+        assert ct_empty_json_dict['shape'] == list(ct_empty.shape)
+
+    @pytest.mark.skipif(torch is None, reason="torch not present")
+    def test_torch_tensor_backwards_compatibility(self):
+        # Simulate an old-style JSON (no "shape")
+        old_json = json.dumps({
+            "@module": "torch",
+            "@class": "Tensor",
+            "dtype": "torch.LongTensor",
+            "data": [0, 1, 2]
+        })
+
+        t = json.loads(old_json, cls=MontyDecoder)
+
+        assert isinstance(t, torch.Tensor)
+        assert t.dtype == torch.long
+        assert t.shape == torch.Size([3])
+        assert torch.equal(t, torch.tensor([0, 1, 2]))
+
+        # Test old decoder is compatible with new JSON (with `shape`)
+        def old_decoder_simulation(json_obj):
+            if json_obj.get('@module') == 'torch' and json_obj.get('@class') == 'Tensor':
+                dtype = json_obj['dtype']
+                data = json_obj['data']
+                return torch.tensor(data).type(dtype)
+            else:
+                raise RuntimeError("")
+
+        # New-style JSON with shape
+        t = torch.empty((0, 2), dtype=torch.float32)
+        new_json = json.dumps(t, cls=MontyEncoder)
+        json_obj = json.loads(new_json)
+
+        decoded = old_decoder_simulation(json_obj)
+
+        assert isinstance(decoded, torch.Tensor)
+        assert list(decoded.shape) == [0] != list(t.shape)
 
     def test_datetime(self):
         dt = datetime.datetime.now()
