@@ -597,7 +597,7 @@ class MontyEncoder(json.JSONEncoder):
                 "@module": "torch",
                 "@class": "Tensor",
                 "dtype": o.type(),
-                "shape": list(o.shape),
+                "size": list(o.size()),
             }
             if "Complex" in o.type():
                 d["data"] = [o.real.tolist(), o.imag.tolist()]
@@ -829,8 +829,8 @@ class MontyDecoder(json.JSONDecoder):
                             ).type(d["dtype"])
 
                         else:
-                            if "shape" in d and d["data"] == []:
-                                return torch.empty(d["shape"]).type(d["dtype"])
+                            if "size" in d and d["data"] == []:
+                                return torch.empty(d["size"]).type(d["dtype"])
 
                             return torch.tensor(d["data"]).type(d["dtype"])
 
