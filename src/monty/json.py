@@ -821,6 +821,9 @@ class MontyDecoder(json.JSONDecoder):
                         import torch  # import torch is very expensive
 
                         if "Complex" in d["dtype"]:
+                            if "size" in d and d["data"] == [[], []]:
+                                return torch.empty(d["size"]).type(d["dtype"])
+
                             return torch.tensor(
                                 [
                                     np.array(r) + np.array(i) * 1j
