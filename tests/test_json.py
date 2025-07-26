@@ -505,40 +505,49 @@ class TestJson:
 
     @pytest.mark.skipif(torch is None, reason="torch not present")
     def test_torch_tensor(self):
+        # Basic tensor
         t0 = torch.tensor([0, 1, 2])
         t0_json_str = json.dumps(t0, cls=MontyEncoder)
         t0_json_dict = json.loads(t0_json_str)
-        t0_from_json_dict = json.loads(t0_json_str, cls=MontyDecoder)
+        t0_from_json = json.loads(t0_json_str, cls=MontyDecoder)
 
-        assert isinstance(t0_from_json_dict, torch.Tensor)
-        assert t0_from_json_dict.type() == t0.type()
+        assert isinstance(t0_from_json, torch.Tensor)
+        assert t0_from_json.type() == t0.type()
         assert t0_json_dict["size"] == list(t0.size())
-        assert np.array_equal(t0_from_json_dict, t0)
+        assert np.array_equal(t0_from_json, t0)
 
-        # Test size preservation of empty (0, x) tensor
+        # Empty tensor
         t_empty = torch.empty((0, 2))
         t_empty_json_str = json.dumps(t_empty, cls=MontyEncoder)
         t_empty_json_dict = json.loads(t_empty_json_str)
+        t_empty_from_json = json.loads(t_empty_json_str, cls=MontyDecoder)
 
+        assert isinstance(t_empty_from_json, torch.Tensor)
+        assert t_empty_from_json.size() == t_empty.size()
         assert t_empty_json_dict["size"] == list(t_empty.size())
+        assert np.array_equal(t_empty_from_json.numpy(), t_empty.numpy())
 
-        # Test complex tensor
+        # Complex tensor
         ct0 = torch.tensor([1 + 1j, 2 + 1j])
         ct0_json_str = json.dumps(ct0, cls=MontyEncoder)
         ct0_json_dict = json.loads(ct0_json_str)
-        ct1 = json.loads(ct0_json_str, cls=MontyDecoder)
+        ct0_from_json = json.loads(ct0_json_str, cls=MontyDecoder)
 
-        assert isinstance(ct1, torch.Tensor)
-        assert ct1.type() == ct0.type()
+        assert isinstance(ct0_from_json, torch.Tensor)
+        assert ct0_from_json.type() == ct0.type()
         assert ct0_json_dict["size"] == list(ct0.size())
-        assert np.array_equal(ct1, ct0)
+        assert np.allclose(ct0_from_json.numpy(), ct0.numpy())
 
-        # Test size preservation of empty (0, x) tensor
+        # Empty complex tensor
         ct_empty = torch.empty((0, 2), dtype=torch.complex64)
         ct_empty_json_str = json.dumps(ct_empty, cls=MontyEncoder)
         ct_empty_json_dict = json.loads(ct_empty_json_str)
+        ct_empty_from_json = json.loads(ct_empty_json_str, cls=MontyDecoder)
 
+        assert isinstance(ct_empty_from_json, torch.Tensor)
+        assert ct_empty_from_json.size() == ct_empty.size()
         assert ct_empty_json_dict["size"] == list(ct_empty.size())
+        assert np.array_equal(ct_empty_from_json.numpy(), ct_empty.numpy())
 
     @pytest.mark.skipif(torch is None, reason="torch not present")
     def test_torch_tensor_backwards_compatibility(self):
