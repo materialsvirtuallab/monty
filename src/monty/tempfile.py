@@ -6,13 +6,13 @@ from __future__ import annotations
 
 import os
 import tempfile
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 from monty.shutil import copy_r, gzip_dir, remove
 
 if TYPE_CHECKING:
-    from typing import Union
+    from pathlib import Path
+    from typing import ClassVar, Union
 
 
 class ScratchDir:
@@ -38,7 +38,7 @@ class ScratchDir:
     7. Delete temp dir.
     """
 
-    SCR_LINK = "scratch_link"
+    SCR_LINK: ClassVar[str] = "scratch_link"
 
     def __init__(
         self,
@@ -48,7 +48,7 @@ class ScratchDir:
         copy_to_current_on_exit: bool = False,
         gzip_on_exit: bool = False,
         delete_removed_files: bool = True,
-    ):
+    ) -> None:
         """
         Initializes scratch directory given a **root** path. There is no need
         to try to create unique directory names. The code will generate a
@@ -81,20 +81,20 @@ class ScratchDir:
                 Defaults to False.
             delete_removed_files (bool): Whether to delete files in the cwd
                 that are removed from the tmp dir.
-                Defaults to True
+                Defaults to True.
         """
-        if Path is not None and isinstance(rootpath, Path):
-            rootpath = str(rootpath)
+        self.rootpath: str | None = (
+            None if rootpath is None else os.path.abspath(rootpath)
+        )
+        self.cwd: str = os.getcwd()
 
-        self.rootpath = os.path.abspath(rootpath) if rootpath is not None else None
-        self.cwd = os.getcwd()
-        self.create_symbolic_link = create_symbolic_link
-        self.start_copy = copy_from_current_on_enter
-        self.end_copy = copy_to_current_on_exit
-        self.gzip_on_exit = gzip_on_exit
-        self.delete_removed_files = delete_removed_files
+        self.create_symbolic_link: bool = create_symbolic_link
+        self.start_copy: bool = copy_from_current_on_enter
+        self.end_copy: bool = copy_to_current_on_exit
+        self.gzip_on_exit: bool = gzip_on_exit
+        self.delete_removed_files: bool = delete_removed_files
 
-    def __enter__(self):
+    def __enter__(self) -> str:
         tempdir = self.cwd
         if self.rootpath is not None and os.path.exists(self.rootpath):
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
@@ -106,7 +106,7 @@ class ScratchDir:
             os.chdir(tempdir)
         return tempdir
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         if self.rootpath is not None and os.path.exists(self.rootpath):
             if self.end_copy:
                 files = set(os.listdir(self.tempdir))
