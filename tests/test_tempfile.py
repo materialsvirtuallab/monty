@@ -157,6 +157,22 @@ class TestScratchDir:
         with ScratchDir("non_existent_root") as d:
             assert d == TEST_DIR
 
+    def test_rootpath_as_none_(self):
+        orig_cwd = os.getcwd()
+        scratch_file_name = "scratch_text"
+
+        with ScratchDir(
+            rootpath=None,
+        ) as d:
+            assert d == orig_cwd
+            assert os.getcwd() == orig_cwd
+
+            with open(scratch_file_name, "w", encoding="utf-8") as f:
+                f.write("write")
+
+        assert os.path.exists(scratch_file_name)
+        os.remove(scratch_file_name)
+
     def teardown_method(self):
         os.chdir(self.cwd)
         shutil.rmtree(self.scratch_root)
