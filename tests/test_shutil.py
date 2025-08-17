@@ -41,7 +41,8 @@ class TestCopyR:
             )
 
     def test_recursive_copy_and_compress(self):
-        copy_r(os.path.join(TEST_DIR, "cpr_src"), os.path.join(TEST_DIR, "cpr_dst"))
+        with pytest.warns(DeprecationWarning, match="shutil.copytree"):
+            copy_r(os.path.join(TEST_DIR, "cpr_src"), os.path.join(TEST_DIR, "cpr_dst"))
         assert os.path.exists(os.path.join(TEST_DIR, "cpr_dst", "test"))
         assert os.path.exists(os.path.join(TEST_DIR, "cpr_dst", "sub", "testr"))
 
@@ -58,7 +59,8 @@ class TestCopyR:
 
     def test_pathlib(self):
         test_path = Path(TEST_DIR)
-        copy_r(test_path / "cpr_src", test_path / "cpr_dst")
+        with pytest.warns(DeprecationWarning, match="shutil.copytree"):
+            copy_r(test_path / "cpr_src", test_path / "cpr_dst")
         assert (test_path / "cpr_dst" / "test").exists()
         assert (test_path / "cpr_dst" / "sub" / "testr").exists()
 
