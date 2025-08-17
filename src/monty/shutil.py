@@ -19,6 +19,8 @@ PathLike: TypeAlias = Union[str, Path]
 
 def copy_r(src: PathLike, dst: PathLike) -> None:
     """
+    Deprecated: please use `shutil.copytree(src, dst, dirs_exist_ok=True)`
+
     Implements a recursive copy function similar to Unix's "cp -r" command.
     Surprisingly, python does not have a real equivalent. shutil.copytree
     only works if the destination directory is not present.
@@ -27,21 +29,13 @@ def copy_r(src: PathLike, dst: PathLike) -> None:
         src (PathLike): Source folder to copy.
         dst (PathLike): Destination folder.
     """
-    src = Path(src)
-    dst = Path(dst)
-    abssrc = src.resolve()
-    absdst = dst.resolve()
-    os.makedirs(absdst, exist_ok=True)
-    for filepath in os.listdir(abssrc):
-        fpath = Path(abssrc, filepath)
-        if fpath.is_symlink():
-            continue
-        if fpath.is_file():
-            shutil.copy(fpath, absdst)
-        elif str(fpath) not in str(absdst):
-            copy_r(fpath, Path(absdst, filepath))
-        else:
-            warnings.warn(f"Cannot copy {fpath} to itself")
+    # TODO: remove after 2027-01-01
+    warnings.warn(
+        "please use `shutil.copytree(src, dst, dirs_exist_ok=True)`",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    shutil.copytree(src, dst, dirs_exist_ok=True)
 
 
 def gzip_dir(path: PathLike, compresslevel: int = 6) -> None:
