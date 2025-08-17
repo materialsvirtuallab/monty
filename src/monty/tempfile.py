@@ -5,11 +5,12 @@ Temporary directory and file creation utilities.
 from __future__ import annotations
 
 import os
+import shutil
 import tempfile
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from monty.shutil import copy_r, gzip_dir, remove
+from monty.shutil import gzip_dir, remove
 
 if TYPE_CHECKING:
     from typing import Union
@@ -100,7 +101,7 @@ class ScratchDir:
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
             if self.start_copy:
-                copy_r(self.cwd, tempdir)
+                shutil.copytree(self.cwd, tempdir, dirs_exist_ok=True)
             if self.create_symbolic_link:
                 os.symlink(tempdir, ScratchDir.SCR_LINK)
             os.chdir(tempdir)
@@ -117,7 +118,7 @@ class ScratchDir:
                     gzip_dir(self.tempdir)
 
                 # copy files over
-                copy_r(self.tempdir, self.cwd)
+                shutil.copytree(self.tempdir, self.cwd, dirs_exist_ok=True)
 
                 # Delete any files that are now gone
                 if self.delete_removed_files:
