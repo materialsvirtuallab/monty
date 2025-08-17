@@ -123,6 +123,8 @@ class TestScratchDir:
 
     def test_symlink(self):
         if platform.system() != "Windows":
+            orig_cwd = os.getcwd()  # where the symlink will be created
+
             with ScratchDir(
                 self.scratch_root,
                 copy_from_current_on_enter=False,
@@ -131,9 +133,16 @@ class TestScratchDir:
             ) as d:
                 with open("scratch_text", "w", encoding="utf-8") as f:
                     f.write("write")
+
                 files = os.listdir(d)
                 assert "scratch_text" in files
                 assert "empty_file.txt" not in files
+
+                # Check symlink
+                link_path = os.path.join(orig_cwd, ScratchDir.SCR_LINK)
+                assert os.path.islink(link_path)
+
+                assert os.readlink(link_path) == d
 
             # Make sure the tempdir is deleted.
             assert not os.path.exists(d)
@@ -141,10 +150,11 @@ class TestScratchDir:
             assert "scratch_text" not in files
 
             # Make sure the symlink is removed
-            assert not os.path.islink("scratch_link")
+            assert not os.path.islink(ScratchDir.SCR_LINK)
 
-    def test_bad_root(self):
-        with ScratchDir("bad_groot") as d:
+    def test_non_existent_root(self):
+        assert not os.path.isdir("non_existent_root")
+        with ScratchDir("non_existent_root") as d:
             assert d == TEST_DIR
 
     def teardown_method(self):
