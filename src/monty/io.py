@@ -68,7 +68,7 @@ def zopen(
             be set to UTF-8 by default otherwise.
 
     Args:
-        filename (str | Path): The file to open.
+        filename (PathLike): The file to open.
         mode (str): The mode in which the file is opened, you should
             explicitly specify "b" for binary or "t" for text.
         **kwargs: Additional keyword arguments to pass to `open`.
@@ -202,7 +202,7 @@ def reverse_readfile(
     of such a function).
 
     Args:
-        filename (str | Path): File to read.
+        filename (PathLike): File to read.
 
     Yields:
         Lines from the file in reverse order.
