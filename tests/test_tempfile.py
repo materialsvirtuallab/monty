@@ -152,10 +152,17 @@ class TestScratchDir:
             # Make sure the symlink is removed
             assert not os.path.islink(ScratchDir.SCR_LINK)
 
-    def test_non_existent_rootpath(self):
+    def test_bad_rootpath(self):
+        # rootpath doesn't exist
         assert not os.path.isdir("non_existent_root")
         with pytest.warns(RuntimeWarning, match="pass through"):
             with ScratchDir("non_existent_root") as d:
+                assert d == TEST_DIR
+
+        # rootpath isn't a directory
+        assert os.path.isfile("empty_file.txt")
+        with pytest.warns(RuntimeWarning, match="pass through"):
+            with ScratchDir("empty_file.txt") as d:
                 assert d == TEST_DIR
 
     def test_rootpath_as_none(self):

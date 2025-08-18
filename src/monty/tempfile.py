@@ -65,7 +65,7 @@ class ScratchDir:
 
         Args:
             rootpath (str/Path): Path in which to create temp subdirectories.
-                If this is None or non-existent, no temp directories will be
+                If this is None or not a directory, no temp directories will be
                 created and this will just be a simple pass through.
             create_symbolic_link (bool): Whether to create a symbolic link in
                 the current working directory to the scratch directory
@@ -89,12 +89,12 @@ class ScratchDir:
         self.rootpath: str | None = (
             None if rootpath is None else os.path.abspath(rootpath)
         )
-        self.pass_through: bool = self.rootpath is None or not os.path.exists(
+        self.pass_through: bool = self.rootpath is None or not os.path.isdir(
             self.rootpath
         )
-        if self.rootpath is not None and not os.path.exists(self.rootpath):
+        if self.rootpath is not None and not os.path.isdir(self.rootpath):
             warnings.warn(
-                f"rootpath {self.rootpath} doesn't exist, would just pass through",
+                f"rootpath {self.rootpath} doesn't exist and is not directory, would just pass through",
                 RuntimeWarning,
                 stacklevel=2,
             )
