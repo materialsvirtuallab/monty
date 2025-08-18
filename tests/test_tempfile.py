@@ -23,17 +23,29 @@ class TestScratchDir:
         with open("pre_scratch_text", "w", encoding="utf-8") as f:
             f.write("write")
 
-        with ScratchDir(
-            self.scratch_root,
-            copy_from_current_on_enter=True,
-            copy_to_current_on_exit=True,
-        ) as d:
+        orig_cwd = os.getcwd()
+
+        # Expect a warning on exit due to newer file in CWD than in temp
+        with (
+            pytest.warns(RuntimeWarning, match="files newer in CWD"),
+            ScratchDir(
+                self.scratch_root,
+                copy_from_current_on_enter=True,
+                copy_to_current_on_exit=True,
+            ) as d,
+        ):
             with open("scratch_text", "w", encoding="utf-8") as f:
                 f.write("write")
             files = os.listdir(d)
             assert "scratch_text" in files
             assert "empty_file.txt" in files
             assert "pre_scratch_text" in files
+
+            # Make a file in the ORIGINAL CWD newer than the copy in temp.
+            with open(
+                os.path.join(orig_cwd, "empty_file.txt"), "a", encoding="utf-8"
+            ) as f:
+                f.write("hello\n")
 
             # We remove the pre-scratch file.
             os.remove("pre_scratch_text")
@@ -123,6 +135,8 @@ class TestScratchDir:
 
     def test_symlink(self):
         if platform.system() != "Windows":
+            orig_cwd = os.getcwd()  # where the symlink will be created
+
             with ScratchDir(
                 self.scratch_root,
                 copy_from_current_on_enter=False,
@@ -131,9 +145,16 @@ class TestScratchDir:
             ) as d:
                 with open("scratch_text", "w", encoding="utf-8") as f:
                     f.write("write")
+
                 files = os.listdir(d)
                 assert "scratch_text" in files
                 assert "empty_file.txt" not in files
+
+                # Check symlink
+                link_path = os.path.join(orig_cwd, ScratchDir.SCR_LINK)
+                assert os.path.islink(link_path)
+
+                assert os.readlink(link_path) == d
 
             # Make sure the tempdir is deleted.
             assert not os.path.exists(d)
@@ -141,11 +162,36 @@ class TestScratchDir:
             assert "scratch_text" not in files
 
             # Make sure the symlink is removed
-            assert not os.path.islink("scratch_link")
+            assert not os.path.islink(ScratchDir.SCR_LINK)
 
-    def test_bad_root(self):
-        with ScratchDir("bad_groot") as d:
-            assert d == TEST_DIR
+    def test_bad_rootpath(self):
+        # rootpath doesn't exist
+        assert not os.path.isdir("non_existent_root")
+        with pytest.warns(RuntimeWarning, match="pass through"):
+            with ScratchDir("non_existent_root") as d:
+                assert d == TEST_DIR
+
+        # rootpath isn't a directory
+        assert os.path.isfile("empty_file.txt")
+        with pytest.warns(RuntimeWarning, match="pass through"):
+            with ScratchDir("empty_file.txt") as d:
+                assert d == TEST_DIR
+
+    def test_rootpath_as_none(self):
+        orig_cwd = os.getcwd()
+        scratch_file_name = "scratch_text"
+
+        with ScratchDir(
+            rootpath=None,
+        ) as d:
+            assert d == orig_cwd
+            assert os.getcwd() == orig_cwd
+
+            with open(scratch_file_name, "w", encoding="utf-8") as f:
+                f.write("write")
+
+        assert os.path.exists(scratch_file_name)
+        os.remove(scratch_file_name)
 
     def teardown_method(self):
         os.chdir(self.cwd)
