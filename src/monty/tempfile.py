@@ -48,7 +48,7 @@ class ScratchDir:
         copy_from_current_on_enter: bool = False,
         copy_to_current_on_exit: bool = False,
         gzip_on_exit: bool = False,
-        delete_removed_files: bool = True,
+        delete_removed_files: bool = False,
     ):
         """
         Initializes scratch directory given a **root** path. There is no need
@@ -81,8 +81,8 @@ class ScratchDir:
                 ScratchDir before copying them back.
                 Defaults to False.
             delete_removed_files (bool): Whether to delete files in the cwd
-                that are removed from the tmp dir.
-                Defaults to True
+                that are not present in the tmp dir. WARNING: this could
+                wipe your CWD. Defaults to False.
         """
         if Path is not None and isinstance(rootpath, Path):
             rootpath = str(rootpath)
