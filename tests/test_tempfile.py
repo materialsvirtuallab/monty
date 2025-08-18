@@ -23,17 +23,29 @@ class TestScratchDir:
         with open("pre_scratch_text", "w", encoding="utf-8") as f:
             f.write("write")
 
-        with ScratchDir(
-            self.scratch_root,
-            copy_from_current_on_enter=True,
-            copy_to_current_on_exit=True,
-        ) as d:
+        orig_cwd = os.getcwd()
+
+        # Expect a warning on exit due to newer file in CWD than in temp
+        with (
+            pytest.warns(RuntimeWarning, match="files newer in CWD"),
+            ScratchDir(
+                self.scratch_root,
+                copy_from_current_on_enter=True,
+                copy_to_current_on_exit=True,
+            ) as d,
+        ):
             with open("scratch_text", "w", encoding="utf-8") as f:
                 f.write("write")
             files = os.listdir(d)
             assert "scratch_text" in files
             assert "empty_file.txt" in files
             assert "pre_scratch_text" in files
+
+            # Make a file in the ORIGINAL CWD newer than the copy in temp.
+            with open(
+                os.path.join(orig_cwd, "empty_file.txt"), "a", encoding="utf-8"
+            ) as f:
+                f.write("hello\n")
 
             # We remove the pre-scratch file.
             os.remove("pre_scratch_text")

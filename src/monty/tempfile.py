@@ -16,6 +16,8 @@ if TYPE_CHECKING:
     from pathlib import Path
     from typing import ClassVar, Union
 
+    from monty.shutil import PathLike
+
 
 class ScratchDir:
     """
@@ -44,7 +46,7 @@ class ScratchDir:
 
     def __init__(
         self,
-        rootpath: Union[str, Path, None],
+        rootpath: Union[PathLike, None],
         create_symbolic_link: bool = False,
         copy_from_current_on_enter: bool = False,
         copy_to_current_on_exit: bool = False,
@@ -126,6 +128,49 @@ class ScratchDir:
                 # gzip files
                 if self.gzip_on_exit:
                     gzip_dir(self.tempdir)
+
+                # Timestamp check
+                def get_files(root: PathLike) -> set[str]:
+                    paths: set[str] = set()
+                    for dirpath, _, filenames in os.walk(root):
+                        for fn in filenames:
+                            abs_path = os.path.join(dirpath, fn)
+                            rel_path = os.path.relpath(abs_path, root)
+                            paths.add(rel_path)
+                    return paths
+
+                def get_modif_times(
+                    root: PathLike,
+                    rel_paths: set[str],
+                ) -> dict[str, float]:
+                    out: dict[str, float] = {}
+                    for rel in rel_paths:
+                        try:
+                            out[rel] = os.path.getmtime(os.path.join(root, rel))
+                        except FileNotFoundError:
+                            # File may have been removed between listing and stat
+                            pass
+                    return out
+
+                common_paths = get_files(self.tempdir) & get_files(self.cwd)
+                temp_mtimes = get_modif_times(self.tempdir, common_paths)
+                cwd_mtimes = get_modif_times(self.cwd, common_paths)
+
+                newer_in_cwd = [
+                    rel
+                    for rel in common_paths
+                    if rel in temp_mtimes
+                    and rel in cwd_mtimes
+                    and cwd_mtimes[rel] > temp_mtimes[rel]
+                ]
+
+                if newer_in_cwd:
+                    warnings.warn(
+                        "ScratchDir: Detected files newer in CWD than tempdir; "
+                        f"copy-back would overwrite: {', '.join(newer_in_cwd)}",
+                        RuntimeWarning,
+                        stacklevel=2,
+                    )
 
                 # copy files over
                 shutil.copytree(self.tempdir, self.cwd, dirs_exist_ok=True)
