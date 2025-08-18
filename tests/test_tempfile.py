@@ -152,12 +152,13 @@ class TestScratchDir:
             # Make sure the symlink is removed
             assert not os.path.islink(ScratchDir.SCR_LINK)
 
-    def test_non_existent_root(self):
+    def test_non_existent_rootpath(self):
         assert not os.path.isdir("non_existent_root")
-        with ScratchDir("non_existent_root") as d:
-            assert d == TEST_DIR
+        with pytest.warns(RuntimeWarning, match="pass through"):
+            with ScratchDir("non_existent_root") as d:
+                assert d == TEST_DIR
 
-    def test_rootpath_as_none_(self):
+    def test_rootpath_as_none(self):
         orig_cwd = os.getcwd()
         scratch_file_name = "scratch_text"
 

@@ -7,6 +7,7 @@ from __future__ import annotations
 import os
 import shutil
 import tempfile
+import warnings
 from typing import TYPE_CHECKING
 
 from monty.shutil import gzip_dir, remove
@@ -64,8 +65,8 @@ class ScratchDir:
 
         Args:
             rootpath (str/Path): Path in which to create temp subdirectories.
-                If this is None, no temp directories will be created and
-                this will just be a simple pass through.
+                If this is None or non-existent, no temp directories will be
+                created and this will just be a simple pass through.
             create_symbolic_link (bool): Whether to create a symbolic link in
                 the current working directory to the scratch directory
                 created.
@@ -84,23 +85,32 @@ class ScratchDir:
                 that are removed from the tmp dir.
                 Defaults to True.
         """
+        self.cwd: str = os.getcwd()
         self.rootpath: str | None = (
             None if rootpath is None else os.path.abspath(rootpath)
         )
-        self.cwd: str = os.getcwd()
+        self.pass_through: bool = self.rootpath is None or not os.path.exists(
+            self.rootpath
+        )
+        if self.rootpath is not None and not os.path.exists(self.rootpath):
+            warnings.warn(
+                f"rootpath {self.rootpath} doesn't exist, would just pass through",
+                RuntimeWarning,
+                stacklevel=2,
+            )
 
         self.create_symbolic_link: bool = create_symbolic_link
-        self.start_copy: bool = copy_from_current_on_enter
-        self.end_copy: bool = copy_to_current_on_exit
+        self.enter_copy: bool = copy_from_current_on_enter
+        self.exit_copy: bool = copy_to_current_on_exit
         self.gzip_on_exit: bool = gzip_on_exit
         self.delete_removed_files: bool = delete_removed_files
 
     def __enter__(self) -> str:
-        tempdir = self.cwd
-        if self.rootpath is not None and os.path.exists(self.rootpath):
+        tempdir: str = self.cwd
+        if not self.pass_through:
             tempdir = tempfile.mkdtemp(dir=self.rootpath)
             self.tempdir = os.path.abspath(tempdir)
-            if self.start_copy:
+            if self.enter_copy:
                 shutil.copytree(self.cwd, tempdir, dirs_exist_ok=True)
             if self.create_symbolic_link:
                 os.symlink(tempdir, ScratchDir.SCR_LINK)
@@ -108,8 +118,8 @@ class ScratchDir:
         return tempdir
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        if self.rootpath is not None and os.path.exists(self.rootpath):
-            if self.end_copy:
+        if not self.pass_through:
+            if self.exit_copy:
                 files = set(os.listdir(self.tempdir))
                 orig_files = set(os.listdir(self.cwd))
 
