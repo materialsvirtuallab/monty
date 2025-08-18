@@ -39,17 +39,14 @@ BinModes: TypeAlias = Literal[
 
 
 @overload
-def zopen(filename: str | Path, /, *, mode: TextModes, **kwargs: Any) -> IO[str]: ...
+def zopen(filename: str | Path, mode: TextModes, **kwargs: Any) -> IO[str]: ...
 @overload
-def zopen(filename: str | Path, /, *, mode: BinModes, **kwargs: Any) -> IO[bytes]: ...
+def zopen(filename: str | Path, mode: BinModes, **kwargs: Any) -> IO[bytes]: ...
 @overload  # fallback
+def zopen(filename: str | Path, mode: str, **kwargs: Any) -> IO[Any]: ...
 def zopen(
-    filename: str | Path, /, *, mode: str | None = ..., **kwargs: Any
-) -> IO[Any]: ...
-def zopen(
-    filename: str | Path,
-    /,
-    mode: str | None = None,
+    filename: Union[str, Path],
+    mode: str,
     **kwargs: Any,
 ) -> IO[Any]:
     """
@@ -59,11 +56,8 @@ def zopen(
         `with zopen(filename, mode="rt", ...)`
 
     Important Notes:
-        - Default `mode` should not be used, and would not be allow
-            in future versions.
         - Always explicitly specify binary/text in `mode`, i.e.
-            always pass `t` or `b` in `mode`, implicit binary/text
-            mode would not be allow in future versions.
+            always pass `t` or `b` in `mode`.
         - Always provide an explicit `encoding` in text mode, it would
             be set to UTF-8 by default otherwise.
 
@@ -76,29 +70,10 @@ def zopen(
     Returns:
         TextIO | BinaryIO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile
     """
-    # Deadline for dropping implicit `mode` support
-    _deadline: str = "2025-06-01"
-
-    # Warn against default `mode`
-    # TODO: remove default value of `mode` to force user to give one after deadline
-    if mode is None:
-        warnings.warn(
-            "We strongly discourage using a default `mode`, it would be "
-            f"set to `r` now but would not be allowed after {_deadline}",
-            FutureWarning,
-            stacklevel=2,
-        )
-        mode = "r"
-
-    # Warn against implicit text/binary `mode`
-    # TODO: replace warning with exception after deadline
-    elif not ("b" in mode or "t" in mode):
-        warnings.warn(
-            "We strongly discourage using implicit binary/text `mode`, "
-            f"and this would not be allowed after {_deadline}. "
-            "I.e. you should pass t/b in `mode`.",
-            FutureWarning,
-            stacklevel=2,
+    # Don't allow implicit text/binary `mode`
+    if not ("b" in mode or "t" in mode):
+        raise RuntimeError(
+            "Implicit text/binary mode is not allowed, please pass t/b explicitly in mode."
         )
 
     # Warn against default `encoding` in text mode if
