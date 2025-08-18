@@ -16,20 +16,39 @@ import subprocess
 import time
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, cast
+from typing import IO, TYPE_CHECKING, Any, Literal, cast, overload
 
 if TYPE_CHECKING:
-    from typing import IO, Any, Iterator, Union
+    from typing import Iterator, TypeAlias, Union
 
 
 class EncodingWarning(Warning): ...  # Added in Python 3.10
 
 
+# fmt: off
+TextModes: TypeAlias = Literal[
+    "r", "w", "a", "r+", "w+", "a+",
+    "rt", "tr", "wt", "tw", "at", "ta",
+    "rt+", "tr+", "wt+", "tw+", "at+", "ta+",
+]
+BinModes: TypeAlias = Literal[
+    "rb", "br", "wb", "bw", "ab", "ba",
+    "rb+", "br+", "wb+", "bw+", "ab+", "ba+",
+]
+# fmt: on
+
+
+@overload
+def zopen(filename: str | Path, mode: TextModes, **kwargs: Any) -> IO[str]: ...
+@overload
+def zopen(filename: str | Path, mode: BinModes, **kwargs: Any) -> IO[bytes]: ...
+@overload  # fallback
+def zopen(filename: str | Path, mode: str, **kwargs: Any) -> IO[Any]: ...
 def zopen(
     filename: Union[str, Path],
     mode: str,
     **kwargs: Any,
-) -> IO | bz2.BZ2File | gzip.GzipFile | lzma.LZMAFile:
+) -> IO[Any]:
     """
     This function wraps around `[bz2/gzip/lzma].open` and `open`
     to deal intelligently with compressed or uncompressed files.
@@ -74,9 +93,9 @@ def zopen(
     ext = ext.lower()
 
     if ext == ".bz2":
-        return bz2.open(filename, mode, **kwargs)
+        return cast(IO[Any], bz2.open(filename, mode, **kwargs))
     if ext == ".gz":
-        return gzip.open(filename, mode, **kwargs)
+        return cast(IO[Any], gzip.open(filename, mode, **kwargs))
     if ext == ".z":
         # TODO: drop ".z" extension support after 2026-01-01
         warnings.warn(
@@ -86,11 +105,11 @@ def zopen(
             category=FutureWarning,
             stacklevel=2,
         )
-        return gzip.open(filename, mode, **kwargs)
+        return cast(IO[Any], gzip.open(filename, mode, **kwargs))
     if ext in {".xz", ".lzma"}:
-        return lzma.open(filename, mode, **kwargs)
+        return cast(IO[Any], lzma.open(filename, mode, **kwargs))
 
-    return open(filename, mode, **kwargs)
+    return cast(IO[Any], open(filename, mode, **kwargs))
 
 
 def _get_line_ending(
