@@ -19,7 +19,8 @@ PathLike: TypeAlias = Union[str, Path]
 
 def copy_r(src: PathLike, dst: PathLike) -> None:
     """
-    Deprecated: please use `shutil.copytree(src, dst, dirs_exist_ok=True)`
+    Deprecated: please use `shutil.copytree(src, dst, dirs_exist_ok=True)`,
+    use the `symlinks` arg to control whether you want to dereference symlinks.
 
     Implements a recursive copy function similar to Unix's "cp -r" command.
     Surprisingly, python does not have a real equivalent. shutil.copytree
